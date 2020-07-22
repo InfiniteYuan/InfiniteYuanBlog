@@ -3,12 +3,12 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: InfiniteYuan
 subtitle: ''
 description: ''
 keywords:
-author: John Doe
-language: en
+author: InfiniteYuan
+language: zh-CN
 timezone: ''
 
 # URL
@@ -98,8 +98,8 @@ theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
-deploy:
-  type: git
-  repo: https://github.com/InfiniteYuan/InfiniteYuan.github.io.git
-  branch: master
-  message: "Site updated: {{ now('YYYY-MM-DD HH:mm:ss') }}"
+# deploy:
+#   type: git
+#   repo: https://github.com/InfiniteYuan/InfiniteYuan.github.io.git
+#   branch: master
+#   message: "Site updated: {{ now('YYYY-MM-DD HH:mm:ss') }}"
