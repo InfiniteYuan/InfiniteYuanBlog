@@ -109,3 +109,88 @@ search:
   field: post
   format: html
   limit: 10000
+
+symbols_count_time:
+  symbols: true
+  time: true
+  total_symbols: true
+  total_time: true
+  exclude_codeblock: false
+  awl: 4
+  wpm: 275
+  suffix: "mins."
+
+theme_config:
+  darkmode: true
+  # Use icon instead of the symbol # to indicate the tag at the bottom of the post
+  tag_icon: true
+  codeblock:
+    # Code Highlight theme
+    # Available values: normal | night | night eighties | night blue | night bright | solarized | solarized dark | galactic
+    # See: https://github.com/chriskempson/tomorrow-theme
+    highlight_theme: normal
+    # Add copy button on codeblock
+    copy_button:
+      enable: false
+      # Show text copy result.
+      show_result: false
+      # Available values: default | flat | mac
+      style:
+  local_search:
+    enable: true
+  menu_settings:
+    icons: true
+    badges: true
+  menu:
+    home: / || fa fa-home
+    #about: /about/ || fa fa-user
+    tags: /tags/ || fa fa-tags
+    categories: /categories/ || fa fa-th
+    archives: /archives/ || fa fa-archive
+    #schedule: /schedule/ || fa fa-calendar
+    sitemap: /sitemap.xml || fa fa-sitemap
+  custom_logo: /InfiniteYuanBlog/images/InfiniteYuanLogo.jpg
+  # Post wordcount display settings
+  # Dependencies: https://github.com/willin/hexo-wordcount
+  symbols_count_time:
+    separated_meta: true
+    item_text_post: true
+    item_text_total: true
+  # Progress bar in the top during page loading.
+  # Dependencies: https://github.com/theme-next/theme-next-pace
+  # For more information: https://github.com/HubSpot/pace
+  pace:
+    enable: true
+    # Themes list:
+    # big-counter | bounce | barber-shop | center-atom | center-circle | center-radar | center-simple
+    # corner-indicator | fill-left | flat-top | flash | loading-bar | mac-osx | material | minimal
+    theme: minimal
+  footer:
+    # Specify the date when the site was setup. If not defined, current year will be used.
+    #since: 2015
+
+    # Icon between year and copyright info.
+    icon:
+      # Icon name in Font Awesome. See: https://fontawesome.com/icons
+      name: fa fa-heart
+      # If you want to animate the icon, set it to true.
+      animated: false
+      # Change the color of icon, using Hex Code.
+      color: "#ff0000"
+
+    # If not defined, `author` from Hexo `_config.yml` will be used.
+    copyright:
+
+    # Powered by Hexo & NexT
+    powered: false
+
+    # Beian ICP and gongan information for Chinese users. See: http://www.beian.miit.gov.cn, http://www.beian.gov.cn
+    beian:
+      enable: false
+      icp:
+      # The digit in the num of gongan beian.
+      gongan_id:
+      # The full num of gongan beian.
+      gongan_num:
+      # The icon for gongan beian. See: http://www.beian.gov.cn/portal/download
+      gongan_icon_url:
