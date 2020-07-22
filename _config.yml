@@ -13,7 +13,7 @@ timezone: ''
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://infiniteyuan1.github.io/
+url: https://InfiniteYuan.github.io/
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -100,6 +100,6 @@ theme: next
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/InfiniteYuan1/InfiniteYuan1.github.io.git
+  repo: https://github.com/InfiniteYuan/InfiniteYuan.github.io.git
   branch: master
   message: "Site updated: {{ now('YYYY-MM-DD HH:mm:ss') }}"
