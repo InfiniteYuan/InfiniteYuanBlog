@@ -14,6 +14,8 @@
 
 
 <link rel="stylesheet" href="/InfiniteYuanBlog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/InfiniteYuanBlog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/InfiniteYuanBlog/lib/pace/pace.min.js"></script>
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
@@ -89,7 +91,12 @@
     </div>
   </div>
 
-  <div class="site-meta">
+  <div class="site-meta custom-logo">
+      <div class="site-meta-headline">
+        <a>
+          <img class="custom-logo-image" src="/InfiniteYuanBlog/images/InfiniteYuanLogo.jpg" alt="InfiniteYuan">
+        </a>
+      </div>
 
     <a href="/InfiniteYuanBlog/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
@@ -115,19 +122,19 @@
     <a href="/InfiniteYuanBlog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
 
   </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/InfiniteYuanBlog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">3</span></a>
+
+  </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/InfiniteYuanBlog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+    <a href="/InfiniteYuanBlog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">3</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/InfiniteYuanBlog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/InfiniteYuanBlog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+    <a href="/InfiniteYuanBlog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">3</span></a>
 
   </li>
         <li class="menu-item menu-item-sitemap">
@@ -372,6 +379,8 @@
 
         
 
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
 <div class="copyright">
   
   &copy; 
@@ -380,9 +389,26 @@
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">InfiniteYuan</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">0k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1 分钟</span>
+
+  <span class="post-meta-divider">|</span>
+  <span class="post-meta-item-icon">
+    <i class="fa fa-user-md"></i>
+  </span>
+  <span id="busuanzi_container_site_pv">站点访客数:<span id="busuanzi_value_site_pv"></span>
+
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
-  </div>
 
         
 
