@@ -20,6 +20,8 @@ ESP32 芯片具有 40 个物理 GPIO pads (焊盘).某些 GPIO pad 既不能使�
  - GPIO 34-39 只能设置为输入模式,没有软件上拉或下拉功能.
  - 这 34 个物理 GPIO pad 的序列号为:0-19, 21-23, 25-27, 32-39.其中 GPIO 34-39 仅用作输入管脚,其他的既可以作为输入又可以作为输出管脚.
 
+<!--more-->
+
 当 GPIO 被连接到 “RTC” 低功耗和模拟子系统时,还有独立的 “RTC GPIO” 支持. 这些引脚功能可在深度睡眠,[超低功耗协处理器](https://esp-idf.readthedocs.io/zh_CN/latest/api-guides/ulp.html)运行时或使用 ADC/DAC/等 模拟功能时使用.
 
 下图描述了数字 pad(控制信号:FUNC_SEL、IE、OE、WPU、WDU 等)和 162 个外设输入以及 176 个外设输出信号(控制信号:SIG_IN_SEL、SIG_OUT_SEL、IE、OE 等)和快速外设输入/输出信号(控制信号:IE、OE 等)以及 RTC IO_MUX 之间的信号选择和连接关系.
