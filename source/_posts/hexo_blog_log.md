@@ -1,5 +1,5 @@
 ---
-title: Hello World
+title: Hexo Blog
 date: 2012-07-22 09:43:43
 categories:
 - Hexo
