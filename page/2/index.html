@@ -228,7 +228,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 06:36:50" itemprop="dateModified" datetime="2020-07-23T06:36:50+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 06:40:43" itemprop="dateModified" datetime="2020-07-23T06:40:43+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -260,7 +260,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.1k</span>
+              <span>2.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -315,7 +315,9 @@
 <h3 id="ESP32-rev-v0"><a href="#ESP32-rev-v0" class="headerlink" title="ESP32 rev v0"></a>ESP32 rev v0</h3><p>ESP-IDF 没有针对此版本硅片中的错误的解决方法，它不能用于将外部 PSRAM 映射到 ESP32s 主存储器映射中。</p>
 <h3 id="ESP32-rev-v1"><a href="#ESP32-rev-v1" class="headerlink" title="ESP32 rev v1"></a>ESP32 rev v1</h3><p>当某些机器指令序列在外部存储器位置 （ESP32 ECO 3.2） 上运行时，此芯片版本中的错误会带来危险。 为了解决这个问题，编译 ESP-IDF 的 gcc 编译器已经扩展了一个标志： -mfix-esp32-psram-cache-issue。 将此标志传递给命令行上的 gcc，编译器可以解决这些序列，并只输出可以安全执行的代码。</p>
 <p>在 ESP-IDF 中，当您选择 <code>CONFIG_SPIRAM_CACHE_WORKAROUND</code> 时，将启用此标志。 ESP-IDF 还采取其他措施确保不使用 PSRAM 访问和违规指令集的组合：它链接到使用 gcc 标志重新编译的 Newlib 版本，不使用某些 ROM 函数并为 WiFi 分配静态内存叠加。</p>
-<p><a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/external-ram.html" target="_blank" rel="noopener">原文链接</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/external-ram.html" target="_blank" rel="noopener">原文链接</a></li>
+</ul>
 
       
     </div>
@@ -366,7 +368,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 06:36:50" itemprop="dateModified" datetime="2020-07-23T06:36:50+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 06:40:43" itemprop="dateModified" datetime="2020-07-23T06:40:43+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -440,7 +442,9 @@
 <p><code>CONFIG_BOOTLOADER_NUM_PIN_APP_TEST</code> - 引导TEST 分区的 GPIO 输入的编号. 选定的 GPIO 将配置为启用内部上拉的输入. 要触发测试应用程序,必须在复位时将此 GPIO 拉低. 停用 GPIO 输入并重启设备后,旧应用程序将启动(工厂或任何 OTA 位置的应用程序).</p>
 <p><code>CONFIG_BOOTLOADER_HOLD_TIME_GPIO</code> - 这是 GPIO 的复位/测试模式保持时间(默认为 5 秒). 复位后,GPIO 必须在此段时间内保持低电平,然后才能执行恢复出厂设置或测试分区引导(如果适用).</p>
 <h2 id="自定义引导加载程序"><a href="#自定义引导加载程序" class="headerlink" title="自定义引导加载程序"></a>自定义引导加载程序</h2><p>当前的引导加载程序实现允许客户覆盖它. 为此,您必须复制文件夹 <code>/esp-idf/components/bootloader</code>,然后编辑 <code>/your_project/components/bootloader/subproject/main/bootloader_main.c</code>. 在引导加载程序空间中,您无法使用其他组件的驱动程序和函数. 如有必要,则应将所需功能放在文件夹引导程序中(请注意,这会增加其大小). 有必要监视其大小,因为内存中可能存在覆盖层,导致损坏. 目前,引导加载程序仅限于地址 0x8000 的分区表.</p>
-<p><a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/bootloader.html" target="_blank" rel="noopener">原文链接</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/bootloader.html" target="_blank" rel="noopener">原文链接</a></li>
+</ul>
 
       
     </div>
@@ -491,7 +495,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 06:36:50" itemprop="dateModified" datetime="2020-07-23T06:36:50+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 06:40:43" itemprop="dateModified" datetime="2020-07-23T06:40:43+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -863,7 +867,9 @@
 <li>数据传输使用 Wi-Fi WPA2-PSK 加密</li>
 <li>网状网络 IE 使用 AES 加密</li>
 </ul>
-<p><a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/mesh.html" target="_blank" rel="noopener">原文链接</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/mesh.html" target="_blank" rel="noopener">原文链接</a></li>
+</ul>
 
       
     </div>
@@ -914,7 +920,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 06:36:50" itemprop="dateModified" datetime="2020-07-23T06:36:50+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 06:40:43" itemprop="dateModified" datetime="2020-07-23T06:40:43+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -946,7 +952,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>938</span>
+              <span>942</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -991,7 +997,9 @@
 <li>一个是默认的初始化数据，它位于头文件 <code>components/esp32/phy_init_data.h</code> 中。 它在编译后嵌入到应用程序二进制文件中，然后存储到只读存储器（DROM）中。 要使用默认初始化数据，请到 <code>menuconfig</code> 并禁用 <code>CONFIG_ESP32_PHY_INIT_DATA_IN_PARTITION</code>。</li>
 <li>另一种是存储在分区中的初始化数据。 使用自定义分区表时，请确保包含 PHY 数据分区（类型：数据，子类型：phy）。 使用默认分区表，这是自动完成的。 如果初始化数据存储在分区中，则必须在那里闪存，否则将发生运行时错误。 要切换到存储在分区中的初始化数据，请到 <code>menuconfig</code> 并启用 <code>CONFIG_ESP32_PHY_INIT_DATA_IN_PARTITION</code>。</li>
 </ol>
-<p><a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/RF_calibration.html" target="_blank" rel="noopener">原文链接</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/RF_calibration.html" target="_blank" rel="noopener">原文链接</a></li>
+</ul>
 
       
     </div>
@@ -1042,7 +1050,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 06:36:50" itemprop="dateModified" datetime="2020-07-23T06:36:50+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 06:40:43" itemprop="dateModified" datetime="2020-07-23T06:40:43+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1111,7 +1119,9 @@
 </ul>
 <p>此 API 具有上述 API 的所有优点,但消除了一些限制. 变量的数量仅受堆上可用内存大小的限制. 由于动态特性,与原生 API 相比,此 API 引入了额外的性能开销.</p>
 <h2 id="C11-标准"><a href="#C11-标准" class="headerlink" title="C11 标准"></a>C11 标准</h2><p>ESP-IDF FreeRTOS 支持根据 C11 标准的线程局部变量(使用 <code>__thread</code> 关键字指定的变量). 有关此 GCC 功能的详细信息,请参阅<a href="https://gcc.gnu.org/onlinedocs/gcc-5.5.0/gcc/Thread-Local.html#Thread-Local" target="_blank" rel="noopener">https://gcc.gnu.org/onlinedocs/gcc-5.5.0/gcc/Thread-Local.html#Thread-Local</a>. 这种变量的存储在任务堆栈上分配. 请注意,程序中所有此类变量的区域将分配到系统中每个任务的堆栈上,即使该任务根本不使用此类变量也是如此. 例如, ESP-IDF 系统任务(如 <code>ipc</code>, <code>timer</code> 任务等)也将分配额外的堆栈空间. 因此应谨慎使用此功能. 有一个权衡: C11 线程局部变量在编程中非常方便,只需使用几个 Xtensa 指令即可访问,但这个好处与系统中所有任务的额外堆栈使用成本有关. 由于变量的静态性质,系统中的所有任务都具有相同的 C11 线程局部变量集.</p>
-<p><a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/thread-local-storage.html" target="_blank" rel="noopener">原文链接</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/thread-local-storage.html" target="_blank" rel="noopener">原文链接</a></li>
+</ul>
 
       
     </div>
@@ -1162,7 +1172,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 06:36:50" itemprop="dateModified" datetime="2020-07-23T06:36:50+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 06:40:43" itemprop="dateModified" datetime="2020-07-23T06:40:43+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1383,7 +1393,7 @@
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">1:15</span>
+    <span title="站点阅读时长">1:16</span>
 
 </div>
 

@@ -30,7 +30,7 @@
 <meta property="og:description" content="外部 RAM介绍ESP32 有几百 KiB 的内部 RAM，与 ESP32 的其余部分位于同一个芯片上。 出于某些目的，这是不够的，因此ESP32还能够使用高达 4MB 的外部 SPI RAM 存储器作为存储器。 外部存储器包含在存储器映射中，并且在某些限制内，可以与内部数据 RAM 相同的方式使用。 硬件ESP32 支持与 SPI Flash 芯片并联的SPI（P）SRAM。 虽然 ESP32">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2012-07-22T09:43:43.000Z">
-<meta property="article:modified_time" content="2020-07-23T06:36:50.181Z">
+<meta property="article:modified_time" content="2020-07-23T06:40:43.317Z">
 <meta property="article:author" content="InfiniteYuan">
 <meta property="article:tag" content="ESP32">
 <meta name="twitter:card" content="summary">
@@ -231,7 +231,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 06:36:50" itemprop="dateModified" datetime="2020-07-23T06:36:50+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 06:40:43" itemprop="dateModified" datetime="2020-07-23T06:40:43+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -270,7 +270,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.1k</span>
+              <span>2.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -325,7 +325,9 @@
 <h3 id="ESP32-rev-v0"><a href="#ESP32-rev-v0" class="headerlink" title="ESP32 rev v0"></a>ESP32 rev v0</h3><p>ESP-IDF 没有针对此版本硅片中的错误的解决方法，它不能用于将外部 PSRAM 映射到 ESP32s 主存储器映射中。</p>
 <h3 id="ESP32-rev-v1"><a href="#ESP32-rev-v1" class="headerlink" title="ESP32 rev v1"></a>ESP32 rev v1</h3><p>当某些机器指令序列在外部存储器位置 （ESP32 ECO 3.2） 上运行时，此芯片版本中的错误会带来危险。 为了解决这个问题，编译 ESP-IDF 的 gcc 编译器已经扩展了一个标志： -mfix-esp32-psram-cache-issue。 将此标志传递给命令行上的 gcc，编译器可以解决这些序列，并只输出可以安全执行的代码。</p>
 <p>在 ESP-IDF 中，当您选择 <code>CONFIG_SPIRAM_CACHE_WORKAROUND</code> 时，将启用此标志。 ESP-IDF 还采取其他措施确保不使用 PSRAM 访问和违规指令集的组合：它链接到使用 gcc 标志重新编译的 Newlib 版本，不使用某些 ROM 函数并为 WiFi 分配静态内存叠加。</p>
-<p><a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/external-ram.html" target="_blank" rel="noopener">原文链接</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/external-ram.html" target="_blank" rel="noopener">原文链接</a></li>
+</ul>
 
     </div>
 
@@ -336,16 +338,16 @@
   <div class="popular-posts-header">相关文章</div>
   <ul class="popular-posts">
     <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2012/07/22/ESP32 官方文档/ESP32 官方文档（一）关于 ESP-IDF 编程的一些说明/" rel="bookmark">ESP32 官方文档（一）关于 ESP-IDF 编程的一些说明</a></div>
+    </li>
+    <li class="popular-posts-item">
       <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2012/07/22/ESP32 官方文档/ESP32 官方文档（七）ESP32 Core Dump/" rel="bookmark">ESP32 官方文档（七）ESP32 Core Dump</a></div>
     </li>
     <li class="popular-posts-item">
       <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2012/07/22/ESP32 官方文档/ESP32 官方文档（三）分区表/" rel="bookmark">ESP32 官方文档（三）分区表</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2012/07/22/ESP32 官方文档/ESP32 官方文档（一）关于 ESP-IDF 编程的一些说明/" rel="bookmark">ESP32 官方文档（一）关于 ESP-IDF 编程的一些说明</a></div>
-    </li>
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2012/07/22/ESP32 官方文档/ESP32 官方文档（五）严重错误/" rel="bookmark">ESP32 官方文档（五）严重错误</a></div>
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2012/07/22/ESP32 官方文档/ESP32 官方文档（九）ESP-IDF FreeRTOS SMP Changes/" rel="bookmark">ESP32 官方文档（九）ESP-IDF FreeRTOS SMP Changes</a></div>
     </li>
     <li class="popular-posts-item">
       <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2012/07/22/ESP32 官方文档/ESP32 官方文档（二）构建系统/" rel="bookmark">ESP32 官方文档（二）构建系统</a></div>
@@ -441,7 +443,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#外部-RAM"><span class="nav-number">1.</span> <span class="nav-text">外部 RAM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#硬件"><span class="nav-number">1.2.</span> <span class="nav-text">硬件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#软件"><span class="nav-number">1.3.</span> <span class="nav-text">软件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#限制"><span class="nav-number">1.3.1.</span> <span class="nav-text">限制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#芯片版本"><span class="nav-number">1.4.</span> <span class="nav-text">芯片版本</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ESP32-rev-v0"><span class="nav-number">1.4.1.</span> <span class="nav-text">ESP32 rev v0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ESP32-rev-v1"><span class="nav-number">1.4.2.</span> <span class="nav-text">ESP32 rev v1</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#外部-RAM"><span class="nav-number">1.</span> <span class="nav-text">外部 RAM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#硬件"><span class="nav-number">1.2.</span> <span class="nav-text">硬件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#软件"><span class="nav-number">1.3.</span> <span class="nav-text">软件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#限制"><span class="nav-number">1.3.1.</span> <span class="nav-text">限制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#芯片版本"><span class="nav-number">1.4.</span> <span class="nav-text">芯片版本</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ESP32-rev-v0"><span class="nav-number">1.4.1.</span> <span class="nav-text">ESP32 rev v0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ESP32-rev-v1"><span class="nav-number">1.4.2.</span> <span class="nav-text">ESP32 rev v1</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.5.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -518,7 +520,7 @@
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">1:15</span>
+    <span title="站点阅读时长">1:16</span>
 
 </div>
 
