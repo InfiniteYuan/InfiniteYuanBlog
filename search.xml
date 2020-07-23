@@ -107,6 +107,8 @@
 <li><code>info_corefile</code> - 打印崩溃的任务的寄存器，调用堆栈，系统中可用任务的列表，内存区域和存储在 Core Dump (TCB 和堆栈)中的内存内容。</li>
 <li><code>dbg_corefile</code> - 创建 Core Dump ELF 文件并使用此文件运行 GDB 调试会话。用户可以手动检查内存，变量和任务状态。请注意，由于并非所有内存都保存在 Core Dump 中，因此只有堆栈上分配的变量值才有意义。</li>
 </ul>
+<a id="more"></a>
+
 <h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>有许多与 Core Dump 相关的配置选项，用户可以在应用程序的配置菜单中选择 (<code>make menuconfig</code>)。</p>
 <ol>
 <li>Core Dump 数据目标(Components -&gt; ESP32-specific config -&gt; Core dump destination):<ul>
@@ -282,6 +284,8 @@
 <p><a href="#%E4%BB%BB%E5%8A%A1%E5%88%A0%E9%99%A4">任务删除</a>:任务删除行为已从 FreeRTOS v9.0.0 反向移植并修改为 SMP 兼容.调用 <code>vTaskDelete()</code> 时,将立即释放任务内存,以删除当前未运行且未固定到其他核的任务.否则,释放任务存储器仍将被委托给空闲任务.</p>
 <p><a href="#%E7%BA%BF%E7%A8%8B%E6%9C%AC%E5%9C%B0%E5%AD%98%E5%82%A8%E6%8C%87%E9%92%88%E5%92%8C%E5%88%A0%E9%99%A4%E5%9B%9E%E8%B0%83">线程本地存储指针和删除回调</a>:ESP-IDF FreeRTOS 已经反向移植了线程本地存储指针 (TLSP) 功能.但是,添加了删除回调的额外功能.在删除任务期间会自动调用删除回调,并用于释放 TLSP 指向的内存.调用 <code>vTaskSetThreadLocalStoragePointerAndDelCallback()</code> 来设置 TLSP 和删除回调.</p>
 <p><a href="%E9%85%8D%E7%BD%AE-esp-idf-freertos">配置 ESP-IDF FreeRTOS</a>:可以使用 <code>make meunconfig</code> 配置 ESP-IDF FreeRTOS 的几个方面,例如在 Unicore 模式下运行 ESP-IDF,或配置每个任务将具有的线程本地存储指针的数量.</p>
+<a id="more"></a>
+
 <h2 id="反向移植特性"><a href="#反向移植特性" class="headerlink" title="反向移植特性"></a>反向移植特性</h2><p>以下功能已从 FreeRTOS v9.0.0 反向移植到 ESP-IDF.</p>
 <h3 id="静态分配"><a href="#静态分配" class="headerlink" title="静态分配"></a>静态分配</h3><p>此特性已从 FreeRTOS v9.0.0 反向移植到 ESP-IDF. 必须在 menuconfig 中启用 <code>CONFIG_SUPPORT_STATIC_ALLOCATION</code> 选项才能使静态分配功能可用. 启用后,可以调用以下函数…</p>
 <ul>
@@ -653,6 +657,8 @@
 <li>Failed assertions 断言失败,通过 <code>assert</code> ,<code>configASSERT</code> 和类似的宏.</li>
 </ul>
 <p>本指南介绍了 ESP-IDF 中用于处理这些错误的过程,并提供了有关错误故障排除的建议.</p>
+<a id="more"></a>
+
 <h2 id="Panic-处理"><a href="#Panic-处理" class="headerlink" title="Panic 处理"></a>Panic 处理</h2><p>概述中列出的每个错误原因都将由 Panic 处理程序处理.</p>
 <p>Panic 处理程序将首先将错误原因打印到控制台. 对于 CPU 异常,消息类似于:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Guru Meditation Error: Core 0 panic&#39;ed (IllegalInstruction). Exception was unhandled.</span><br></pre></td></tr></table></figure>
@@ -752,6 +758,8 @@
 <blockquote>
 <p>启用闪存加密会限制您进一步更新 ESP32 的选项。请务必阅读本文档(包括 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#flash-encryption-limitations" target="_blank" rel="noopener">Flash 加密限制</a>)并了解启用闪存加密的含义。</p>
 </blockquote>
+<a id="more"></a>
+
 <h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1 背景"></a>1 背景</h2><ul>
 <li><p>使用带有 256 位密钥的 AES 加密闪存的内容。闪存加密密钥存储在芯片内部的 efuse 中，并且(默认情况下)受软件访问保护。</p>
 </li>
@@ -1004,7 +1012,9 @@
     <title>ESP32 官方文档（六）深度睡眠唤醒存根</title>
     <url>/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%85%AD%EF%BC%89%E6%B7%B1%E5%BA%A6%E7%9D%A1%E7%9C%A0%E5%94%A4%E9%86%92%E5%AD%98%E6%A0%B9/</url>
     <content><![CDATA[<h1 id="深度睡眠唤醒存根"><a href="#深度睡眠唤醒存根" class="headerlink" title="深度睡眠唤醒存根"></a>深度睡眠唤醒存根</h1><p>ESP32 支持在深度睡眠时运行“深度睡眠唤醒存根”。芯片唤醒后立即运行此功能 - 在任何正常初始化，引导加载程序或 ESP-IDF 代码运行之前。唤醒存根运行后，SoC 可以返回休眠状态或继续正常启动 ESP-IDF。</p>
-<p>深度睡眠唤醒存根代码被加载到“RTC 快速存储器”中，它使用的任何数据也必须加载到 RTC 存储器中。RTC 存储区域在深度睡眠期间保持其内容，</p>
+<p>深度睡眠唤醒存根代码被加载到“RTC 快速存储器”中，它使用的任何数据也必须加载到 RTC 存储器中。RTC 存储区域在深度睡眠期间保持其内容。</p>
+<a id="more"></a>
+
 <h2 id="唤醒存根规则"><a href="#唤醒存根规则" class="headerlink" title="唤醒存根规则"></a>唤醒存根规则</h2><p>必须仔细编写唤醒存根代码:</p>
 <ul>
 <li>由于 SoC 刚刚从睡眠状态中醒来，大多数外设都处于复位状态。SPI Flash 未映射。</li>
@@ -1053,6 +1063,8 @@
     <title>ESP32 官方文档（十一）高级中断</title>
     <url>/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%B8%80%EF%BC%89%E9%AB%98%E7%BA%A7%E4%B8%AD%E6%96%AD/</url>
     <content><![CDATA[<h1 id="高级中断"><a href="#高级中断" class="headerlink" title="高级中断"></a>高级中断</h1><p>Xtensa 架构支持 32 个中断,分为 8 个级别,以及各种异常. 在 ESP32 上,中断复用器允许使用<a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/system/intr_alloc.html" target="_blank" rel="noopener">中断分配器</a>将大多数中断源路由到这些中断. 通常,中断将以 C 语言写入,但 ESP-IDF 也允许在汇编中写入高级中断,从而允许非常低的中断延迟.</p>
+<a id="more"></a>
+
 <h2 id="中断级别"><a href="#中断级别" class="headerlink" title="中断级别"></a>中断级别</h2><table>
 <thead>
 <tr>
@@ -1127,6 +1139,8 @@
     <title>ESP32 官方文档（十三）外部 RAM</title>
     <url>/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89%E5%A4%96%E9%83%A8%20RAM/</url>
     <content><![CDATA[<h1 id="外部-RAM"><a href="#外部-RAM" class="headerlink" title="外部 RAM"></a>外部 RAM</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>ESP32 有几百 KiB 的内部 RAM，与 ESP32 的其余部分位于同一个芯片上。 出于某些目的，这是不够的，因此ESP32还能够使用高达 4MB 的外部 SPI RAM 存储器作为存储器。 外部存储器包含在存储器映射中，并且在某些限制内，可以与内部数据 RAM 相同的方式使用。</p>
+<a id="more"></a>
+
 <h2 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h2><p>ESP32 支持与 SPI Flash 芯片并联的SPI（P）SRAM。 虽然 ESP32 能够支持多种类型的 RAM 芯片，但 ESP32 SDK 目前仅支持 ESP-PSRAM32 芯片。</p>
 <p>ESP-PSRAM32 芯片是 1.8V 器件，只能与 1.8V 闪存器件并联使用。 确保在启动时将 MTDI 引脚设置为高信号电平，或者将 ESP32 中的保险丝编程为始终使用 1.8V 的 VDD_SIO 电平。 不这样做有损坏 PSRAM 和/或 Flash 芯片的风险。</p>
 <p><strong>要将 ESP-PSRAM 芯片连接到 ESP32D0W *，请连接以下信号：</strong></p>
@@ -1183,6 +1197,8 @@
 <li>将此映像加载到  RAM(IRAM 和 DRAM) 并将管理传输到它.</li>
 </ol>
 <p>引导加载程序位于 Flash 中的地址 0x1000.</p>
+<a id="more"></a>
+
 <h2 id="恢复出厂设置"><a href="#恢复出厂设置" class="headerlink" title="恢复出厂设置"></a>恢复出厂设置</h2><p>用户可以编写基本工作固件并将其加载到 factory 分区.接下来,通过 OTA(无线)更新固件.更新的固件将加载到 OTA 应用程序分区位置,并更新 OTA 数据分区以从此分区引导.如果您希望能够回滚到出厂固件并清除设置,则需要设置 <code>CONFIG_BOOTLOADER_FACTORY_RESET</code>.恢复出厂设置机制允许将设备重置为 factory 设置：</p>
 <ul>
 <li>清除一个或多个数据分区.</li>
@@ -1217,6 +1233,8 @@
 <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP-MESH 是一种基于 Wi-Fi 协议构建的网络协议。ESP-MESH 允许在大的物理区域（室内和室外）上分布的多个设备（以下称为节点）在单个 WLAN（无线局域网）下互连。ESP-MESH 具有自组织和自我修复功能，意味着网络可以自主构建和维护。</p>
 <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><img src="https://img-blog.csdnimg.cn/20190201111240103.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="传统的 Wi-Fi 网络架构"><br>传统的 Wi-Fi 网络是一点对多点网络，其中称为接入点（AP）的单个中心节点直接连接到所有其他节点（station）。AP 负责仲裁和转发节点之间的传输。一些 AP 还通过路由器中继与外部 IP 网络的传输。传统的 Wi-Fi 网络由于要求每个站必须在一定范围内以直接与 AP 连接而具有有限覆盖区域的缺点。此外，传统的 Wi-Fi 网络易于过载，因为网络中允许的最大站数受到 AP 容量的限制。</p>
 <p><img src="https://img-blog.csdnimg.cn/20190201113539338.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>ESP-MESH 与传统的 Wi-Fi 网络的不同之处在于节点不需要连接到中心节点。相反，允许节点与相邻节点连接。节点相互负责传递彼此的传输。这允许 ESP-MESH 网络具有更大的覆盖区域，因为节点仍然可以实现互连而无需在中心节点的范围内。同样，ESP-MESH 也不易受到过载的影响，因为网络上允许的节点数量不再受单个中心节点的限制。</p>
+<a id="more"></a>
+
 <h2 id="ESP-MESH概念"><a href="#ESP-MESH概念" class="headerlink" title="ESP-MESH概念"></a>ESP-MESH概念</h2><h3 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h3><table>
 <thead>
 <tr>
@@ -1554,6 +1572,8 @@
 <li>完全校准</li>
 <li>没有校准</li>
 </ol>
+<a id="more"></a>
+
 <h2 id="部分校准"><a href="#部分校准" class="headerlink" title="部分校准"></a>部分校准</h2><p>在 RF 初始化期间，默认情况下使用部分校准方法进行 RF 校准。 它基于存储在 NVS 中的完整校准数据完成。 要使用此方法，请到 <code>menuconfig</code> 并启用 <code>CONFIG_ESP32_PHY_CALIBRATION_AND_DATA_STORAGE</code>。</p>
 <h2 id="完全校准"><a href="#完全校准" class="headerlink" title="完全校准"></a>完全校准</h2><p>在以下条件下触发完全校准：</p>
 <ol>
@@ -1590,6 +1610,8 @@
     <url>/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%EF%BC%89%E7%BA%BF%E7%A8%8B%E5%B1%80%E9%83%A8%E5%AD%98%E5%82%A8/</url>
     <content><![CDATA[<h1 id="线程局部存储"><a href="#线程局部存储" class="headerlink" title="线程局部存储"></a>线程局部存储</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>线程局部存储 (TLS) 是一种机制,通过该机制分配变量,使每个现存线程有一个变量实例. ESP-IDF 提供了三种利用这些变量的方法:</p>
 <p><a href="#freertos-%E5%8E%9F%E7%94%9F-api">FreeRTOS 原生 API</a>: ESP-IDF FreeRTOS 原生 API.<br><a href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B-api">多线程 API</a>:ESP-IDF 的多线程 API.<br><a href="#c11-%E6%A0%87%E5%87%86">C11 标准</a>:C11 标准引入了特殊关键字来将变量声明为线程局部.</p>
+<a id="more"></a>
+
 <h2 id="FreeRTOS-原生-API"><a href="#FreeRTOS-原生-API" class="headerlink" title="FreeRTOS 原生 API"></a>FreeRTOS 原生 API</h2><p>ESP-IDF FreeRTOS 提供以下 AP I来管理线程局部变量:</p>
 <ul>
 <li>vTaskSetThreadLocalStoragePointer()</li>

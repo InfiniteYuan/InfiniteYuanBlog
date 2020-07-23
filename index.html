@@ -228,7 +228,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 06:40:43" itemprop="dateModified" datetime="2020-07-23T06:40:43+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 06:45:40" itemprop="dateModified" datetime="2020-07-23T06:45:40+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -340,7 +340,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 06:40:43" itemprop="dateModified" datetime="2020-07-23T06:40:43+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 06:45:40" itemprop="dateModified" datetime="2020-07-23T06:45:40+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -450,7 +450,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 06:40:43" itemprop="dateModified" datetime="2020-07-23T06:40:43+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 06:45:40" itemprop="dateModified" datetime="2020-07-23T06:45:40+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -506,55 +506,14 @@
 <li><code>info_corefile</code> - 打印崩溃的任务的寄存器，调用堆栈，系统中可用任务的列表，内存区域和存储在 Core Dump (TCB 和堆栈)中的内存内容。</li>
 <li><code>dbg_corefile</code> - 创建 Core Dump ELF 文件并使用此文件运行 GDB 调试会话。用户可以手动检查内存，变量和任务状态。请注意，由于并非所有内存都保存在 Core Dump 中，因此只有堆栈上分配的变量值才有意义。</li>
 </ul>
-<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>有许多与 Core Dump 相关的配置选项，用户可以在应用程序的配置菜单中选择 (<code>make menuconfig</code>)。</p>
-<ol>
-<li>Core Dump 数据目标(Components -&gt; ESP32-specific config -&gt; Core dump destination):<ul>
-<li>禁用 Core Dump 生成</li>
-<li>将 Core Dump 保存到 Flash</li>
-<li>将 Core Dump 打印到 UART</li>
-</ul>
-</li>
-<li>核心转储中的最大任务快照数(Components -&gt; ESP32-specific config -&gt; Core dump -&gt; Maximum number of tasks)。</li>
-<li>Core Dump 打印到 UART 之前的延迟时间(Components -&gt; ESP32-specific config -&gt; Core dump print to UART delay).。值以 ms 为单位。</li>
-</ol>
-<h2 id="将-Core-Dump-保存到-Flash"><a href="#将-Core-Dump-保存到-Flash" class="headerlink" title="将 Core Dump 保存到 Flash"></a>将 Core Dump 保存到 Flash</h2><p>选择此选项后，Core Dump 将保存到 Flash 上的特殊分区。当使用随 ESP-IDF 提供的默认分区表文件时，它会自动在 Flash 上分配必要的空间，但如果用户想要将自己的布局文件与 Core Dump 功能一起使用，则应为 Core Dump 定义单独的分区，如下所示:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Name,   Type, SubType, Offset,  Size</span><br><span class="line"># Note: if you change the phy_init or app partition offset, make sure to change the offset in Kconfig.projbuild</span><br><span class="line">nvs,      data, nvs,     0x9000,  0x6000</span><br><span class="line">phy_init, data, phy,     0xf000,  0x1000</span><br><span class="line">factory,  app,  factory, 0x10000, 1M</span><br><span class="line">coredump, data, coredump,,        64K</span><br></pre></td></tr></table></figure>
-
-<p>分区名称没有特殊要求。可以根据用户应用需求选择，但分区类型应为“数据”，子类型应为“coredump”。此外，在选择分区大小时请注意，Core Dump 数据结构会引入 20 字节的常量开销和 12 字节的每任务开销。此开销不包括每个任务的 TCB 和堆栈的大小，因此，partirion 大小应至少为 20 + max task stack number x(12 + TCB size + max task stack size) 字节。</p>
-<p>从 Flash 分析 Core Dump 的通用命令示例是:<br><code>espcoredump.py -p &lt;/path/to/serial/port&gt; info_corefile &lt;/path/to/program/elf/file&gt;</code><br>或<br> <code>espcoredump.py -p &lt;/path/to/serial/port&gt; dbg_corefile &lt;/path/to/program/elf/file&gt;</code></p>
-<h2 id="将-Core-Dump-打印到UART"><a href="#将-Core-Dump-打印到UART" class="headerlink" title="将 Core Dump 打印到UART"></a>将 Core Dump 打印到UART</h2><p>选择此选项时，在系统崩溃进入 Panic 状态时，将在 UART 上打印 <strong>base64 编码的 Core Dump</strong>。在这种情况下，用户应手动将 Core Dump 文本正文保存到某个文件，然后运行以下命令:<br><code>espcoredump.py info_corefile -t b64 -c &lt;/path/to/saved/base64/text&gt; &lt;/path/to/program/elf/file&gt;</code><br>或<br> <code>espcoredump.py dbg_corefile -t b64 -c &lt;/path/to/saved/base64/text&gt; &lt;/path/to/program/elf/file&gt;</code></p>
-<p>Base64 编码的 Core Dump 体将位于以下页眉和页脚之间:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; CORE DUMP START &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">&lt;body of base64-encoded core dump, save it to file on disk&gt;</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; CORE DUMP END &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br></pre></td></tr></table></figure>
-
-<p>CORE DUMP START 和 CORE DUMP END 行不得包含在 Core Dump 文本文件中。</p>
-<h2 id="Backtraces-中的-ROM-函数"><a href="#Backtraces-中的-ROM-函数" class="headerlink" title="Backtraces 中的 ROM 函数"></a>Backtraces 中的 ROM 函数</h2><p>可能的情况是，在崩溃时，一些任务或/和崩溃的任务本身在其调用堆栈中具有一个或多个 ROM 功能。由于 ROM 不是程序 ELF 的一部分，GDB 不可能解析这样的调用堆栈，因为它试图分析函数的序言来实现它。在这种情况下，调用堆栈打印将在第一个 ROM 函数中被错误消息打破。要解决此问题，您可以使用 Espressif 提供的 <a href="https://dl.espressif.com/dl/esp32_rom.elf" target="_blank" rel="noopener">ROM ELF</a> 并将其传递给 ‘espcoredump.py’。</p>
-<h2 id="运行-‘espcoredump-py’"><a href="#运行-‘espcoredump-py’" class="headerlink" title="运行 ‘espcoredump.py’"></a>运行 ‘espcoredump.py’</h2><p>通用命令语法:</p>
-<p><code>espcoredump.py [options] command [args]</code></p>
-<p><code>Script Options:</code>    </p>
-<ul>
-<li>–chip,-c {auto,esp32}. Target chip type. Supported values are auto and esp32.</li>
-<li>–port,-p PORT. Serial port device.</li>
-<li>–baud,-b BAUD. Serial port baud rate used when flashing/reading.</li>
-</ul>
-<p><code>Commands:</code>    </p>
-<ul>
-<li>info_corefile. Retrieve core dump and print useful info.</li>
-<li>dbg_corefile. Retrieve core dump and start GDB session with it.</li>
-</ul>
-<p><code>Command Arguments:</code></p>
-<ul>
-<li>–gdb,-g GDB. Path to gdb to use for data retrieval.</li>
-<li>–core,-c CORE. Path to core dump file to use (if skipped core dump will be read from flash).</li>
-<li>–core-format,-t CORE_FORMAT. Specifies that file passed with “-c” is an ELF (“elf”), dumped raw binary (“raw”) or base64-encoded (“b64”) format.</li>
-<li>–off,-o OFF. Ofsset of coredump partition in flash (type “make partition_table” to see it).</li>
-<li>–save-core,-s SAVE_CORE. Save core to file. Othwerwise temporary core file will be deleted. Ignored with “-c”.</li>
-<li>–rom-elf,-r ROM_ELF. Path to ROM ELF file to use (if skipped “esp32_rom.elf” is used).</li>
-<li>–print-mem,-m Print memory dump. Used only with “info_corefile”.</li>
-</ul>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
-<li><a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/core_dump.html" target="_blank" rel="noopener">原文链接</a></li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%B8%83%EF%BC%89ESP32%20Core%20Dump/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -604,7 +563,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 06:40:43" itemprop="dateModified" datetime="2020-07-23T06:40:43+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 06:45:40" itemprop="dateModified" datetime="2020-07-23T06:45:40+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -721,7 +680,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 06:40:43" itemprop="dateModified" datetime="2020-07-23T06:40:43+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 06:45:40" itemprop="dateModified" datetime="2020-07-23T06:45:40+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -785,98 +744,14 @@
 <p><a href="#%E4%BB%BB%E5%8A%A1%E5%88%A0%E9%99%A4">任务删除</a>:任务删除行为已从 FreeRTOS v9.0.0 反向移植并修改为 SMP 兼容.调用 <code>vTaskDelete()</code> 时,将立即释放任务内存,以删除当前未运行且未固定到其他核的任务.否则,释放任务存储器仍将被委托给空闲任务.</p>
 <p><a href="#%E7%BA%BF%E7%A8%8B%E6%9C%AC%E5%9C%B0%E5%AD%98%E5%82%A8%E6%8C%87%E9%92%88%E5%92%8C%E5%88%A0%E9%99%A4%E5%9B%9E%E8%B0%83">线程本地存储指针和删除回调</a>:ESP-IDF FreeRTOS 已经反向移植了线程本地存储指针 (TLSP) 功能.但是,添加了删除回调的额外功能.在删除任务期间会自动调用删除回调,并用于释放 TLSP 指向的内存.调用 <code>vTaskSetThreadLocalStoragePointerAndDelCallback()</code> 来设置 TLSP 和删除回调.</p>
 <p><a href="%E9%85%8D%E7%BD%AE-esp-idf-freertos">配置 ESP-IDF FreeRTOS</a>:可以使用 <code>make meunconfig</code> 配置 ESP-IDF FreeRTOS 的几个方面,例如在 Unicore 模式下运行 ESP-IDF,或配置每个任务将具有的线程本地存储指针的数量.</p>
-<h2 id="反向移植特性"><a href="#反向移植特性" class="headerlink" title="反向移植特性"></a>反向移植特性</h2><p>以下功能已从 FreeRTOS v9.0.0 反向移植到 ESP-IDF.</p>
-<h3 id="静态分配"><a href="#静态分配" class="headerlink" title="静态分配"></a>静态分配</h3><p>此特性已从 FreeRTOS v9.0.0 反向移植到 ESP-IDF. 必须在 menuconfig 中启用 <code>CONFIG_SUPPORT_STATIC_ALLOCATION</code> 选项才能使静态分配功能可用. 启用后,可以调用以下函数…</p>
-<ul>
-<li><code>xTaskCreateStatic()</code> (查看下面的<a href="#%E5%8F%8D%E5%90%91%E7%A7%BB%E6%A4%8D%E8%AE%B0%E5%BD%95">反向移植记录</a>)</li>
-<li><code>xQueueCreateStatic</code></li>
-<li><code>xSemaphoreCreateBinaryStatic</code></li>
-<li><code>xSemaphoreCreateCountingStatic</code></li>
-<li><code>xSemaphoreCreateMutexStatic</code></li>
-<li><code>xSemaphoreCreateRecursiveMutexStatic</code></li>
-<li><code>xTimerCreateStatic()</code> (查看下面的<a href="#%E5%8F%8D%E5%90%91%E7%A7%BB%E6%A4%8D%E8%AE%B0%E5%BD%95">反向移植记录</a>)</li>
-<li><code>xEventGroupCreateStatic()</code></li>
-</ul>
-<h3 id="其他特性"><a href="#其他特性" class="headerlink" title="其他特性"></a>其他特性</h3><ul>
-<li><code>vTaskSetThreadLocalStoragePointer()</code>  (查看下面的<a href="#%E5%8F%8D%E5%90%91%E7%A7%BB%E6%A4%8D%E8%AE%B0%E5%BD%95">反向移植记录</a>)</li>
-<li><code>pvTaskGetThreadLocalStoragePointer()</code>  (查看下面的<a href="#%E5%8F%8D%E5%90%91%E7%A7%BB%E6%A4%8D%E8%AE%B0%E5%BD%95">反向移植记录</a>)</li>
-<li><code>vTimerSetTimerID()</code></li>
-<li><code>xTimerGetPeriod()</code></li>
-<li><code>xTimerGetExpiryTime()</code></li>
-<li><code>pcQueueGetName()</code></li>
-<li><code>uxSemaphoreGetCount</code></li>
-</ul>
-<h3 id="反向移植记录"><a href="#反向移植记录" class="headerlink" title="反向移植记录"></a>反向移植记录</h3><ol>
-<li><code>xTaskCreateStatic()</code> 以与 <code>xTaskCreate()</code> 类似的方式与 SMP 兼容(请参阅<a href="#%E4%BB%BB%E5%8A%A1%E5%92%8C%E4%BB%BB%E5%8A%A1%E5%88%9B%E5%BB%BA">任务和任务创建</a>). 因此也可以调用 <code>xTaskCreateStaticPinnedToCore()</code>.</li>
-<li>尽管 vanilla FreeRTOS 允许静态分配 Timer 功能的守护进程任务,但守护进程任务总是在 ESP-IDF 中动态分配. 因此,在 ESP-IDF FreeRTOS 中使用静态分配的计时器时,不需要定义 <code>vApplicationGetTimerTaskMemory</code>.</li>
-<li>在 ESP-IDF FreeRTOS 中修改了线程本地存储指针功能,以包括删除回调(请参阅<a href="#%E7%BA%BF%E7%A8%8B%E6%9C%AC%E5%9C%B0%E5%AD%98%E5%82%A8%E6%8C%87%E9%92%88%E5%92%8C%E5%88%A0%E9%99%A4%E5%9B%9E%E8%B0%83">线程本地存储指针和删除回调</a>). 因此,也可以调用函数 <code>vTaskSetThreadLocalStoragePointerAndDelCallback()</code>.</li>
-</ol>
-<h2 id="任务和任务创建"><a href="#任务和任务创建" class="headerlink" title="任务和任务创建"></a>任务和任务创建</h2><p>ESP-IDF FreeRTOS 中的任务设计为在特定核上运行,因此通过将 <code>PinnedToCore</code> 附加到 vanilla FreeRTOS 中的任务创建功能的名称,ESP-IDF FreeRTOS 中添加了两个新的任务创建功能. <code>xTaskCreate()</code> 和 <code>xTaskCreateStatic()</code> 的 vanilla FreeRTOS 函数导致在 ESP-IDF FreeRTOS 中添加了 <code>xTaskCreatePinnedToCore()</code> 和 <code>xTaskCreateStaticPinnedToCore()</code> (参见<a href="#%E5%8F%8D%E5%90%91%E7%A7%BB%E6%A4%8D%E7%89%B9%E6%80%A7">反向移植特性</a>).</p>
-<p>有关更多详细信息,请参阅 <a href="https://github.com/espressif/esp-idf/blob/a557e8c/components/freertos/task.c" target="_blank" rel="noopener">freertos/task.c</a></p>
-<p>除了称为 <code>xCoreID</code> 的额外参数外,ESP-IDF FreeRTOS 任务创建功能几乎与它们的vanilla对应物相同. 此参数指定应在其上运行任务的核,并且可以是以下值之一.</p>
-<ul>
-<li><code>0</code> 将任务固定在 <strong>PRO_CPU</strong> 上运行</li>
-<li><code>1</code> 将任务固定在 <strong>APP_CPU</strong> 上运行</li>
-<li><code>tskNO_AFFINITY</code>允许在两个 CPU 上运行任务</li>
-</ul>
-<p>例如,<code>xTaskCreatePinnedToCore(tsk_callback,“APP_CPU Task”,1000,NULL,10,NULL,1)</code> 创建优先级为 10 的任务,该堆栈大小为 1000 字节运行在 <strong>APP_CPU</strong> 上. 应该注意的是,vanilla FreeRTOS 中的 <code>uxStackDepth</code> 参数根据字数指定任务的堆栈深度,而 ESP-IDF FreeRTOS 以字节的形式指定堆栈深度.</p>
-<p>请注意,vanilla FreeRTOS函数 <code>xTaskCreate()</code> 和 <code>xTaskCreateStatic()</code> 已在 ESP-IDF FreeRTOS 中定义为内联函数,它们分别使用 tskNO_AFFINITY 作为 xCoreID 值调用 <code>xTaskCreatePinnedToCore()</code> 和 <code>xTaskCreateStaticPinnedToCore()</code>.</p>
-<p>ESP-IDF 中的每个任务控制块 (TCB) 将 <code>xCoreID</code> 存储为成员. 因此,当每个核调用调度器选择要运行的任务时,<code>xCoreID</code> 成员将允许调度器确定是否允许让任务在调用调度器的核上运行.</p>
-<h2 id="调度方式"><a href="#调度方式" class="headerlink" title="调度方式"></a>调度方式</h2><p>vanilla FreeRTOS 在 <code>vTaskSwitchContext()</code> 函数中实现调度. 此函数负责从处于就绪状态的任务列表中选择要执行的最高优先级任务,称为就绪任务列表(将在下一节中介绍). 在 ESP-IDF FreeRTOS 中,每个核将独立调用 <code>vTaskSwitchContext()</code>以从两个核之间共享的就绪任务列表中选择要运行的任务. vanilla 和 ESP-IDF FreeRTOS 之间的调度行为存在一些差异,例如 循环调度调度,调度程序暂停和滴答中断同步的差异.</p>
-<h3 id="循环调度"><a href="#循环调度" class="headerlink" title="循环调度"></a>循环调度</h3><p>鉴于 Ready 状态和优先级相同的多个任务,vanilla FreeRTOS 在每个任务之间实现循环调度. 这将导致每次调用调度程序时轮流运行这些任务(例如每个滴答中断). 另一方面,当循环调度具有相同优先级的多个 Ready 状态任务时,ESP-IDF FreeRTOS 调度器可以跳过任务.</p>
-<p>循环调度期间跳过任务的问题源于在 FreeRTOS 中实现就绪任务列表的方式. 在 vanilla FreeRTOS 中,<code>pxReadyTasksList</code> 用于存储处于 Ready 状态的任务列表. 该列表实现为长度为 <code>configMAX_PRIORITIES</code> 的数组,其中数组的每个元素都是链表. 每个链表都是 <code>List_t</code> 类型,并包含处于 Ready 状态的相同优先级任务的 TCB. 下图说明了 <code>pxReadyTasksList</code> 结构.</p>
-<p><img src="https://img-blog.csdn.net/20180902140458206?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="pxReadyTasksList"><br> <center> Illustration of FreeRTOS Ready Task List Data Structure</center></p>
-<p>每个链表还包含一个 <code>pxIndex</code>,它指向查询列表时返回的最后一个 TCB. 该索引允许 <code>vTaskSwitchContext()</code> 在 <code>pxIndex</code> 之后立即开始遍历 TCB 上的列表,从而在相同优先级的任务之间实现循环调度.</p>
-<p>在 ESP-IDF FreeRTOS 中,就绪任务列表在核之间共享,因此 <code>pxReadyTasksList</code> 将包含固定到不同核的任务. 当核调用调度程序时,它能够查看列表中每个 TCB 的 <code>xCoreID</code> 成员,以确定是否允许在调用调度程序的核上运行该任务. ESP-IDF FreeRTOS <code>pxReadyTasksList</code> 如下图所示.</p>
-<p><img src="https://img-blog.csdn.net/20180902140927284?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="Illustration of FreeRTOS Ready Task List Data Structure in ESP-IDF"><br> <center> Illustration of FreeRTOS Ready Task List Data Structure in ESP-IDF </center> </p>
-<p>因此,当 <strong>PRO_CPU</strong> 调用调度程序时,它只会将任务视为蓝色或紫色. 而当 <strong>APP_CPU</strong> 调用调度程序时,它只会考虑橙色或紫色的任务.</p>
-<p>虽然每个 TCB 在 ESP-IDF FreeRTOS 中都有一个 <code>xCoreID</code>,但每个优先级的链表只有一个 <code>pxIndex</code>. 因此,当从特定核调用调度程序并遍历链接列表时,它将跳过固定到另一个核的所有 TCB,并将 <code>pxIndex</code> 指向所选任务. 如果另一个核接着调用调度程序,它将在 <code>pxIndex</code> 之后立即遍历从 TCB 开始的链表. 因此,<strong>在当前调度程序调用中不会考虑从由其他核先前调用调度程序跳过的 TCB</strong>. 下图说明了此问题.</p>
-<p><img src="https://img-blog.csdn.net/20180902141125129?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="Illustration of pxIndex behavior in ESP-IDF FreeRTOS"><br> <center>Illustration of pxIndex behavior in ESP-IDF FreeRTOS </center></p>
-<p>参考上面的图示,假设优先级 9 是最高优先级,并且优先级9中的任何任务都不会被阻塞,因此将始终处于运行或就绪状态.</p>
-<ol>
-<li><strong>PRO_CPU</strong> 调用调度程序并选择要运行的任务 A,因此将 <code>pxIndex</code> 移动到指向任务 A.</li>
-<li><strong>APP_CPU</strong> 调用调度程序并在作为任务 B 的 <code>pxIndex</code> 之后开始遍历任务.但是没有选择任务 B 运行,因为它没有固定到 <strong>APP_CPU</strong> 因此它被跳过并且选择了任务 C.  <code>pxIndex</code> 现在指向任务 C.</li>
-<li><strong>PRO_CPU</strong> 调用调度程序并开始从任务 D 开始遍历.它跳过任务 D 并选择任务 E 运行并将 <code>pxIndex</code> 指向任务 E.请注意,任务 B 未被遍历,因为最后一次 <strong>APP_CPU</strong> 调用调度程序时它被跳过遍历清单.</li>
-<li>如果 <strong>APP_CPU</strong> 再次调用调度程序,则会发生与任务 D 相同的情况,因为 <code>pxIndex</code> 现在指向任务E</li>
-</ol>
-<p>任务跳过问题的一个解决方案是确保每个任务都进入阻塞状态,以便从就绪任务列表中删除它们.另一种解决方案是跨多个优先级分配任务,以便不给予给定优先级多个固定到不同核的任务.</p>
-<h3 id="挂起调度器"><a href="#挂起调度器" class="headerlink" title="挂起调度器"></a>挂起调度器</h3><p>在 vanilla FreeRTOS 中,通过 <code>vTaskSuspendAll()</code> 挂起调度程序将阻止 <code>vTaskSwitchContext</code> 从上下文切换调用,直到调度程序已使用 <code>xTaskResumeAll()</code> 恢复.但是仍然允许为 ISR 提供服务.因此,在恢复调度程序之前,将不会执行由当前正在运行的任务或 ISRS 导致的任务状态的任何更改. vanilla FreeRTOS 中的调度程序暂停是一种常见的保护方法,可以同时访问任务之间共享的数据,同时仍允许对 ISR 进行服务.</p>
-<p>在 ESP-IDF FreeRTOS 中,<code>xTaskResumeAll()</code> 只会阻止调用 <code>vTaskSwitchContext()</code> 来切换调用挂起的核上下文.因此,如果 <strong>PRO_CPU</strong> 调用 <code>vTaskSuspendAll()</code>, <strong>APP_CPU</strong> 仍然可以切换上下文.如果数据在固定到不同核的任务之间共享,则调度程序暂停不是防止同时访问的有效方法.在保护 ESP-IDF FreeRTOS 中的共享资源时,请考虑使用关键部分(禁用中断)或信号量(不禁用中断).</p>
-<p>通常,最好使用其他 RTOS 原语(如互斥信号量)来防止任务之间共享的数据,而不是 <code>vTaskSuspendAll()</code>.</p>
-<h3 id="滴答中断同步"><a href="#滴答中断同步" class="headerlink" title="滴答中断同步"></a>滴答中断同步</h3><p>在 ESP-IDF FreeRTOS 中,由于来自每个核的调度程序调用是独立的,因此在相同的滴答计数上取消阻塞的不同核上的任务可能不会在完全相同的时间运行,并且每个核的滴答中断是不同步的.</p>
-<p>在 vanilla FreeRTOS 中,滴答中断触发对 <code>xTaskIncrementTick()</code> 的调用,该调用负责增加滴答计数器,检查调用 <code>vTaskDelay()</code> 的任务是否已经完成延迟时间,并将这些任务从 Delayed Task List 移动​​到 Ready Task 名单.如果需要上下文切换,则滴答中断将调用调度程序.</p>
-<p>在 ESP-IDF FreeRTOS 中,由于 <strong>PRO_CPU</strong> 负责增加共享滴答计数,因此参考 <strong>PRO_CPU</strong> 上的滴答中断来解除延迟任务的阻塞.但是,每个核的滴答中断可能不会同步(频率相同但异相),因此当 <strong>PRO_CPU</strong> 收到滴答中断时, <strong>APP_CPU</strong> 可能尚未收到它.因此,如果相同优先级的多个任务在相同的滴答计数上被解除阻塞,则固定到 <strong>PRO_CPU</strong> 的任务将立即运行,而固定到 <strong>APP_CPU</strong> 的任务必须等到 <strong>APP_CPU</strong> 收到其不同步滴答中断.收到滴答中断后, <strong>APP_CPU</strong> 将调用上下文切换,最后将上下文切换到新解锁的任务.</p>
-<p>因此,不应将任务延迟用作 ESP-IDF FreeRTOS 中任务之间的同步方法.相反,请考虑使用计数信号量同时取消阻止多个任务.</p>
-<h2 id="临界区和禁用中断"><a href="#临界区和禁用中断" class="headerlink" title="临界区和禁用中断"></a>临界区和禁用中断</h2><p>Vanilla FreeRTOS 在 <code>vTaskEnterCritical</code> 中实现了关键部分,它们禁用调度程序并调用 <code>portDISABLE_INTERRUPTS</code>.这可以防止在关键部分中进行上下文切换和ISR服务.因此,关键部分被用作防止 vanilla FreeRTOS 同时访问的有效保护方法.</p>
-<p>另一方面, ESP32 没有内核的硬件方法来禁用彼此的中断.调用 <code>portDISABLE_INTERRUPTS()</code> 对其他内核的中断没有影响.因此,禁用中断不是防止同时访问共享数据的有效保护方法,因为即使当前内核已禁用其自身的中断,它也会使其他内核可以自由访问数据.</p>
-<p>因此, ESP-IDF FreeRTOS 使用互斥锁实现关键部分,进入或退出关键部分的调用必须提供与需要访问保护的共享资源相关联的互斥锁.当进入 ESP-IDF FreeRTOS 中的关键部分时,调用内核将禁用其调度程序和中断,类似于 vanilla FreeRTOS 实现.但是,调用核也将使用互斥锁,而另一个核在关键部分不受影响.如果另一个核尝试使用相同的互斥锁,它将旋转直到释放互斥锁.因此,关键部分的 ESP-IDF FreeRTOS 实现允许核具有对共享资源的受保护访问,而不会禁用其他核.另一个核只有在尝试同时访问同一资源时才会受到影响.</p>
-<p>ESP-IDF FreeRTOS 关键部分功能已经修改如下……</p>
-<ul>
-<li><code>taskENTER_CRITICAL(mux)</code>,<code>taskENTER_CRITICAL_ISR(mux)</code>,<code>portENTER_CRITICAL(mux)</code>,<code>portENTER_CRITICAL_ISR(mux)</code> 都是宏定义来调用 <code>vTaskEnterCritical()</code></li>
-<li><code>taskEXIT_CRITICAL(mux)</code>,<code>taskEXIT_CRITICAL_ISR(mux)</code>,<code>portEXIT_CRITICAL(mux)</code>,<code>portEXIT_CRITICAL_ISR(mux)</code> 都是宏定义来调用 <code>vTaskExitCritical()</code></li>
-</ul>
-<p>有关更多详细信息,请参阅 <a href="https://github.com/espressif/esp-idf/blob/a557e8c/components/freertos/include/freertos/portmacro.h" target="_blank" rel="noopener">freertos/include/freertos/portmacro.h</a> 和 <a href="https://github.com/espressif/esp-idf/blob/a557e8c/components/freertos/task.c" target="_blank" rel="noopener">freertos/task.c</a></p>
-<p>应该注意的是,当修改 vanilla FreeRTOS 代码与 ESP-IDF FreeRTOS 兼容时,修改关键部分的类型是微不足道的,因为它们都被定义为调用相同的函数.只要在进入和退出时提供相同的互斥锁,呼叫类型就无关紧要了.</p>
-<h2 id="浮点运算"><a href="#浮点运算" class="headerlink" title="浮点运算"></a>浮点运算</h2><p>ESP32 通过连接到每个内核的浮点单元 (FPU,也称为协处理器)支持单精度浮点运算 (<code>float</code>) 的硬件加速.使用 FPU 对 ESP-IDF FreeRTOS 施加了一些行为限制.</p>
-<p>ESP-IDF FreeRTOS 为 FPU 实现了延迟上下文切换.换句话说,当发生上下文切换时,不会立即保存核心 FPU 寄存器的状态.因此,利用 <code>float</code> 的任务必须在创建时固定到特定的核心.如果没有, ESP-IDF FreeRTOS 会自动将有问题的任务固定到任务首次使用 <code>float</code> 任务的任何核心上.同样由于惰性上下文切换,中断服务例程也必须不使用 <code>float</code>.</p>
-<p>ESP32 不支持双精度浮点运算 (<code>double</code>) 的硬件加速.相反, <code>double</code> 是通过软件实现的,因此关于 <code>float</code> 的行为限制不适用于 <code>double</code>.请注意,由于缺少硬件加速,与 <code>float</code> 相比,双重操作可能会消耗更多的 CPU 时间.</p>
-<h2 id="任务删除"><a href="#任务删除" class="headerlink" title="任务删除"></a>任务删除</h2><p>在 v9.0.0 之前删除 FreeRTOS 任务将任务内存的释放完全委托给空闲任务. 目前,如果正在删除的任务当前没有运行或没有固定到另一个核心(相对于核心 <code>vTaskDelete()</code> 被调用),任务内存的释放将立即发生(在 <code>vTaskDelete()</code> 内). 如果满足相同的条件,TLSP删除回调也将立即运行.</p>
-<p>但是,调用 <code>vTaskDelete()</code> 来删除当前正在运行或固定到另一个核心的任务仍将导致释放被委派给空闲任务的内存.</p>
-<h2 id="线程本地存储指针和删除回调"><a href="#线程本地存储指针和删除回调" class="headerlink" title="线程本地存储指针和删除回调"></a>线程本地存储指针和删除回调</h2><p>线程本地存储指针 (TLSP) 是直接存储在 TCB 中的指针. TLSP 允许每个任务拥有自己唯一的数据结构指针集.但是, vanilla FreeRTOS 中的任务删除行为不会自动释放 TLSP 指向的内存.因此,如果在删除任务之前用户未明确释放 TLSP 指向的内存,则会发生内存泄漏.</p>
-<p>ESP-IDF FreeRTOS 提供了 Deletion Callbacks 的附加功能.删除任务删除期间自动调用回调以释放 TLSP 指向的内存.每个 TLSP 都可以拥有自己的 Deletion Callback.请注意,由于 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/freertos-smp.html#task-deletion" target="_blank" rel="noopener">Task Deletion</a> 行为,可能存在在空闲任务的上下文中调用 Deletion Callbacks 的实例.因此,删除回调不应该试图阻止,并且关键部分应该尽可能短,以最小化优先级倒置.</p>
-<p>删除回调的类型为 <code>void(* TlsDeleteCallbackFunction_t)(int,void *)</code>,其中第一个参数是关联 TLSP 的索引号,第二个参数是 TLSP 本身.</p>
-<p>通过调用 <code>vTaskSetThreadLocalStoragePointerAndDelCallback()</code> 将删除回调与 TLSP 一起设置.调用 vanilla FreeRTOS 函数 <code>vTaskSetThreadLocalStoragePointer()</code> 只会将 TLSP 关联的 Deletion Callback 设置为 NULL,这意味着在删除任务期间不会为该 TLSP 调用回调.如果删除回调为 NULL,则用户应在删除任务之前手动释放相关 TLSP 指向的内存,以避免内存泄漏.</p>
-<p>menuconfig 中的 <code>CONFIG_FREERTOS_THREAD_LOCAL_STORAGE_POINTERS</code> 可用于配置TCB将具有的 TLSP 和删除回调数.</p>
-<p>有关更多详细信息,请参阅 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/system/freertos.html" target="_blank" rel="noopener">FreeRTOS API 参考</a>.</p>
-<h2 id="配置-ESP-IDF-FreeRTOS"><a href="#配置-ESP-IDF-FreeRTOS" class="headerlink" title="配置 ESP-IDF FreeRTOS"></a>配置 ESP-IDF FreeRTOS</h2><p>可以使用 <code>Component_Config/FreeRTOS</code> 下的 <code>make menuconfig</code> 配置 ESP-IDF FreeRTOS. 以下部分重点介绍了一些 ESP-IDF FreeRTOS 配置选项.有关 ESP-IDF FreeRTOS 配置的完整列表,请参阅 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/kconfig.html" target="_blank" rel="noopener">FreeRTOS</a></p>
-<p><code>CONFIG_FREERTOS_UNICORE</code> 将仅在 <strong>PRO_CPU</strong> 上运行 ESP-IDF FreeRTOS.请注意,这不等于运行 vanilla FreeRTOS.将修改 ESP-IDF 中多个组件的行为,例如 <a href="https://github.com/espressif/esp-idf/blob/a557e8c/components/esp32/cpu_start.c" target="_blank" rel="noopener">esp32/cpu_start.c</a>.有关在单核上运行 ESP-IDF FreeRTOS 的效果的更多详细信息,请在 ESP-IDF 组件中搜索 <code>CONFIG_FREERTOS_UNICORE</code> 的出现.</p>
-<p><code>CONFIG_FREERTOS_THREAD_LOCAL_STORAGE_POINTERS</code> 将定义每个任务在 ESP-IDF FreeRTOS 中将具有的线程本地存储指针的数量.</p>
-<p><code>CONFIG_SUPPORT_STATIC_ALLOCATION</code> 将在 ESP-IDF FreeRTOS 中启用 <code>xTaskCreateStaticPinnedToCore()</code> 的反向移植功能</p>
-<p><code>CONFIG_FREERTOS_ASSERT_ON_UNTESTED_FUNCTION</code> 将触发 ESP-IDF FreeRTOS 中特定功能的暂停,这些功能尚未在 SMP 上下文中进行全面测试.</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
-<li><a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/freertos-smp.html" target="_blank" rel="noopener">原文链接</a></li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%B9%9D%EF%BC%89ESP-IDF%20FreeRTOS%20SMP%20Changes/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -926,7 +801,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 06:40:43" itemprop="dateModified" datetime="2020-07-23T06:40:43+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 06:45:40" itemprop="dateModified" datetime="2020-07-23T06:45:40+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1037,7 +912,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 06:40:43" itemprop="dateModified" datetime="2020-07-23T06:40:43+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 06:45:40" itemprop="dateModified" datetime="2020-07-23T06:45:40+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1104,90 +979,14 @@
 <li>Failed assertions 断言失败,通过 <code>assert</code> ,<code>configASSERT</code> 和类似的宏.</li>
 </ul>
 <p>本指南介绍了 ESP-IDF 中用于处理这些错误的过程,并提供了有关错误故障排除的建议.</p>
-<h2 id="Panic-处理"><a href="#Panic-处理" class="headerlink" title="Panic 处理"></a>Panic 处理</h2><p>概述中列出的每个错误原因都将由 Panic 处理程序处理.</p>
-<p>Panic 处理程序将首先将错误原因打印到控制台. 对于 CPU 异常,消息类似于:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Guru Meditation Error: Core 0 panic&#39;ed (IllegalInstruction). Exception was unhandled.</span><br></pre></td></tr></table></figure>
-
-<p>对于某些系统级别检查(中断监视程序,缓存访问错误),该消息将类似于:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Guru Meditation Error: Core 0 panic&#39;ed (Cache disabled but cached memory region accessed)</span><br></pre></td></tr></table></figure>
-
-<p>在所有情况下,错误原因将打印在括号中. 有关可能的错误原因列表,请参阅 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/fatal-errors.html#guru-meditation-errors" target="_blank" rel="noopener">Guru Meditation Errors</a>.</p>
-<p>可以使用 <code>CONFIG_ESP32_PANIC</code> 配置选项设置 Panic 处理程序的后续行为. 可用选项包括:</p>
-<ul>
-<li><p>打印寄存器并重新启动(<code>CONFIG_ESP32_PANIC_PRINT_REBOOT</code>) - 默认选项.<br> 这将在异常点打印寄存器值,打印回溯,然后重新启动芯片.</p>
-</li>
-<li><p>打印寄存器并暂停(<code>CONFIG_ESP32_PANIC_PRINT_HALT</code>)<br> 与上述选项类似,但暂停而不是重新启动. 重启程序需要外部重置.</p>
-</li>
-<li><p>无提示重启(<code>CONFIG_ESP32_PANIC_SILENT_REBOOT</code>)<br> 不要打印寄存器或回溯,立即重启芯片.</p>
-</li>
-<li><p>调用 GDB 存根(<code>CONFIG_ESP32_PANIC_GDBSTUB</code>)<br>  启动 GDB 服务器,它可以通过控制台 UART 端口与 GDB 通信. 有关详细信息,请参阅 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/fatal-errors.html#gdb-stub" target="_blank" rel="noopener">GDB 存根</a>.</p>
-</li>
-</ul>
-<p>Panic 处理程序的行为受另外两个配置选项的影响.</p>
-<ul>
-<li>如果启用了 <code>CONFIG_ESP32_DEBUG_OCDAWARE</code> (这是默认设置),则 Panic 处理程序将检测 JTAG 调试器是否已连接. 如果是,则执行将暂停,控制权将传递给调试器. 在这种情况下,寄存器和回溯不会转储到控制台,并且不使用 GDBStub/Core Dump 功能.</li>
-<li>如果启用了核心转储功能(<code>CONFIG_ESP32_ENABLE_COREDUMP_TO_FLASH</code> 或 <code>CONFIG_ESP32_ENABLE_COREDUMP_TO_UART</code> 选项),则系统状态(任务堆栈和寄存器)将被转储到 Flash 或 UART,以供以后分析.</li>
-</ul>
-<p>下图说明了 Panic 处理程序的行为:</p>
-<p><img src="https://img-blog.csdn.net/20180901140838695?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="Panic 处理程序流程图"></p>
-<h2 id="寄存器转储和回溯"><a href="#寄存器转储和回溯" class="headerlink" title="寄存器转储和回溯"></a>寄存器转储和回溯</h2><p>除非启用了 <code>CONFIG_ESP32_PANIC_SILENT_REBOOT</code> 选项,否则 Panic 处理程序会将一些 CPU 寄存器和回溯打印到控制台:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Core 0 register dump:</span><br><span class="line">PC      : 0x400e14ed  PS      : 0x00060030  A0      : 0x800d0805  A1      : 0x3ffb5030</span><br><span class="line">A2      : 0x00000000  A3      : 0x00000001  A4      : 0x00000001  A5      : 0x3ffb50dc</span><br><span class="line">A6      : 0x00000000  A7      : 0x00000001  A8      : 0x00000000  A9      : 0x3ffb5000</span><br><span class="line">A10     : 0x00000000  A11     : 0x3ffb2bac  A12     : 0x40082d1c  A13     : 0x06ff1ff8</span><br><span class="line">A14     : 0x3ffb7078  A15     : 0x00000000  SAR     : 0x00000014  EXCCAUSE: 0x0000001d</span><br><span class="line">EXCVADDR: 0x00000000  LBEG    : 0x4000c46c  LEND    : 0x4000c477  LCOUNT  : 0xffffffff</span><br><span class="line"></span><br><span class="line">Backtrace: 0x400e14ed:0x3ffb5030 0x400d0802:0x3ffb5050</span><br></pre></td></tr></table></figure>
-
-<p>打印的寄存器值是异常帧中的寄存器值,即 CPU 异常或其他严重错误发生时的值.</p>
-<p>如果由于 <code>abort()</code> 调用而执行了 Panic 处理程序,则不会打印寄存器转储.</p>
-<p>在某些情况下,例如中断看门狗超时, Panic 处理程序可能会打印额外的 CPU 寄存器 (EPC1-EPC4) 以及在另一个 CPU 上运行的代码的寄存器/回溯.</p>
-<p>Backtrace 行包含 PC:SP 对,其中 PC 是程序计数器,SP 是堆栈指针,用于当前任务的每个堆栈帧. 如果在 ISR 内发生严重错误,则回溯可能包括来自被中断的任务和来自 ISR 的 PC:SP 对.</p>
-<p>如果使用 IDF Monitor,程序计数器值将转换为代码位置(函数名称,文件名和行号),输出将与其他行进行注释:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Core 0 register dump:</span><br><span class="line">PC      : 0x400e14ed  PS      : 0x00060030  A0      : 0x800d0805  A1      : 0x3ffb5030</span><br><span class="line">0x400e14ed: app_main at &#x2F;Users&#x2F;user&#x2F;esp&#x2F;example&#x2F;main&#x2F;main.cpp:36</span><br><span class="line"></span><br><span class="line">A2      : 0x00000000  A3      : 0x00000001  A4      : 0x00000001  A5      : 0x3ffb50dc</span><br><span class="line">A6      : 0x00000000  A7      : 0x00000001  A8      : 0x00000000  A9      : 0x3ffb5000</span><br><span class="line">A10     : 0x00000000  A11     : 0x3ffb2bac  A12     : 0x40082d1c  A13     : 0x06ff1ff8</span><br><span class="line">0x40082d1c: _calloc_r at &#x2F;Users&#x2F;user&#x2F;esp&#x2F;esp-idf&#x2F;components&#x2F;newlib&#x2F;syscalls.c:51</span><br><span class="line"></span><br><span class="line">A14     : 0x3ffb7078  A15     : 0x00000000  SAR     : 0x00000014  EXCCAUSE: 0x0000001d</span><br><span class="line">EXCVADDR: 0x00000000  LBEG    : 0x4000c46c  LEND    : 0x4000c477  LCOUNT  : 0xffffffff</span><br><span class="line"></span><br><span class="line">Backtrace: 0x400e14ed:0x3ffb5030 0x400d0802:0x3ffb5050</span><br><span class="line">0x400e14ed: app_main at &#x2F;Users&#x2F;user&#x2F;esp&#x2F;example&#x2F;main&#x2F;main.cpp:36</span><br><span class="line"></span><br><span class="line">0x400d0802: main_task at &#x2F;Users&#x2F;user&#x2F;esp&#x2F;esp-idf&#x2F;components&#x2F;esp32&#x2F;cpu_start.c:470</span><br></pre></td></tr></table></figure>
-
-<p>要查找发生严重错误的位置,请查看“Backtrace”的下一行. 严重错误位置是顶行,后续行显示调用堆栈.</p>
-<h2 id="GDB-存根"><a href="#GDB-存根" class="headerlink" title="GDB 存根"></a>GDB 存根</h2><p>如果启用了 <code>CONFIG_ESP32_PANIC_GDBSTUB</code> 选项,则发生严重错误时, Panic 处理程序不会重置芯片. 相反,它将启动 GDB 远程协议服务器,通常称为 GDB Stub. 发生这种情况时,可以指示主机上运行的 GDB 实例连接到 ESP32 UART 端口.</p>
-<p>如果使用 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/get-started/idf-monitor.html" target="_blank" rel="noopener">IDF Monitor</a>,则在 UART 上检测到 GDB Stub 提示时会自动启动 GDB. 输出看起来像这样:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">Entering gdb stub now.</span><br><span class="line">$T0b#e6GNU gdb (crosstool-NG crosstool-ng-1.22.0-80-gff1f415) 7.10</span><br><span class="line">Copyright (C) 2015 Free Software Foundation, Inc.</span><br><span class="line">License GPLv3+: GNU GPL version 3 or later &lt;http:&#x2F;&#x2F;gnu.org&#x2F;licenses&#x2F;gpl.html&gt;</span><br><span class="line">This is free software: you are free to change and redistribute it.</span><br><span class="line">There is NO WARRANTY, to the extent permitted by law.  Type &quot;show copying&quot;</span><br><span class="line">and &quot;show warranty&quot; for details.</span><br><span class="line">This GDB was configured as &quot;--host&#x3D;x86_64-build_apple-darwin16.3.0 --target&#x3D;xtensa-esp32-elf&quot;.</span><br><span class="line">Type &quot;show configuration&quot; for configuration details.</span><br><span class="line">For bug reporting instructions, please see:</span><br><span class="line">&lt;http:&#x2F;&#x2F;www.gnu.org&#x2F;software&#x2F;gdb&#x2F;bugs&#x2F;&gt;.</span><br><span class="line">Find the GDB manual and other documentation resources online at:</span><br><span class="line">&lt;http:&#x2F;&#x2F;www.gnu.org&#x2F;software&#x2F;gdb&#x2F;documentation&#x2F;&gt;.</span><br><span class="line">For help, type &quot;help&quot;.</span><br><span class="line">Type &quot;apropos word&quot; to search for commands related to &quot;word&quot;...</span><br><span class="line">Reading symbols from &#x2F;Users&#x2F;user&#x2F;esp&#x2F;example&#x2F;build&#x2F;example.elf...done.</span><br><span class="line">Remote debugging using &#x2F;dev&#x2F;cu.usbserial-31301</span><br><span class="line">0x400e1b41 in app_main ()</span><br><span class="line">    at &#x2F;Users&#x2F;user&#x2F;esp&#x2F;example&#x2F;main&#x2F;main.cpp:36</span><br><span class="line">36      *((int*) 0) &#x3D; 0;</span><br><span class="line">(gdb)</span><br></pre></td></tr></table></figure>
-
-<p>GDB 提示可用于检查 CPU 寄存器,本地和静态变量以及内存中的任意位置. 无法设置断点,更改 PC 或继续执行. 要重置程序,请退出 GDB 并执行外部重置:IDF Monitor 中的 <code>Ctrl-T Ctrl-R</code>,或使用开发板上的外部重置按钮.</p>
-<h2 id="Guru-Meditation-错误"><a href="#Guru-Meditation-错误" class="headerlink" title="Guru Meditation 错误"></a>Guru Meditation 错误</h2><p>本节解释了不同错误原因的含义,打印在 <code>Guru Meditation Error:Core panic&#39;ed message</code> 之后的括号中.</p>
-<blockquote>
-<p>有关“Guru Meditation”的历史渊源,请参阅 <a href="https://en.wikipedia.org/wiki/Guru_Meditation" target="_blank" rel="noopener">Wikipedia 文章</a>.</p>
-</blockquote>
-<h3 id="IllegalInstruction-非法指令"><a href="#IllegalInstruction-非法指令" class="headerlink" title="IllegalInstruction (非法指令)"></a>IllegalInstruction (非法指令)</h3><p>该 CPU 异常表示执行的指令不是有效指令. 此错误的最常见原因有:</p>
-<ul>
-<li>FreeRTOS 任务功能已经返回. 在 FreeRTOS 中,如果任务函数需要终止,它应该调用 vTaskDelete() 函数并删除它自己,而不是返回.</li>
-<li>无法从 SPI Flash 加载下一条指令. 这种情况通常发生在:<ul>
-<li>应用程序已将 SPI Flash 引脚重新配置为其他功能(GPIO,UART 等). 有关 SPI Flash 引脚的详细信息,请参阅硬件设计指南和芯片或模块的数据表.</li>
-<li>某些外部设备意外连接到 SPI Flash 引脚,干扰了 ESP32 和 SPI Flash 之间的通信.</li>
-</ul>
-</li>
-</ul>
-<h3 id="InstrFetchProhibited-禁止指令加载"><a href="#InstrFetchProhibited-禁止指令加载" class="headerlink" title="InstrFetchProhibited (禁止指令加载)"></a>InstrFetchProhibited (禁止指令加载)</h3><p>此 CPU 异常表示 CPU 无法加载指令,因为指令的地址不属于指令 RAM 或 ROM 中的有效区域.</p>
-<p>通常这意味着尝试调用函数指针,该指针不指向有效代码. PC (程序计数器)寄存器可用作指示器:它将为零或将包含垃圾值(不是 0x4xxxxxxx).</p>
-<h3 id="LoadProhibited-StoreProhibited-禁止加载，禁止存储"><a href="#LoadProhibited-StoreProhibited-禁止加载，禁止存储" class="headerlink" title="LoadProhibited,StoreProhibited(禁止加载，禁止存储)"></a>LoadProhibited,StoreProhibited(禁止加载，禁止存储)</h3><p>当应用程序尝试读取或写入无效的内存位置时,会发生此 CPU 异常. 写入/读取的地址可在寄存器转储中的 <code>EXCVADDR</code> 寄存器中找到. 如果此地址为零,则通常表示应用程序尝试取消引用 NULL 指针. 如果此地址接近于零,则通常意味着应用程序尝试访问结构的成员,但指向该结构的指针为 NULL. 如果该地址是别的(垃圾值,不在 <code>0x3fxxxxxx</code> - <code>0x6xxxxxxx</code> 范围内),则可能意味着用于访问数据的指针未初始化或已损坏.</p>
-<h3 id="IntegerDivideByZero-除以-0"><a href="#IntegerDivideByZero-除以-0" class="headerlink" title="IntegerDivideByZero(除以 0)"></a>IntegerDivideByZero(除以 0)</h3><p>应用程序尝试将整数除以零.</p>
-<h3 id="LoadStoreAlignment-对齐方式不对"><a href="#LoadStoreAlignment-对齐方式不对" class="headerlink" title="LoadStoreAlignment(对齐方式不对)"></a>LoadStoreAlignment(对齐方式不对)</h3><p>应用程序尝试读取或写入内存位置,并且地址对齐与加载/存储大小不匹配. 例如,32 位加载只能从 4 字节对齐的地址完成,而 16 位加载只能从 2 字节的对齐地址完成.</p>
-<h3 id="LoadStoreError-加载-存储错误"><a href="#LoadStoreError-加载-存储错误" class="headerlink" title="LoadStoreError(加载/存储错误)"></a>LoadStoreError(加载/存储错误)</h3><p>应用程序尝试从仅支持 32 位加载/存储的内存区域进行 8 位或 16 位加载/存储. 例如,取消引用指向内存存储器的 <code>char *</code> 指针将导致这样的错误.</p>
-<h3 id="Unhandled-debug-exception-堆栈错误"><a href="#Unhandled-debug-exception-堆栈错误" class="headerlink" title="Unhandled debug exception(堆栈错误)"></a>Unhandled debug exception(堆栈错误)</h3><p>通常会出现以下消息:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Debug exception reason: Stack canary watchpoint triggered (task_name)</span><br></pre></td></tr></table></figure>
-
-<p>此错误表示应用程序已写入 <code>task_name</code> 任务堆栈的末尾. 请注意,并非每个堆栈溢出都可以保证触发此错误. 任务可能会在堆栈 <code>canary</code> 位置之外写入堆栈,在这种情况下,不会触发观察点.</p>
-<h3 id="Interrupt-wdt-timeout-on-CPU0-CPU1-看门狗超时"><a href="#Interrupt-wdt-timeout-on-CPU0-CPU1-看门狗超时" class="headerlink" title="Interrupt wdt timeout on CPU0 / CPU1(看门狗超时)"></a>Interrupt wdt timeout on CPU0 / CPU1(看门狗超时)</h3><p>表示发生了中断看门狗超时. 有关详细信息,请参阅<a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/system/wdts.html" target="_blank" rel="noopener">看门狗</a>.</p>
-<h3 id="Cache-disabled-but-cached-memory-region-accessed-Cache-禁止"><a href="#Cache-disabled-but-cached-memory-region-accessed-Cache-禁止" class="headerlink" title="Cache disabled but cached memory region accessed(Cache 禁止)"></a>Cache disabled but cached memory region accessed(Cache 禁止)</h3><p>在某些情况下,ESP-IDF 将暂时禁止通过高速缓存访问外部 SPI Flash 和 SPI RAM. 例如,spi_flash API 用于读取/写入/擦除/mmap SPI Flash 区域. 在这些情况下,任务被挂起,并且未注册 <code>ESP_INTR_FLAG_IRAM</code> 的中断处理程序被禁用. 确保使用此标志注册的任何中断处理程序都具有 IRAM/DRAM 中的所有代码和数据. 有关更多详细信息,请参阅 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/storage/spi_flash.html#iram-safe-interrupt-handlers" target="_blank" rel="noopener">SPI Flash API 文档</a>.</p>
-<h2 id="其他严重错误"><a href="#其他严重错误" class="headerlink" title="其他严重错误"></a>其他严重错误</h2><h3 id="Brownout-欠压"><a href="#Brownout-欠压" class="headerlink" title="Brownout(欠压)"></a>Brownout(欠压)</h3><p>ESP32 有一个内置的掉电检测器,默认启用. 如果电源电压低于安全水平,掉电检测器可以触发系统复位. 可以使用 <code>CONFIG_BROWNOUT_DET</code> 和 <code>CONFIG_BROWNOUT_DET_LVL_SEL</code> 选项配置掉电检测器. 当掉电检测器触发时,将打印以下消息:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Brownout detector was triggered</span><br></pre></td></tr></table></figure>
-
-<p>打印消息后,芯片将复位.</p>
-<p>请注意,如果电源电压快速下降,则控制台上只能看到部分消息.</p>
-<h3 id="Corrupt-Heap"><a href="#Corrupt-Heap" class="headerlink" title="Corrupt Heap"></a>Corrupt Heap</h3><p>ESP-IDF 堆实现包含许多堆结构的运行时检查. 可以在 menuconfig 中启用其他检查(“Heap Stisoning”). 如果其中一项检查失败,将打印类似于以下内容的消息:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CORRUPT HEAP: Bad tail at 0x3ffe270a. Expected 0xbaad5678 got 0xbaac5678</span><br><span class="line">assertion &quot;head !&#x3D; NULL&quot; failed: file &quot;&#x2F;Users&#x2F;user&#x2F;esp&#x2F;esp-idf&#x2F;components&#x2F;heap&#x2F;multi_heap_poisoning.c&quot;, line 201, function: multi_heap_free</span><br><span class="line">abort() was called at PC 0x400dca43 on core 0</span><br></pre></td></tr></table></figure>
-
-<p>有关详细信息,请参阅<a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/system/heap_debug.html" target="_blank" rel="noopener">堆内存调试文档</a>.</p>
-<h3 id="Stack-Smashing"><a href="#Stack-Smashing" class="headerlink" title="Stack Smashing"></a>Stack Smashing</h3><p>可以使用 <code>CONFIG_STACK_CHECK_MODE</code> 选项在 ESP-IDF 中启用 Stack Smashing 保护(基于 GCC  <code>-fstack-protector *</code> 标志). 如果检测到 Stack Smashing,将打印类似于以下内容的消息:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Stack smashing protect failure!</span><br><span class="line"></span><br><span class="line">abort() was called at PC 0x400d2138 on core 0</span><br><span class="line"></span><br><span class="line">Backtrace: 0x4008e6c0:0x3ffc1780 0x4008e8b7:0x3ffc17a0 0x400d2138:0x3ffc17c0 0x400e79d5:0x3ffc17e0 0x400e79a7:0x3ffc1840 0x400e79df:0x3ffc18a0 0x400e2235:0x3ffc18c0 0x400e1916:0x3ffc18f0 0x400e19cd:0x3ffc1910 0x400e1a11:0x3ffc1930 0x400e1bb2:0x3ffc1950 0x400d2c44:0x3ffc1a80</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
-
-<p>回溯应该指向 Stack Smashing 发生的函数. 检查功能代码以获得对本地阵列的无限制访问.</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
-<li><a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/fatal-errors.html" target="_blank" rel="noopener">原文链接</a></li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%BA%94%EF%BC%89%E4%B8%A5%E9%87%8D%E9%94%99%E8%AF%AF/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1237,7 +1036,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 06:40:43" itemprop="dateModified" datetime="2020-07-23T06:40:43+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 06:45:40" itemprop="dateModified" datetime="2020-07-23T06:45:40+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1293,247 +1092,14 @@
 <blockquote>
 <p>启用闪存加密会限制您进一步更新 ESP32 的选项。请务必阅读本文档(包括 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#flash-encryption-limitations" target="_blank" rel="noopener">Flash 加密限制</a>)并了解启用闪存加密的含义。</p>
 </blockquote>
-<h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1 背景"></a>1 背景</h2><ul>
-<li><p>使用带有 256 位密钥的 AES 加密闪存的内容。闪存加密密钥存储在芯片内部的 efuse 中，并且(默认情况下)受软件访问保护。</p>
-</li>
-<li><p>通过 ESP32 的闪存缓存映射功能，Flash 访问是透明的 - 映射到地址空间的任何闪存区域在读取时都将被透明地解密。</p>
-</li>
-<li><p>通过使用明文数据烧录 ESP32 来应用加密，并且(如果启用了加密)引导加载程序会在首次启动时对数据进行加密。</p>
-</li>
-<li><p>并非所有闪存都是加密的。以下类型的闪存数据已加密:</p>
-<ul>
-<li><p>引导程序</p>
-</li>
-<li><p>安全启动引导加载程序摘要(如果启用了安全启动)</p>
-</li>
-<li><p>分区表</p>
-</li>
-<li><p>所有 “app” 类型分区</p>
-</li>
-<li><p>分区表中标有 “encrypted” 标志的任何分区</p>
-<p> 可能希望一些数据分区保持未加密以便于访问，或者使用对于数据被加密时无效的闪存友好更新算法。由于 NVS 库与闪存加密不直接兼容，因此无法加密用于非易失性存储的 NVS 分区。有关更多详细信息，请参阅 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/storage/nvs_flash.html#nvs-encryption" target="_blank" rel="noopener">NVS 加密</a>。</p>
-</li>
-</ul>
-</li>
-<li><p>闪存加密密钥存储在 ESP32 芯片内部的 efuse 密钥块 1 中。默认情况下，此密钥具有读写保护功能，因此软件无法访问或更改密钥。</p>
-</li>
-<li><p>默认情况下，Efuse Block 1 编码方案为 “None”，并且在该块中存储 256 位密钥。在某些 ESP32 上，编码方案设置为 3/4 编码 (CODING_SCHEME efuse 的值为 1)，并且必须在该块中存储 192 位密钥。有关详细信息，请参见 《ESP32 技术参考手册》第 20.3.1.3 节 “系统参数 coding_scheme”。在所有情况下，算法都在 256 位密钥上运行，通过重复一些位（<a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#flash-encryption-algorithm" target="_blank" rel="noopener">具体细节</a>）来扩展  192 位密钥。当 <code>esptool.py</code> 连接到芯片或 <code>espefuse.py summary</code> 输出时，编码方案显示在 Features 行中。</p>
-</li>
-<li><p>闪存加密算法是 AES-256，其中密钥是“调整”的，每个 32 字节闪存块的偏移地址。这意味着每个 32 字节块(两个连续的 16 字节 AES 块)使用从闪存加密密钥派生的唯一密钥进行加密。</p>
-</li>
-<li><p>虽然芯片上运行的软件可以透明地解密闪存内容，但默认情况下，当启用闪存加密时，UART 引导加载程序无法解密(或加密)数据。</p>
-</li>
-<li><p>如果可以启用闪存加密，则编写<a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#using-encrypted-flash" target="_blank" rel="noopener">使用加密闪存</a>的代码时，编程人员必须采取一定的预防措施。</p>
-</li>
-</ul>
-<h2 id="2-Flash-加密初始化"><a href="#2-Flash-加密初始化" class="headerlink" title="2 Flash 加密初始化"></a>2 Flash 加密初始化</h2><p>这是默认(推荐) Flash 加密初始化过程。可以为开发或其他目的自定义此过程，有关详细信息，请参阅 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#flash-encryption-advanced-features" target="_blank" rel="noopener">Flash 加密高级功能</a>。</p>
-<blockquote>
-<p>在首次启动时启用闪存加密后，硬件通过串行重新闪存最多允许3次后续闪存烧录。必须遵循特殊过程(在<a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#updating-encrypted-flash-serial" target="_blank" rel="noopener">串口烧录</a>中记录)才能执行这些更新。</p>
-</blockquote>
-<ul>
-<li>如果启用了安全启动，则使用纯文本数据进行物理重新刷新需要“可重新映射”的安全启动摘要(请参阅 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#flash-encryption-and-secure-boot" target="_blank" rel="noopener">Flash 加密和安全启动</a>)。</li>
-<li>OTA 更新可用于更新 Flash 内容，而不计入此限制。</li>
-<li>在开发中启用闪存加密时，请使用预生成的闪存加密密钥，以允许使用预加密数据进行无限次重新闪存。</li>
-</ul>
-<p>启用闪存加密的过程:</p>
-<ul>
-<li>必须在启用闪存加密支持的情况下编译引导加载程序。在 <code>make menuconfig</code> 中，导航到“安全功能”，然后选择“是”以“启动时启用闪存加密”。</li>
-<li>如果同时启用安全启动，最好同时选择这些选项。首先阅读<a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/secure-boot.html" target="_blank" rel="noopener">安全启动</a>文档。</li>
-<li>正常构建并刷新引导加载程序，分区表和工厂应用程序映像。这些分区最初写入未加密的闪存。</li>
-</ul>
-<blockquote>
-<p>启用安全启动和闪存加密时，引导加载程序应用程序二进制 <code>bootloader.bin</code> 可能会变得太大。请参阅 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/secure-boot.html#secure-boot-bootloader-size" target="_blank" rel="noopener">Bootloader 大小</a>。</p>
-</blockquote>
-<ul>
-<li>首次启动时，引导加载程序会看到 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#flash-crypt-cnt" target="_blank" rel="noopener">FLASH_CRYPT_CNT efuse</a> 设置为 0 (出厂默认值)，因此它使用硬件随机数生成器生成闪存加密密钥。该密钥存储在efuse中。密钥是读写保护，以防止进一步的软件访问。</li>
-<li>然后，引导加载程序就地对所有加密分区进行加密。就地加密可能需要一些时间(对于大型分区，最多需要一分钟.)</li>
-</ul>
-<blockquote>
-<p>第一次启动加密通道运行时，请勿中断ESP32的电源。如果电源中断，闪存内容将被破坏，并且需要再次使用未加密的数据烧录。像这样的重新烧录不会计入烧录限制。</p>
-</blockquote>
-<ul>
-<li>烧录完成后。在 UART 引导加载程序运行时，激活(默认情况下)以禁用加密的闪存访问。有关高级详细信息，请参阅<a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#uart-bootloader-encryption" target="_blank" rel="noopener">启用 UART Bootloader 加密/解密</a>。</li>
-<li><code>FLASH_CRYPT_CONFIG efuse</code> 也会被烧制到最大值(0xF)，以最大化闪存算法中调整的关键位数。有关高级详细信息，请参阅<a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#setting-flash-crypt-config" target="_blank" rel="noopener">设置 FLASH_CRYPT_CONFIG</a>。</li>
-<li>最后，<a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#flash-crypt-cnt" target="_blank" rel="noopener">FLASH_CRYPT_CNT efuse</a> 以初始值 1 进行刻录。这个 efuse 激活透明闪存加密层，并限制后续重新刷新的次数。有关 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#flash-crypt-cnt" target="_blank" rel="noopener">FLASH_CRYPT_CNT efuse</a> 的详细信息，请参阅<a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#updating-encrypted-flash" target="_blank" rel="noopener">更新加密的 Flash</a> 部分。</li>
-<li>引导加载程序重置自身以重新加密的闪存重新引导。</li>
-</ul>
-<h2 id="3-使用加密的-Flash"><a href="#3-使用加密的-Flash" class="headerlink" title="3 使用加密的 Flash"></a>3 使用加密的 Flash</h2><p>ESP32 应用程序代码可以通过调用 <code>esp_flash_encryption_enabled()</code> 来检查当前是否启用了闪存加密。</p>
-<p>启用闪存加密后，从代码访问闪存内容时需要注意一些事项。</p>
-<h3 id="3-1-Flash-加密的范围"><a href="#3-1-Flash-加密的范围" class="headerlink" title="3.1 Flash 加密的范围"></a>3.1 Flash 加密的范围</h3><p>只要将 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#flash-crypt-cnt" target="_blank" rel="noopener">FLASH_CRYPT_CNT efuse</a> 设置为设置了奇数位的值，就会透明地解密通过 MMU 的闪存缓存访问的所有闪存内容。这包括:</p>
-<ul>
-<li>Flash 中的可执行应用程序代码 (IROM)。</li>
-<li>存储在闪存 (DROM) 中的所有只读数据。</li>
-<li>通过 <code>esp_spi_flash_mmap()</code> 访问的任何数据。</li>
-<li>ROM 引导加载程序读取软件引导加载程序映像。</li>
-</ul>
-<blockquote>
-<p>MMU Flash 缓存无条件地解密所有数据。在闪存中未加密存储的数据将通过闪存缓存“透明地解密”，并且看起来像随机垃圾这样的软件。</p>
-</blockquote>
-<h3 id="3-2-读取加密的-Flash"><a href="#3-2-读取加密的-Flash" class="headerlink" title="3.2 读取加密的 Flash"></a>3.2 读取加密的 Flash</h3><p>要在不使用闪存缓存 MMU 映射的情况下读取数据，我们建议使用分区读取函数 <code>esp_partition_read()</code>。使用此功能时，只有从加密分区读取数据时才会解密数据。其他分区将以未加密方式读取。通过这种方式，软件可以以相同的方式访问加密和非加密的闪存。</p>
-<p>通过其他 SPI 读取 APIs 读取的数据不会被解密:</p>
-<ul>
-<li>通过 <code>esp_spi_flash_read()</code> 读取的数据不会被解密</li>
-<li>通过 ROM 函数 <code>SPIRead()</code> 读取的数据不会被解密 (esp-idf 应用程序不支持此功能)</li>
-<li>使用非易失性存储 (NVS) API 存储的数据始终存储并读取解密。</li>
-</ul>
-<h3 id="3-3-写加密的-Flash"><a href="#3-3-写加密的-Flash" class="headerlink" title="3.3 写加密的 Flash"></a>3.3 写加密的 Flash</h3><p>在可能的情况下，我们建议使用分区写入函数 <code>esp_partition_write</code>。使用此功能时，只有在写入加密分区时才会加密数据。数据将被写入未加密的其他分区。通过这种方式，软件可以以相同的方式访问加密和非加密的闪存.</p>
-<p>当 <code>write_encrypted</code> 参数设置为 true 时，<code>esp_spi_flash_write</code> 函数将写入数据。否则，数据将以未加密的方式写入.</p>
-<p>ROM 函数 <code>esp_rom_spiflash_write_encrypted</code> 将加密数据写入闪存，ROM 函数 <code>SPIWrite</code> 将未加密写入闪存。(esp-idf 应用程序不支持这些功能).</p>
-<p>未加密数据的最小写入大小为 4 个字节(对齐为 4 个字节)。由于数据是以块为单位加密的，因此加密数据的最小写入大小为 16 字节(对齐为16字节).</p>
-<h2 id="4-更像加密的-Flash"><a href="#4-更像加密的-Flash" class="headerlink" title="4 更像加密的 Flash"></a>4 更像加密的 Flash</h2><h3 id="4-1-OTA-更新"><a href="#4-1-OTA-更新" class="headerlink" title="4.1 OTA 更新"></a>4.1 OTA 更新</h3><p>只要使用 <code>esp_partition_write</code> 函数，对加密分区的 OTA 更新将自动加密写入.</p>
-<h3 id="4-2-串口烧录"><a href="#4-2-串口烧录" class="headerlink" title="4.2 串口烧录"></a>4.2 串口烧录</h3><p><code>FLASH_CRYPT_CNT efuse</code> 允许通过串口烧录(或其他物理方法)使用新的明文数据更新闪存，最多 3 次.</p>
-<p>该过程涉及烧录明文数据，然后碰撞 <code>FLASH_CRYPT_CNT efuse</code> 的值，这会导致引导加载程序重新加密此数据.</p>
-<h4 id="4-2-1-限制更新"><a href="#4-2-1-限制更新" class="headerlink" title="4.2.1 限制更新"></a>4.2.1 限制更新</h4><p>这种类型只有 4 个明文串行更新周期，包括初始加密闪存.</p>
-<p>禁用第四次加密后，<code>FLASH_CRYPT_CNT efuse</code> 的最大值为 0xFF，永久禁用加密.</p>
-<p>通过预生成的 Flash 加密密钥使用 OTA 更新或重新刷新可以超过此限制.</p>
-<h4 id="4-2-2-串口烧录的注意事项"><a href="#4-2-2-串口烧录的注意事项" class="headerlink" title="4.2.2 串口烧录的注意事项"></a>4.2.2 串口烧录的注意事项</h4><ul>
-<li>通过串口重新烧录时，重新刷新最初用明文数据写入的每个分区(包括 bootloader)。可以跳过不是“当前选择的” OTA 分区的应用程序分区(除非在那里找到明文应用程序映像，否则不会重新加密这些分区.)但是，标有“加密”标志的任何分区都将无条件地重新分区。加密，意味着任何已加密的数据将被加密两次并被破坏.<ul>
-<li>使用 <code>make flash</code> 应烧录所有需要闪存的分区.</li>
-</ul>
-</li>
-<li>如果启用了安全启动，则除非您使用“可重新启动”选项进行安全启动，否则无法通过串口重新刷新纯文本数据。请参阅 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#flash-encryption-and-secure-boot" target="_blank" rel="noopener">Flash加密和安全启动</a>.</li>
-</ul>
-<h3 id="4-3-串口重新烧录程序"><a href="#4-3-串口重新烧录程序" class="headerlink" title="4.3 串口重新烧录程序"></a>4.3 串口重新烧录程序</h3><ul>
-<li>正常的构建应用程序.</li>
-<li>正常的使用明文数据刷新设备 (make flash 或 esptool.py 命令.)闪存所有先前加密的分区，包括引导加载程序(参见上一节).</li>
-<li>此时，设备将无法启动(消息为 flash read err，1000)，因为它希望看到加密的引导加载程序，但引导加载程序是纯文本.</li>
-<li>通过运行命令 <code>espefuse.py burn_efuse FLASH_CRYPT_CNT</code> 来刻录 <code>FLASH_CRYPT_CNT efuse</code>。 <code>espefuse.py</code> 会自动将位数递增 1，从而禁用加密.</li>
-<li>重置设备，它将重新加密明文分区，然后再次刻录 <code>FLASH_CRYPT_CNT efuse</code> 以重新启用加密.</li>
-</ul>
-<h4 id="4-3-1-禁用串口更新"><a href="#4-3-1-禁用串口更新" class="headerlink" title="4.3.1 禁用串口更新"></a>4.3.1 禁用串口更新</h4><p>要防止通过串口进行进一步的明文更新，请在启用闪存加密后(即首次启动完成后)使用 <code>espefuse.py</code> 写保护 <code>FLASH_CRYPT_CNT efuse</code> :</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">espefuse.py --port PORT write_protect_efuse FLASH_CRYPT_CNT</span><br></pre></td></tr></table></figure>
-
-<p>这可以防止进一步修改以禁用或重新启用闪存加密.</p>
-<h3 id="4-4-通过预生成的-Flash-加密密钥重新烧录"><a href="#4-4-通过预生成的-Flash-加密密钥重新烧录" class="headerlink" title="4.4 通过预生成的 Flash 加密密钥重新烧录"></a>4.4 通过预生成的 Flash 加密密钥重新烧录</h3><p>可以在主机上预生成闪存加密密钥，并将其刻录到 ESP32 的 efuse 密钥块中。这允许数据在主机上预加密并烧录到 ESP32，而无需明文闪存更新.</p>
-<p>这对于开发很有用，因为它消除了 4 次刷新限制。它还允许在启用安全启动的情况下重新刷新应用程序，因为每次都不需要重新启动引导加载程序.</p>
-<blockquote>
-<p>此方法仅用于协助开发，而不用于生产设备。如果为生产预生成闪存加密，请确保密钥是从高质量的随机数源生成的，并且不要跨多个设备共享相同的闪存加密密钥.</p>
-</blockquote>
-<h4 id="4-4-1-预生成-Flash-加密密钥"><a href="#4-4-1-预生成-Flash-加密密钥" class="headerlink" title="4.4.1 预生成 Flash 加密密钥"></a>4.4.1 预生成 Flash 加密密钥</h4><p>Flash 加密密钥是 32 字节的随机数据。您可以使用 <code>espsecure.py</code> 生成随机密钥:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">espsecure.py generate_flash_encryption_key my_flash_encryption_key.bin</span><br></pre></td></tr></table></figure>
-
-<p>(这些数据的随机性仅与操作系统一样好，而且是Python安装的随机数据源.)</p>
-<p>或者，如果您使用安全启动并具有安全启动签名密钥，则可以生成安全启动专用签名密钥的确定性SHA-256摘要，并将其用作闪存加密密钥:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">espsecure.py digest_private_key --keyfile secure_boot_signing_key.pem my_flash_encryption_key.bin</span><br></pre></td></tr></table></figure>
-
-<p>(如果为安全启动启用可重新映射模式，则使用相同的 32 个字节作为安全启动摘要键.)</p>
-<p>以这种方式从安全启动签名密钥生成闪存加密密钥意味着您只需要存储一个密钥文件。然而，该方法根本不适用于生产设备.</p>
-<h4 id="4-4-2-刻录-Flash-加密密钥"><a href="#4-4-2-刻录-Flash-加密密钥" class="headerlink" title="4.4.2 刻录 Flash 加密密钥"></a>4.4.2 刻录 Flash 加密密钥</h4><p>生成闪存加密密钥后，需要将其刻录到 ESP32 的 efuse 密钥块。这必须在首次加密启动之前完成，否则 ESP32 将生成软件无法访问或修改的随机密钥.</p>
-<p>要将密钥刻录到设备(仅限一次):</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">espefuse.py --port PORT burn_key flash_encryption my_flash_encryption_key.bin</span><br></pre></td></tr></table></figure>
-
-<h4 id="4-4-3-带有预生成密钥的第一次烧录"><a href="#4-4-3-带有预生成密钥的第一次烧录" class="headerlink" title="4.4.3 带有预生成密钥的第一次烧录"></a>4.4.3 带有预生成密钥的第一次烧录</h4><p>烧录密钥后，按照与默认 Flash 加密初始化相同的步骤操作，并为第一次启动时刷新纯文本图像。引导加载程序将使用预先烧制的密钥启用闪存加密并加密所有分区.</p>
-<h4 id="4-4-4-使用预生成密钥重新烧录"><a href="#4-4-4-使用预生成密钥重新烧录" class="headerlink" title="4.4.4 使用预生成密钥重新烧录"></a>4.4.4 使用预生成密钥重新烧录</h4><p>在首次启动时启用加密后，重新烧录加密镜像需要额外的手动步骤。这是我们预先加密我们希望在闪存中更新的数据的地方.</p>
-<p>假设这是用于刷新明文数据的常规命令:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">esptool.py --port &#x2F;dev&#x2F;ttyUSB0 --baud 115200 write_flash 0x10000 build&#x2F;my-app.bin</span><br></pre></td></tr></table></figure>
-
-<p>二进制应用程序映像 build/my-app.bin 写入偏移量 0x10000。此文件名和偏移量需要用于加密数据，如下所示:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">espsecure.py encrypt_flash_data --keyfile my_flash_encryption_key.bin --address 0x10000 -o build&#x2F;my-app-encrypted.bin build&#x2F;my-app.bin</span><br></pre></td></tr></table></figure>
-
-<p>此示例命令将使用提供的密钥加密 my-app.bin，并生成加密文件 my-app-encrypted.bin。确保 address 参数与计划闪存二进制文件的地址匹配.</p>
-<p>然后，使用esptool.py刷新加密的二进制文件:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">esptool.py --port &#x2F;dev&#x2F;ttyUSB0 --baud 115200 write_flash 0x10000 build&#x2F;my-app-encrypted.bin</span><br></pre></td></tr></table></figure>
-
-<p>不需要进一步的步骤或 efuse 操作，因为我们闪存时数据已经加密.</p>
-<h2 id="5-禁用-Flash-加密"><a href="#5-禁用-Flash-加密" class="headerlink" title="5 禁用 Flash 加密"></a>5 禁用 Flash 加密</h2><p>如果由于某种原因意外启用了闪存加密，则下一次明文数据闪存将使ESP32软化(设备将连续重启，打印错误闪存读错误， 1000).</p>
-<p>您可以通过编写 <code>FLASH_CRYPT_CNT efuse</code> 再次禁用闪存加密:</p>
-<ul>
-<li>首先，运行 <code>make menuconfig</code> 并取消选中“安全功能”下的“启用闪存加密启动”.</li>
-<li>退出 <code>menuconfig</code> 并保存新配置.</li>
-<li>再次运行 <code>make menuconfig</code> 并仔细检查你是否真的禁用了这个选项！ 如果启用此选项，则引导加载程序将在引导时立即重新启用加密.</li>
-<li>运行 <code>make flash</code> 以构建并刷新新的引导加载程序和应用程序，而不启用闪存加密.</li>
-<li>运行 <code>espefuse.py</code> (在 components/esptool_py/esptool 中)以禁用 <code>FLASH_CRYPT_CNT efuse</code>)::</li>
-</ul>
-<p>重置 ESP32 并禁用闪存加密，引导加载程序将正常启动.</p>
-<h2 id="6-Flash-加密的局限性"><a href="#6-Flash-加密的局限性" class="headerlink" title="6 Flash 加密的局限性"></a>6 Flash 加密的局限性</h2><p>Flash 加密可防止加密闪存的明文读出，从而保护固件免受未经授权的读取和修改.了解闪存加密系统的局限性非常重要:</p>
-<ul>
-<li>Flash 加密仅与密钥一样强大.因此，我们建议在首次启动时在设备上生成密钥(默认行为).如果在设备外生成密钥(请参阅通过预生成的 Flash 加密密钥重新刷新)，请确保遵循正确的步骤.</li>
-<li>并非所有数据都是加密存储的.如果在闪存上存储数据，请检查您使用的方法(库，API 等)是否支持闪存加密.</li>
-<li>Flash 加密不会阻止攻击者理解闪存的高级布局.这是因为相同的 AES 密钥用于每对相邻的 16 字节 AES 块.当这些相邻的 16 字节块包含相同的内容(例如空或填充区域)时，这些块将加密以产生匹配的加密块对.这可能允许攻击者在加密设备之间进行高级别比较(即判断两个设备是否可能运行相同的固件版本).</li>
-<li>出于同样的原因，攻击者总能知道一对相邻的 16 字节块 (32 字节对齐)何时包含相同的内容.如果将敏感数据存储在闪存中，请记住这一点，设计闪存存储器，以免发生这种情况(使用计数器字节或每 16 字节一些其他不相同的值就足够了).</li>
-</ul>
-<h2 id="7-Flash-加密和安全启动"><a href="#7-Flash-加密和安全启动" class="headerlink" title="7 Flash 加密和安全启动"></a>7 Flash 加密和安全启动</h2><p>建议一起使用闪存加密和安全启动。但是，如果启用了安全启动，则重新刷新设备会有其他限制:</p>
-<ul>
-<li>OTA 更新不受限制(前提是新应用程序使用安全启动签名密钥正确签名).</li>
-<li>只有选择了 Reflashable Secure Boot 模式并且预先生成安全启动密钥并将其刻录到 ESP32 (参见安全启动文档)，才能进行明文串口烧录更新。在此配置中， make bootloader 将生成预先消化的引导加载程序和安全引导摘要文件，以便在偏移量 0x0 处烧录。当遵循明文串行重新刷新步骤时，必须在烧录其他明文数据之前重新刷新该文件.</li>
-<li>如果未重新启动引导加载程序，仍可以通过预生成的 Flash 加密密钥重新刷新。重新刷新引导加载程序需要在安全引导配置中启用相同的 Reflashable 选项.</li>
-</ul>
-<h2 id="8-使用没有安全启动的-Flash-加密"><a href="#8-使用没有安全启动的-Flash-加密" class="headerlink" title="8 使用没有安全启动的 Flash 加密"></a>8 使用没有安全启动的 Flash 加密</h2><p>如果在没有安全启动的情况下使用闪存加密，则可以使用串行重新烧录加载未经授权的代码。有关详细信息，请参阅串行烧录 然后，这个未授权的代码可以读取所有加密的分区(以解密的形式)，使闪存加密无效。这可以通过写保护 <code>FLASH_CRYPT_CNT efuse</code> 来避免，从而禁止串口重新烧录。FLASH_CRYPT_CNT可以使用命令对efuse进行写保护:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">espefuse.py --port PORT write_protect_efuse FLASH_CRYPT_CNT</span><br></pre></td></tr></table></figure>
-
-<p>或者，应用程序可以在其启动过程中调用 <code>esp_flash_write_protect_crypt_cnt()</code>.</p>
-<h2 id="9-Flash-加密高级功能"><a href="#9-Flash-加密高级功能" class="headerlink" title="9 Flash 加密高级功能"></a>9 Flash 加密高级功能</h2><p>以下信息对于高级使用闪存加密非常有用:</p>
-<h3 id="9-1-加密分区标志"><a href="#9-1-加密分区标志" class="headerlink" title="9.1 加密分区标志"></a>9.1 加密分区标志</h3><p>某些分区默认是加密的。否则，可以将任何分区标记为需要加密:</p>
-<p>在分区表描述 CSV 文件中，有一个标志字段.</p>
-<p>通常留空，如果在此字段中写入 “encrypted” ，则分区将在分区表中标记为已加密，此处写入的数据将被视为已加密(与应用程序分区相同):</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Name,   Type, SubType, Offset,  Size, Flags</span><br><span class="line">nvs,      data, nvs,     0x9000,  0x6000</span><br><span class="line">phy_init, data, phy,     0xf000,  0x1000</span><br><span class="line">factory,  app,  factory, 0x10000, 1M</span><br><span class="line">secret_data, 0x40, 0x01, 0x20000, 256K, encrypted</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>默认分区表都不包含任何加密数据分区.</li>
-<li>没有必要将 “app” 分区标记为已加密，它们始终被视为已加密.</li>
-<li>如果未启用闪存加密，则“加密”标志不执行任何操作.</li>
-<li>如果您希望保护此数据不受物理访问读取或修改的影响，则可以将 phy_init 数据标记为可选的phy分区.</li>
-<li>无法将 nvs 分区标记为已加密.</li>
-</ul>
-<h3 id="9-2-启用-UART-Bootloader-加密-解密"><a href="#9-2-启用-UART-Bootloader-加密-解密" class="headerlink" title="9.2 启用 UART Bootloader 加密/解密"></a>9.2 启用 UART Bootloader 加密/解密</h3><p>默认情况下，首次启动时，闪存加密过程将刻录 <code>DISABLE_DL_ENCRYPT</code> ， <code>DISABLE_DL_DECRYPT</code> 和 <code>DISABLE_DL_CACHE</code> :</p>
-<p>在 UART 引导加载程序引导模式下运行时， <code>DISABLE_DL_ENCRYPT</code> 禁用闪存加密操作.<br> <code>DISABLE_DL_DECRYPT</code> 在 UART 引导加载程序模式下运行时禁用透明闪存解密，即使 <code>FLASH_CRYPT_CNT efuse</code> 设置为在正常操作中启用它也是如此.<br>在 UART 引导加载程序模式下运行时， <code>DISABLE_DL_CACHE</code> 禁用整个 MMU 闪存缓存.<br>可以仅刻录其中一些 efuses，并在第一次引导之前对其余部分进行写保护(使用未设置值 0)，以便保留它们。例如:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">espefuse.py --port PORT burn_efuse DISABLE_DL_DECRYPT</span><br><span class="line">espefuse.py --port PORT write_protect_efuse DISABLE_DL_ENCRYPT</span><br></pre></td></tr></table></figure>
-
-<p>(注意，这些 efuse 中的所有 3 个都是通过一个写保护位禁用的，因此写保护将保护所有这些保护位.因此，在写保护之前必须设置任何位.)</p>
-<blockquote>
-<p>由于 esptool.py 不支持写入或读取加密闪存，因此写保护这些 efuse 以保持它们不被设置目前不是非常有用.</p>
-</blockquote>
-<blockquote>
-<p>如果未设置 <code>DISABLE_DL_DECRYPT(0)</code>， 这有效地使闪存加密无效，因为具有物理访问权限的攻击者可以使用UART引导加载程序模式(使用自定义存根代码)来读取闪存内容.</p>
-</blockquote>
-<h3 id="9-3-设置-FLASH-CRYPT-CONFIG"><a href="#9-3-设置-FLASH-CRYPT-CONFIG" class="headerlink" title="9.3 设置 FLASH_CRYPT_CONFIG"></a>9.3 设置 <code>FLASH_CRYPT_CONFIG</code></h3><p><code>FLASH_CRYPT_CONFIG efuse</code> 确定闪存加密密钥中用块偏移“调整”的位数。有关详细信息，请参阅 Flash 加密算法.</p>
-<p>引导加载程序的首次引导始终将此值设置为最大 0xF.</p>
-<p>可以手动编写这些 efuse， 并在首次启动之前写保护，以便选择不同的调整值。不建议这样做.</p>
-<p>强烈建议在值为零时永远不要写保护 <code>FLASH_CRYPT_CONFIG</code>。如果此 efuse 设置为零，则不会调整闪存加密密钥中的任何位，并且闪存加密算法等同于 AES ECB 模式.</p>
-<h2 id="10-技术细节"><a href="#10-技术细节" class="headerlink" title="10 技术细节"></a>10 技术细节</h2><p>以下部分提供有关闪存加密操作的一些参考信息.</p>
-<h3 id="10-1-FLASH-CRYPT-CNT-efuse"><a href="#10-1-FLASH-CRYPT-CNT-efuse" class="headerlink" title="10.1 FLASH_CRYPT_CNT efuse"></a>10.1 <code>FLASH_CRYPT_CNT efuse</code></h3><p><code>FLASH_CRYPT_CNT</code> 是一个 8 位 efuse 字段，用于控制闪存加密。Flash 加密根据此 efuse 中设置为 “1” 的位数启用或禁用:</p>
-<ul>
-<li>设置偶数位 (0,2,4,6,8) 时:禁用闪存加密，无法解密任何加密数据.<ul>
-<li>如果引导加载程序是使用“启动时启用闪存加密”构建的，那么它将看到这种情况并立即重新加密闪存，无论它何时找到未加密的数据.完成后，它会将 efuse 中的另一位设置为 “1”，这意味着现在设置了奇数个位.<ul>
-<li>在第一次纯文本引导时，位计数具有全新值 0，并且引导加载程序在加密后将其更改为位计数 1 (值 0x01).</li>
-<li>在下一次明文闪存更新后，将位计数手动更新为 2 (值 0x03).重新加密引导加载程序后，将 efuse 位计数更改为 3 (值 0x07).</li>
-<li>在下一个明文闪存之后，将位计数手动更新为 4 (值 0x0F).重新加密引导加载程序后，将 efuse 位计数更改为 5 (值 0x1F).</li>
-<li>在最后的明文闪存之后，位计数被手动更新为 6 (值 0x3F).重新加密引导加载程序后，将 efuse 位计数更改为7 (值 0x7F).</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>设置奇数位 (1,3,5,7) 时:启用透明读取加密闪存.</li>
-<li>设置完所有 8 位后(efuse 值 0xFF):禁用透明读取加密闪存，永久无法访问任何加密数据。Bootloader 通常会检测到这种情况并停止.为避免使用此状态加载未经授权的代码，必须使用安全引导或 <code>FLASH_CRYPT_CNT efuse</code> 必须写保护.</li>
-</ul>
-<h3 id="10-2-Flash-加密算法"><a href="#10-2-Flash-加密算法" class="headerlink" title="10.2 Flash 加密算法"></a>10.2 Flash 加密算法</h3><ul>
-<li><p>AES-256 以 16 字节数据块运行.闪存加密引擎以 32 字节块，两个串联的 AES 块加密和解密数据.</p>
-</li>
-<li><p>AES 算法在闪存加密中反转使用，因此闪存加密“加密”操作是 AES 解密，“解密”操作是AES加密.这是出于性能原因，并未改变算法的有效性.</p>
-</li>
-<li><p>主闪存加密密钥存储在 efuse(BLOCK1) 中，默认情况下不受进一步写入或软件读取的影响.</p>
-</li>
-<li><p>每个 32 字节块(两个相邻的 16 字节 AES 块)使用唯一密钥加密.密钥源自efuse中的主闪存加密密钥，与闪存中该块的偏移量进行异或(“键调整”).</p>
-</li>
-<li><p>具体的调整取决于 <code>FLASH_CRYPT_CONFIG efuse</code> 的设置.这是一个 4 位 efuse， 其中每个位都能对特定范围的关键位进行异或运算:</p>
-<ul>
-<li>位 1， 该值的 0-66 位被异或.</li>
-<li>位 2， 该值的 67-131 位被异或.</li>
-<li>位 3， 该值的 132-194 被异或.</li>
-<li>位 4， 该值的 195-256 位被异或.<br>建议始终保留 <code>FLASH_CRYPT_CONFIG</code> 以设置默认值 0xF，以便所有关键位与块偏移进行异或.有关详细信息，请参阅设置 <code>FLASH_CRYPT_CONFIG</code>.</li>
-</ul>
-</li>
-<li><p>块偏移的高 19 位(第 5 位到第 23 位)与主闪存加密密钥进行异或.选择此范围有两个原因:最大闪存大小为 16MB(24 位)，每个块为 32 字节，因此最低有效 5 位 始终为零.</p>
-</li>
-<li><p>从 19 个块偏移位中的每一个到闪存加密密钥的 256 位存在特定映射，以确定哪个位与哪个位进行异或.请参阅 espsecure.py 源代码中的变量 <code>_FLASH_ENCRYPTION_TWEAK_PATTERN</code> 以获取完整的映射.</p>
-</li>
-<li><p>要查看 Python 中实现的完整闪存加密算法，请参阅 espsecure.py 源代码中的 <code>_flash_encryption_operation()</code> 函数.</p>
-</li>
-</ul>
-<h2 id="11-参考资料"><a href="#11-参考资料" class="headerlink" title="11 参考资料"></a>11 参考资料</h2><ul>
-<li><a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html" target="_blank" rel="noopener">原文链接</a></li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%85%AB%EF%BC%89Flash%20%E5%8A%A0%E5%AF%86/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1583,7 +1149,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 06:40:43" itemprop="dateModified" datetime="2020-07-23T06:40:43+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 06:45:40" itemprop="dateModified" datetime="2020-07-23T06:45:40+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1635,44 +1201,15 @@
 
       
           <h1 id="深度睡眠唤醒存根"><a href="#深度睡眠唤醒存根" class="headerlink" title="深度睡眠唤醒存根"></a>深度睡眠唤醒存根</h1><p>ESP32 支持在深度睡眠时运行“深度睡眠唤醒存根”。芯片唤醒后立即运行此功能 - 在任何正常初始化，引导加载程序或 ESP-IDF 代码运行之前。唤醒存根运行后，SoC 可以返回休眠状态或继续正常启动 ESP-IDF。</p>
-<p>深度睡眠唤醒存根代码被加载到“RTC 快速存储器”中，它使用的任何数据也必须加载到 RTC 存储器中。RTC 存储区域在深度睡眠期间保持其内容，</p>
-<h2 id="唤醒存根规则"><a href="#唤醒存根规则" class="headerlink" title="唤醒存根规则"></a>唤醒存根规则</h2><p>必须仔细编写唤醒存根代码:</p>
-<ul>
-<li>由于 SoC 刚刚从睡眠状态中醒来，大多数外设都处于复位状态。SPI Flash 未映射。</li>
-<li>唤醒存根代码只能调用 ROM 中或加载到 RTC 快速存储器中实现的功能(见下文)。</li>
-<li>唤醒存根代码只能访问 RTC 存储器中加载的数据。所有其他 RAM 将无法使用并具有随机内容。唤醒存根可以使用其他 RAM 进行临时存储，但是当 SoC 重新进入休眠状态或启动 ESP-IDF 时,内容将被覆盖。</li>
-<li>RTC 内存必须包含存根使用的任何只读数据(.rodata)。</li>
-<li>每当 SoC 重新启动时，RTC 存储器中的数据都会被初始化，除非从深度睡眠中唤醒。从深度睡眠中醒来时，保持睡眠前存在的值。</li>
-<li>唤醒存根代码是 esp-idf 应用程序的一部分。在 esp-idf 的正常运行期间，函数可以调用唤醒存根函数或访问 RTC 存储器。就好像这些是应用程序的常规部分。</li>
-</ul>
-<h2 id="实现存根"><a href="#实现存根" class="headerlink" title="实现存根"></a>实现存根</h2><p>esp-idf 中的唤醒存根的函数 <code>esp_wake_deep_sleep()</code>。只要 SoC 从深度睡眠中唤醒，该函数就会运行。esp-idf 中提供了此函数的默认版本，但默认函数是弱链接的，因此如果您的应用程序包含名为 <code>esp_wake_deep_sleep()</code> 的函数，那么这将覆盖这个默认版本。</p>
-<p>如果提供自定义唤醒存根，它首先要做的就是调用 <code>esp_default_wake_deep_sleep()</code>。</p>
-<p>没有必要在您的应用程序中实现 <code>esp_wake_deep_sleep()</code> 以使用深度睡眠。只有你想在唤醒时立即有特殊行为才有必要。</p>
-<p>如果要在运行时在不同的深度睡眠存根之间进行交换，也可以通过调用 <code>esp_set_deep_sleep_wake_stub()</code> 函数来执行此操作。如果仅使用默认的 <code>esp_wake_deep_sleep()</code> 函数，则不需要这样做。</p>
-<p>所有这些函数都在 components/esp32 下的 <code>esp_deepsleep.h</code> 头文件中声明。</p>
-<h2 id="将代码加载到-RTC-内存中"><a href="#将代码加载到-RTC-内存中" class="headerlink" title="将代码加载到 RTC 内存中"></a>将代码加载到 RTC 内存中</h2><p>唤醒存根代码必须驻留在 RTC 快速存储器中。这可以通过两种方式之一完成。</p>
-<p>第一种方法是使用 <code>RTC_IRAM_ATTR</code> 属性将函数放入 RTC 内存:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">void RTC_IRAM_ATTR esp_wake_deep_sleep(void) &#123;</span><br><span class="line">    esp_default_wake_deep_sleep();</span><br><span class="line">    &#x2F;&#x2F; Add additional functionality here</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>第二种方法是将函数放入名称以 <code>rtc_wake_stub</code> 开头的任何源文件中。文件名 <code>rtc_wake_stub *</code> 中其内容将通过链接器自动放入 <code>RTC</code> 存储器中。</p>
-<p>对于非常简短的代码，或者对于要混合“普通”和 “RTC” 代码的源文件，第一种方法更简单。当你想为 <code>RTC</code> 内存编写更长的代码时，第二种方法更简单。</p>
-<h2 id="将数据加载到-RTC-内存中"><a href="#将数据加载到-RTC-内存中" class="headerlink" title="将数据加载到 RTC 内存中"></a>将数据加载到 RTC 内存中</h2><p>存根代码使用的数据必须驻留在 <code>RTC</code> 慢速存储器中。ULP 也使用该存储器。</p>
-<p>可以通过以下两种方式之一来指定此数据:</p>
-<p>第一种方法是使用 <code>RTC_DATA_ATTR</code> 和 <code>RTC_RODATA_ATTR</code> 来指定应加载到 RTC 慢速内存中的任何数据(可写或只读，相应):</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">RTC_DATA_ATTR int wake_count;</span><br><span class="line"></span><br><span class="line">void RTC_IRAM_ATTR esp_wake_deep_sleep(void) &#123;</span><br><span class="line">    esp_default_wake_deep_sleep();</span><br><span class="line">    static RTC_RODATA_ATTR const char fmt_str[] &#x3D; &quot;Wake count %d\n&quot;;</span><br><span class="line">    ets_printf(fmt_str, wake_count++);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>可以通过名为 <code>CONFIG_ESP32_RTCDATA_IN_FAST_MEM</code> 的 menuconfig 选项配置放置此数据的 RTC 存储区。此选项允许为 ULP 程序保留较慢的存储区域，一旦启用，标记为 <code>RTC_DATA_ATTR</code> 和 <code>RTC_RODATA_ATTR</code> 的数据将被放置在 RTC 快速存储器段中，否则将转至 RTC 慢速存储器（默认选项）。此选项取决于 <code>CONFIG_FREERTOS_UNICORE</code>，因为 RTC 快速存储器只能由 PRO_CPU 访问。</p>
-<p>类似的属性 <code>RTC_FAST_ATTR</code> 和 <code>RTC_SLOW_ATTR</code> 用于指定将数据分别强制放入 <code>RTC_FAST</code> 和 <code>RTC_SLOW</code> 存储器。<code>PRO_CPU</code> 仅允许对标记为 <code>RTC_FAST_ATTR</code> 的数据进行访问，并且用户有责任确保它。</p>
-<p>不幸的是，以这种方式使用的任何字符串常量必须声明为数组并用 <code>RTC_RODATA_ATTR</code> 标记，如上例所示。</p>
-<p>第二种方法是将数据放入名称以 <code>rtc_wake_stub</code> 开头的任何源文件中。</p>
-<p>例如，<code>rtc_wake_stub_counter.c</code> 中的等效示例:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">int wake_count;</span><br><span class="line"></span><br><span class="line">void RTC_IRAM_ATTR esp_wake_deep_sleep(void) &#123;</span><br><span class="line">    esp_default_wake_deep_sleep();</span><br><span class="line">    ets_printf(&quot;Wake count %d\n&quot;, wake_count++);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>如果您需要使用字符串或编写其他更复杂的代码，第二种方法是更好的选择。</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
-<li><a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/deep-sleep-stub.html" target="_blank" rel="noopener">原文链接</a></li>
-</ul>
-
+<p>深度睡眠唤醒存根代码被加载到“RTC 快速存储器”中，它使用的任何数据也必须加载到 RTC 存储器中。RTC 存储区域在深度睡眠期间保持其内容。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%85%AD%EF%BC%89%E6%B7%B1%E5%BA%A6%E7%9D%A1%E7%9C%A0%E5%94%A4%E9%86%92%E5%AD%98%E6%A0%B9/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1722,7 +1259,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 06:40:43" itemprop="dateModified" datetime="2020-07-23T06:40:43+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 06:45:40" itemprop="dateModified" datetime="2020-07-23T06:45:40+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1774,69 +1311,14 @@
 
       
           <h1 id="高级中断"><a href="#高级中断" class="headerlink" title="高级中断"></a>高级中断</h1><p>Xtensa 架构支持 32 个中断,分为 8 个级别,以及各种异常. 在 ESP32 上,中断复用器允许使用<a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/system/intr_alloc.html" target="_blank" rel="noopener">中断分配器</a>将大多数中断源路由到这些中断. 通常,中断将以 C 语言写入,但 ESP-IDF 也允许在汇编中写入高级中断,从而允许非常低的中断延迟.</p>
-<h2 id="中断级别"><a href="#中断级别" class="headerlink" title="中断级别"></a>中断级别</h2><table>
-<thead>
-<tr>
-<th align="center">级别</th>
-<th align="center">标识</th>
-<th align="center">备注</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center">N/A</td>
-<td align="center">异常和0级中断. 由 ESP-IDF 处理</td>
-</tr>
-<tr>
-<td align="center">2-3</td>
-<td align="center">N/A</td>
-<td align="center">中级中断. 由 ESP-IDF 处理</td>
-</tr>
-<tr>
-<td align="center">4</td>
-<td align="center">xt_highint4</td>
-<td align="center">通常由 ESP-IDF 调试逻辑使用</td>
-</tr>
-<tr>
-<td align="center">5</td>
-<td align="center">xt_highint4</td>
-<td align="center">随意使用</td>
-</tr>
-<tr>
-<td align="center">NMI</td>
-<td align="center">xt_nmi</td>
-<td align="center">随意使用</td>
-</tr>
-<tr>
-<td align="center">dbg</td>
-<td align="center">xt_debugexception</td>
-<td align="center">调试异常. 被称为例如 BREAK 指令.</td>
-</tr>
-</tbody></table>
-<p>使用这些标识是通过创建一个程序集文件(后缀 .S)并定义命名符号来完成的,如下所示：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">    .section .iram1,&quot;ax&quot;</span><br><span class="line">    .global     xt_highint5</span><br><span class="line">    .type       xt_highint5,@function</span><br><span class="line">    .align      4</span><br><span class="line">xt_highint5:</span><br><span class="line">    ... your code here</span><br><span class="line">    rsr     a0, EXCSAVE_5</span><br><span class="line">    rfi     5</span><br></pre></td></tr></table></figure>
-
-<p>有关实际示例,请参阅 <code>components/esp32/panic_highint_hdl.S</code> 文件; Panic 处理程序中断在那里实现.</p>
-<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><ul>
-<li><p>不要从高级别中断调用 C 代码; 因为这些中断仍然在关键部分运行,这可能会导致崩溃. (恐慌处理程序中断会调用正常的C代码,但这没关系,因为之后无意返回正常的代码流.)</p>
-</li>
-<li><p>确保汇编代码被链接.如果中断处理程序符号是代码中其余代码使用的唯一符号,则链接器将采用默认的ISR,而不是将程序集文件链接到最终项目. 要解决此问题,请在汇编文件中定义符号,如下所示：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">     .global ld_include_my_isr_file</span><br><span class="line">ld_include_my_isr_file:</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<p>(此符号在此处称为 <code>ld_include_my_isr_file</code>,但可以具有未在其他任何位置定义的任意名称.)然后,在 <code>component.mk</code> 中,将此文件作为未解析的符号添加到 ld 命令行参数：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">COMPONENT_ADD_LDFLAGS :&#x3D; -u ld_include_my_isr_file</span><br></pre></td></tr></table></figure>
-
-<p>这应该导致链接器始终包含定义 <code>ld_include_my_isr_file</code> 的文件,从而导致始终链接 ISR.</p>
-<ul>
-<li>可以使用 <code>esp_intr_alloc</code> 和相关函数路由和处理高级中断. 但是,<code>esp_intr_alloc</code> 的处理程序和处理程序参数必须为 NULL.</li>
-<li>理论上,中等优先级中断也可以这种方式处理. 目前, ESP-IDF 不支持这一点.</li>
-</ul>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
-<li><a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/hlinterrupts.html" target="_blank" rel="noopener">原文链接</a></li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%B8%80%EF%BC%89%E9%AB%98%E7%BA%A7%E4%B8%AD%E6%96%AD/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
