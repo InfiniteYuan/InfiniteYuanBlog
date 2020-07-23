@@ -203,7 +203,7 @@ theme_config:
     categories: /categories/ || fa fa-th
     archives: /archives/ || fa fa-archive
     #schedule: /schedule/ || fa fa-calendar
-    sitemap: /sitemap.xml || fa fa-sitemap
+    # sitemap: /sitemap.xml || fa fa-sitemap
   custom_logo: /InfiniteYuanBlog/images/InfiniteYuanLogo.jpg
   # Post wordcount display settings
   # Dependencies: https://github.com/willin/hexo-wordcount
