@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/InfiniteYuanBlog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/InfiniteYuanBlog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/InfiniteYuanBlog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/InfiniteYuanBlog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/css/main.css">
+
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/InfiniteYuanBlog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/InfiniteYuanBlog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"infiniteyuan.github.io","root":"/InfiniteYuanBlog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="ESP-MESH本指南提供有关 ESP-MESH 协议的信息。有关 API 使用的更多信息，请参阅 MESH API 参考。 概述ESP-MESH 是一种基于 Wi-Fi 协议构建的网络协议。ESP-MESH 允许在大的物理区域（室内和室外）上分布的多个设备（以下称为节点）在单个 WLAN（无线局域网）下互连。ESP-MESH 具有自组织和自我修复功能，意味着网络可以自主构建和维护。 简介传统的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ESP32 官方文档（十五）ESP-MESH">
+<meta property="og:url" content="https://infiniteyuan.github.io/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89ESP-MESH/index.html">
+<meta property="og:site_name" content="InfiniteYuan">
+<meta property="og:description" content="ESP-MESH本指南提供有关 ESP-MESH 协议的信息。有关 API 使用的更多信息，请参阅 MESH API 参考。 概述ESP-MESH 是一种基于 Wi-Fi 协议构建的网络协议。ESP-MESH 允许在大的物理区域（室内和室外）上分布的多个设备（以下称为节点）在单个 WLAN（无线局域网）下互连。ESP-MESH 具有自组织和自我修复功能，意味着网络可以自主构建和维护。 简介传统的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190201111240103.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190201113539338.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190201114600123.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190201115649174.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190201120120285.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190201140919219.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190201142029243.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019020114281399.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190201144333598.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190201145101139.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190201150942611.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190201153541569.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190201153956675.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190201160040642.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190201162512352.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190201165440991.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190201171947753.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2012-07-22T09:43:43.000Z">
+<meta property="article:modified_time" content="2020-07-23T06:36:50.181Z">
+<meta property="article:author" content="InfiniteYuan">
+<meta property="article:tag" content="ESP32">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190201111240103.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89ESP-MESH/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ESP32 官方文档（十五）ESP-MESH | InfiniteYuan</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/InfiniteYuanBlog/atom.xml" title="InfiniteYuan" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+      <div class="site-meta-headline">
+        <a>
+          <img class="custom-logo-image" src="/InfiniteYuanBlog/images/InfiniteYuanLogo.jpg" alt="InfiniteYuan">
+        </a>
+      </div>
+
+    <a href="/InfiniteYuanBlog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">InfiniteYuan</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/InfiniteYuanBlog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/InfiniteYuanBlog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">16</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/InfiniteYuanBlog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/InfiniteYuanBlog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/infiniteyuan" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89ESP-MESH/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
+      <meta itemprop="name" content="InfiniteYuan">
+      <meta itemprop="description" content="Stay Hungry, Stay Funlish">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="InfiniteYuan">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ESP32 官方文档（十五）ESP-MESH
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2012-07-22 09:43:43" itemprop="dateCreated datePublished" datetime="2012-07-22T09:43:43+00:00">2012-07-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-23 06:36:50" itemprop="dateModified" datetime="2020-07-23T06:36:50+00:00">2020-07-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/" itemprop="url" rel="index"><span itemprop="name">ESP32 官方文档</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89ESP-MESH/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89ESP-MESH/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>14k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>13 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="ESP-MESH"><a href="#ESP-MESH" class="headerlink" title="ESP-MESH"></a>ESP-MESH</h1><p>本指南提供有关 ESP-MESH 协议的信息。有关 API 使用的更多信息，请参阅 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/network/esp_mesh.html" target="_blank" rel="noopener">MESH API 参考</a>。</p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP-MESH 是一种基于 Wi-Fi 协议构建的网络协议。ESP-MESH 允许在大的物理区域（室内和室外）上分布的多个设备（以下称为节点）在单个 WLAN（无线局域网）下互连。ESP-MESH 具有自组织和自我修复功能，意味着网络可以自主构建和维护。</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><img src="https://img-blog.csdnimg.cn/20190201111240103.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="传统的 Wi-Fi 网络架构"><br>传统的 Wi-Fi 网络是一点对多点网络，其中称为接入点（AP）的单个中心节点直接连接到所有其他节点（station）。AP 负责仲裁和转发节点之间的传输。一些 AP 还通过路由器中继与外部 IP 网络的传输。传统的 Wi-Fi 网络由于要求每个站必须在一定范围内以直接与 AP 连接而具有有限覆盖区域的缺点。此外，传统的 Wi-Fi 网络易于过载，因为网络中允许的最大站数受到 AP 容量的限制。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190201113539338.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>ESP-MESH 与传统的 Wi-Fi 网络的不同之处在于节点不需要连接到中心节点。相反，允许节点与相邻节点连接。节点相互负责传递彼此的传输。这允许 ESP-MESH 网络具有更大的覆盖区域，因为节点仍然可以实现互连而无需在中心节点的范围内。同样，ESP-MESH 也不易受到过载的影响，因为网络上允许的节点数量不再受单个中心节点的限制。</p>
+<h2 id="ESP-MESH概念"><a href="#ESP-MESH概念" class="headerlink" title="ESP-MESH概念"></a>ESP-MESH概念</h2><h3 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h3><table>
+<thead>
+<tr>
+<th>术语</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>节点</td>
+<td>任何属于或可以属于 ESP-MESH 网络的设备</td>
+</tr>
+<tr>
+<td>根节点</td>
+<td>网络中的顶级节点</td>
+</tr>
+<tr>
+<td>子节点</td>
+<td>当节点 X 连接到另一节点 Y 时，节点 X 是子节点，其中连接使节点 X 比根节点更远离节点 Y（就连接数而言）。</td>
+</tr>
+<tr>
+<td>父节点</td>
+<td>子节点的相反概念</td>
+</tr>
+<tr>
+<td>子孙节点</td>
+<td>通过从父节点到子节点重复进行都可以访问的任何节点（例：父-&gt;子-&gt;子孙）</td>
+</tr>
+<tr>
+<td>同级节点</td>
+<td>共享同一父节点的节点</td>
+</tr>
+<tr>
+<td>连接</td>
+<td>AP 与站之间的传统 Wi-Fi 关联。ESP-MESH 中的节点将使用其工作站接口与另一个节点的 SoftAP 接口关联，从而形成连接。连接过程包括 Wi-Fi 中的认证和关联过程。</td>
+</tr>
+<tr>
+<td>上游连接</td>
+<td>从节点到其父节点的连接</td>
+</tr>
+<tr>
+<td>下游连接</td>
+<td>从节点到其子节点之一的连接</td>
+</tr>
+<tr>
+<td>无线跳数</td>
+<td>源节点和目标节点之间的路径部分，对应于单个无线连接。遍历单个连接的数据包称为单跳，而遍历多个连接称为多跳。</td>
+</tr>
+<tr>
+<td>子网</td>
+<td>一个子网是 ESP-MESH 网络的细分，它由一个节点及其所有后代节点组成。因此，根节点的子网由 ESP-MESH 网络中的所有节点组成。</td>
+</tr>
+<tr>
+<td>MAC 地址</td>
+<td>媒体访问控制地址，用于唯一标识 ESP-MESH 网络中的每个节点或路由器。</td>
+</tr>
+<tr>
+<td>DS</td>
+<td>分配系统（外部 IP 网络）</td>
+</tr>
+</tbody></table>
+<h3 id="树状网络拓扑结构"><a href="#树状网络拓扑结构" class="headerlink" title="树状网络拓扑结构"></a>树状网络拓扑结构</h3><p>ESP-MESH 基于 Wi-Fi 协议构建，可以被视为将许多单独的 Wi-Fi 网络组合到单个 WLAN 中的网络协议。在 Wi-Fi 中，Station 在任何时候都限于与 AP（上游连接）的单个连接，而 AP 可以同时连接到多个 Station（下游连接）。然而，ESP-MESH 允许节点同时充当 Station 和 AP。因此，ESP-MESH 中的节点可以使用其 SoftAP 接口具有多个下游连接，同时使用其 Station 接口具有单个上游连接。这就是具有由多个层组成的父子层次结构的树状网络拓扑结构。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190201114600123.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="ESP-MESH 树状网络拓扑结构"><br>ESP-MESH 是多跳网络，意味着节点可以通过一个或多个无线“跳跃”将数据包发送到网络中的其他节点。因此，ESP-MESH 中的节点不仅传输自己的数据包，还同时用作其他节点的中继。如果物理层上的任何两个节点之间存在路径（通过一个或多个无线跳），则 ESP-MESH 网络内的 <strong>任何两个节点（节点对）</strong> 都可以进行通信。</p>
+<blockquote>
+<p>ESP-MESH 网络中的大小（节点总数）取决于网络中允许的最大层数，以及每个节点可以拥有的最大下游连接数。可以通过配置这两个变量限制网络的大小。</p>
+</blockquote>
+<h3 id="节点类型"><a href="#节点类型" class="headerlink" title="节点类型"></a>节点类型</h3><p><img src="https://img-blog.csdnimg.cn/20190201115649174.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="ESP-MESH 节点类型"><br><strong>根节点：</strong> 根节点是网络中的顶级节点，并且是 ESP-MESH 网络和外部 IP 网络之间的唯一接口。 根节点连接到传统的 Wi-Fi 路由器，并将数据包中继到外部 IP 网络或从中继到 ESP-MESH 网络内的节点。 ESP-MESH 网络中只能有一个根节点，根节点的上游连接只可能与路由器连接。参考上图，节点 A 是网络的根节点。</p>
+<p><strong>叶节点：</strong> 叶节点是不允许具有任何子节点（没有下游连接）的节点。因此，叶子节点只能发送或接收自己的数据包，但不能转发其他节点的数据包。如果节点位于网络的最大允许层上，则将其指定为叶节点。这可以防止节点形成任何下游连接，从而确保网络不会添加额外的层。由于需要为任何下游连接提供 SoftAP 接口，因此一些没有 SoftAP 接口（仅限 Station）的节点也将被指定为叶节点。参考上图，节点 L/M/N 位于网络最大允许层上，因此已被指定为叶节点。</p>
+<p><strong>中间父节点：</strong> 既不是根节点也不是叶节点的连接节点是中间父节点。中间父节点必须具有单个上游连接（单个父节点），但可以具有零到多个下游连接（零到多个子节点）。因此，中间父节点可以发送和接收数据包，但也可以转发从其上游和下游连接发送的数据包。参考上图，节点 B 到 J 是中间父节点。没有下游连接的中间父节点（例如节点 E/F/G/I/J）不等同于叶节点，因为它们在将来仍然允许形成下游连接。</p>
+<p><strong>空闲节点：</strong> 尚未加入网络的节点被指定为空闲节点。空闲节点将尝试与中间父节点形成上游连接，或尝试在正确的情况下成为根节点（请参阅<a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/mesh.html#automatic-root-node-selection" target="_blank" rel="noopener">自动根节点选择</a>）。参考上图，节点 K 和 O 是空闲节点。</p>
+<h3 id="信标帧-Beacon-帧-和-RSSI-阈值"><a href="#信标帧-Beacon-帧-和-RSSI-阈值" class="headerlink" title="信标帧(Beacon 帧)和 RSSI 阈值"></a>信标帧(Beacon 帧)和 RSSI 阈值</h3><p>ESP-MESH 中能够形成下游连接（即具有 SoftAP 接口）的每个节点将<strong>周期性地发送 Wi-Fi 信标帧</strong>。节点使用信标帧来允许其他节点检测其存在并知道其状态。空闲节点将监听信标帧以生成潜在父节点的列表，空闲节点将与其中一个形成上游连接。<strong>ESP-MESH 使用信标帧中的供应商信息（Vendor IE）元素来存储（传输）元数据</strong>，例如：</p>
+<ul>
+<li>节点类型（根节点，中间父节点，叶节点，空闲节点）</li>
+<li>当前节点层</li>
+<li>网络中允许的最大层数</li>
+<li>当前子节点数</li>
+<li>要接受的最大下游连接数</li>
+</ul>
+<p>潜在上游连接的信号强度由潜在父节点的信标帧的 RSSI（接收信号强度指示）表示。为了防止节点形成弱上游连接，ESP-MESH 为信标帧实现了 RSSI 阈值机制。如果节点检测到 RSSI 低于预先配置的阈值的信标帧，则在形成上游连接时将忽略发送该信标帧的节点。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190201120120285.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="RSSI 阈值的影响"><br>上图中的面板 A 展示了 RSSI 阈值如何影响空闲节点具有的候选父节点的数量。</p>
+<p>上图中的面板 B 展示了 RF 屏蔽对象如何降低潜在父节点的 RSSI。由于 RF 屏蔽对象，节点 X 的 RSSI 高于阈值的区域显着减小。这导致空闲节点忽略节点 X，即使节点 X 在物理上相邻。由于更强的 RSSI，空闲节点将改为与物理上远的节点Y形成上游连接。</p>
+<blockquote>
+<p>节点在技术上仍然接收 MAC 层上的所有信标帧。RSSI 阈值是 ESP-MESH 功能，它只是过滤掉所有接收到的低于预先配置阈值的信号帧。</p>
+</blockquote>
+<h3 id="首选父节点"><a href="#首选父节点" class="headerlink" title="首选父节点"></a>首选父节点</h3><p>当空闲节点具有多个候选父节点（潜在父节点）时，空闲节点将与首选父节点形成上游连接。<strong>首选父节点基于以下标准确定</strong>：</p>
+<ul>
+<li>候选父节点位于哪个层</li>
+<li>候选父节点当前具有的下游连接（子节点）的数量</li>
+</ul>
+<p>首选父节点的选择将始终优先考虑网络最浅层（包括根节点）上的候选父节点。这有助于在形成上游连接时最小化ESP-MESH网络中的层总数。例如，给定第二层节点和第三层节点，第二层节点将始终是首选的。</p>
+<p>如果在同一层内存在多个候选父节点，则具有最少子节点的候选父节点将是首选的。该标准具有平衡同一层的节点之间的下游连接数的效果。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190201140919219.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="首选父节点"><br>上图中的面板 A 展示了在给定五个候选父节点 B/C/D/E/F 的情况下空闲节点 G 如何选择首选父节点的示例。最浅层上的节点是首选的，因此节点 B/C 优先选择做为父节点，因为它们是第二层节点，而节点 D/E/F 在第三层上。选择节点 C 作为首选父节点，因为与节点 B 相比，它具有更少的下游连接（更少的子节点）。</p>
+<p>上图中的面板 B 展示了根节点在空闲节点 G 的范围内的情况。换句话说，当节点 G 接收时，根节点的信标帧高于 RSSI 阈值。根节点始终是最浅节点，因此，在 ESP-MESH网络中，给定多个候选父节点时，根节点总是首选的父节点。</p>
+<blockquote>
+<p>用户还可以定义自己的算法以选择首选父节点，或强制节点仅与特定父节点连接（请参阅<a href="https://github.com/espressif/esp-idf/tree/2790d4a/examples/mesh/manual_networking" target="_blank" rel="noopener">手动 MESH 网络示例</a>）。</p>
+</blockquote>
+<h3 id="路由表"><a href="#路由表" class="headerlink" title="路由表"></a>路由表</h3><p>ESP-MESH 网络中的每个节点将单独维护自己的路由表，用于将 ESP-MESH 数据包（请参阅 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/mesh.html#esp-mesh-packet" target="_blank" rel="noopener">ESP-MESH 数据包</a>）正确路由到正确目标节点。特定节点的路由表将包括特定节点的子网内所有节点的 MAC 地址（包括特定节点本身的 MAC 地址）。每个路由表在内部划分为多个子表，每个子表对应于每个子节点的子网。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190201142029243.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="ESP-MESH路由表示例"><br>使用上面的图作为示例，节点 B 的路由表将包括节点 B 到 I 的 MAC 地址（即，等同于节点 B 的子网）。节点 B 的路由表在内部划分为两个子表，包含节点 C 到 F 和节点 G 到 I（即分别等同于节点 C 和 G 的子网）。</p>
+<p><strong>ESP-MESH 利用路由表来确定是否应根据以下规则向上游或下游转发 ESP-MESH 数据包。</strong></p>
+<ol>
+<li>如果数据包的目标 MAC 地址在当前节点的路由表中并且不是当前节点，请选择包含目标 MAC 地址的子表，并将数据包下游转发到与子表对应的子节点。</li>
+<li>如果目标 MAC 地址不在当前节点的路由表中，则将数据包上游转发到当前节点的父节点。重复执行此操作将导致数据包到达根节点，其中路由表应包含网络中的所有节点。</li>
+</ol>
+<blockquote>
+<p>用户可以调用 <code>esp_mesh_get_routing_table()</code> 来获取节点的路由表，或者调用 <code>esp_mesh_get_routing_table_size()</code> 来获取节点的路由表的大小。<br><code>esp_mesh_get_subnet_nodes_list()</code> 可用于获取特定子节点的相应子表。同样，<code>esp_mesh_get_subnet_nodes_num()</code> 可用于获取子表的大小。</p>
+</blockquote>
+<h2 id="构建-ESP-MESH-网络"><a href="#构建-ESP-MESH-网络" class="headerlink" title="构建 ESP-MESH 网络"></a>构建 ESP-MESH 网络</h2><h3 id="一般过程"><a href="#一般过程" class="headerlink" title="一般过程"></a>一般过程</h3><blockquote>
+<p>在 ESP-MESH 网络构建过程开始之前，配置的某些部分必须在网络中的每个节点上保持一致（请参阅 <code>mesh_cfg_t</code>）。每个节点必须配置相同的 Mesh 网络 ID，路由器配置和 SoftAP 配置。</p>
+</blockquote>
+<p>ESP-MESH 网络构建过程涉及根节点选择，然后逐层形成下游连接，直到所有节点都加入网络。网络的确切布局可以取决于诸如根节点选择，父节点选择和异步上电复位等因素。但是，ESP-MESH 网络构建过程可以概括为以下步骤：</p>
+<p><img src="https://img-blog.csdnimg.cn/2019020114281399.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="ESP-MESH 网络构建过程"></p>
+<ol>
+<li><p>根节点选择</p>
+<p><strong>根节点可以在配置期间指定</strong>（请参阅<a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/mesh.html#user-designated-root-node" target="_blank" rel="noopener">用户指定的根节点部分</a>），或者<strong>根据每个节点和路由器之间的信号强度动态选择</strong>（请参阅<a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/mesh.html#automatic-root-node-selection" target="_blank" rel="noopener">自动根节点选择</a>）。选择后，根节点将与路由器连接并开始允许形成下游连接。参考上图，节点 A 被选择为根节点，因此节点 A 与路由器形成上游连接。</p>
+</li>
+<li><p>第二层形成</p>
+<p>一旦根节点连接到路由器，根节点范围内的空闲节点将开始与根节点连接，从而形成网络的第二层。连接后，第二层节点成为中间父节点（假设允许的最大层数 &gt; 2），因此形成下一层。参考上图，节点 B 到 D 在根节点的范围内。因此，节点 B 到 D 与根节点形成上游连接，并成为中间父节点。</p>
+</li>
+<li><p>形成剩余层</p>
+<p>剩余的空闲节点将与范围内的中间父节点连接，从而在网络中形成新层。连接后，空闲节点将成为中间父节点或叶节点，具体取决于网络允许的最大层数。重复该步骤，直到网络中不再有空闲节点或者直到达到网络的最大允许层为止。参考上图，节点 E/F/G 分别与节点 B/C/D 连接，并成为中间父节点本身。</p>
+</li>
+<li><p>限制树深度</p>
+<p>为防止网络超出允许的最大层数，最大层上的节点一旦连接就会自动成为叶子节点。这防止任何其他空闲节点与叶节点连接，从而防止形成新的层形式。但是，如果空闲节点没有其他可能的父节点，它将无限期地保持空闲状态。参考上图，网络的最大允许层数设置为 4。因此，当节点 H 连接时，它成为叶节点以防止形成任何下游连接。</p>
+</li>
+</ol>
+<h3 id="自动根节点选择"><a href="#自动根节点选择" class="headerlink" title="自动根节点选择"></a>自动根节点选择</h3><p><strong>根节点的自动选择涉及所有空闲节点之间基于其与路由器的信号强度的选举过程。每个空闲节点将通过 Wi-Fi 信标帧发送其 MAC 地址和路由器 RSSI 值</strong>。MAC 地址用于唯一地标识网络中的每个节点，而路由器 RSSI 用于指示节点参考路由器的信号强度。</p>
+<p>然后，<strong>每个节点将同时扫描来自其他空闲节点的信标帧</strong>。<strong>如果节点检测到具有更强路由器 RSSI 的信标帧，则该节点将开始发送该信标帧的内容</strong>（即，对具有更强路由器 RSSI 的节点进行投票）。<strong>传输和扫描的过程将重复预先配置的最小迭代次数</strong>（默认为 10 次迭代），<strong>这将导致具有最强路由器 RSSI 的信标帧在整个网络中传播</strong>。</p>
+<p>在所有迭代之后，每个节点将单独检查其投票百分比（投票数/参与选举的节点数）以确定它是否应该成为根节点。<strong>如果节点的投票百分比大于预配置的阈值（默认为 90％），则该节点将成为根节点</strong>。</p>
+<p>下图演示了在自动选择根节点时如何构建 ESP-MESH 网络。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190201144333598.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="根节点选择示例"></p>
+<ol>
+<li>在上电复位时，每个节点开始发送由其自己的 MAC 地址和路由器 RSSI 组成的信标帧。</li>
+<li>在多次传输和扫描迭代中，具有最强路由器 RSSI 的信标帧在整个网络中传播。节点 C 具有最强的路由器RSSI（-10db），因此其信标帧在整个网络中传播。参与选举的所有节点都对节点 C 进行投票，从而给节点 C 一个 100％ 的投票百分比。因此，节点 C 成为根节点并与路由器连接。</li>
+<li>一旦节点 C 与路由器连接，节点 A/B/D/E 就与节点 C 连接，因为它是首选的父节点（即最浅节点）。节点 A/B/D/E 构成网络的第二层。</li>
+<li>节点 F 和 G 分别与节点 D 和 E 连接，网络构建过程完成。</li>
+</ol>
+<blockquote>
+<p>可以使用 <code>esp_mesh_set_attempts（）</code> 配置选举过程的最小迭代次数。用户应该基于网络内的节点数量来调整迭代次数（即，网络越大，所需的扫描迭代次数越多）。</p>
+</blockquote>
+<blockquote>
+<p>也可以使用 <code>esp_mesh_set_vote_percentage()</code> 配置投票百分比阈值。设置低投票百分比阈值可导致两个或更多节点成为同一 ESP-MESH 网络内的根节点，从而导致建立多个网络。如果是这种情况，ESP-MESH 具有自主解决根节点冲突的内部机制。多个根节点的网络将组合成具有单个根节点的单个网络。但是，根节点冲突，其中两个或多个根节点具有相同的路由器 SSID 但不处理不同的路由器 BSSID。</p>
+</blockquote>
+<h3 id="用户指定根节点"><a href="#用户指定根节点" class="headerlink" title="用户指定根节点"></a>用户指定根节点</h3><p><strong>根节点也可以由用户指定，这将使指定的根节点直接与路由器连接并放弃选举过程。当指定根节点时，网络中的所有其他节点也必须放弃选举过程以防止发生根节点冲突。</strong> 下图演示了当用户指定根节点时如何构建 ESP-MESH 网络。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190201145101139.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="指定根节点示例（根节点= A，最大层数= 4）"></p>
+<ol>
+<li>节点 A 被用户指定为根节点，因此直接与路由器连接。所有其他节点放弃选举过程。</li>
+<li>节点 C/D 连接节点 A 作为其首选父节点。两个节点构成网络的第二层。</li>
+<li>同样，节点 B/E 与节点 C 连接，节点 F 与节点 D 连接。节点 B/E/F 构成网络的第三层。</li>
+<li>节点 G 与节点 E 连接，形成网络的第四层。但是，此网络中允许的最大层数配置为 4，因此节点 G 成为叶节点以防止形成任何新层。</li>
+</ol>
+<blockquote>
+<p>在指定根节点时，根节点应调用 <code>esp_mesh_set_parent()</code> 以直接与路由器连接。同样，所有其他节点应调用 <code>esp_mesh_fix_root()</code> 以放弃选举过程。</p>
+</blockquote>
+<h3 id="父节点选择"><a href="#父节点选择" class="headerlink" title="父节点选择"></a>父节点选择</h3><p>默认情况下，ESP-MESH 是自组织的，这意味着每个节点将自动选择与哪个潜在父节点形成上游连接。自主选择的父节点称为首选父节点。用于选择首选父节点的标准旨在减少 ESP-MESH 网络中的层数，并平衡潜在父节点之间的下游连接数（请参阅<a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/mesh.html#preferred-parent-node" target="_blank" rel="noopener">首选父节点</a>）。</p>
+<p>但是，ESP-MESH 还允许用户禁用自组织行为，这将允许用户定义自己的父节点选择标准，或配置节点以具有指定的父节点（请参阅<a href="https://github.com/espressif/esp-idf/tree/2790d4a/examples/mesh/manual_networking" target="_blank" rel="noopener">手动 MESH 网络示例</a>）。</p>
+<h3 id="异步上电复位"><a href="#异步上电复位" class="headerlink" title="异步上电复位"></a>异步上电复位</h3><p>ESP-MESH 网络建设可能受节点上电顺序的影响。如果网络中的某些节点异步上电（即相隔几分钟），则网络的最终结构可能与所有节点同步通电的理想情况不同。上电延迟的节点将遵循以下规则：</p>
+<p>规则1：如果网络中已存在根节点，则延迟节点将不会尝试选择新的根节点，即使它与路由器具有更强的 RSSI。通过连接首选父节点，延迟节点将像任何其他空闲节点一样加入网络。如果延迟节点是指定的根节点，则网络中的所有其他节点将保持空闲，直到延迟节点通电。</p>
+<p>规则2：如果延迟节点形成上游连接并成为中间父节点，则它也可以成为其他节点的新首选父节点（即，是较浅的节点）。这将导致其他节点切换其上游连接以与延迟节点连接（请参阅<a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/mesh.html#parent-node-switching" target="_blank" rel="noopener">父节点切换</a>）。</p>
+<p>规则3：如果空闲节点具有在通电时被延迟的指定父节点，则空闲节点将不会在没有其指定的父节点的情况下尝试形成任何上游连接。空闲节点将无限期地保持空闲，直到其指定的父节点上电为止。</p>
+<p>以下示例演示了异步上电对网络构建的影响。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190201150942611.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="基于异步电源的网络构建示例"></p>
+<ol>
+<li>节点 A/C/D/F/G/H 同步上电，通过广播其 MAC 地址和路由器 RSSI 开始根节点选举过程。节点 A 被选为根节点，因为它具有最强的 RSSI。</li>
+<li>一旦节点 A 成为根节点，其余节点就开始逐层形成具有其首选选父节点的上游连接。结果是一个有五层的网络。</li>
+<li>节点 B/E 在上电时被延迟但是没有尝试成为根节点，即使它们具有比节点 A 更强的路由器 RSSI（-20db 和 -10db）。相反，两个延迟节点形成与其首选父节点的上游连接。节点 A 和 C 分别。连接后，两个节点 B/E 都成为中间父节点。</li>
+<li>节点 D/G 切换它们的上游连接，因为节点 B 是新的首选父节点，因为它位于较浅的层（第二层节点）上。由于切换，所得到的网络具有三层而不是原始的五层。</li>
+</ol>
+<p>同步上电：如果所有节点同步上电，节点 E 将成为根节点，因为它具有最强的路由器 RSSI（-10db）。与在异步通电条件下形成的网络相比，这将导致显着不同的网络布局。但是，如果用户手动切换根节点，仍然可以达到同步开机网络布局（请参阅 <code>esp_mesh_waive_root()</code> ）。</p>
+<blockquote>
+<p>由异步上电引起的父节点选择的差异在 ESP-MESH 中在某种程度上被自动校正（参见<a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/mesh.html#parent-node-switching" target="_blank" rel="noopener">父节点切换</a>）</p>
+</blockquote>
+<h3 id="环路避免，检测和处理"><a href="#环路避免，检测和处理" class="headerlink" title="环路避免，检测和处理"></a>环路避免，检测和处理</h3><p>环路是特定节点与其后代节点之一（特定节点的子网内的节点）形成上游连接的情况。这导致圆形连接路径，从而破坏树状网络拓扑结构。ESP-MESH 通过排除在选择节点的路由表中已存在的节点（参见<a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/mesh.html#routing-tables" target="_blank" rel="noopener">路由表</a>）来防止在父节点选择期间产生环路，从而防止特定节点尝试连接到其子网内的任何节点。</p>
+<p>在发生环路的情况下，ESP-MESH利用路径验证机制和能量传输机制来检测环路发生。导致环路的上游连接的父节点将通知子节点环路并启动断开连接。</p>
+<h2 id="管理网络"><a href="#管理网络" class="headerlink" title="管理网络"></a>管理网络</h2><p>ESP-MESH 是一个自我修复网络，意味着它可以检测并纠正网络路由中的故障。当具有一个或多个子节点的父节点发生故障或父节点与其子节点之间的连接变得不稳定时，会发生故障。ESP-MESH 中的子节点将自动选择新的父节点并与其形成上游连接以维持网络互连。ESP-MESH 可以处理根节点故障和中间父节点故障。</p>
+<h3 id="根节点故障"><a href="#根节点故障" class="headerlink" title="根节点故障"></a>根节点故障</h3><p><strong>如果根节点发生故障，与其连接的节点（第二层节点）将立即检测到根节点的故障。第二层节点最初将尝试与根节点重新连接。但是，在多次尝试失败后，第二层节点将初始化新一轮的根节点选举。具有最强路由器 RSSI 的第二层节点将被选为新的根节点，而剩余的第二层节点将与新的根节点（或相邻的父节点，如果不在范围内）形成上游连接。</strong></p>
+<p>如果根节点和多个下游层同时发生故障（例如，根节点，第二层和第三层），仍然起作用的最浅层将初始化根节点选举。以下示例说明了从根节点分解的自我修复示例。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190201153541569.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="从根节点故障中自我修复"></p>
+<ol>
+<li>节点 C 是网络的根节点。节点 A/B/D/E 是连接到节点 C 的第二层节点。</li>
+<li>节点 C 发生故障。在多次尝试重新连接失败后，第二层节点通过广播其路由器 RSSI 开始选举过程。节点 B 具有最强的路由器 RSSI。</li>
+<li>节点 B 被选为根节点并开始接受下游连接。剩余的第二层节点 A/D/E 形成与节点 B 的上游连接，因此网络被修复并且可以继续正常操作。</li>
+</ol>
+<blockquote>
+<p>如果指定的根节点发生故障，则其余节点将不会自主地尝试选择新的根节点，因为在使用指定的根节点时将永远不会尝试选举过程。</p>
+</blockquote>
+<h3 id="中间父节点故障"><a href="#中间父节点故障" class="headerlink" title="中间父节点故障"></a>中间父节点故障</h3><p><strong>如果中间父节点发生故障，则断开连接的子节点将首先尝试与父节点重新连接。在多次尝试重新连接失败后，每个子节点将开始扫描潜在的父节点（请参阅<a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/mesh.html#beacon-frames-rssi-thresholding" target="_blank" rel="noopener">信标帧和 RSSI 阈值</a>）。</strong></p>
+<p>如果其他可能的父节点可用，则每个子节点将单独选择新的首选父节点（请参阅<a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/mesh.html#preferred-parent-node" target="_blank" rel="noopener">首选父节点</a>）并与其形成上游连接。如果特定子节点没有其他潜在父节点，则它将无限期保持空闲状态。</p>
+<p>下图说明了从中间父节点分解的自我修复的示例。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190201153956675.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="从中间父节点故障中自我修复"></p>
+<ol>
+<li>网络的以下分支由节点 A 到 G 组成。</li>
+<li>节点 C 发生故障。 节点 F/G 检测到故障并尝试与节点 C 重新连接。多次尝试重新连接失败后，节点 F/G 开始选择新的首选父节点。</li>
+<li>节点 G 超出任何其他父节点的范围，因此暂时保持空闲。节点 F 在节点 B/E 的范围内，但是节点 B 被选择，因为它是较浅的节点。节点 F 在与节点 B 连接之后成为中间父节点，因此节点 G 可以与节点 F 连接。网络被修复，但是网络路由已经受到影响并且添加了额外的层。</li>
+</ol>
+<blockquote>
+<p>如果子节点具有指定的父节点，则子节点将不会尝试连接新的父节点。子节点将无限期保持空闲状态。</p>
+</blockquote>
+<h3 id="根节点切换"><a href="#根节点切换" class="headerlink" title="根节点切换"></a>根节点切换</h3><p><strong>除非根节点发生故障，否则 ESP-MESH 不会自动切换根节点。即使根节点的路由器 RSSI 降级到断开点，根节点也将保持不变</strong>。根节点切换是明确开始新选举的行为，使得具有更强路由器 RSSI 的节点将被选为新的根节点。这可以是适应降低根节点性能的有用方法。</p>
+<p><strong>要触发根节点切换，当前根节点必须显式调用 <code>esp_mesh_waive_root()</code> 以触发新选举</strong>。当前根节点将发信号通知网络内的所有节点开始发送和扫描信标帧（参见<a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/mesh.html#automatic-root-node-selection" target="_blank" rel="noopener">自动根节点选择</a>），同时保持连接到网络（即，不空闲）。如果另一个节点收到的选票多于当前根节点，则将启动根节点切换。否则，根节点将保持不变。</p>
+<p>新选择的根节点向当前根节点发送切换请求，该当前根节点将以确认响应，表示两个节点都准备切换。一旦收到确认，新选出的根节点将与其父节点断开连接，并迅速与路由器形成上游连接，从而成为网络的新根节点。先前的根节点将断开与路由器的连接，同时保持其所有下游连接并进入空闲状态。然后，先前的根节点将开始扫描潜在的父节点并选择首选父节点。</p>
+<p>下图说明了根节点切换的示例。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190201160040642.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="根节点切换示例"></p>
+<ol>
+<li>节点 C 是当前的根节点，但路由器的信号强度降低（-85db）。节点 C 触发新的选举，并且所有节点在仍然连接的同时开始发送和扫描信标帧。</li>
+<li>经过多轮传输和扫描后，节点 B 被选为新的根节点。节点 B 向节点 C 发送切换请求，节点 C 以确认响应。</li>
+<li>节点 B 与其父节点断开连接，并与路由器连接，成为网络新的根节点。节点 C 与路由器断开连接，进入空闲状态，并开始扫描并选择新的首选父节点。节点 C 在整个过程中维护其所有下游连接。</li>
+<li>节点 C 选择节点 B 作为其首选父节点，形成上游连接，并成为第二层节点。交换根节点后网络布局类似，因为节点 C 仍保持相同的子网。但是，由于交换根节点，节点 C 的子网中的每个节点都被放置了一层。如果任何节点由于根节点切换而具有新的优选父节点，则父节点切换可以随后调整网络布局。</li>
+</ol>
+<blockquote>
+<p>根节点切换必须要求选举，因此仅在使用自组织 ESP-MESH 网络时才支持。换句话说，如果使用指定的根节点，则不能发生根节点切换。</p>
+</blockquote>
+<h3 id="父节点切换"><a href="#父节点切换" class="headerlink" title="父节点切换"></a>父节点切换</h3><p><strong>父节点切换需要子节点将其上游连接切换到较浅层的另一个父节点。父节点切换自动发生，这意味着如果较浅层的潜在父节点变得可用（即，由于<a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/mesh.html#asynchronous-power-on-reset" target="_blank" rel="noopener">异步上电复位</a>），子节点将自动改变其上游连接。</strong></p>
+<p>所有潜在的父节点周期性地发送信标帧（参见<a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/mesh.html#beacon-frames-rssi-thresholding" target="_blank" rel="noopener">信标帧和 RSSI 阈值</a>），允许子节点扫描较浅的父节点的可用性。由于父节点切换，自组织的 ESP-MESH 网络可以动态调整其网络布局，以确保每个连接具有良好的 RSSI 并且网络中的层数最小化。</p>
+<h2 id="数据传输"><a href="#数据传输" class="headerlink" title="数据传输"></a>数据传输</h2><h3 id="ESP-MESH数据包"><a href="#ESP-MESH数据包" class="headerlink" title="ESP-MESH数据包"></a>ESP-MESH数据包</h3><p>ESP-MESH 网络数据传输使用 ESP-MESH 数据包。ESP-MESH 数据包完全包含在 Wi-Fi 数据帧的帧体内。ESP-MESH 网络中的多跳数据传输将涉及通过不同的 Wi-Fi 数据帧在每个无线跳上承载的单个 ESP-MESH 数据包。</p>
+<p>下图显示了 ESP-MESH 数据包的结构及其与 Wi-Fi 数据帧的关系。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190201162512352.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="ESP-MESH 数据包"><br>ESP-MESH 数据包的包头包含源节点和目标节点的 MAC 地址。选项字段包含与特殊类型的 ESP-MESH 数据包有关的信息，例如组传输或源自外部 IP 网络的数据包（请参阅 <code>MESH_OPT_SEND_GROUP</code> 和 <code>MESH_OPT_RECV_DS_ADDR</code>）。</p>
+<p>ESP-MESH 数据包的有效负载包含实际的应用程序数据。此数据可以是原始二进制数据，也可以在应用程序层协议（如 HTTP，MQTT 和 JSON）下编码（请参阅 <code>mesh_proto_t</code>）。</p>
+<blockquote>
+<p>将 ESP-MESH 数据包发送到外部 IP 网络时，包头的目标地址字段将包含目标服务器的 IP 地址和端口，而不是节点的 MAC 地址（请参阅 <code>mesh_addr_t</code>）。此外，根节点将处理输出 TCP/IP 数据包的形成。</p>
+</blockquote>
+<h3 id="组控制和多播"><a href="#组控制和多播" class="headerlink" title="组控制和多播"></a>组控制和多播</h3><p>多播是一种允许将单个 ESP-MESH 数据包同时传输到网络中的多个节点的功能。ESP-MESH 中的多播可以通过指定目标节点列表或指定预先配置的节点组来实现。两种多播方法都是通过 <code>esp_mesh_send()</code> 调用的。</p>
+<p>要通过指定目标节点列表进行多播，用户必须首先将 ESP-MESH 数据包的目标地址设置为多播组地址（01:00:5E:xx:xx:xx）。这表示 ESP-MESH 数据包是具有一组地址的多播数据包，并且该地址应从头选项中获取。然后，用户必须将目标节点的 MAC 地址列为选项（请参阅 <code>mesh_opt_t</code> 和 <code>MESH_OPT_SEND_GROUP</code>）。这种多播方法不需要事先设置，但可能产生大量开销数据，因为每个目标节点的 MAC 地址必须列在数据包包头的选项字段中。</p>
+<p>按组进行多播允许将 ESP-MESH 数据包传输到预先配置的节点组。每个组由唯一 ID 标识，并且可以通过 <code>esp_mesh_set_group_id()</code> 将节点放入组中。对组进行组播涉及将 ESP-MESH 数据包中的目的地址设置为目标组 ID。此外，必须设置 <code>MESH_DATA_GROUP</code> 标志。使用组进行多播会产生较少的开销，但需要先前将节点添加到组中。</p>
+<blockquote>
+<p>在多播期间，网络中的所有节点仍然在 MAC 层上接收 ESP-MESH 数据包。但是，未包含在 MAC 地址列表或目标组中的节点将简单地过滤掉该数据包。</p>
+</blockquote>
+<h3 id="广播"><a href="#广播" class="headerlink" title="广播"></a>广播</h3><p>广播是一种允许单个 ESP-MESH 数据包同时传输到网络中所有节点的功能。每个节点基本上将广播包转发到其所有上游和下游连接，使得广播包尽可能快地在整个网络中传播。但是，ESP-MESH 利用以下方法避免在广播期间浪费带宽。</p>
+<ol>
+<li>当中间父节点从其父节点接收广播包时，它将广播包转发到其每个子节点，同时为其自身存储广播包的副本。</li>
+<li>当中间父节点是广播的源节点时，它将向上游发送广播包到父节点并且向下游发送广播包到每个子节点。</li>
+<li>当中间父节点从其子节点之一接收广播包时，它将广播包转发到其父节点及其剩余的每个子节点，同时为其自身存储广播包的副本。</li>
+<li>当叶节点是广播的源节点时，它将直接将数据包传输到其父节点。</li>
+<li>当根节点是广播的源节点时，根节点将数据包传输到其所有子节点。</li>
+<li>当根节点从其子节点之一接收广播包时，它将广播包转发到其剩余的每个子节点，同时为其自身存储广播包的副本。</li>
+<li>当节点接收到源地址与其自己的 MAC 地址匹配的广播包时，该节点将丢弃该广播包。</li>
+<li>当中间父节点从其父节点接收到最初从其子节点之一发送的广播包时，它将丢弃广播包。</li>
+</ol>
+<h3 id="上游流量控制"><a href="#上游流量控制" class="headerlink" title="上游流量控制"></a>上游流量控制</h3><p>ESP-MESH 依靠父节点来控制其直接子节点的上游数据流。为了防止父节点的消息缓冲区由于上游传输的过载而溢出，父节点将为其每个子节点分配用于上游传输的配额，称为接收窗口。<strong>每个子节点必须在允许向上游传输之前申请接收窗口。</strong> 可以动态调整接收窗口的大小。从子节点到父节点的上游传输包括以下步骤：</p>
+<ol>
+<li>在每次传输之前，子节点向其父节点发送窗口请求。窗口请求由序列号组成，该序列号对应于待传输的子节点的数据包。</li>
+<li>父节点接收窗口请求，并将序列号与子节点发送的先前数据包的序列号进行比较。该比较用于计算发送回子节点的接收窗口的大小。</li>
+<li>子节点根据父节点指定的窗口大小发送数据包。如果子节点耗尽其接收窗口，则必须通过在允许继续发送之前发送请求来获得另一个接收窗口。</li>
+</ol>
+<blockquote>
+<p>ESP-MESH 不支持任何下游流量控制。</p>
+</blockquote>
+<blockquote>
+<p>由于父节点切换，在上游传输期间可能发生数据包丢失。</p>
+</blockquote>
+<p>由于根节点充当外部 IP 网络的唯一接口，因此下游节点了解根节点与外部 IP 网络的连接状态至关重要。如果不这样做，可能会导致节点在与 IP 网络断开连接时尝试将数据上行传递到根节点。这导致不必要的传输和数据包丢失。ESP-MESH 通过提供一种机制来解决此问题，该机制基于根节点和外部 IP 网络之间的连接状态来稳定传出数据的吞吐量。根节点可以通过调用 <code>esp_mesh_post_toDS_state()</code> 将其外部 IP 网络连接状态广播到所有其他节点。</p>
+<h3 id="双向数据流"><a href="#双向数据流" class="headerlink" title="双向数据流"></a>双向数据流</h3><p>下图说明了 ESP-MESH 双向数据流中涉及的各种网络层。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190201165440991.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="ESP-MESH 双向数据流"><br>由于使用了<a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/mesh.html#routing-tables" target="_blank" rel="noopener">路由表</a>，ESP-MESH 能够完全在网状层上处理包转发。仅当根节点向/从外部 IP 网络发送/接收数据包时，才需要 TCP/IP 层。</p>
+<h2 id="信道切换"><a href="#信道切换" class="headerlink" title="信道切换"></a>信道切换</h2><h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>在传统的 Wi-Fi 网络中，信道是预定的频率范围。在基本服务集（BSS）中，服务 AP 及其连接的 Station 必须在相同信道（1 至 14）上发送信标。在同一信道上运行的物理上相邻的 BSS（基本服务集）可能会导致干扰并降低性能。</p>
+<p>为了使 BSS 适应不断变化的物理层条件并保持性能，Wi-Fi 包含用于网络信道切换的机制。网络信道切换是尝试将 BSS 移动到新的操作信道，同时在此过程中最小化对 BSS 的干扰。然而，应该认识到，在将所有 Station 移动到新的操作信道时，信道切换可能是不成功的。</p>
+<p>在 Wi-Fi 网络中，AP 触发网络信道切换，目的是使 AP 和所有连接的 Station 同步切换到新信道。通过在 AP 的周期性发送的信标帧内嵌入信道切换公告（CSA）元素来实现网络信道切换。CSA 元素用于向所有连接的站点通告关于即将到来的网络信道切换，并且将被包括在多个信标帧中直到切换发生。</p>
+<p>CSA 元素包含关于新信道号和信道切换计数的信息，其指示在网络信道切换发生之前剩余的信标帧间隔（TBTT）的数量。因此，每个信标帧递减信道切换计数，并允许连接的 Station 将其信道切换与 AP 同步。</p>
+<h3 id="ESP-MESH-网络信道切换"><a href="#ESP-MESH-网络信道切换" class="headerlink" title="ESP-MESH 网络信道切换"></a>ESP-MESH 网络信道切换</h3><p>ESP-MESH 网络信道切换还利用包含 CSA 元素的信标帧。然而，作为多跳网络使得 ESP-MESH 中的切换过程更复杂，因为信标帧可能无法到达网络内的所有节点（即，在单跳中）。因此，ESP-MESH 网络依靠节点转发 CSA 元素，以便它在整个网络中传播。</p>
+<p>当具有一个或多个子节点的中间父节点接收到包含 CSA 的信标帧时，该节点将通过将该元素包括在其下一个发送的信标帧中（即，具有相同的新信道号和信道切换计数）来转发 CSA 元素。鉴于 ESP-MESH 网络内的所有节点都接收相同的 CSA，节点可以使用信道切换计数来同步其信道切换，尽管由于 CSA 元素转发而导致短的延迟。</p>
+<p>ESP-MESH 网络信道切换可以由路由器或根节点触发。</p>
+<h3 id="根节点触发"><a href="#根节点触发" class="headerlink" title="根节点触发"></a>根节点触发</h3><p>只有当 ESP-MESH 网络未连接到路由器时，才会发生根节点触发的信道切换。通过调用 <code>esp_mesh_switch_channel()</code>，根节点将设置初始信道切换计数值并开始在其信标帧中包含 CSA 元素。然后，每个 CSA 元素由第二层节点接收，并在它们自己的信标帧中向下游转发。</p>
+<h3 id="路由器触发"><a href="#路由器触发" class="headerlink" title="路由器触发"></a>路由器触发</h3><p>当 ESP-MESH 网络连接到路由器时，整个网络必须使用与路由器相同的信道。因此，当根节点连接到路由器时，将不允许根节点触发通道切换。</p>
+<p>当根节点从路由器接收包含 CSA 元素的信标帧时，根节点将 CSA 元素中的信道切换计数值设置为自定义值，然后通过信标帧向下游转发。它还将相对于自定义值递减后续 CSA 元素的通道切换计数。此自定义值可以基于诸如网络层数，当前节点数等因素。</p>
+<p>将信道切换计数值设置为自定义值是由于 ESP-MESH 网络及其路由器可能具有不同且变化的信标间隔。因此，路由器提供的信道切换计数值与 ESP-MESH 网络无关。通过使用自定义值，ESP-MESH 网络中的节点能够相对于 ESP-MESH 网络的信标间隔同步切换信道。但是，这也会导致 ESP-MESH 网络的信道切换与路由器及其连接站的信道切换不同步。</p>
+<h3 id="网络信道切换的影响"><a href="#网络信道切换的影响" class="headerlink" title="网络信道切换的影响"></a>网络信道切换的影响</h3><ul>
+<li>由于 ESP-MESH 网络信道切换与路由器的信道切换不同步，ESP-MESH 网络和路由器之间将存在临时信道差异。<ul>
+<li>ESP-MESH 网络的信道切换时间取决于 ESP-MESH 网络的信标间隔和根节点的自定义信道切换计数值。</li>
+<li>通道差异可防止在 ESP-MESH 网络切换期间根节点与路由器之间的任何数据交换。</li>
+<li>在 ESP-MESH 网络中，根节点和中间父节点将请求其连接的子节点停止传输，直到通过将 CSA 元素中的信道切换模式字段设置为 1 来进行信道切换。</li>
+<li>频繁路由器触发的网络信道切换会降低 ESP-MESH 网络的性能。请注意，这可能是由 ESP-MESH 网络本身引起的（例如，由于与 ESP-MESH 网络的无线媒体争用）。如果是这种情况，用户应禁用路由器上的自动信道切换，并使用指定的信道。</li>
+</ul>
+</li>
+<li>当存在临时信道差异时，根节点在技术上保持与路由器的连接。<ul>
+<li>在根节点未能通过固定数量的路由器信标间隔从路由器接收任何信标帧或探测响应之后发生断开连接。</li>
+<li>断开连接后，根节点将自动重新扫描所有通道以查找是否存在路由器。</li>
+</ul>
+</li>
+<li>如果根节点无法接收任何路由器的 CSA 信标帧（例如，由于路由器给出的切换时间短），路由器将在没有 ESP-MESH 网络知识的情况下切换信道。<ul>
+<li>路由器切换通道后，根节点将无法再接收路由器的信标帧和探测响应，并在固定数量的信标间隔后导致断开连接。</li>
+<li>断开连接后，根节点将重新扫描路由器的所有通道。</li>
+<li>根节点将在整个过程中维护下游连接。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>尽管 ESP-MESH 网络信道切换旨在将网络内的所有节点移动到新的操作信道，但应该认识到信道切换可能不能成功地移动所有节点（例如，由于诸如节点故障的原因）。</p>
+</blockquote>
+<h3 id="通道和路由器切换配置"><a href="#通道和路由器切换配置" class="headerlink" title="通道和路由器切换配置"></a>通道和路由器切换配置</h3><p>ESP-MESH 允许通过配置启用/禁用自主通道切换。同样，也可以通过配置启用/禁用自主路由器切换（即，当根节点自主连接到另一个路由器时）。自主信道切换和路由器切换取决于以下配置参数和运行时条件。</p>
+<p><strong>允许通道切换：</strong> 此参数通过 <code>mesh_cfg_t</code> 结构的 <code>allow_channel_switch</code> 字段设置，并允许 ESP-MESH 网络在设置时动态切换通道。</p>
+<p><strong>预设信道：</strong> 通过将 <code>mesh_cfg_t</code> 结构的信道字段设置为所需的信道号，ESP-MESH 网络可以拥有预设信道。如果未设置此字段，则会覆盖 <code>allow_channel_switch</code> 参数，以便始终允许通道切换。</p>
+<p><strong>允许路由器切换：</strong> 此参数通过 <code>mesh_router_t</code> 的 <code>allow_router_switch</code> 字段设置，并允许 ESP-MESH 在设置时动态切换到其他路由器。</p>
+<p><strong>预设路由器BSSID：</strong> ESP-MESH 网络可以通过将 <code>mesh_router_t</code> 结构的 <code>bssid</code> 字段设置为所需路由器的 BSSID 来具有预设路由器。如果未设置此字段，则会覆盖 <code>allow_router_switch</code> 参数，以便始终允许路由器切换。</p>
+<p><strong>根节点存在：</strong> 根节点的存在还会影响是允许还是允许通道或路由器切换。</p>
+<p>下表说明了参数/条件的不同组合如何影响是否允许信道切换和/或路由器切换。请注意，X 表示参数的“不关心”。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190201171947753.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h2><p>可以基于多个指标评估 ESP-MESH 网络的性能，例如：</p>
+<p><strong>网络构建时间：</strong> 从头开始构建 ESP-MESH 网络所需的时间。</p>
+<p><strong>恢复时间：</strong> 网络检测节点故障所需的时间，并执行适当的操作来修复网络（例如生成新的根节点或形成新的连接）。</p>
+<p><strong>每跳延迟：</strong> 通过一个无线跳数据传输的延迟。换句话说，将数据包从父节点传输到子节点所花费的时间，反之亦然。</p>
+<p><strong>网络节点容量：</strong> ESP-MESH 网络可以同时支持的节点总数。<strong>此数字由节点可接受的最大下游连接数和网络中允许的最大层数确定。</strong></p>
+<p>下表列出了 ESP-MESH 网络的常见性能数据。但是，用户应注意，基于网络配置和操作环境的安装之间的性能数字可能会有很大差异。</p>
+<blockquote>
+<p>使用以下测试条件产生上述性能数据。</p>
+<ul>
+<li>测试设备数量：100</li>
+<li>要接受的最大下游连接数：6</li>
+<li>最大允许层数：6</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>吞吐量取决于数据包错误率和跳数。</p>
+</blockquote>
+<blockquote>
+<p>根节点访问外部IP网络的吞吐量直接受 ESP-MESH 网络中节点数量和路由器带宽的影响。</p>
+</blockquote>
+<h2 id="进一步说明"><a href="#进一步说明" class="headerlink" title="进一步说明"></a>进一步说明</h2><ul>
+<li>数据传输使用 Wi-Fi WPA2-PSK 加密</li>
+<li>网状网络 IE 使用 AES 加密</li>
+</ul>
+<p><a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/mesh.html" target="_blank" rel="noopener">原文链接</a></p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2012/07/22/ESP32 官方文档/ESP32 官方文档（七）ESP32 Core Dump/" rel="bookmark">ESP32 官方文档（七）ESP32 Core Dump</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2012/07/22/ESP32 官方文档/ESP32 官方文档（三）分区表/" rel="bookmark">ESP32 官方文档（三）分区表</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2012/07/22/ESP32 官方文档/ESP32 官方文档（一）关于 ESP-IDF 编程的一些说明/" rel="bookmark">ESP32 官方文档（一）关于 ESP-IDF 编程的一些说明</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2012/07/22/ESP32 官方文档/ESP32 官方文档（五）严重错误/" rel="bookmark">ESP32 官方文档（五）严重错误</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2012/07/22/ESP32 官方文档/ESP32 官方文档（二）构建系统/" rel="bookmark">ESP32 官方文档（二）构建系统</a></div>
+    </li>
+  </ul>
+
+        <div class="reward-container">
+  <div>如果这篇文章对你有帮助，那么不妨？</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/InfiniteYuanBlog/tags/ESP32/" rel="tag"><i class="fa fa-tag"></i> ESP32</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89RF%20%E6%A0%A1%E5%87%86/" rel="prev" title="ESP32 官方文档（十四）RF 校准">
+      <i class="fa fa-chevron-left"></i> ESP32 官方文档（十四）RF 校准
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%BA%8C%EF%BC%89Bootloader%20(%E5%BC%95%E5%AF%BC%E5%8A%A0%E8%BD%BD%E7%A8%8B%E5%BA%8F)/" rel="next" title="ESP32 官方文档（十二）Bootloader (引导加载程序)">
+      ESP32 官方文档（十二）Bootloader (引导加载程序) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ESP-MESH"><span class="nav-number">1.</span> <span class="nav-text">ESP-MESH</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.2.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ESP-MESH概念"><span class="nav-number">1.3.</span> <span class="nav-text">ESP-MESH概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#术语"><span class="nav-number">1.3.1.</span> <span class="nav-text">术语</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#树状网络拓扑结构"><span class="nav-number">1.3.2.</span> <span class="nav-text">树状网络拓扑结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#节点类型"><span class="nav-number">1.3.3.</span> <span class="nav-text">节点类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信标帧-Beacon-帧-和-RSSI-阈值"><span class="nav-number">1.3.4.</span> <span class="nav-text">信标帧(Beacon 帧)和 RSSI 阈值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#首选父节点"><span class="nav-number">1.3.5.</span> <span class="nav-text">首选父节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#路由表"><span class="nav-number">1.3.6.</span> <span class="nav-text">路由表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构建-ESP-MESH-网络"><span class="nav-number">1.4.</span> <span class="nav-text">构建 ESP-MESH 网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一般过程"><span class="nav-number">1.4.1.</span> <span class="nav-text">一般过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自动根节点选择"><span class="nav-number">1.4.2.</span> <span class="nav-text">自动根节点选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户指定根节点"><span class="nav-number">1.4.3.</span> <span class="nav-text">用户指定根节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#父节点选择"><span class="nav-number">1.4.4.</span> <span class="nav-text">父节点选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步上电复位"><span class="nav-number">1.4.5.</span> <span class="nav-text">异步上电复位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#环路避免，检测和处理"><span class="nav-number">1.4.6.</span> <span class="nav-text">环路避免，检测和处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#管理网络"><span class="nav-number">1.5.</span> <span class="nav-text">管理网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#根节点故障"><span class="nav-number">1.5.1.</span> <span class="nav-text">根节点故障</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中间父节点故障"><span class="nav-number">1.5.2.</span> <span class="nav-text">中间父节点故障</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#根节点切换"><span class="nav-number">1.5.3.</span> <span class="nav-text">根节点切换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#父节点切换"><span class="nav-number">1.5.4.</span> <span class="nav-text">父节点切换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据传输"><span class="nav-number">1.6.</span> <span class="nav-text">数据传输</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ESP-MESH数据包"><span class="nav-number">1.6.1.</span> <span class="nav-text">ESP-MESH数据包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组控制和多播"><span class="nav-number">1.6.2.</span> <span class="nav-text">组控制和多播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#广播"><span class="nav-number">1.6.3.</span> <span class="nav-text">广播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上游流量控制"><span class="nav-number">1.6.4.</span> <span class="nav-text">上游流量控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双向数据流"><span class="nav-number">1.6.5.</span> <span class="nav-text">双向数据流</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#信道切换"><span class="nav-number">1.7.</span> <span class="nav-text">信道切换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#背景"><span class="nav-number">1.7.1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ESP-MESH-网络信道切换"><span class="nav-number">1.7.2.</span> <span class="nav-text">ESP-MESH 网络信道切换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#根节点触发"><span class="nav-number">1.7.3.</span> <span class="nav-text">根节点触发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#路由器触发"><span class="nav-number">1.7.4.</span> <span class="nav-text">路由器触发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络信道切换的影响"><span class="nav-number">1.7.5.</span> <span class="nav-text">网络信道切换的影响</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通道和路由器切换配置"><span class="nav-number">1.7.6.</span> <span class="nav-text">通道和路由器切换配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能"><span class="nav-number">1.8.</span> <span class="nav-text">性能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进一步说明"><span class="nav-number">1.9.</span> <span class="nav-text">进一步说明</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="InfiniteYuan"
+      src="/InfiniteYuanBlog/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">InfiniteYuan</p>
+  <div class="site-description" itemprop="description">Stay Hungry, Stay Funlish</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/InfiniteYuanBlog/archives/">
+        
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/InfiniteYuanBlog/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/InfiniteYuanBlog/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/infiniteyuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;infiniteyuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">InfiniteYuan</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">83k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:15</span>
+
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        站点访客数:<span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        站点阅读量:<span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/InfiniteYuanBlog/lib/anime.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/InfiniteYuanBlog/js/utils.js"></script>
+
+<script src="/InfiniteYuanBlog/js/motion.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/schemes/muse.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/next-boot.js"></script>
+
+<script src="/InfiniteYuanBlog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/InfiniteYuanBlog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '2spSMheFYziIJlzCVs7fvHeG-gzGzoHsz',
+      appKey     : 'aj8lFtI7EyFfrWCx902T0szo',
+      placeholder: "ヾﾉ≧∀≦)o来啊，快活啊!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

@@ -22,12 +22,12 @@
     var CONFIG = {"hostname":"infiniteyuan.github.io","root":"/InfiniteYuanBlog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="ESP32 Core Dump概述ESP-IDF 支持在不可恢复的软件错误上生成 Core Dump。这个技术可以对软件发生故障时的软件状态进行事后分析。在系统崩溃进入 Panic 状态时，根据配置打印一些信息并停止或重新启动。用户可以选择生成 Core Dump，以便稍后在 PC 上分析故障原因。Core Dump 包含软件发生故障时系统中所有任务的快照。快照包括任务控制块(TCB)和堆栈。因此">
+  <meta name="description" content="RF 校准ESP32 在 RF 初始化期间支持三种 RF 校准方法：  部分校准 完全校准 没有校准  部分校准在 RF 初始化期间，默认情况下使用部分校准方法进行 RF 校准。 它基于存储在 NVS 中的完整校准数据完成。 要使用此方法，请到 menuconfig 并启用 CONFIG_ESP32_PHY_CALIBRATION_AND_DATA_STORAGE。 完全校准在以下条件下触发完全校">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ESP32 官方文档（七）ESP32 Core Dump">
-<meta property="og:url" content="https://infiniteyuan.github.io/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%B8%83%EF%BC%89ESP32%20Core%20Dump/index.html">
+<meta property="og:title" content="ESP32 官方文档（十四）RF 校准">
+<meta property="og:url" content="https://infiniteyuan.github.io/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89RF%20%E6%A0%A1%E5%87%86/index.html">
 <meta property="og:site_name" content="InfiniteYuan">
-<meta property="og:description" content="ESP32 Core Dump概述ESP-IDF 支持在不可恢复的软件错误上生成 Core Dump。这个技术可以对软件发生故障时的软件状态进行事后分析。在系统崩溃进入 Panic 状态时，根据配置打印一些信息并停止或重新启动。用户可以选择生成 Core Dump，以便稍后在 PC 上分析故障原因。Core Dump 包含软件发生故障时系统中所有任务的快照。快照包括任务控制块(TCB)和堆栈。因此">
+<meta property="og:description" content="RF 校准ESP32 在 RF 初始化期间支持三种 RF 校准方法：  部分校准 完全校准 没有校准  部分校准在 RF 初始化期间，默认情况下使用部分校准方法进行 RF 校准。 它基于存储在 NVS 中的完整校准数据完成。 要使用此方法，请到 menuconfig 并启用 CONFIG_ESP32_PHY_CALIBRATION_AND_DATA_STORAGE。 完全校准在以下条件下触发完全校">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2012-07-22T09:43:43.000Z">
 <meta property="article:modified_time" content="2020-07-23T06:36:50.181Z">
@@ -35,7 +35,7 @@
 <meta property="article:tag" content="ESP32">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%B8%83%EF%BC%89ESP32%20Core%20Dump/">
+<link rel="canonical" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89RF%20%E6%A0%A1%E5%87%86/">
 
 
 <script id="page-configurations">
@@ -48,7 +48,7 @@
   };
 </script>
 
-  <title>ESP32 官方文档（七）ESP32 Core Dump | InfiniteYuan</title>
+  <title>ESP32 官方文档（十四）RF 校准 | InfiniteYuan</title>
   
 
 
@@ -201,7 +201,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%B8%83%EF%BC%89ESP32%20Core%20Dump/">
+    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89RF%20%E6%A0%A1%E5%87%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
@@ -214,7 +214,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          ESP32 官方文档（七）ESP32 Core Dump
+          ESP32 官方文档（十四）RF 校准
         </h1>
 
         <div class="post-meta">
@@ -259,8 +259,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%B8%83%EF%BC%89ESP32%20Core%20Dump/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%B8%83%EF%BC%89ESP32%20Core%20Dump/" itemprop="commentCount"></span>
+    <a title="valine" href="/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89RF%20%E6%A0%A1%E5%87%86/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89RF%20%E6%A0%A1%E5%87%86/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -270,14 +270,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>3.6k</span>
+              <span>938</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
+              <span>1 分钟</span>
             </span>
 
         </div>
@@ -289,57 +289,33 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="ESP32-Core-Dump"><a href="#ESP32-Core-Dump" class="headerlink" title="ESP32 Core Dump"></a>ESP32 Core Dump</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP-IDF 支持在不可恢复的软件错误上生成 Core Dump。这个技术可以对软件发生故障时的软件状态进行事后分析。在系统崩溃进入 Panic 状态时，根据配置打印一些信息并停止或重新启动。用户可以选择生成 Core Dump，以便稍后在 PC 上分析故障原因。Core Dump 包含软件发生故障时系统中所有任务的快照。快照包括任务控制块(TCB)和堆栈。因此。有可能找出什么任务，在什么指令(代码行)和该任务的什么调用堆栈导致崩溃。ESP-IDF 提供特殊脚本 <code>espcoredump.py</code>，以帮助用户检索和分析 Core Dump。此工具提供两个用于 Core Dump 分析的命令:</p>
-<ul>
-<li><code>info_corefile</code> - 打印崩溃的任务的寄存器，调用堆栈，系统中可用任务的列表，内存区域和存储在 Core Dump (TCB 和堆栈)中的内存内容。</li>
-<li><code>dbg_corefile</code> - 创建 Core Dump ELF 文件并使用此文件运行 GDB 调试会话。用户可以手动检查内存，变量和任务状态。请注意，由于并非所有内存都保存在 Core Dump 中，因此只有堆栈上分配的变量值才有意义。</li>
-</ul>
-<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>有许多与 Core Dump 相关的配置选项，用户可以在应用程序的配置菜单中选择 (<code>make menuconfig</code>)。</p>
+        <h1 id="RF-校准"><a href="#RF-校准" class="headerlink" title="RF 校准"></a>RF 校准</h1><p>ESP32 在 RF 初始化期间支持三种 RF 校准方法：</p>
 <ol>
-<li>Core Dump 数据目标(Components -&gt; ESP32-specific config -&gt; Core dump destination):<ul>
-<li>禁用 Core Dump 生成</li>
-<li>将 Core Dump 保存到 Flash</li>
-<li>将 Core Dump 打印到 UART</li>
-</ul>
-</li>
-<li>核心转储中的最大任务快照数(Components -&gt; ESP32-specific config -&gt; Core dump -&gt; Maximum number of tasks)。</li>
-<li>Core Dump 打印到 UART 之前的延迟时间(Components -&gt; ESP32-specific config -&gt; Core dump print to UART delay).。值以 ms 为单位。</li>
+<li>部分校准</li>
+<li>完全校准</li>
+<li>没有校准</li>
 </ol>
-<h2 id="将-Core-Dump-保存到-Flash"><a href="#将-Core-Dump-保存到-Flash" class="headerlink" title="将 Core Dump 保存到 Flash"></a>将 Core Dump 保存到 Flash</h2><p>选择此选项后，Core Dump 将保存到 Flash 上的特殊分区。当使用随 ESP-IDF 提供的默认分区表文件时，它会自动在 Flash 上分配必要的空间，但如果用户想要将自己的布局文件与 Core Dump 功能一起使用，则应为 Core Dump 定义单独的分区，如下所示:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Name,   Type, SubType, Offset,  Size</span><br><span class="line"># Note: if you change the phy_init or app partition offset, make sure to change the offset in Kconfig.projbuild</span><br><span class="line">nvs,      data, nvs,     0x9000,  0x6000</span><br><span class="line">phy_init, data, phy,     0xf000,  0x1000</span><br><span class="line">factory,  app,  factory, 0x10000, 1M</span><br><span class="line">coredump, data, coredump,,        64K</span><br></pre></td></tr></table></figure>
-
-<p>分区名称没有特殊要求。可以根据用户应用需求选择，但分区类型应为“数据”，子类型应为“coredump”。此外，在选择分区大小时请注意，Core Dump 数据结构会引入 20 字节的常量开销和 12 字节的每任务开销。此开销不包括每个任务的 TCB 和堆栈的大小，因此，partirion 大小应至少为 20 + max task stack number x(12 + TCB size + max task stack size) 字节。</p>
-<p>从 Flash 分析 Core Dump 的通用命令示例是:<br><code>espcoredump.py -p &lt;/path/to/serial/port&gt; info_corefile &lt;/path/to/program/elf/file&gt;</code><br>或<br> <code>espcoredump.py -p &lt;/path/to/serial/port&gt; dbg_corefile &lt;/path/to/program/elf/file&gt;</code></p>
-<h2 id="将-Core-Dump-打印到UART"><a href="#将-Core-Dump-打印到UART" class="headerlink" title="将 Core Dump 打印到UART"></a>将 Core Dump 打印到UART</h2><p>选择此选项时，在系统崩溃进入 Panic 状态时，将在 UART 上打印 <strong>base64 编码的 Core Dump</strong>。在这种情况下，用户应手动将 Core Dump 文本正文保存到某个文件，然后运行以下命令:<br><code>espcoredump.py info_corefile -t b64 -c &lt;/path/to/saved/base64/text&gt; &lt;/path/to/program/elf/file&gt;</code><br>或<br> <code>espcoredump.py dbg_corefile -t b64 -c &lt;/path/to/saved/base64/text&gt; &lt;/path/to/program/elf/file&gt;</code></p>
-<p>Base64 编码的 Core Dump 体将位于以下页眉和页脚之间:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; CORE DUMP START &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">&lt;body of base64-encoded core dump, save it to file on disk&gt;</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; CORE DUMP END &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br></pre></td></tr></table></figure>
-
-<p>CORE DUMP START 和 CORE DUMP END 行不得包含在 Core Dump 文本文件中。</p>
-<h2 id="Backtraces-中的-ROM-函数"><a href="#Backtraces-中的-ROM-函数" class="headerlink" title="Backtraces 中的 ROM 函数"></a>Backtraces 中的 ROM 函数</h2><p>可能的情况是，在崩溃时，一些任务或/和崩溃的任务本身在其调用堆栈中具有一个或多个 ROM 功能。由于 ROM 不是程序 ELF 的一部分，GDB 不可能解析这样的调用堆栈，因为它试图分析函数的序言来实现它。在这种情况下，调用堆栈打印将在第一个 ROM 函数中被错误消息打破。要解决此问题，您可以使用 Espressif 提供的 <a href="https://dl.espressif.com/dl/esp32_rom.elf" target="_blank" rel="noopener">ROM ELF</a> 并将其传递给 ‘espcoredump.py’。</p>
-<h2 id="运行-‘espcoredump-py’"><a href="#运行-‘espcoredump-py’" class="headerlink" title="运行 ‘espcoredump.py’"></a>运行 ‘espcoredump.py’</h2><p>通用命令语法:</p>
-<p><code>espcoredump.py [options] command [args]</code></p>
-<p><code>Script Options:</code>    </p>
-<ul>
-<li>–chip,-c {auto,esp32}. Target chip type. Supported values are auto and esp32.</li>
-<li>–port,-p PORT. Serial port device.</li>
-<li>–baud,-b BAUD. Serial port baud rate used when flashing/reading.</li>
-</ul>
-<p><code>Commands:</code>    </p>
-<ul>
-<li>info_corefile. Retrieve core dump and print useful info.</li>
-<li>dbg_corefile. Retrieve core dump and start GDB session with it.</li>
-</ul>
-<p><code>Command Arguments:</code></p>
-<ul>
-<li>–gdb,-g GDB. Path to gdb to use for data retrieval.</li>
-<li>–core,-c CORE. Path to core dump file to use (if skipped core dump will be read from flash).</li>
-<li>–core-format,-t CORE_FORMAT. Specifies that file passed with “-c” is an ELF (“elf”), dumped raw binary (“raw”) or base64-encoded (“b64”) format.</li>
-<li>–off,-o OFF. Ofsset of coredump partition in flash (type “make partition_table” to see it).</li>
-<li>–save-core,-s SAVE_CORE. Save core to file. Othwerwise temporary core file will be deleted. Ignored with “-c”.</li>
-<li>–rom-elf,-r ROM_ELF. Path to ROM ELF file to use (if skipped “esp32_rom.elf” is used).</li>
-<li>–print-mem,-m Print memory dump. Used only with “info_corefile”.</li>
-</ul>
-<p><a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/core_dump.html" target="_blank" rel="noopener">原文链接</a></p>
+<h2 id="部分校准"><a href="#部分校准" class="headerlink" title="部分校准"></a>部分校准</h2><p>在 RF 初始化期间，默认情况下使用部分校准方法进行 RF 校准。 它基于存储在 NVS 中的完整校准数据完成。 要使用此方法，请到 <code>menuconfig</code> 并启用 <code>CONFIG_ESP32_PHY_CALIBRATION_AND_DATA_STORAGE</code>。</p>
+<h2 id="完全校准"><a href="#完全校准" class="headerlink" title="完全校准"></a>完全校准</h2><p>在以下条件下触发完全校准：</p>
+<ol>
+<li>NVS  不存在。</li>
+<li>用于存储校准数据的  NVS  分区被擦除。</li>
+<li>硬件 MAC  地址已更改。</li>
+<li>PHY 库版本已更改。</li>
+<li>从 NVS 分区加载的 RF 校准数据被破坏。</li>
+</ol>
+<p>需要大约  100 ms, 比部分校准用的时间多。如果启动持续时间不重要，建议使用完整的校准方法。要切换到完整校准方法，请转到 <code>menuconfig</code> 并禁用 <code>CONFIG_ESP32_PHY_CALIBRATION_AND_DATA_STORAGE</code>。如果使用 RF 校准的默认方法，有两种方法可以添加触发完全校准功能作为最后的补救措施。</p>
+<ol>
+<li>如果您不介意删除存储在  NVS  分区中的所有数据，请擦除 NVS 分区。</li>
+<li>在基于某些条件（例如，在某些诊断模式中提供的选项）初始化 WiFi  和 BT/BLE 之前调用 <code>esp_phy_erase_cal_data_in_nvs（）</code>。在这种情况下，仅擦除 NVS 分区的 phy 命名空间。</li>
+</ol>
+<h2 id="没有校准"><a href="#没有校准" class="headerlink" title="没有校准"></a>没有校准</h2><p>ESP32 从深度睡眠中醒来时，不会使用校准方法。</p>
+<h2 id="PHY-初始化数据"><a href="#PHY-初始化数据" class="headerlink" title="PHY 初始化数据"></a>PHY 初始化数据</h2><p>PHY 初始化数据用于 RF 校准。 有两种方法可以获得 PHY 初始化数据。</p>
+<ol>
+<li>一个是默认的初始化数据，它位于头文件 <code>components/esp32/phy_init_data.h</code> 中。 它在编译后嵌入到应用程序二进制文件中，然后存储到只读存储器（DROM）中。 要使用默认初始化数据，请到 <code>menuconfig</code> 并禁用 <code>CONFIG_ESP32_PHY_INIT_DATA_IN_PARTITION</code>。</li>
+<li>另一种是存储在分区中的初始化数据。 使用自定义分区表时，请确保包含 PHY 数据分区（类型：数据，子类型：phy）。 使用默认分区表，这是自动完成的。 如果初始化数据存储在分区中，则必须在那里闪存，否则将发生运行时错误。 要切换到存储在分区中的初始化数据，请到 <code>menuconfig</code> 并启用 <code>CONFIG_ESP32_PHY_INIT_DATA_IN_PARTITION</code>。</li>
+</ol>
+<p><a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/RF_calibration.html" target="_blank" rel="noopener">原文链接</a></p>
 
     </div>
 
@@ -349,6 +325,9 @@
       
   <div class="popular-posts-header">相关文章</div>
   <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2012/07/22/ESP32 官方文档/ESP32 官方文档（七）ESP32 Core Dump/" rel="bookmark">ESP32 官方文档（七）ESP32 Core Dump</a></div>
+    </li>
     <li class="popular-posts-item">
       <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2012/07/22/ESP32 官方文档/ESP32 官方文档（三）分区表/" rel="bookmark">ESP32 官方文档（三）分区表</a></div>
     </li>
@@ -360,9 +339,6 @@
     </li>
     <li class="popular-posts-item">
       <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2012/07/22/ESP32 官方文档/ESP32 官方文档（二）构建系统/" rel="bookmark">ESP32 官方文档（二）构建系统</a></div>
-    </li>
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2012/07/22/ESP32 官方文档/ESP32 官方文档（八）Flash 加密/" rel="bookmark">ESP32 官方文档（八）Flash 加密</a></div>
     </li>
   </ul>
 
@@ -389,12 +365,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%B8%89%EF%BC%89%E5%88%86%E5%8C%BA%E8%A1%A8/" rel="prev" title="ESP32 官方文档（三）分区表">
-      <i class="fa fa-chevron-left"></i> ESP32 官方文档（三）分区表
+    <a href="/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%EF%BC%89%E7%BA%BF%E7%A8%8B%E5%B1%80%E9%83%A8%E5%AD%98%E5%82%A8/" rel="prev" title="ESP32 官方文档（十）线程局部存储">
+      <i class="fa fa-chevron-left"></i> ESP32 官方文档（十）线程局部存储
     </a></div>
       <div class="post-nav-item">
-    <a href="/InfiniteYuanBlog/2012/07/22/hexo_blog_log/" rel="next" title="Hexo Blog">
-      Hexo Blog <i class="fa fa-chevron-right"></i>
+    <a href="/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89ESP-MESH/" rel="next" title="ESP32 官方文档（十五）ESP-MESH">
+      ESP32 官方文档（十五）ESP-MESH <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -455,7 +431,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ESP32-Core-Dump"><span class="nav-number">1.</span> <span class="nav-text">ESP32 Core Dump</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置"><span class="nav-number">1.2.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#将-Core-Dump-保存到-Flash"><span class="nav-number">1.3.</span> <span class="nav-text">将 Core Dump 保存到 Flash</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#将-Core-Dump-打印到UART"><span class="nav-number">1.4.</span> <span class="nav-text">将 Core Dump 打印到UART</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Backtraces-中的-ROM-函数"><span class="nav-number">1.5.</span> <span class="nav-text">Backtraces 中的 ROM 函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行-‘espcoredump-py’"><span class="nav-number">1.6.</span> <span class="nav-text">运行 ‘espcoredump.py’</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RF-校准"><span class="nav-number">1.</span> <span class="nav-text">RF 校准</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#部分校准"><span class="nav-number">1.1.</span> <span class="nav-text">部分校准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完全校准"><span class="nav-number">1.2.</span> <span class="nav-text">完全校准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#没有校准"><span class="nav-number">1.3.</span> <span class="nav-text">没有校准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PHY-初始化数据"><span class="nav-number">1.4.</span> <span class="nav-text">PHY 初始化数据</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
