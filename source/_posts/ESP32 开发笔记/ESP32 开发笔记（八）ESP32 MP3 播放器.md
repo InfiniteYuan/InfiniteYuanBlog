@@ -31,4 +31,4 @@ Embedded GUI: [LittlevGL](https://github.com/littlevgl/lvgl)
 
 ## 运行结果
 
-[Twitter Video](https://twitter.com/InfiniteYuan/status/1063739310275350528)
+ - [Twitter Video](https://twitter.com/InfiniteYuan/status/1063739310275350528)

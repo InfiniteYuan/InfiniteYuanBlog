@@ -186,8 +186,8 @@ static void IRAM_ATTR i2c_slave_isr_handler_default(void* arg)
 
 # 完整工程
 
-[ESP32-I2C-Slave](https://github.com/InfiniteYuan/ESP32-I2C-Slave/tree/master)
+ - [ESP32-I2C-Slave](https://github.com/InfiniteYuan/ESP32-I2C-Slave/tree/master)
 
 # 参考资料
 
-[I2C Specification](https://www.nxp.com/docs/en/user-guide/UM10204.pdf)
+ - [I2C Specification](https://www.nxp.com/docs/en/user-guide/UM10204.pdf)

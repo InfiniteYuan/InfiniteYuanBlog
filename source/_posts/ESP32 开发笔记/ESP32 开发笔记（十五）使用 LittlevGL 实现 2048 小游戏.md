@@ -203,5 +203,5 @@ void move_up()
 
 ## 参考链接
 
-GitHub 源码：[esp32-lvgl-gui](https://github.com/InfiniteYuan/esp32-lvgl-gui/tree/master/lvgl_2048)
-Twitter 视频：[Twitter](https://twitter.com/InfiniteYuan/status/1048106496649641985?s=20)
+ - GitHub 源码：[esp32-lvgl-gui](https://github.com/InfiniteYuan/esp32-lvgl-gui/tree/master/lvgl_2048)
+ - Twitter 视频：[Twitter](https://twitter.com/InfiniteYuan/status/1048106496649641985?s=20)

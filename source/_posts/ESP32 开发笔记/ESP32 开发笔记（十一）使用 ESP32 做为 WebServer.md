@@ -188,4 +188,4 @@ void app_httpd_main() {
 
 ## Example
 
-[web server](https://github.com/espressif/esp-who/blob/master/examples/single_chip/camera_web_server/main/app_httpd.c)
+ - [web server](https://github.com/espressif/esp-who/blob/master/examples/single_chip/camera_web_server/main/app_httpd.c)
