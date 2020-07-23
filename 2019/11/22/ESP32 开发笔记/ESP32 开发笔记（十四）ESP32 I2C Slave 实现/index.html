@@ -31,7 +31,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20191123145556881.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
 <meta property="article:published_time" content="2019-11-22T01:24:44.000Z">
-<meta property="article:modified_time" content="2020-07-23T07:51:54.985Z">
+<meta property="article:modified_time" content="2020-07-23T08:01:41.041Z">
 <meta property="article:author" content="InfiniteYuan">
 <meta property="article:tag" content="ESP32">
 <meta name="twitter:card" content="summary">
@@ -131,7 +131,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/InfiniteYuanBlog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">32</span></a>
+    <a href="/InfiniteYuanBlog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">34</span></a>
 
   </li>
         <li class="menu-item menu-item-tags">
@@ -141,7 +141,7 @@
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/InfiniteYuanBlog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">3</span></a>
+    <a href="/InfiniteYuanBlog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">4</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -233,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 07:51:54" itemprop="dateModified" datetime="2020-07-23T07:51:54+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 08:01:41" itemprop="dateModified" datetime="2020-07-23T08:01:41+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -332,8 +332,12 @@
 </ul>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> IRAM_ATTR <span class="title">i2c_slave_isr_handler_default</span><span class="params">(<span class="keyword">void</span>* arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> i2c_num = I2C_SLAVE_NUM;</span><br><span class="line">    <span class="keyword">uint32_t</span> status = I2C_INSTANCE[i2c_num]-&gt;int_status.val;</span><br><span class="line">    <span class="keyword">int</span> idx = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    portBASE_TYPE HPTaskAwoken = pdFALSE;</span><br><span class="line">    <span class="keyword">while</span> (status != <span class="number">0</span>) &#123;</span><br><span class="line">        status = I2C_INSTANCE[i2c_num]-&gt;int_status.val;</span><br><span class="line">        <span class="keyword">if</span> (status &amp; I2C_ACK_ERR_INT_ST_M) &#123;</span><br><span class="line">            ets_printf(<span class="string">"ae\n"</span>);</span><br><span class="line">            I2C_INSTANCE[i2c_num]-&gt;int_ena.ack_err = <span class="number">0</span>;</span><br><span class="line">            I2C_INSTANCE[i2c_num]-&gt;int_clr.ack_err = <span class="number">1</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (status &amp; I2C_TRANS_COMPLETE_INT_ST_M) &#123; <span class="comment">// receive data after receive device address + W/R bit and data address</span></span><br><span class="line">            <span class="comment">// ets_printf("tc, ");</span></span><br><span class="line">            I2C_INSTANCE[i2c_num]-&gt;int_clr.trans_complete = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">int</span> rx_fifo_cnt = I2C_INSTANCE[i2c_num]-&gt;status_reg.rx_fifo_cnt;</span><br><span class="line">            <span class="keyword">if</span> (I2C_INSTANCE[i2c_num]-&gt;status_reg.slave_rw) &#123; <span class="comment">// read, slave should to send</span></span><br><span class="line">                <span class="comment">// ets_printf("R\n");</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">// write, slave should to recv</span></span><br><span class="line">                <span class="comment">// ets_printf("W ");</span></span><br><span class="line">                ets_printf(<span class="string">"Slave Recv"</span>);</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">for</span> (idx = <span class="number">0</span>; idx &lt; rx_fifo_cnt; idx++) &#123;</span><br><span class="line">                    slave_data[w_r_index++] = I2C_INSTANCE[i2c_num]-&gt;fifo_data.data;</span><br><span class="line">                &#125;</span><br><span class="line">                ets_printf(<span class="string">"\n"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            I2C_INSTANCE[i2c_num]-&gt;int_clr.rx_fifo_full = <span class="number">1</span>;</span><br><span class="line">            slave_event = SLAVE_IDLE;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (status &amp; I2C_SLAVE_TRAN_COMP_INT_ST_M) &#123; <span class="comment">// slave receive device address + W/R bit + data address</span></span><br><span class="line">            <span class="keyword">if</span> (I2C_INSTANCE[i2c_num]-&gt;status_reg.slave_rw) &#123; <span class="comment">// read, slave should to send</span></span><br><span class="line">                ets_printf(<span class="string">"sc, Slave Send\n"</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">// write, slave should to recv</span></span><br><span class="line">                <span class="comment">// ets_printf("sc W\n");</span></span><br><span class="line">                w_r_index = I2C_INSTANCE[i2c_num]-&gt;fifo_data.data;</span><br><span class="line">                <span class="keyword">switch</span> (slave_event) &#123;</span><br><span class="line">                    <span class="keyword">case</span> SLAVE_IDLE:</span><br><span class="line">                        ets_printf(<span class="string">"sc, I2W\n"</span>);</span><br><span class="line">                        <span class="comment">// reset tx fifo to avoid send last byte when master send read command next.</span></span><br><span class="line">                        i2c_reset_tx_fifo(i2c_num);</span><br><span class="line"></span><br><span class="line">                        slave_event = SLAVE_WRITE;</span><br><span class="line">                        slave_send_index = w_r_index;</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">int</span> tx_fifo_rem = I2C_FIFO_LEN - I2C_INSTANCE[i2c_num]-&gt;status_reg.tx_fifo_cnt;</span><br><span class="line">                        <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; tx_fifo_rem; i++) &#123;</span><br><span class="line">                            WRITE_PERI_REG(I2C_DATA_APB_REG(i2c_num), slave_data[slave_send_index++]);</span><br><span class="line">                        &#125;</span><br><span class="line">                        I2C_INSTANCE[i2c_num]-&gt;int_ena.tx_fifo_empty = <span class="number">1</span>;</span><br><span class="line">                        I2C_INSTANCE[i2c_num]-&gt;int_clr.tx_fifo_empty = <span class="number">1</span>;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            I2C_INSTANCE[i2c_num]-&gt;int_clr.slave_tran_comp = <span class="number">1</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (status &amp; I2C_TXFIFO_EMPTY_INT_ST_M) &#123;</span><br><span class="line">            ets_printf(<span class="string">"tfe, "</span>);</span><br><span class="line">            <span class="keyword">int</span> tx_fifo_rem = I2C_FIFO_LEN - I2C_INSTANCE[i2c_num]-&gt;status_reg.tx_fifo_cnt;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (I2C_INSTANCE[i2c_num]-&gt;status_reg.slave_rw) &#123; <span class="comment">// read, slave should to send</span></span><br><span class="line">                ets_printf(<span class="string">"R\r\n"</span>);</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; tx_fifo_rem; i++) &#123;</span><br><span class="line">                    WRITE_PERI_REG(I2C_DATA_APB_REG(i2c_num), slave_data[slave_send_index++]);</span><br><span class="line">                &#125;</span><br><span class="line">                I2C_INSTANCE[i2c_num]-&gt;int_ena.tx_fifo_empty = <span class="number">1</span>;</span><br><span class="line">                I2C_INSTANCE[i2c_num]-&gt;int_clr.tx_fifo_empty = <span class="number">1</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">// write, slave should to recv</span></span><br><span class="line">                ets_printf(<span class="string">"W\r\n"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (status &amp; I2C_RXFIFO_OVF_INT_ST_M) &#123;</span><br><span class="line">            ets_printf(<span class="string">"rfo\n"</span>);</span><br><span class="line">            I2C_INSTANCE[i2c_num]-&gt;int_clr.rx_fifo_ovf = <span class="number">1</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (status &amp; I2C_RXFIFO_FULL_INT_ST_M) &#123;</span><br><span class="line">            ets_printf(<span class="string">"rff\n"</span>);</span><br><span class="line">            <span class="keyword">int</span> rx_fifo_cnt = I2C_INSTANCE[i2c_num]-&gt;status_reg.rx_fifo_cnt;</span><br><span class="line">            <span class="keyword">for</span> (idx = <span class="number">0</span>; idx &lt; rx_fifo_cnt; idx++) &#123;</span><br><span class="line">                slave_data[w_r_index++] = I2C_INSTANCE[i2c_num]-&gt;fifo_data.data;</span><br><span class="line">            &#125;</span><br><span class="line">            I2C_INSTANCE[i2c_num]-&gt;int_clr.rx_fifo_full = <span class="number">1</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// ets_printf("%x\n", status);</span></span><br><span class="line">            I2C_INSTANCE[i2c_num]-&gt;int_clr.val = status;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//We only need to check here if there is a high-priority task needs to be switched.</span></span><br><span class="line">    <span class="keyword">if</span>(HPTaskAwoken == pdTRUE) &#123;</span><br><span class="line">        portYIELD_FROM_ISR();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h1 id="完整工程"><a href="#完整工程" class="headerlink" title="完整工程"></a>完整工程</h1><p><a href="https://github.com/InfiniteYuan/ESP32-I2C-Slave/tree/master" target="_blank" rel="noopener">ESP32-I2C-Slave</a></p>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://www.nxp.com/docs/en/user-guide/UM10204.pdf" target="_blank" rel="noopener">I2C Specification</a></p>
+<h1 id="完整工程"><a href="#完整工程" class="headerlink" title="完整工程"></a>完整工程</h1><ul>
+<li><a href="https://github.com/InfiniteYuan/ESP32-I2C-Slave/tree/master" target="_blank" rel="noopener">ESP32-I2C-Slave</a></li>
+</ul>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a href="https://www.nxp.com/docs/en/user-guide/UM10204.pdf" target="_blank" rel="noopener">I2C Specification</a></li>
+</ul>
 
     </div>
 
@@ -344,6 +348,12 @@
   <div class="popular-posts-header">相关文章</div>
   <ul class="popular-posts">
     <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/11/20/ESP32 学习笔记/ESP32 学习笔记（一）开发环境搭建/" rel="bookmark">ESP32 学习笔记（一）开发环境搭建</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/11/20/ESP32 学习笔记/ESP32 学习笔记（二）GPIO & RTC GPIO/" rel="bookmark">ESP32 学习笔记（二）GPIO & RTC GPIO</a></div>
+    </li>
+    <li class="popular-posts-item">
       <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/07/22/ESP32 官方文档/ESP32 官方文档（一）关于 ESP-IDF 编程的一些说明/" rel="bookmark">ESP32 官方文档（一）关于 ESP-IDF 编程的一些说明</a></div>
     </li>
     <li class="popular-posts-item">
@@ -351,12 +361,6 @@
     </li>
     <li class="popular-posts-item">
       <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/29/ESP32 官方文档/ESP32 官方文档（三）分区表/" rel="bookmark">ESP32 官方文档（三）分区表</a></div>
-    </li>
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/09/02/ESP32 官方文档/ESP32 官方文档（九）ESP-IDF FreeRTOS SMP Changes/" rel="bookmark">ESP32 官方文档（九）ESP-IDF FreeRTOS SMP Changes</a></div>
-    </li>
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/07/22/ESP32 官方文档/ESP32 官方文档（二）构建系统/" rel="bookmark">ESP32 官方文档（二）构建系统</a></div>
     </li>
   </ul>
 
@@ -465,14 +469,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/InfiniteYuanBlog/archives/">
         
-          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-count">34</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/InfiniteYuanBlog/categories/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -520,13 +524,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">129k</span>
+    <span title="站点总字数">133k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">1:58</span>
+    <span title="站点阅读时长">2:01</span>
 
 </div>
 
