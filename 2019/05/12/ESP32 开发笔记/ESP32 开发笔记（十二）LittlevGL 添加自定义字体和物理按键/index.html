@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/InfiniteYuanBlog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/InfiniteYuanBlog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/InfiniteYuanBlog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/InfiniteYuanBlog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/css/main.css">
+
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/InfiniteYuanBlog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/InfiniteYuanBlog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"infiniteyuan.github.io","root":"/InfiniteYuanBlog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="LittlevGL 添加自定义字体 获取字库 ttf 文件可以从一些网站上获取字库文件，比如 请注意字体许可证   生成源文件使用 LittlevGL 提供的字库文件转换工具，将 ttf 字库文件转换为源文件。 将生成的源文件添加到 LittlevGL 工程中，添加以下代码声明字体：1extern lv_font_t my_font_name; 或者1LV_FONT_DECLARE(my_font">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ESP32 开发笔记（十二）LittlevGL 添加自定义字体和物理按键">
+<meta property="og:url" content="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/05/12/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%8C%EF%BC%89LittlevGL%20%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AD%97%E4%BD%93%E5%92%8C%E7%89%A9%E7%90%86%E6%8C%89%E9%94%AE/index.html">
+<meta property="og:site_name" content="InfiniteYuan">
+<meta property="og:description" content="LittlevGL 添加自定义字体 获取字库 ttf 文件可以从一些网站上获取字库文件，比如 请注意字体许可证   生成源文件使用 LittlevGL 提供的字库文件转换工具，将 ttf 字库文件转换为源文件。 将生成的源文件添加到 LittlevGL 工程中，添加以下代码声明字体：1extern lv_font_t my_font_name; 或者1LV_FONT_DECLARE(my_font">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190515163138800.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2019-05-12T20:05:34.000Z">
+<meta property="article:modified_time" content="2020-07-23T07:45:38.365Z">
+<meta property="article:author" content="InfiniteYuan">
+<meta property="article:tag" content="ESP32">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190515163138800.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/05/12/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%8C%EF%BC%89LittlevGL%20%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AD%97%E4%BD%93%E5%92%8C%E7%89%A9%E7%90%86%E6%8C%89%E9%94%AE/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ESP32 开发笔记（十二）LittlevGL 添加自定义字体和物理按键 | InfiniteYuan</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/InfiniteYuanBlog/atom.xml" title="InfiniteYuan" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+      <div class="site-meta-headline">
+        <a>
+          <img class="custom-logo-image" src="/InfiniteYuanBlog/images/InfiniteYuanLogo.jpg" alt="InfiniteYuan">
+        </a>
+      </div>
+
+    <a href="/InfiniteYuanBlog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">InfiniteYuan</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/InfiniteYuanBlog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/InfiniteYuanBlog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">32</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/InfiniteYuanBlog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/InfiniteYuanBlog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">3</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/infiniteyuan" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/05/12/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%8C%EF%BC%89LittlevGL%20%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AD%97%E4%BD%93%E5%92%8C%E7%89%A9%E7%90%86%E6%8C%89%E9%94%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
+      <meta itemprop="name" content="InfiniteYuan">
+      <meta itemprop="description" content="Stay Hungry, Stay Funlish">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="InfiniteYuan">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ESP32 开发笔记（十二）LittlevGL 添加自定义字体和物理按键
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-05-12 20:05:34" itemprop="dateCreated datePublished" datetime="2019-05-12T20:05:34+00:00">2019-05-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-23 07:45:38" itemprop="dateModified" datetime="2020-07-23T07:45:38+00:00">2020-07-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">ESP32 开发笔记</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/InfiniteYuanBlog/2019/05/12/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%8C%EF%BC%89LittlevGL%20%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AD%97%E4%BD%93%E5%92%8C%E7%89%A9%E7%90%86%E6%8C%89%E9%94%AE/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2019/05/12/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%8C%EF%BC%89LittlevGL%20%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AD%97%E4%BD%93%E5%92%8C%E7%89%A9%E7%90%86%E6%8C%89%E9%94%AE/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="LittlevGL-添加自定义字体"><a href="#LittlevGL-添加自定义字体" class="headerlink" title="LittlevGL 添加自定义字体"></a>LittlevGL 添加自定义字体</h1><ol>
+<li>获取字库 <code>ttf</code> 文件<br>可以从一些网站上获取字库文件，比如<blockquote>
+<p>请注意字体许可证</p>
+</blockquote>
+</li>
+<li>生成源文件<br>使用 LittlevGL 提供的字库文件<a href="https://littlevgl.com/ttf-font-to-c-array" target="_blank" rel="noopener">转换工具</a>，将 <code>ttf</code> 字库文件转换为源文件。</li>
+<li>将生成的源文件添加到 LittlevGL 工程中，添加以下代码声明字体：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">extern lv_font_t my_font_name;</span><br></pre></td></tr></table></figure>
+或者<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LV_FONT_DECLARE(my_font_name);</span><br></pre></td></tr></table></figure>
+源代码中使用这个字体可以：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">style.text.font &#x3D; &amp;my_font_name;</span><br></pre></td></tr></table></figure>
+或者将这个字体添加到当前使用的字体中：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lv_font_add(&amp;my_font_name, &amp;current_use);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">LV_FONT_DECLARE(my_font_name);</span><br><span class="line"></span><br><span class="line">void lv_chinese_fonts1(void)</span><br><span class="line">&#123;</span><br><span class="line">    &#x2F;*Concatenate the fonts into one*&#x2F;</span><br><span class="line">&#x2F;&#x2F;    lv_font_add(&amp;arial_cyrillic_20, &amp;arial_ascii_20); 相同高度才可以添加到一起</span><br><span class="line">&#x2F;&#x2F;    lv_font_add(&amp;arial_math_20, &amp;arial_ascii_20);</span><br><span class="line"> </span><br><span class="line">    &#x2F;* 创建一个新的样式，并且修改新样式的文本字体 *&#x2F;</span><br><span class="line">    static lv_style_t style1; </span><br><span class="line">    lv_style_copy(&amp;style1, &amp;lv_style_plain);</span><br><span class="line">    style1.text.font &#x3D; &amp;my_font_name; &#x2F;* 设置自定义字体 *&#x2F;</span><br><span class="line"> </span><br><span class="line">    &#x2F;*Create a label and set new text*&#x2F;</span><br><span class="line">    lv_obj_t * label &#x3D; lv_label_create(lv_scr_act(), NULL); &#x2F;* 创建标签 *&#x2F;</span><br><span class="line">    lv_obj_set_pos(label, 10, 10);       &#x2F;* 设置相对位置 *&#x2F;</span><br><span class="line">    lv_label_set_style(label, &amp;style1);  &#x2F;* 设置样式 *&#x2F;</span><br><span class="line">    lv_label_set_text(label, &quot;Hello World!\n 世界你好,我是littleVGL!&quot;);      &#x2F;* 显示汉字 *&#x2F;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="LittlevGL-添加自定义符号"><a href="#LittlevGL-添加自定义符号" class="headerlink" title="LittlevGL 添加自定义符号"></a>LittlevGL 添加自定义符号</h1><p>流程：</p>
+<ul>
+<li>寻找合适的 <code>ttf</code> 文件（包含目标符号，可在 linux 下通过 FontForge 软件打开 <code>ttf</code> 文件，查看包含那些字符）</li>
+<li>使用 LittlevGL 提供的字库文件<a href="https://littlevgl.com/ttf-font-to-c-array" target="_blank" rel="noopener">转换工具</a>，将选中的符号转换为 <code>c</code> 源文件。在转换的页面 <code>Range</code> 中输入目标符号的 Unicode 编码，怎么查询可以通过百度</li>
+<li>将源文件添加到工程中，和上面添加字体类似，首先声明字体，然后添加到字体中或者直接使用。</li>
+<li>定义一个宏指向这个目标符号，宏的内容需要为 <code>UTF-8编码</code>，通过 <a href="https://www.qqxiuzi.cn/bianma/Unicode-UTF.php" target="_blank" rel="noopener">Unicode和UTF编码转换</a> 可以进行转换</li>
+</ul>
+<p>例如：<br><img src="https://img-blog.csdnimg.cn/20190515163138800.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="摄氏度符号"></p>
+<p>这样就需要在程序中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* MACROS *&#x2F;</span><br><span class="line">#define SYMBOL_TEMP &quot;\xE2\x84\x83&quot; &#x2F;&#x2F; E28483</span><br><span class="line"></span><br><span class="line">&#x2F;* STATIC VARIABLES *&#x2F;</span><br><span class="line">LV_FONT_DECLARE(tempreture_symbol_40);</span><br><span class="line"></span><br><span class="line">&#x2F;* Add font to current font *&#x2F;</span><br><span class="line">lv_font_add(&amp;tempreture_symbol_40, &amp;lv_font_dejavu_40);</span><br><span class="line"></span><br><span class="line">&#x2F;* Use this symbol *&#x2F;</span><br><span class="line">lv_label_set_text(temp_l, &quot;21.5 &quot;SYMBOL_TEMP);</span><br></pre></td></tr></table></figure>
+
+<h1 id="LittlevGL-添加物理按键"><a href="#LittlevGL-添加物理按键" class="headerlink" title="LittlevGL 添加物理按键"></a>LittlevGL 添加物理按键</h1><p>注册物理按键驱动：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">uint8_t my_btn_read()</span><br><span class="line">&#123;</span><br><span class="line">    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) &#x3D;&#x3D; 0)</span><br><span class="line">    &#123;</span><br><span class="line">        return 1;</span><br><span class="line">    &#125;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        return 0;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">bool my_input_read(lv_indev_data_t *data)</span><br><span class="line">&#123;</span><br><span class="line">    static int8_t last_btn &#x3D; 0;    &#x2F;* Store the last pressed button *&#x2F;</span><br><span class="line">    int8_t btn_pr &#x3D; my_btn_read(); &#x2F;* Get the ID (0,1,2...) of the pressed button *&#x2F;</span><br><span class="line"></span><br><span class="line">    if (btn_pr &gt; 0)</span><br><span class="line">    &#123;                                    &#x2F;* Is there a button press? *&#x2F;</span><br><span class="line">        last_btn &#x3D; btn_pr;               &#x2F;* Save the ID of the pressed button *&#x2F;</span><br><span class="line">        data-&gt;state &#x3D; LV_INDEV_STATE_PR; &#x2F;* Set the pressed state *&#x2F;</span><br><span class="line">    &#125;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        data-&gt;state &#x3D; LV_INDEV_STATE_REL; &#x2F;* Set the released state *&#x2F;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    data-&gt;btn &#x3D; last_btn; &#x2F;* Set the last button *&#x2F;</span><br><span class="line"></span><br><span class="line">    return false; &#x2F;* No buffering so no more data read *&#x2F;</span><br><span class="line">&#125;</span><br><span class="line">void my_button_init(void)</span><br><span class="line">&#123;</span><br><span class="line">    static lv_indev_t *indev;</span><br><span class="line">    lv_indev_drv_t indev_drv;</span><br><span class="line"></span><br><span class="line">    lv_indev_drv_init(&amp;indev_drv);</span><br><span class="line"></span><br><span class="line">    indev_drv.read &#x3D; my_input_read;</span><br><span class="line">    indev_drv.type &#x3D; LV_INDEV_TYPE_BUTTON;</span><br><span class="line">    indev &#x3D; lv_indev_drv_register(&amp;indev_drv);</span><br><span class="line"></span><br><span class="line">    &#x2F;*points_array: these points will be assigned to the buttons to press a specific point on the screen.*&#x2F;</span><br><span class="line">    static lv_point_t points_array[] &#x3D; &#123;&#123;20, 20&#125;&#125;;</span><br><span class="line">    lv_indev_set_button_points(indev, points_array);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>创建一个按键，保证上面的点在按钮的区域内：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">static lv_obj_t *btn &#x3D; lv_btn_create(lv_scr_act(), NULL);  </span><br><span class="line">lv_obj_set_size(btn, 40, 40);</span><br><span class="line">lv_obj_set_pos(btn, 0, 0);</span><br><span class="line">lv_btn_set_action(btn, LV_BTN_ACTION_CLICK, btn_click_action);</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/07/22/ESP32 官方文档/ESP32 官方文档（一）关于 ESP-IDF 编程的一些说明/" rel="bookmark">ESP32 官方文档（一）关于 ESP-IDF 编程的一些说明</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/09/01/ESP32 官方文档/ESP32 官方文档（七）ESP32 Core Dump/" rel="bookmark">ESP32 官方文档（七）ESP32 Core Dump</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/29/ESP32 官方文档/ESP32 官方文档（三）分区表/" rel="bookmark">ESP32 官方文档（三）分区表</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/09/02/ESP32 官方文档/ESP32 官方文档（九）ESP-IDF FreeRTOS SMP Changes/" rel="bookmark">ESP32 官方文档（九）ESP-IDF FreeRTOS SMP Changes</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/07/22/ESP32 官方文档/ESP32 官方文档（二）构建系统/" rel="bookmark">ESP32 官方文档（二）构建系统</a></div>
+    </li>
+  </ul>
+
+        <div class="reward-container">
+  <div>如果这篇文章对你有帮助，那么不妨？</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/InfiniteYuanBlog/tags/ESP32/" rel="tag"><i class="fa fa-tag"></i> ESP32</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2019/04/28/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%80%EF%BC%89%E4%BD%BF%E7%94%A8%20ESP32%20%E5%81%9A%E4%B8%BA%20WebServer/" rel="prev" title="ESP32 开发笔记（十一）使用 ESP32 做为 WebServer">
+      <i class="fa fa-chevron-left"></i> ESP32 开发笔记（十一）使用 ESP32 做为 WebServer
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2019/11/22/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89ESP32%20ping%20%E5%8A%9F%E8%83%BD/" rel="next" title="ESP32 开发笔记（十三）ESP32 ping 功能">
+      ESP32 开发笔记（十三）ESP32 ping 功能 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LittlevGL-添加自定义字体"><span class="nav-number">1.</span> <span class="nav-text">LittlevGL 添加自定义字体</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LittlevGL-添加自定义符号"><span class="nav-number">2.</span> <span class="nav-text">LittlevGL 添加自定义符号</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LittlevGL-添加物理按键"><span class="nav-number">3.</span> <span class="nav-text">LittlevGL 添加物理按键</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="InfiniteYuan"
+      src="/InfiniteYuanBlog/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">InfiniteYuan</p>
+  <div class="site-description" itemprop="description">Stay Hungry, Stay Funlish</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/InfiniteYuanBlog/archives/">
+        
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/InfiniteYuanBlog/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/InfiniteYuanBlog/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/infiniteyuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;infiniteyuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">InfiniteYuan</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">129k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:58</span>
+
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        站点访客数:<span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        站点阅读量:<span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/InfiniteYuanBlog/lib/anime.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/InfiniteYuanBlog/js/utils.js"></script>
+
+<script src="/InfiniteYuanBlog/js/motion.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/schemes/muse.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/next-boot.js"></script>
+
+<script src="/InfiniteYuanBlog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/InfiniteYuanBlog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '2spSMheFYziIJlzCVs7fvHeG-gzGzoHsz',
+      appKey     : 'aj8lFtI7EyFfrWCx902T0szo',
+      placeholder: "ヾﾉ≧∀≦)o来啊，快活啊!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

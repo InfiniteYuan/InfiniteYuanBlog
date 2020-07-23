@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/InfiniteYuanBlog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/InfiniteYuanBlog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/InfiniteYuanBlog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/InfiniteYuanBlog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/css/main.css">
+
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/InfiniteYuanBlog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/InfiniteYuanBlog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"infiniteyuan.github.io","root":"/InfiniteYuanBlog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="概述这篇文章将介绍使用 ESP32 作为 I2C 实现 Random Read&#x2F;Write 和  Sequential Read&#x2F;Write 时序。 首先通过下面的图了解下 Random Read 时序，I2C Master 通过这个时序读取任意数据地址开始的数据。 12________________________________________________________________">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ESP32 开发笔记（十四）ESP32 I2C Slave 实现">
+<meta property="og:url" content="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/11/22/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89ESP32%20I2C%20Slave%20%E5%AE%9E%E7%8E%B0/index.html">
+<meta property="og:site_name" content="InfiniteYuan">
+<meta property="og:description" content="概述这篇文章将介绍使用 ESP32 作为 I2C 实现 Random Read&#x2F;Write 和  Sequential Read&#x2F;Write 时序。 首先通过下面的图了解下 Random Read 时序，I2C Master 通过这个时序读取任意数据地址开始的数据。 12________________________________________________________________">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191123145556881.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2019-11-22T01:24:44.000Z">
+<meta property="article:modified_time" content="2020-07-23T07:45:38.365Z">
+<meta property="article:author" content="InfiniteYuan">
+<meta property="article:tag" content="ESP32">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20191123145556881.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/11/22/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89ESP32%20I2C%20Slave%20%E5%AE%9E%E7%8E%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ESP32 开发笔记（十四）ESP32 I2C Slave 实现 | InfiniteYuan</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/InfiniteYuanBlog/atom.xml" title="InfiniteYuan" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+      <div class="site-meta-headline">
+        <a>
+          <img class="custom-logo-image" src="/InfiniteYuanBlog/images/InfiniteYuanLogo.jpg" alt="InfiniteYuan">
+        </a>
+      </div>
+
+    <a href="/InfiniteYuanBlog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">InfiniteYuan</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/InfiniteYuanBlog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/InfiniteYuanBlog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">32</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/InfiniteYuanBlog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/InfiniteYuanBlog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">3</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/infiniteyuan" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/11/22/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89ESP32%20I2C%20Slave%20%E5%AE%9E%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
+      <meta itemprop="name" content="InfiniteYuan">
+      <meta itemprop="description" content="Stay Hungry, Stay Funlish">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="InfiniteYuan">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ESP32 开发笔记（十四）ESP32 I2C Slave 实现
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-22 01:24:44" itemprop="dateCreated datePublished" datetime="2019-11-22T01:24:44+00:00">2019-11-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-23 07:45:38" itemprop="dateModified" datetime="2020-07-23T07:45:38+00:00">2020-07-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">ESP32 开发笔记</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/InfiniteYuanBlog/2019/11/22/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89ESP32%20I2C%20Slave%20%E5%AE%9E%E7%8E%B0/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2019/11/22/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89ESP32%20I2C%20Slave%20%E5%AE%9E%E7%8E%B0/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>这篇文章将介绍使用 ESP32 作为 I2C 实现 Random Read/Write 和  Sequential Read/Write 时序。</p>
+<p>首先通过下面的图了解下 Random Read 时序，I2C Master 通过这个时序读取任意数据地址开始的数据。<br><img src="https://img-blog.csdnimg.cn/20191123145556881.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="Random Read"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">___________________________________________________________________________________________________________________________________________________</span><br><span class="line">| start | slave_addr + write_bit + ack | data address |start | slave_addr + read_bit + ack |  <span class="built_in">read</span> n<span class="number">-1</span> bytes + ack | <span class="built_in">read</span> <span class="number">1</span> <span class="keyword">byte</span> + nack | <span class="built_in">stop</span> |</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>RANDOM READ</strong>: A random read requires a “dummy” byte write sequence to load in the data word address. Once the device address word and data word address are clocked in and acknowledged by the EEPROM, the microcontroller must generate another start condition.<br>The microcontroller now initiates a current address read by sending a device address with the read/write select bit high. The EEPROM acknowledges the device address and serially clocks out the data word. The microcontroller does not respond with a zero but does generate a following stop condition </p>
+</blockquote>
+<ul>
+<li>现有的 I2C Slave 无法实现类似 Random Read 时序<ul>
+<li>原因分析：esp-idf 提供的 <code>i2c_slave_write_buffer</code> <code>i2c_slave_read_buffer</code> API 都是操作 RingBuffer 实现，而 Random Read 需要 Slave 在 接收到 <code>slave_addr + read_bit + data address</code> 前将数据放入 I2C 的硬件 FIFO 中。若是通过 API 进行判断当前 Master 想要操作的 数据地址，会因为这个 API 都是操作 RingBuffer 而有所延迟，导致 Master 接收到错误的数据（因为此时硬件 FIFO 还没有数据）。</li>
+<li>解决办法：<ul>
+<li>在接收到 <code>slave_addr + write_bit + data address</code> 时将可能需要发送到主机的数据放入 TX FIFO 中，当主机继续发送 <code>slave_addr + read_bit + data address</code> 并 提供读数据时钟 时，I2C Slave 硬件会将 TX FIFO 中的数据发送到 Master。若主机不再发送 <code>slave_addr + read_bit + data address</code>，就将 FIFO 清空避免在之后的操作中造成错误。</li>
+<li>通过自定义中断处理程序，在相应的中断中进行处理</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="I2C-中断介绍"><a href="#I2C-中断介绍" class="headerlink" title="I2C 中断介绍"></a>I2C 中断介绍</h1><ol>
+<li>想要针对某个 I2C 或者 某种模式，使用自定义的中断处理程序，需要修改 <code>esp-idf/components/driver/i2c.c</code> 中的代码，这里仅仅针对 master 使用驱动中提供的中断处理程序，当模式为 Slave 时，使用自定义的中断处理程序。</li>
+</ol>
+<blockquote>
+<p>在 release/3.2 中，无法直接使用 <code>i2c_isr_register</code> 覆盖之前的中断处理程序。通过简单修改驱动源文件，并在应用程序中调用 <code>i2c_isr_register</code> 实现使用自定义的中断处理程序。</p>
+</blockquote>
+<p>修改 <code>esp-idf/components/driver/i2c.c</code> 文件中 <code>i2c_driver_install</code>  函数中的这段代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (mode == I2C_MODE_MASTER) &#123;</span><br><span class="line">    <span class="comment">//hook isr handler</span></span><br><span class="line">    i2c_isr_register(i2c_num, i2c_isr_handler_default, p_i2c_obj[i2c_num], intr_alloc_flags, &amp;p_i2c_obj[i2c_num]-&gt;intr_handle);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在应用程序中使用自定义的中断处理程序：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> IRAM_ATTR <span class="title">i2c_slave_isr_handler_default</span><span class="params">(<span class="keyword">void</span>* arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	…</span><br><span class="line">	…</span><br><span class="line">	…</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief i2c slave initialization</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">esp_err_t</span> <span class="title">i2c_slave_init</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i2c_slave_port = I2C_SLAVE_NUM;</span><br><span class="line">    <span class="keyword">i2c_config_t</span> conf_slave;</span><br><span class="line">    conf_slave.sda_io_num = I2C_SLAVE_SDA_IO;</span><br><span class="line">    conf_slave.sda_pullup_en = GPIO_PULLUP_ENABLE;</span><br><span class="line">    conf_slave.scl_io_num = I2C_SLAVE_SCL_IO;</span><br><span class="line">    conf_slave.scl_pullup_en = GPIO_PULLUP_ENABLE;</span><br><span class="line">    conf_slave.mode = I2C_MODE_SLAVE;</span><br><span class="line">    conf_slave.slave.addr_10bit_en = <span class="number">0</span>;</span><br><span class="line">    conf_slave.slave.slave_addr = ESP_SLAVE_ADDR;</span><br><span class="line">    i2c_param_config(i2c_slave_port, &amp;conf_slave);</span><br><span class="line">    i2c_driver_install(i2c_slave_port, conf_slave.mode, I2C_SLAVE_RX_BUF_LEN, I2C_SLAVE_TX_BUF_LEN, <span class="number">0</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (i2c_isr_register(I2C_SLAVE_NUM, i2c_slave_isr_handler_default, <span class="literal">NULL</span>, <span class="number">0</span>, <span class="literal">NULL</span>) != ESP_OK) &#123;</span><br><span class="line">        ESP_LOGE(TAG, <span class="string">"i2c_isr_register error"</span>);</span><br><span class="line">        <span class="keyword">return</span> ESP_FAIL;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> ESP_OK;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Slave-中断处理程序"><a href="#Slave-中断处理程序" class="headerlink" title="Slave 中断处理程序"></a>Slave 中断处理程序</h1><p>需要使用的几个中断：</p>
+<ul>
+<li><strong>I2C_SLAVE_TRAN_COMP_INT</strong>：从机收到设备地址和数据地址时将触发（device address + W/R bit + data address），在这里需要判断 Write/Read。若是 Write，需要清空 TX FIFO，并提前将需要操作的数据放入 TX FIFO 中（根据数据地址），尽可能放满 TX FIFO</li>
+<li><strong>I2C_TRANS_COMPLETE_INT</strong>：从机检测到 STOP 时将触发，这个中断中需要将 RX FIFO 中的数据取到数据缓冲区中</li>
+<li><strong>I2C_TXFIFO_EMPTY_INT</strong>：硬件 TX FIFO 为空时将触发，（PS：实际测试触发时，FIFO 大小为 27 byte），将可能操作的数据继续放入 TX FIFO 中</li>
+<li><strong>I2C_RXFIFO_FULL_INT</strong>：硬件 RX FIFO 满时将触发，将 RX FIFO 中的数据取到数据缓冲区中</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> IRAM_ATTR <span class="title">i2c_slave_isr_handler_default</span><span class="params">(<span class="keyword">void</span>* arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> i2c_num = I2C_SLAVE_NUM;</span><br><span class="line">    <span class="keyword">uint32_t</span> status = I2C_INSTANCE[i2c_num]-&gt;int_status.val;</span><br><span class="line">    <span class="keyword">int</span> idx = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    portBASE_TYPE HPTaskAwoken = pdFALSE;</span><br><span class="line">    <span class="keyword">while</span> (status != <span class="number">0</span>) &#123;</span><br><span class="line">        status = I2C_INSTANCE[i2c_num]-&gt;int_status.val;</span><br><span class="line">        <span class="keyword">if</span> (status &amp; I2C_ACK_ERR_INT_ST_M) &#123;</span><br><span class="line">            ets_printf(<span class="string">"ae\n"</span>);</span><br><span class="line">            I2C_INSTANCE[i2c_num]-&gt;int_ena.ack_err = <span class="number">0</span>;</span><br><span class="line">            I2C_INSTANCE[i2c_num]-&gt;int_clr.ack_err = <span class="number">1</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (status &amp; I2C_TRANS_COMPLETE_INT_ST_M) &#123; <span class="comment">// receive data after receive device address + W/R bit and data address</span></span><br><span class="line">            <span class="comment">// ets_printf("tc, ");</span></span><br><span class="line">            I2C_INSTANCE[i2c_num]-&gt;int_clr.trans_complete = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">int</span> rx_fifo_cnt = I2C_INSTANCE[i2c_num]-&gt;status_reg.rx_fifo_cnt;</span><br><span class="line">            <span class="keyword">if</span> (I2C_INSTANCE[i2c_num]-&gt;status_reg.slave_rw) &#123; <span class="comment">// read, slave should to send</span></span><br><span class="line">                <span class="comment">// ets_printf("R\n");</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">// write, slave should to recv</span></span><br><span class="line">                <span class="comment">// ets_printf("W ");</span></span><br><span class="line">                ets_printf(<span class="string">"Slave Recv"</span>);</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">for</span> (idx = <span class="number">0</span>; idx &lt; rx_fifo_cnt; idx++) &#123;</span><br><span class="line">                    slave_data[w_r_index++] = I2C_INSTANCE[i2c_num]-&gt;fifo_data.data;</span><br><span class="line">                &#125;</span><br><span class="line">                ets_printf(<span class="string">"\n"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            I2C_INSTANCE[i2c_num]-&gt;int_clr.rx_fifo_full = <span class="number">1</span>;</span><br><span class="line">            slave_event = SLAVE_IDLE;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (status &amp; I2C_SLAVE_TRAN_COMP_INT_ST_M) &#123; <span class="comment">// slave receive device address + W/R bit + data address</span></span><br><span class="line">            <span class="keyword">if</span> (I2C_INSTANCE[i2c_num]-&gt;status_reg.slave_rw) &#123; <span class="comment">// read, slave should to send</span></span><br><span class="line">                ets_printf(<span class="string">"sc, Slave Send\n"</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">// write, slave should to recv</span></span><br><span class="line">                <span class="comment">// ets_printf("sc W\n");</span></span><br><span class="line">                w_r_index = I2C_INSTANCE[i2c_num]-&gt;fifo_data.data;</span><br><span class="line">                <span class="keyword">switch</span> (slave_event) &#123;</span><br><span class="line">                    <span class="keyword">case</span> SLAVE_IDLE:</span><br><span class="line">                        ets_printf(<span class="string">"sc, I2W\n"</span>);</span><br><span class="line">                        <span class="comment">// reset tx fifo to avoid send last byte when master send read command next.</span></span><br><span class="line">                        i2c_reset_tx_fifo(i2c_num);</span><br><span class="line"></span><br><span class="line">                        slave_event = SLAVE_WRITE;</span><br><span class="line">                        slave_send_index = w_r_index;</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">int</span> tx_fifo_rem = I2C_FIFO_LEN - I2C_INSTANCE[i2c_num]-&gt;status_reg.tx_fifo_cnt;</span><br><span class="line">                        <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; tx_fifo_rem; i++) &#123;</span><br><span class="line">                            WRITE_PERI_REG(I2C_DATA_APB_REG(i2c_num), slave_data[slave_send_index++]);</span><br><span class="line">                        &#125;</span><br><span class="line">                        I2C_INSTANCE[i2c_num]-&gt;int_ena.tx_fifo_empty = <span class="number">1</span>;</span><br><span class="line">                        I2C_INSTANCE[i2c_num]-&gt;int_clr.tx_fifo_empty = <span class="number">1</span>;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            I2C_INSTANCE[i2c_num]-&gt;int_clr.slave_tran_comp = <span class="number">1</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (status &amp; I2C_TXFIFO_EMPTY_INT_ST_M) &#123;</span><br><span class="line">            ets_printf(<span class="string">"tfe, "</span>);</span><br><span class="line">            <span class="keyword">int</span> tx_fifo_rem = I2C_FIFO_LEN - I2C_INSTANCE[i2c_num]-&gt;status_reg.tx_fifo_cnt;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (I2C_INSTANCE[i2c_num]-&gt;status_reg.slave_rw) &#123; <span class="comment">// read, slave should to send</span></span><br><span class="line">                ets_printf(<span class="string">"R\r\n"</span>);</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; tx_fifo_rem; i++) &#123;</span><br><span class="line">                    WRITE_PERI_REG(I2C_DATA_APB_REG(i2c_num), slave_data[slave_send_index++]);</span><br><span class="line">                &#125;</span><br><span class="line">                I2C_INSTANCE[i2c_num]-&gt;int_ena.tx_fifo_empty = <span class="number">1</span>;</span><br><span class="line">                I2C_INSTANCE[i2c_num]-&gt;int_clr.tx_fifo_empty = <span class="number">1</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">// write, slave should to recv</span></span><br><span class="line">                ets_printf(<span class="string">"W\r\n"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (status &amp; I2C_RXFIFO_OVF_INT_ST_M) &#123;</span><br><span class="line">            ets_printf(<span class="string">"rfo\n"</span>);</span><br><span class="line">            I2C_INSTANCE[i2c_num]-&gt;int_clr.rx_fifo_ovf = <span class="number">1</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (status &amp; I2C_RXFIFO_FULL_INT_ST_M) &#123;</span><br><span class="line">            ets_printf(<span class="string">"rff\n"</span>);</span><br><span class="line">            <span class="keyword">int</span> rx_fifo_cnt = I2C_INSTANCE[i2c_num]-&gt;status_reg.rx_fifo_cnt;</span><br><span class="line">            <span class="keyword">for</span> (idx = <span class="number">0</span>; idx &lt; rx_fifo_cnt; idx++) &#123;</span><br><span class="line">                slave_data[w_r_index++] = I2C_INSTANCE[i2c_num]-&gt;fifo_data.data;</span><br><span class="line">            &#125;</span><br><span class="line">            I2C_INSTANCE[i2c_num]-&gt;int_clr.rx_fifo_full = <span class="number">1</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// ets_printf("%x\n", status);</span></span><br><span class="line">            I2C_INSTANCE[i2c_num]-&gt;int_clr.val = status;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//We only need to check here if there is a high-priority task needs to be switched.</span></span><br><span class="line">    <span class="keyword">if</span>(HPTaskAwoken == pdTRUE) &#123;</span><br><span class="line">        portYIELD_FROM_ISR();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="完整工程"><a href="#完整工程" class="headerlink" title="完整工程"></a>完整工程</h1><p><a href="https://github.com/InfiniteYuan/ESP32-I2C-Slave/tree/master" target="_blank" rel="noopener">ESP32-I2C-Slave</a></p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://www.nxp.com/docs/en/user-guide/UM10204.pdf" target="_blank" rel="noopener">I2C Specification</a></p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/07/22/ESP32 官方文档/ESP32 官方文档（一）关于 ESP-IDF 编程的一些说明/" rel="bookmark">ESP32 官方文档（一）关于 ESP-IDF 编程的一些说明</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/09/01/ESP32 官方文档/ESP32 官方文档（七）ESP32 Core Dump/" rel="bookmark">ESP32 官方文档（七）ESP32 Core Dump</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/29/ESP32 官方文档/ESP32 官方文档（三）分区表/" rel="bookmark">ESP32 官方文档（三）分区表</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/09/02/ESP32 官方文档/ESP32 官方文档（九）ESP-IDF FreeRTOS SMP Changes/" rel="bookmark">ESP32 官方文档（九）ESP-IDF FreeRTOS SMP Changes</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/07/22/ESP32 官方文档/ESP32 官方文档（二）构建系统/" rel="bookmark">ESP32 官方文档（二）构建系统</a></div>
+    </li>
+  </ul>
+
+        <div class="reward-container">
+  <div>如果这篇文章对你有帮助，那么不妨？</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/InfiniteYuanBlog/tags/ESP32/" rel="tag"><i class="fa fa-tag"></i> ESP32</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2019/11/22/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89ESP32%20ping%20%E5%8A%9F%E8%83%BD/" rel="prev" title="ESP32 开发笔记（十三）ESP32 ping 功能">
+      <i class="fa fa-chevron-left"></i> ESP32 开发笔记（十三）ESP32 ping 功能
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2020/05/17/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89%E4%BD%BF%E7%94%A8%20LittlevGL%20%E5%AE%9E%E7%8E%B0%202048%20%E5%B0%8F%E6%B8%B8%E6%88%8F/" rel="next" title="ESP32 开发笔记（十五）使用 LittlevGL 实现 2048 小游戏">
+      ESP32 开发笔记（十五）使用 LittlevGL 实现 2048 小游戏 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#I2C-中断介绍"><span class="nav-number">2.</span> <span class="nav-text">I2C 中断介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Slave-中断处理程序"><span class="nav-number">3.</span> <span class="nav-text">Slave 中断处理程序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#完整工程"><span class="nav-number">4.</span> <span class="nav-text">完整工程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="InfiniteYuan"
+      src="/InfiniteYuanBlog/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">InfiniteYuan</p>
+  <div class="site-description" itemprop="description">Stay Hungry, Stay Funlish</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/InfiniteYuanBlog/archives/">
+        
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/InfiniteYuanBlog/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/InfiniteYuanBlog/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/infiniteyuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;infiniteyuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">InfiniteYuan</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">129k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:58</span>
+
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        站点访客数:<span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        站点阅读量:<span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/InfiniteYuanBlog/lib/anime.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/InfiniteYuanBlog/js/utils.js"></script>
+
+<script src="/InfiniteYuanBlog/js/motion.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/schemes/muse.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/next-boot.js"></script>
+
+<script src="/InfiniteYuanBlog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/InfiniteYuanBlog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '2spSMheFYziIJlzCVs7fvHeG-gzGzoHsz',
+      appKey     : 'aj8lFtI7EyFfrWCx902T0szo',
+      placeholder: "ヾﾉ≧∀≦)o来啊，快活啊!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

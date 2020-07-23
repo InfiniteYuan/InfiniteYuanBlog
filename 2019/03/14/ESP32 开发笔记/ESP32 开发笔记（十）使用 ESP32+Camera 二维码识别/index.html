@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/InfiniteYuanBlog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/InfiniteYuanBlog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/InfiniteYuanBlog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/InfiniteYuanBlog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/css/main.css">
+
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/InfiniteYuanBlog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/InfiniteYuanBlog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"infiniteyuan.github.io","root":"/InfiniteYuanBlog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="使用 ESP32 Camera 进行二维码识别 GitHub: esp32-camera-qr-recoginize  环境搭建 ESP-WHO ESP-IDF  使用 quirc 二维码识别库 quirc  摄像头初始化12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ESP32 开发笔记（十）使用 ESP32+Camera 二维码识别">
+<meta property="og:url" content="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/03/14/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%EF%BC%89%E4%BD%BF%E7%94%A8%20ESP32+Camera%20%E4%BA%8C%E7%BB%B4%E7%A0%81%E8%AF%86%E5%88%AB/index.html">
+<meta property="og:site_name" content="InfiniteYuan">
+<meta property="og:description" content="使用 ESP32 Camera 进行二维码识别 GitHub: esp32-camera-qr-recoginize  环境搭建 ESP-WHO ESP-IDF  使用 quirc 二维码识别库 quirc  摄像头初始化12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190315190639946.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2019-03-14T15:16:37.000Z">
+<meta property="article:modified_time" content="2020-07-23T07:45:38.365Z">
+<meta property="article:author" content="InfiniteYuan">
+<meta property="article:tag" content="ESP32">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190315190639946.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/03/14/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%EF%BC%89%E4%BD%BF%E7%94%A8%20ESP32+Camera%20%E4%BA%8C%E7%BB%B4%E7%A0%81%E8%AF%86%E5%88%AB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ESP32 开发笔记（十）使用 ESP32+Camera 二维码识别 | InfiniteYuan</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/InfiniteYuanBlog/atom.xml" title="InfiniteYuan" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+      <div class="site-meta-headline">
+        <a>
+          <img class="custom-logo-image" src="/InfiniteYuanBlog/images/InfiniteYuanLogo.jpg" alt="InfiniteYuan">
+        </a>
+      </div>
+
+    <a href="/InfiniteYuanBlog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">InfiniteYuan</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/InfiniteYuanBlog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/InfiniteYuanBlog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">32</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/InfiniteYuanBlog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/InfiniteYuanBlog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">3</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/infiniteyuan" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/03/14/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%EF%BC%89%E4%BD%BF%E7%94%A8%20ESP32+Camera%20%E4%BA%8C%E7%BB%B4%E7%A0%81%E8%AF%86%E5%88%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
+      <meta itemprop="name" content="InfiniteYuan">
+      <meta itemprop="description" content="Stay Hungry, Stay Funlish">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="InfiniteYuan">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ESP32 开发笔记（十）使用 ESP32+Camera 二维码识别
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-03-14 15:16:37" itemprop="dateCreated datePublished" datetime="2019-03-14T15:16:37+00:00">2019-03-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-23 07:45:38" itemprop="dateModified" datetime="2020-07-23T07:45:38+00:00">2020-07-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">ESP32 开发笔记</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/InfiniteYuanBlog/2019/03/14/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%EF%BC%89%E4%BD%BF%E7%94%A8%20ESP32+Camera%20%E4%BA%8C%E7%BB%B4%E7%A0%81%E8%AF%86%E5%88%AB/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2019/03/14/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%EF%BC%89%E4%BD%BF%E7%94%A8%20ESP32+Camera%20%E4%BA%8C%E7%BB%B4%E7%A0%81%E8%AF%86%E5%88%AB/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="使用-ESP32-Camera-进行二维码识别"><a href="#使用-ESP32-Camera-进行二维码识别" class="headerlink" title="使用 ESP32 Camera 进行二维码识别"></a>使用 ESP32 Camera 进行二维码识别</h1><ul>
+<li>GitHub: <a href="https://github.com/InfiniteYuan/esp32-camera-qr-recoginize/tree/master/examples/single_chip/qrcode_recoginize" target="_blank" rel="noopener">esp32-camera-qr-recoginize</a></li>
+</ul>
+<h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><ul>
+<li><a href="https://github.com/espressif/esp-who" target="_blank" rel="noopener">ESP-WHO</a></li>
+<li><a href="https://github.com/espressif/esp-idf" target="_blank" rel="noopener">ESP-IDF</a></li>
+</ul>
+<h2 id="使用-quirc-二维码识别库"><a href="#使用-quirc-二维码识别库" class="headerlink" title="使用 quirc 二维码识别库"></a>使用 quirc 二维码识别库</h2><ul>
+<li><a href="https://github.com/dlbeer/quirc" target="_blank" rel="noopener">quirc</a></li>
+</ul>
+<h2 id="摄像头初始化"><a href="#摄像头初始化" class="headerlink" title="摄像头初始化"></a>摄像头初始化</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> CAMERA_PIXEL_FORM PIXFORMAT_GRAYSCALE</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> CAMERA_FRAME_SIZE FRAMESIZE_VGA</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">app_main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> CONFIG_CAMERA_MODEL_CUSTOM</span></span><br><span class="line">    <span class="comment">/* IO13, IO14 is designed for JTAG by default,</span></span><br><span class="line"><span class="comment">     * to use it as generalized input,</span></span><br><span class="line"><span class="comment">     * firstly declair it as pullup input */</span></span><br><span class="line">    <span class="keyword">gpio_config_t</span> conf;</span><br><span class="line">    conf.mode = GPIO_MODE_INPUT;</span><br><span class="line">    conf.pull_up_en = GPIO_PULLUP_ENABLE;</span><br><span class="line">    conf.pull_down_en = GPIO_PULLDOWN_DISABLE;</span><br><span class="line">    conf.intr_type = GPIO_INTR_DISABLE;</span><br><span class="line">    conf.pin_bit_mask = <span class="number">1L</span>L &lt;&lt; <span class="number">13</span>;</span><br><span class="line">    gpio_config(&amp;conf);</span><br><span class="line">    conf.pin_bit_mask = <span class="number">1L</span>L &lt;&lt; <span class="number">14</span>;</span><br><span class="line">    gpio_config(&amp;conf);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">config</span>.ledc_channel = LEDC_CHANNEL_0;</span><br><span class="line">    <span class="built_in">config</span>.ledc_timer = LEDC_TIMER_0;</span><br><span class="line">    <span class="built_in">config</span>.pin_d0 = Y2_GPIO_NUM;</span><br><span class="line">    <span class="built_in">config</span>.pin_d1 = Y3_GPIO_NUM;</span><br><span class="line">    <span class="built_in">config</span>.pin_d2 = Y4_GPIO_NUM;</span><br><span class="line">    <span class="built_in">config</span>.pin_d3 = Y5_GPIO_NUM;</span><br><span class="line">    <span class="built_in">config</span>.pin_d4 = Y6_GPIO_NUM;</span><br><span class="line">    <span class="built_in">config</span>.pin_d5 = Y7_GPIO_NUM;</span><br><span class="line">    <span class="built_in">config</span>.pin_d6 = Y8_GPIO_NUM;</span><br><span class="line">    <span class="built_in">config</span>.pin_d7 = Y9_GPIO_NUM;</span><br><span class="line">    <span class="built_in">config</span>.pin_xclk = XCLK_GPIO_NUM;</span><br><span class="line">    <span class="built_in">config</span>.pin_pclk = PCLK_GPIO_NUM;</span><br><span class="line">    <span class="built_in">config</span>.pin_vsync = VSYNC_GPIO_NUM;</span><br><span class="line">    <span class="built_in">config</span>.pin_href = HREF_GPIO_NUM;</span><br><span class="line">    <span class="built_in">config</span>.pin_sscb_sda = SIOD_GPIO_NUM;</span><br><span class="line">    <span class="built_in">config</span>.pin_sscb_scl = SIOC_GPIO_NUM;</span><br><span class="line">    <span class="built_in">config</span>.pin_pwdn = PWDN_GPIO_NUM;</span><br><span class="line">    <span class="built_in">config</span>.pin_reset = RESET_GPIO_NUM;</span><br><span class="line">    <span class="comment">// Only support 10 MHz current. Camera will output bad image when XCLK is 20 MHz.</span></span><br><span class="line">    <span class="built_in">config</span>.xclk_freq_hz = <span class="number">10000000</span>;</span><br><span class="line">    <span class="built_in">config</span>.pixel_format = CAMERA_PIXEL_FORM;</span><br><span class="line">    <span class="built_in">config</span>.frame_size = CAMERA_FRAME_SIZE;</span><br><span class="line">    <span class="built_in">config</span>.jpeg_quality = <span class="number">10</span>;</span><br><span class="line">    <span class="built_in">config</span>.fb_count = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// camera init</span></span><br><span class="line">    <span class="keyword">esp_err_t</span> err = esp_camera_init(&amp;<span class="built_in">config</span>);</span><br><span class="line">    <span class="keyword">if</span> (err != ESP_OK) &#123;</span><br><span class="line">        ESP_LOGE(TAG, <span class="string">"Camera init failed with error 0x%x"</span>, err);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Create QR-code recognize task</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    app_qr_recognize(&amp;<span class="built_in">config</span>);</span><br><span class="line"></span><br><span class="line">    ESP_LOGI(TAG, <span class="string">"Free heap: %u"</span>, xPortGetFreeHeapSize());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="二维码识别"><a href="#二维码识别" class="headerlink" title="二维码识别"></a>二维码识别</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">qr_recoginze</span><span class="params">(<span class="keyword">void</span> *parameter)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">camera_config_t</span> *camera_config = (<span class="keyword">camera_config_t</span> *)parameter;</span><br><span class="line">    <span class="comment">// Use VGA Size currently, but quirc can support other frame size.(eg: FRAMESIZE_SVGA,FRAMESIZE_VGA，</span></span><br><span class="line">    <span class="comment">// FRAMESIZE_CIF,FRAMESIZE_QVGA,FRAMESIZE_HQVGA,FRAMESIZE_QCIF,FRAMESIZE_QQVGA2,FRAMESIZE_QQVGA,etc)</span></span><br><span class="line">    <span class="keyword">if</span> (camera_config-&gt;frame_size &gt; FRAMESIZE_VGA) &#123;</span><br><span class="line">        ESP_LOGE(TAG, <span class="string">"Camera Frame Size err %d"</span>, (camera_config-&gt;frame_size));</span><br><span class="line">        vTaskDelete(<span class="literal">NULL</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Save image width and height, avoid allocate memory repeatly.</span></span><br><span class="line">    <span class="keyword">uint16_t</span> old_width = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">uint16_t</span> old_height = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Construct a new QR-code recognizer.</span></span><br><span class="line">    ESP_LOGI(TAG, <span class="string">"Construct a new QR-code recognizer(quirc)."</span>);</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">quirc</span> *<span class="title">qr_recognizer</span> = <span class="title">quirc_new</span>();</span></span><br><span class="line">    <span class="keyword">if</span> (!qr_recognizer) &#123;</span><br><span class="line">        ESP_LOGE(TAG, <span class="string">"Can't create quirc object"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">camera_fb_t</span> *fb = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">uint8_t</span> *<span class="built_in">image</span> = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">int</span> id_count = <span class="number">0</span>;</span><br><span class="line">    UBaseType_t uxHighWaterMark;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 入口处检测一次 */</span></span><br><span class="line">    ESP_LOGI(TAG, <span class="string">"uxHighWaterMark = %d"</span>, uxTaskGetStackHighWaterMark( <span class="literal">NULL</span> ));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        ESP_LOGI(TAG, <span class="string">"uxHighWaterMark = %d"</span>, uxTaskGetStackHighWaterMark( <span class="literal">NULL</span> ));</span><br><span class="line">        <span class="comment">// Capture a frame</span></span><br><span class="line">        fb = esp_camera_fb_get();</span><br><span class="line">        <span class="keyword">if</span> (!fb) &#123;</span><br><span class="line">            ESP_LOGE(TAG, <span class="string">"Camera capture failed"</span>);</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (old_width != fb-&gt;<span class="built_in">width</span> || old_height != fb-&gt;<span class="built_in">height</span>) &#123;</span><br><span class="line">            ESP_LOGD(TAG, <span class="string">"Recognizer size change w h len: %d, %d, %d"</span>, fb-&gt;<span class="built_in">width</span>, fb-&gt;<span class="built_in">height</span>, fb-&gt;len);</span><br><span class="line">            ESP_LOGI(TAG, <span class="string">"Resize the QR-code recognizer."</span>);</span><br><span class="line">            <span class="comment">// Resize the QR-code recognizer.</span></span><br><span class="line">            <span class="keyword">if</span> (quirc_resize(qr_recognizer, fb-&gt;<span class="built_in">width</span>, fb-&gt;<span class="built_in">height</span>) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                ESP_LOGE(TAG, <span class="string">"Resize the QR-code recognizer err."</span>);</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                old_width = fb-&gt;<span class="built_in">width</span>;</span><br><span class="line">                old_height = fb-&gt;<span class="built_in">height</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/** These functions are used to process images for QR-code recognition.</span></span><br><span class="line"><span class="comment">         * quirc_begin() must first be called to obtain access to a buffer into</span></span><br><span class="line"><span class="comment">         * which the input image should be placed. Optionally, the current</span></span><br><span class="line"><span class="comment">         * width and height may be returned.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * After filling the buffer, quirc_end() should be called to process</span></span><br><span class="line"><span class="comment">         * the image for QR-code recognition. The locations and content of each</span></span><br><span class="line"><span class="comment">         * code may be obtained using accessor functions described below.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="built_in">image</span> = quirc_begin(qr_recognizer, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">        <span class="built_in">memcpy</span>(<span class="built_in">image</span>, fb-&gt;buf, fb-&gt;len);</span><br><span class="line">        quirc_end(qr_recognizer);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Return the number of QR-codes identified in the last processed image.</span></span><br><span class="line">        id_count = quirc_count(qr_recognizer);</span><br><span class="line">        <span class="keyword">if</span> (id_count == <span class="number">0</span>) &#123;</span><br><span class="line">            ESP_LOGE(TAG, <span class="string">"Error: not a valid qrcode"</span>);</span><br><span class="line">            esp_camera_fb_return(fb);</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Print information of QR-code</span></span><br><span class="line">        dump_info(qr_recognizer, id_count);</span><br><span class="line">        esp_camera_fb_return(fb);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Destroy QR-Code recognizer (quirc)</span></span><br><span class="line">    quirc_destroy(qr_recognizer);</span><br><span class="line">    ESP_LOGI(TAG, <span class="string">"Deconstruct QR-Code recognizer(quirc)"</span>);</span><br><span class="line">    vTaskDelete(<span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="示例结果"><a href="#示例结果" class="headerlink" title="示例结果"></a>示例结果</h2><p><img src="https://img-blog.csdnimg.cn/20190315190639946.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="示例结果"></p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/07/22/ESP32 官方文档/ESP32 官方文档（一）关于 ESP-IDF 编程的一些说明/" rel="bookmark">ESP32 官方文档（一）关于 ESP-IDF 编程的一些说明</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/09/01/ESP32 官方文档/ESP32 官方文档（七）ESP32 Core Dump/" rel="bookmark">ESP32 官方文档（七）ESP32 Core Dump</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/29/ESP32 官方文档/ESP32 官方文档（三）分区表/" rel="bookmark">ESP32 官方文档（三）分区表</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/09/02/ESP32 官方文档/ESP32 官方文档（九）ESP-IDF FreeRTOS SMP Changes/" rel="bookmark">ESP32 官方文档（九）ESP-IDF FreeRTOS SMP Changes</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/07/22/ESP32 官方文档/ESP32 官方文档（二）构建系统/" rel="bookmark">ESP32 官方文档（二）构建系统</a></div>
+    </li>
+  </ul>
+
+        <div class="reward-container">
+  <div>如果这篇文章对你有帮助，那么不妨？</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/InfiniteYuanBlog/tags/ESP32/" rel="tag"><i class="fa fa-tag"></i> ESP32</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2019/03/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89ESP-MESH%20%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/" rel="prev" title="ESP32 官方文档（十六）ESP-MESH 编程指南">
+      <i class="fa fa-chevron-left"></i> ESP32 官方文档（十六）ESP-MESH 编程指南
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2019/04/28/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%80%EF%BC%89%E4%BD%BF%E7%94%A8%20ESP32%20%E5%81%9A%E4%B8%BA%20WebServer/" rel="next" title="ESP32 开发笔记（十一）使用 ESP32 做为 WebServer">
+      ESP32 开发笔记（十一）使用 ESP32 做为 WebServer <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#使用-ESP32-Camera-进行二维码识别"><span class="nav-number">1.</span> <span class="nav-text">使用 ESP32 Camera 进行二维码识别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境搭建"><span class="nav-number">1.1.</span> <span class="nav-text">环境搭建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-quirc-二维码识别库"><span class="nav-number">1.2.</span> <span class="nav-text">使用 quirc 二维码识别库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#摄像头初始化"><span class="nav-number">1.3.</span> <span class="nav-text">摄像头初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二维码识别"><span class="nav-number">1.4.</span> <span class="nav-text">二维码识别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例结果"><span class="nav-number">1.5.</span> <span class="nav-text">示例结果</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="InfiniteYuan"
+      src="/InfiniteYuanBlog/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">InfiniteYuan</p>
+  <div class="site-description" itemprop="description">Stay Hungry, Stay Funlish</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/InfiniteYuanBlog/archives/">
+        
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/InfiniteYuanBlog/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/InfiniteYuanBlog/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/infiniteyuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;infiniteyuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">InfiniteYuan</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">129k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:58</span>
+
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        站点访客数:<span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        站点阅读量:<span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/InfiniteYuanBlog/lib/anime.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/InfiniteYuanBlog/js/utils.js"></script>
+
+<script src="/InfiniteYuanBlog/js/motion.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/schemes/muse.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/next-boot.js"></script>
+
+<script src="/InfiniteYuanBlog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/InfiniteYuanBlog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '2spSMheFYziIJlzCVs7fvHeG-gzGzoHsz',
+      appKey     : 'aj8lFtI7EyFfrWCx902T0szo',
+      placeholder: "ヾﾉ≧∀≦)o来啊，快活啊!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
