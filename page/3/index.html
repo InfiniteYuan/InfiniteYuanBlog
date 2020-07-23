@@ -228,7 +228,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 07:45:38" itemprop="dateModified" datetime="2020-07-23T07:45:38+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 07:51:54" itemprop="dateModified" datetime="2020-07-23T07:51:54+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -352,7 +352,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 07:45:38" itemprop="dateModified" datetime="2020-07-23T07:45:38+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 07:51:54" itemprop="dateModified" datetime="2020-07-23T07:51:54+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -469,7 +469,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 07:45:38" itemprop="dateModified" datetime="2020-07-23T07:45:38+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 07:51:54" itemprop="dateModified" datetime="2020-07-23T07:51:54+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -529,50 +529,14 @@
 <li>The touch pad is replaced by your mouse</li>
 <li>The written code is portable, you can simply copy it when using an embedded hardware</li>
 </ul>
-<h2 id="配置流程"><a href="#配置流程" class="headerlink" title="配置流程"></a>配置流程</h2><h3>Install Eclipse CDT</h3>
-
-<p>Eclipse CDT is C/C++ IDE. You can use other IDEs as well but in this tutorial the configuration for Eclipse CDT is shown.<br>Eclipse is a Java based software therefore be sure Jave Runtime Environment is installed on your system.<br>On linux: sudo apt-get install default-jre<br>You can download Eclipse’s CDT from: <a href="https://eclipse.org/cdt/" target="_blank" rel="noopener">https://eclipse.org/cdt/</a>. Start the nstaller and choose <em>Eclipse CDT</em> from the list</p>
-<h3>Install SDL 2</h3>
-
-<p>The PC simulator uses the <a href="https://www.libsdl.org/download-2.0.php" target="_blank" rel="noopener">SDL 2</a> cross platform library to simulate a TFT display and a touch pad.</p>
-<h5>Linux</h5>
-
-<p>On Linux you can easily install SDL2 using a terminal:</p>
-<ol>
-<li>Find the current version of SDL2: <code>apt-cache search libsdl2</code> (e.g. libsdl2-2.0-0)</li>
-<li>Install SDL2: <code>sudo apt-get install libsdl2-2.0-0</code> (replace with the found version)</li>
-<li>Install SDL2 developement package: <code>sudo apt-get install libsdl2-dev</code></li>
-<li>If build essentials are not installed yet: <code>sudo apt-get install build-essential</code></li>
-</ol>
-<h5>Windows</h5>
-
-<p>If you are using Windows firstly you need to install MinGW (<a href="http://mingw-w64.org/doku.php/download" target="_blank" rel="noopener">64 bit version</a>). After it do the following steps to add SDL2:</p>
-<ol>
-<li>Download the development libraries of SDL. Go to <a href="https://www.libsdl.org/download-2.0.php" target="_blank" rel="noopener">https://www.libsdl.org/download-2.0.php</a> and download Development Libraries: SDL2-devel-2.0.5-mingw.tar.gz</li>
-<li>Uncompress the file and go to x86_64-w64-mingw32 directory (for 64 bit MinGW) or to i686-w64-mingw32 (for 32 bit MinGW)</li>
-<li>Copy …_mingw32/include/SDL2 folder to C:/MinGW/…/x86_64-w64-mingw32/include</li>
-<li>Copy …_mingw32/lib/ content to C:/MinGW/…/x86_64-w64-mingw32/lib</li>
-<li>Copy …_mingw32/bin/SDL2.dll to {eclipse_worksapce}/pc_simulator/Debug/. Do it later when Eclipse is installed.</li>
-</ol>
-<blockquote>
-<p>Note: If you will use Microsoft Visual Studio instead of Eclipse then you don’t have to install MinGW.</p>
-</blockquote>
-<h5>OSX</h5>
-
-<p>On OSX you can easily install SDL2 with brew: <code>brew install sdl2</code></p>
-<p>If something is not worging I suggest <a href="http://lazyfoo.net/tutorials/SDL/01_hello_SDL/index.php" target="_blank" rel="noopener">this tutoria</a>l to get statered with SDL</p>
-<h2 id="Pre-configured-project"><a href="#Pre-configured-project" class="headerlink" title="Pre-configured project"></a>Pre-configured project</h2><p>A pre-configured graphics library project (based on the lates release) is always available in PC simulator project. You can find it on <a href="https://github.com/littlevgl/proj_pc" target="_blank" rel="noopener">GitHub</a> or on the <a href="https://littlevgl.com/download" target="_blank" rel="noopener">Download</a> page. The project is configured for Eclipse CDT.</p>
-<p>##Add the pre-configured project to Eclipse CDT<br>Run Eclipse CDT. It will show a dialogue about the <strong>workspace path</strong>. Before accepting it check that path and copy (and unzip) the downloaded pre-configured project there. Now you can accept the workspace path. Of course you can modify this path but in that case copy the projct to the that location.</p>
-<p>Close the start up window and go to <strong>File-&gt;Import</strong> and choose <strong>General-&gt;Existing project into Workspace</strong>.<br><strong>Browse the root directory</strong> of the project and click <strong>Finish</strong></p>
-<p>On <strong>Windows</strong> you have to do two additional things:</p>
-<ul>
-<li>Copy the <strong>SDL2.dll</strong> into the project’s Debug folder</li>
-<li>Righ click on the project -&gt; Project properties -&gt; C/C++ Build -&gt; Settings -&gt; Libraries -&gt; Add … and add mingw32 above SDLmain and SDL. (The order is important: mingw32, SDLmain, SDL)</li>
-</ul>
-<h2 id="Compile-and-Run"><a href="#Compile-and-Run" class="headerlink" title="Compile and Run"></a>Compile and Run</h2><p>Now you are ready to run the Littlev Graphics Library on your PC. Click on the Hammer Icon on the top menu bar to Build the project. If you have done everything right you will not get any errors. Note that on some systems additional steps might be required to “see” SDL 2 from Eclipse but in most of cases the configurtions in the downloaded project is enough.</p>
-<p>After a success build click on the Play button on the top menu bar to run the project. Now a window should appear in the middle of your screen</p>
-<p>Now everything is ready to use the Littlev Graphics Library in the practice or begin the developement on your PC.</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/InfiniteYuanBlog/2018/08/09/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89LittlevGL%20PC%20Simulator%20%E9%85%8D%E7%BD%AE/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -622,7 +586,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 07:45:38" itemprop="dateModified" datetime="2020-07-23T07:45:38+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 07:51:54" itemprop="dateModified" datetime="2020-07-23T07:51:54+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -677,40 +641,14 @@
 <h2 id="LittlevGL-介绍"><a href="#LittlevGL-介绍" class="headerlink" title="LittlevGL 介绍"></a>LittlevGL 介绍</h2><blockquote>
 <p>littlevGL is a free and open-source graphics library providing everything you need to create embedded GUI with easy-to-use graphical elements, beautiful visual effects and low memory footprint.<br><a href="https://littlevgl.com/" target="_blank" rel="noopener">LittlevGL 官网链接</a><br><a href="https://littlevgl.com/porting" target="_blank" rel="noopener">LittlevGL 移植教程</a><br><a href="https://littlevgl.com/basics" target="_blank" rel="noopener">LittlevGL 官方文档</a><br><a href="https://github.com/littlevgl/lvgl" target="_blank" rel="noopener">LittlevGL GitHub链接</a></p>
 </blockquote>
-<h4>关键特性：</h4>
- - Powerful building blocks buttons, charts, lists, sliders, images etc
- - Advanced graphics with animations, anti-aliasing, opacity, smooth scrolling
- - Various input devices touch pad, mouse, keyboard, encoder, buttons etc
- - Multi language support with UTF-8 decoding
- - Fully customizable graphical elements
- - Hardware independent to use with any microcontroller or display
- - Scalable to operate with few memory (50 kB Flash, 10 kB RAM)
- - OS, External memory and GPU supported but not required
- - Single frame buffer operation even with advances graphical effects
- - Written in C for maximal compatibility
- - Simulator to develop on PC without embedded hardware
- - Tutorials, examples, themes for rapid development
- - Documentation and API references online
-
-<h2 id="移植过程"><a href="#移植过程" class="headerlink" title="移植过程"></a>移植过程</h2><ol>
-<li>在工程目录下新建一个 components 目录，放入 LittlevGL 源码</li>
-<li>在 components 目录下新建一个 include 目录，放入 lv_conf.h 文件，由 LittlevGL 源码目录中的 lv_conf_templ.h文件而来</li>
-<li>在 components 目录下新建一个  component.mk  文件，将 LittlevGL 相关源码添加到组件的 <code>COMPONENT_SRCDIRS</code>、<code>COMPONENT_ADD_INCLUDEDIRS</code>和<code>COMPONENT_PRIV_INCLUDEDIRS</code>目录变量中</li>
-<li>之后在程序中使用了～，可根据 <a href="https://github.com/littlevgl/lv_examples/blob/master/lv_tutorial/0_porting/lv_tutorial_porting.c" target="_blank" rel="noopener">LittlevGL Tutorial</a> 在自己的主程序中实现</li>
-</ol>
-<h4>大致初始化流程：</h4>
-
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/***********************</span></span><br><span class="line"><span class="comment"> * Initialize LittlevGL</span></span><br><span class="line"><span class="comment"> ***********************/</span></span><br><span class="line">lv_init();</span><br><span class="line"></span><br><span class="line"><span class="comment">/***********************</span></span><br><span class="line"><span class="comment"> * Tick interface</span></span><br><span class="line"><span class="comment"> ***********************/</span></span><br><span class="line"><span class="comment">/* Initialize a Timer for 1 ms period and</span></span><br><span class="line"><span class="comment"> * in its interrupt call</span></span><br><span class="line"><span class="comment"> * lv_tick_inc(1); */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/***********************</span></span><br><span class="line"><span class="comment"> * Display interface</span></span><br><span class="line"><span class="comment"> ***********************/</span></span><br><span class="line"><span class="keyword">lv_disp_drv_t</span> disp_drv;                         <span class="comment">/*Descriptor of a display driver*/</span></span><br><span class="line">lv_disp_drv_init(&amp;disp_drv);                    <span class="comment">/*Basic initialization*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*Set up the functions to access to your display*/</span></span><br><span class="line">disp_drv.disp_flush = ex_disp_flush;            <span class="comment">/*Used in buffered mode (LV_VDB_SIZE != 0  in lv_conf.h)*/</span></span><br><span class="line"></span><br><span class="line">disp_drv.disp_fill = ex_disp_fill;              <span class="comment">/*Used in unbuffered mode (LV_VDB_SIZE == 0  in lv_conf.h)*/</span></span><br><span class="line">disp_drv.disp_map = ex_disp_map;                <span class="comment">/*Used in unbuffered mode (LV_VDB_SIZE == 0  in lv_conf.h)*/</span></span><br><span class="line"><span class="comment">/*Finally register the driver*/</span></span><br><span class="line">lv_disp_drv_register(&amp;disp_drv);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*************************</span></span><br><span class="line"><span class="comment"> * Input device interface</span></span><br><span class="line"><span class="comment"> *************************/</span></span><br><span class="line"><span class="comment">/*Add a touchpad in the example*/</span></span><br><span class="line"><span class="comment">/*touchpad_init();*/</span>                            <span class="comment">/*Initialize your touchpad*/</span></span><br><span class="line"><span class="keyword">lv_indev_drv_t</span> indev_drv;                       <span class="comment">/*Descriptor of an input device driver*/</span></span><br><span class="line">lv_indev_drv_init(&amp;indev_drv);                  <span class="comment">/*Basic initialization*/</span></span><br><span class="line">indev_drv.type = LV_INDEV_TYPE_POINTER;         <span class="comment">/*The touchpad is pointer type device*/</span></span><br><span class="line">indev_drv.<span class="built_in">read</span> = ex_tp_read;                    <span class="comment">/*Library ready your touchpad via this function*/</span></span><br><span class="line">lv_indev_drv_register(&amp;indev_drv);              <span class="comment">/*Finally register the driver*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*************************************</span></span><br><span class="line"><span class="comment"> * Run the task handler of LittlevGL</span></span><br><span class="line"><span class="comment"> *************************************/</span></span><br><span class="line"><span class="comment">/* Periodically call this function.</span></span><br><span class="line"><span class="comment"> * The timing is not critical but should be between 1..10 ms */</span></span><br><span class="line">lv_task_handler();</span><br><span class="line"><span class="comment">/*delay_ms(5)*/</span></span><br></pre></td></tr></table></figure>
-
-<h4>需要实现的函数：</h4>
-
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/***********************</span></span><br><span class="line"><span class="comment"> * Display interface</span></span><br><span class="line"><span class="comment"> ***********************/</span></span><br><span class="line"> <span class="comment">/*Write the internal buffer (VDB) to the display. 'lv_flush_ready()' has to be called when finished*/</span></span><br><span class="line"> <span class="keyword">void</span> (*disp_flush)(<span class="keyword">int32_t</span> x1, <span class="keyword">int32_t</span> y1, <span class="keyword">int32_t</span> x2, <span class="keyword">int32_t</span> y2, <span class="keyword">const</span> <span class="keyword">lv_color_t</span> * color_p);</span><br><span class="line"> <span class="comment">/*Fill an area with a color on the display*/</span></span><br><span class="line"> <span class="keyword">void</span> (*disp_fill)(<span class="keyword">int32_t</span> x1, <span class="keyword">int32_t</span> y1, <span class="keyword">int32_t</span> x2, <span class="keyword">int32_t</span> y2, <span class="keyword">lv_color_t</span> color);</span><br><span class="line"> <span class="comment">/*Write pixel map (e.g. image) to the display*/</span></span><br><span class="line"> <span class="keyword">void</span> (*disp_map)(<span class="keyword">int32_t</span> x1, <span class="keyword">int32_t</span> y1, <span class="keyword">int32_t</span> x2, <span class="keyword">int32_t</span> y2, <span class="keyword">const</span> <span class="keyword">lv_color_t</span> * color_p);</span><br><span class="line"> </span><br><span class="line"><span class="comment">/*************************</span></span><br><span class="line"><span class="comment"> * Input device interface</span></span><br><span class="line"><span class="comment"> *************************/</span></span><br><span class="line"> <span class="keyword">bool</span> (*<span class="built_in">read</span>)(<span class="keyword">lv_indev_data_t</span> *data);        <span class="comment">/*Function pointer to read data. Return 'true' if there is still data to be read (buffered)*/</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p><strong>注意：</strong>在实现 <code>disp_flush</code> 函数时，在函数末尾需要调用 LittlevGL 提供的 <code>lv_flush_ready</code> 函数<br>上述的这些函数可以自行实现，函数体保持一致即可</p>
-</blockquote>
-<p>欢迎关注本人 <a href="https://github.com/InfiniteYuan" target="_blank" rel="noopener">GitHub</a> ，更新 ESP32 相关开源库</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/InfiniteYuanBlog/2018/08/08/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89%E7%A7%BB%E6%A4%8D%E5%BC%80%E6%BA%90%E5%9B%BE%E5%BD%A2%E5%BA%93%20LittlevGL/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -760,7 +698,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 07:45:38" itemprop="dateModified" datetime="2020-07-23T07:45:38+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 07:51:54" itemprop="dateModified" datetime="2020-07-23T07:51:54+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -871,7 +809,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 07:45:38" itemprop="dateModified" datetime="2020-07-23T07:45:38+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 07:51:54" itemprop="dateModified" datetime="2020-07-23T07:51:54+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -981,7 +919,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 07:45:38" itemprop="dateModified" datetime="2020-07-23T07:45:38+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 07:51:54" itemprop="dateModified" datetime="2020-07-23T07:51:54+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1033,8 +971,14 @@
 
       
           <h1 id="ESP32-Touch-TFT"><a href="#ESP32-Touch-TFT" class="headerlink" title="ESP32 Touch TFT"></a>ESP32 Touch TFT</h1><p>GitHub地址：<a href="https://github.com/InfiniteYuan/esp32-touchTFT" target="_blank" rel="noopener">工程源码</a><br>该工程时使用了 lcd、xpt2046、esp32 实现了触摸屏基础功能</p>
-<h1 id="编译、运行"><a href="#编译、运行" class="headerlink" title="编译、运行"></a>编译、运行</h1><p>请参考 esp-idf 的工程配置与运行</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/InfiniteYuanBlog/2018/01/16/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89XPT2046%20%E8%A7%A6%E6%91%B8/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1084,7 +1028,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 07:45:38" itemprop="dateModified" datetime="2020-07-23T07:45:38+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 07:51:54" itemprop="dateModified" datetime="2020-07-23T07:51:54+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1146,19 +1090,14 @@
 <li>通过手机端浏览器访问 ESP32 HTTP 服务器，查看当前摄像头采集的图像</li>
 <li>摄像头采集图像、LCD 实时显示刷新速率达到 22fps</li>
 </ul>
-<h2 id="硬件连接"><a href="#硬件连接" class="headerlink" title="硬件连接"></a>硬件连接</h2><p>按照默认的<code>make menuconfig</code>中的默认配置连接即可。</p>
-<blockquote>
-<p>注: 如果使用<code>ESP-WROVER-KIT</code>开发板，请注意把 LCD 的 reset 引脚上拉，否则 LCD 无法正常复位。</p>
-</blockquote>
-<blockquote>
-<p>注: 如果 LCD 的背光灯没有正常亮起，可以将背光灯引脚直接接到高/低电平。</p>
-</blockquote>
-<h2 id="硬件实物图"><a href="#硬件实物图" class="headerlink" title="硬件实物图"></a>硬件实物图</h2><p>该工程默认使用的为<code>ESP-WROVER-KIT</code>开发板;<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTgwMTE2MTgyODA0MDM5?x-oss-process=image/format,png" alt="LCD屏幕"><br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTgwMTE2MTgzMDQ2MjIw?x-oss-process=image/format,png" alt="这里写图片描述"></p>
-<h2 id="编译运行"><a href="#编译运行" class="headerlink" title="编译运行"></a>编译运行</h2><p>若选用<code>ESP-WROVER-KIT</code>开发板，下载时，请选择 ttyUSB1 ;</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make -j8 flash</span><br></pre></td></tr></table></figure>
-
-<h2 id="相关配置"><a href="#相关配置" class="headerlink" title="相关配置"></a>相关配置</h2><p>以下是需要注意的相关配置：<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTgwMTE2MTgzMTE3Njk4?x-oss-process=image/format,png" alt="这里写图片描述"><br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTgwMTE2MTgzMTI4Mzg3?x-oss-process=image/format,png" alt="这里写图片描述"><br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTgwMTE2MTgzMTM5OTYx?x-oss-process=image/format,png" alt="这里写图片描述"><br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTgwMTE2MTgzMTUxNDU1?x-oss-process=image/format,png" alt="这里写图片描述"></p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/InfiniteYuanBlog/2018/01/16/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%9B%9B%EF%BC%89OV7670%20%E6%91%84%E5%83%8F%E5%A4%B4%E5%9B%BE%E5%83%8F%E9%87%87%E9%9B%86/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1208,7 +1147,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 07:45:38" itemprop="dateModified" datetime="2020-07-23T07:45:38+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 07:51:54" itemprop="dateModified" datetime="2020-07-23T07:51:54+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1260,62 +1199,14 @@
 
       
           <h1 id="ESP32-AWS-IOT-发布-订阅-示例"><a href="#ESP32-AWS-IOT-发布-订阅-示例" class="headerlink" title="ESP32 AWS IOT 发布/订阅 示例"></a>ESP32 AWS IOT 发布/订阅 示例</h1><p>首先提供源码吧：<a href="https://github.com/InfiniteYuan/esp32-aws-iot" target="_blank" rel="noopener">GitHub源码地址</a><br>这是一个适用于 ESP-IDF 中<a href="https://github.com/aws/aws-iot-device-sdk-embedded-C" target="_blank" rel="noopener">AWS IoT C SDK</a> 的 “subscribe_publish”示例。</p>
-<h1 id="AWS-IOT-配置"><a href="#AWS-IOT-配置" class="headerlink" title="AWS IOT 配置"></a>AWS IOT 配置</h1><p>在运行工程前，我们需要正确配置 AWS IOT ：</p>
-<ul>
-<li><p>正确配置 esp-iot-solution 和 示例工程</p>
-<ul>
-<li>拉取最新的 esp-iot-solution</li>
-<li>保证能够正确编译一个工程</li>
-</ul>
-</li>
-<li><p>正确配置 AWS 事物模块：事物、证书、策略</p>
-<ul>
-<li><p>我们可以根据<a href="https://docs.aws.amazon.com/zh_cn/iot/latest/developerguide/iot-console-signin.html" target="_blank" rel="noopener">AWS IoT Developer Guide</a>，从<code>登录 AWS IOT 控制台</code> 这一步，一直配置到 <code>配置您的设备</code>这步，之后再进行下面的配置</p>
-</li>
-<li><p>安装私钥和证书</p>
-<p>  添加 <code>*.pem.key</code> 和 <code>*.pem.crt</code> 文件到 <code>main/cert</code> 目录中，并重命名为<code>private.pem.key</code>和<code>certificate.pem.crt</code>。</p>
-</li>
-<li><p>设置 AWS 端点主机名</p>
-<p>  您的 AWS IOT 帐户具有唯一终端主机名。要找到它，请打开 AWS IOT 控制台，然后单击左下方的“设置”按钮。端点主机名显示在此页面的“自定义端点”标题下。</p>
-<p>  之后我们在电脑终端运行<code>make menuconfig</code>并进入<code>component config</code>-&gt;<code>Amazon Web Service IoT Config</code>-&gt;<code>AWS IoT MQTT Hostname</code>，在这里我们输入上一步找到的主机名。</p>
-</li>
-<li><p>设置客户端 ID</p>
-<p>  在电脑终端中运行<code>make menuconfig</code>，在<code>example configuration</code>下，设置 <code>AWS IOT Client ID</code>的值</p>
-</li>
-<li><p>本地验证证书是否配置正确 </p>
-<p>当 ESP32 连接到 AWS IoT 时，根 CA 证书提供信任根。我们已经在文件 <code>main/certs/aws-root-ca.pem</code> 中提供了根 CA 证书（采用 PEM 格式）。</p>
-<p>如果要本地验证此根 CA 证书未更改，可以对 AWS MQTT 主机运行以下命令：</p>
-<p>运行 <code>openssl s_client -showcerts -connect hostname:8883 &lt; /dev/null</code> 命令去验证证书是否正确</p>
-<p>（将主机名替换为您的 AWS MQTT 端点主机。）根 CA 证书是打印的证书列表中的最后一个证书。 您可以复制粘贴它来代替现有的 <code>aws-root-ca.pem</code> 文件。</p>
-</li>
-</ul>
-</li>
-<li><p>正确配置 ESP32 网络连接</p>
-<p>  在电脑终端运行 <code>make menuconfig</code> 命令，在 <code>Example Configuration</code> 目录中配置 <code>WiFi SSID</code> 和 <code>WiFi Password</code></p>
-</li>
-</ul>
-<h1 id="监视来自设备的数据"><a href="#监视来自设备的数据" class="headerlink" title="监视来自设备的数据"></a>监视来自设备的数据</h1><p>下载完这个工程之后，程序会自动连接 AWS 并开始订阅/发布数据。</p>
-<p>这个工程会发布数据到<code>test_topic/node1</code>主题，在 AWS 中提供了一个用于测试订阅/发布数据的接口：</p>
-<ul>
-<li>在 AWS IOT 控制里，点击右上角的“MQTT Client”。</li>
-<li>点击“Generate Client ID去生成一个随机 ID。</li>
-<li>点击”Connect”</li>
-</ul>
-<p>在连接成功后，我们可以订阅 ESP32 发布的数据：</p>
-<ul>
-<li>点击”Subscribe to Topic”</li>
-<li>在”Subscription Topic”中输入<code>test_topic/node1</code></li>
-<li>点击”Subscribe”</li>
-</ul>
-<p>我们可以看到正在运行的示例中发布的 MQTT 数据。</p>
-<p>发布数据返回到设备：</p>
-<ul>
-<li>点击”Publish to Topic”</li>
-<li>在”Publish Topic”中输入<code>test_topic/node2</code></li>
-<li>在有效负载字段中输入消息</li>
-<li>点击“Publish”</li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/InfiniteYuanBlog/2018/01/12/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89ESP32%20%20%E8%BF%9E%E6%8E%A5%20AWS%20IOT/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1365,7 +1256,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 07:45:38" itemprop="dateModified" datetime="2020-07-23T07:45:38+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 07:51:54" itemprop="dateModified" datetime="2020-07-23T07:51:54+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1425,96 +1316,14 @@
 <li>手势/触摸传感器控制 OLED 显示页面上下翻页</li>
 <li>通过触摸传感器手动进入低功耗模式</li>
 </ul>
-<p>下图为 ESP32 OLED Demo 的硬件实物图：<br>    <br><br>   <img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTgwMTEyMTIxNzU2MjAx?x-oss-process=image/format,png" alt="硬件实物图"></p>
-<hr>
-<h2 id="硬件组成"><a href="#硬件组成" class="headerlink" title="硬件组成"></a>硬件组成</h2><p>该 DEMO 使用 ESP32_Button_Module_V2 作为开发板，包含以下元件：</p>
-<ul>
-<li>接近/环境光线传感器 (APDS9960)</li>
-<li>OLED 显示屏 (SSD1306)</li>
-<li>温度、湿度传感器 (HTS221)</li>
-<li>两个触摸传感器按钮</li>
-</ul>
-<p>完整硬件原理图：<a href="https://github.com/InfiniteYuan1/esp32_oled_gestrue/blob/master/ESP32_BUTTON_MODULE_V2_20170720A.pdf" target="_blank" rel="noopener">ESP32_BUTTON_MODULE_V2.pdf</a></p>
-<p>显示屏、传感器电源开关控制原理图：<br>    <img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTgwMTEyMTIyMjQ4MjA1?x-oss-process=image/format,png" alt="这里写图片描述"></p>
-<p>VDD33 为 LDO VOUT 3.3V 端，做为 ESP32、外设、 flash 电源；VDD33_PeriP 为显示屏、温湿度传感器、手势传感器电源。三极管 SI2301 用做电源开关，控制 VDD33_PeriP 端电压。默认情况下三极管 gate 端保持高电平，电源开关关闭，通过控制 Power_ON 保持低电平以打开电源开关。</p>
-<h2 id="软件设计"><a href="#软件设计" class="headerlink" title="软件设计"></a>软件设计</h2><p>我们使用了以下方法实现了 ESP32 OLED demo：</p>
-<ul>
-<li>使用 esp-iot-solution 开发工具包</li>
-<li>基于 FreeRTOS 实时操作系统，多任务处理</li>
-<li>SNTP 协议获取实时时间</li>
-<li>通过触摸传感器进入低功耗模式</li>
-<li>通过触摸传感器唤醒设备</li>
-</ul>
-<hr>
-<h2 id="低功耗模式说明"><a href="#低功耗模式说明" class="headerlink" title="低功耗模式说明"></a>低功耗模式说明</h2><h3 id="低功耗模式硬件设计"><a href="#低功耗模式硬件设计" class="headerlink" title="低功耗模式硬件设计"></a>低功耗模式硬件设计</h3><p>我们使用了以下方法使设备在低功耗模式下的功耗达到最低。</p>
-<ul>
-<li>控制显示屏、温湿度传感器、手势传感器的电源开关</li>
-<li>选用低功耗 LDO, 静态电流约为 1 μA</li>
-<li>对触摸传感器进行功耗管理</li>
-</ul>
-<h3 id="触摸传感器工作周期"><a href="#触摸传感器工作周期" class="headerlink" title="触摸传感器工作周期"></a>触摸传感器工作周期</h3><p>触摸传感器在工作时，会有两种状态：sleep、measurement，两种状态循环交替进行。在正常的工作模式下我们把 sleep 时间设置得比较短，在进入低功耗模式后，我们把 sleep 时间设置得相对较长，以尽可能地降低功耗。</p>
-<p>在进入低功耗模式前调用 <code>touch_pad_set_meas_time(uint16_t sleep_cycle, uint16_t meas_cycle)</code> 接口调整触摸传感器的 sleep 与 measure 时间。</p>
-<p>参数说明：</p>
-<ul>
-<li><p><code>sleep_cycle</code>：<code>sleep_cycle</code> 决定了两次测量的间隔时间，间隔时间 t_sleep = sleep_cycle / (RTC_SLOW_CLK frequency)。</p>
-<p>  可以使用 <code>rtc_clk_slow_freq_get_hz()</code> 接口获取 <code>RTC_SLOW_CLK</code> frequency 值。</p>
-</li>
-<li><p><code>meas_cycle</code>：<code>meas_cycle</code> 决定了测量时间，测量时间 t_meas = meas_cycle / 8M，最大测量时间为 0xffff / 8 M = 8.19 ms。</p>
-</li>
-</ul>
-<h3 id="低功耗模式使用"><a href="#低功耗模式使用" class="headerlink" title="低功耗模式使用"></a>低功耗模式使用</h3><p>长按触摸传感器按钮进入低功耗模式，在低功耗模式下，触摸传感器采样频率会降至最低，所以从低功耗模式下唤醒同样需要稍长时间地触摸传感器按钮。低功耗模式下电流采样如下：</p>
-<ul>
-<li>低功耗模式下 LDO VOUT 3.3V 端的电流采样图如下 (包含 ESP32、显示屏、传感器消耗的电流) ：  <br>
-  ![这里写图片描述](https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTgwMTEyMTIyMzE0OTQ1?x-oss-process=image/format,png)
-
-</li>
-</ul>
-<blockquote>
-<p>注：在低功耗模式下 LDO VOUT 3.3V 端的平均电流约为 30 μA， 最大电流约为 1.6 mA， 处在波峰时， 触摸传感器位于 measurement 状态。<br><br></p>
-</blockquote>
-<ul>
-<li>低功耗模式下 LDO VIN 5V 端的电流采样图如下 (包含 ESP32、显示屏、传感器、LDO 消耗的电流) ：  <br>
-  ![这里写图片描述](https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTgwMTEyMTIyMzI2Nzg1?x-oss-process=image/format,png)
-
-</li>
-</ul>
-<blockquote>
-<p>注：在低功耗模式下 LDO VIN 5V 端的平均电流约为 45 μA，最大电流约为 2.1 mA。</p>
-</blockquote>
-<h2 id="OLED-Demo-编译与运行"><a href="#OLED-Demo-编译与运行" class="headerlink" title="OLED Demo 编译与运行"></a>OLED Demo 编译与运行</h2><h3 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h3><p>首先需要确保你的电脑上已经安装好 ESP32 工具链，工具链安装请参考 ESP-IDF 中的 <a href="https://github.com/espressif/esp-idf/blob/master/README.md" target="_blank" rel="noopener">README.md</a>。</p>
-<h3 id="获取-IoT-Solution-项目代码"><a href="#获取-IoT-Solution-项目代码" class="headerlink" title="获取 IoT Solution 项目代码"></a>获取 IoT Solution 项目代码</h3><p>执行指令，下载 iot-solution 项目仓库：</p>
-<ul>
-<li><p>可以直接递归获取仓库代码，这样将会自动初始化需要的所有子模块：</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone --recursive https:&#x2F;&#x2F;github.com&#x2F;espressif&#x2F;esp-iot-solution.git</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>也可以手动进行初始化子模块，先运行以下指令：</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;espressif&#x2F;esp-iot-solution.git</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>然后切换到项目根目录执行以下指令, 下载本项目依赖的一些其它子模块：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule update --init --recursive</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="编译与运行"><a href="#编译与运行" class="headerlink" title="编译与运行"></a>编译与运行</h3><p>子模块代码下载完成后就可以对 Iot Solution 工程中的  oled_screen_module 进行编译和运行。切换到 <code>esp-iot-solution/examples/oled\_screen\_module</code> 目录下，然后进行下列步骤。</p>
-<ul>
-<li>串口参数设置</li>
-</ul>
-<p>执行以下指令进行编译配置，如串口号和串口下载速度可以在 <code>Serial flasher config</code> 这一菜单选项中进行配置（如果不需配置, 可跳过这一步）。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd YOUR_IOT_SOLUTION_PATH&#x2F;examples&#x2F;oled_screen_module</span><br><span class="line">make menuconfig</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>编译，烧写与运行</li>
-</ul>
-<p>执行下面指令，编译 oled_screen_module，以下命令中的 flash 是下载命令，monitor 表示开启系统打印，可根据实际情况选择添加。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make flash monitor</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>注：下载程序时，如果无法自动开始下载，可以尝试手动进入下载模式。下载固件完成后，按开发板上的 reset 键重新运行程序，可以查看串口打印。</p>
-</blockquote>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/InfiniteYuanBlog/2018/01/12/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89OLED%20ssd1306%20apds9960%20%E6%89%8B%E5%8A%BF%E6%8E%A7%E5%88%B6/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 

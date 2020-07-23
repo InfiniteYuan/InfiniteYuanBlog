@@ -22,16 +22,16 @@
     var CONFIG = {"hostname":"infiniteyuan.github.io","root":"/InfiniteYuanBlog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="概述这篇文章将介绍使用 ESP32 作为 I2C 实现 Random Read&#x2F;Write 和  Sequential Read&#x2F;Write 时序。 首先通过下面的图了解下 Random Read 时序，I2C Master 通过这个时序读取任意数据地址开始的数据。 12________________________________________________________________">
+  <meta name="description" content="概述这篇文章将介绍使用 ESP32 作为 I2C 实现 Random Read&#x2F;Write 和  Sequential Read&#x2F;Write 时序。 首先通过下面的图了解下 Random Read 时序，I2C Master 通过这个时序读取任意数据地址开始的数据。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ESP32 开发笔记（十四）ESP32 I2C Slave 实现">
 <meta property="og:url" content="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/11/22/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89ESP32%20I2C%20Slave%20%E5%AE%9E%E7%8E%B0/index.html">
 <meta property="og:site_name" content="InfiniteYuan">
-<meta property="og:description" content="概述这篇文章将介绍使用 ESP32 作为 I2C 实现 Random Read&#x2F;Write 和  Sequential Read&#x2F;Write 时序。 首先通过下面的图了解下 Random Read 时序，I2C Master 通过这个时序读取任意数据地址开始的数据。 12________________________________________________________________">
+<meta property="og:description" content="概述这篇文章将介绍使用 ESP32 作为 I2C 实现 Random Read&#x2F;Write 和  Sequential Read&#x2F;Write 时序。 首先通过下面的图了解下 Random Read 时序，I2C Master 通过这个时序读取任意数据地址开始的数据。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20191123145556881.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
 <meta property="article:published_time" content="2019-11-22T01:24:44.000Z">
-<meta property="article:modified_time" content="2020-07-23T07:45:38.365Z">
+<meta property="article:modified_time" content="2020-07-23T07:51:54.985Z">
 <meta property="article:author" content="InfiniteYuan">
 <meta property="article:tag" content="ESP32">
 <meta name="twitter:card" content="summary">
@@ -233,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 07:45:38" itemprop="dateModified" datetime="2020-07-23T07:45:38+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 07:51:54" itemprop="dateModified" datetime="2020-07-23T07:51:54+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -293,6 +293,8 @@
       
         <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>这篇文章将介绍使用 ESP32 作为 I2C 实现 Random Read/Write 和  Sequential Read/Write 时序。</p>
 <p>首先通过下面的图了解下 Random Read 时序，I2C Master 通过这个时序读取任意数据地址开始的数据。<br><img src="https://img-blog.csdnimg.cn/20191123145556881.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="Random Read"></p>
+<a id="more"></a>
+
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">___________________________________________________________________________________________________________________________________________________</span><br><span class="line">| start | slave_addr + write_bit + ack | data address |start | slave_addr + read_bit + ack |  <span class="built_in">read</span> n<span class="number">-1</span> bytes + ack | <span class="built_in">read</span> <span class="number">1</span> <span class="keyword">byte</span> + nack | <span class="built_in">stop</span> |</span><br></pre></td></tr></table></figure>
 
 <blockquote>

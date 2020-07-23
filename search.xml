@@ -1575,6 +1575,8 @@
 <li>API 参考</li>
 </ul>
 <p>有关 ESP-MESH 协议的文档，请参阅 <a href="https://mp.csdn.net/postedit/86743079" target="_blank" rel="noopener">ESP-MESH API 指南</a>。</p>
+<a id="more"></a>
+
 <h2 id="ESP-MESH-编程模型"><a href="#ESP-MESH-编程模型" class="headerlink" title="ESP-MESH 编程模型"></a>ESP-MESH 编程模型</h2><h3 id="软件栈"><a href="#软件栈" class="headerlink" title="软件栈"></a>软件栈</h3><p>ESP-MESH 软件栈构建在 Wi-Fi 驱动/FreeRTOS 之上，并且在某些情况下可以使用 LwIP 栈（即根节点）。下图说明了 ESP-MESH 软件栈。<br><img src="https://img-blog.csdnimg.cn/2019030215595528.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="ESP-MESH 软件栈"></p>
 <h3 id="系统事件"><a href="#系统事件" class="headerlink" title="系统事件"></a>系统事件</h3><p>应用程序通过 ESP-MESH 事件与 ESP-MESH 交互。由于 ESP-MESH 构建在 Wi-Fi 栈的顶部，因此应用程序也可以通过 Wi-Fi 事件任务与 Wi-Fi 驱动交互。下图说明了 ESP-MESH 应用程序中各种系统事件的接口。<br><img src="https://img-blog.csdnimg.cn/20190302162721734.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="ESP-MESH 系统事件"><br><code>mesh_event_id_t</code> 定义所有可能的  ESP-MESH 系统事件，并且可以指示诸如父/子的连接/断开之类的事件。在可以使用 ESP-MESH 系统事件之前，应用程序必须通过 <code>esp_mesh_set_config()</code> 注册 Mesh 事件回调。 回调用于从 ESP-MESH 栈以及 LwIP 栈接收事件，并且应包含与应用程序相关的每个事件的处理程序。</p>
 <p>系统事件的典型用例包括使用诸如 <code>MESH_EVENT_PARENT_CONNECTED</code> 和 <code>MESH_EVENT_CHILD_CONNECTED</code> 之类的事件来指示节点何时可以分别开始上游和下游传输数据。 同样，<code>MESH_EVENT_ROOT_GOT_IP</code> 和 <code>MESH_EVENT_ROOT_LOST_IP</code> 可用于指示根节点何时能够和不能将数据传输到外部 IP 网络。</p>
@@ -1921,7 +1923,8 @@
 <li>/src 公共源码</li>
 <li>/tools 相关工具</li>
 </ol>
-<hr>
+<a id="more"></a>
+
 <h2 id="移植过程"><a href="#移植过程" class="headerlink" title="移植过程"></a>移植过程</h2><p>在移植之前，你需要配置 esp32-iot-solution 的环境，可参考： <a href="https://esp-idf.readthedocs.io/en/latest/get-started/index.html" target="_blank" rel="noopener"> ESP-IDF Programming Guide </a></p>
 <ul>
 <li>从 ugfx 官网下载源码：<a href="https://community.ugfx.io/index.php?/files/" target="_blank" rel="noopener">官网下载链接</a></li>
@@ -1963,6 +1966,8 @@
 <li>The touch pad is replaced by your mouse</li>
 <li>The written code is portable, you can simply copy it when using an embedded hardware</li>
 </ul>
+<a id="more"></a>
+
 <h2 id="配置流程"><a href="#配置流程" class="headerlink" title="配置流程"></a>配置流程</h2><h3>Install Eclipse CDT</h3>
 
 <p>Eclipse CDT is C/C++ IDE. You can use other IDEs as well but in this tutorial the configuration for Eclipse CDT is shown.<br>Eclipse is a Java based software therefore be sure Jave Runtime Environment is installed on your system.<br>On linux: sudo apt-get install default-jre<br>You can download Eclipse’s CDT from: <a href="https://eclipse.org/cdt/" target="_blank" rel="noopener">https://eclipse.org/cdt/</a>. Start the nstaller and choose <em>Eclipse CDT</em> from the list</p>
@@ -2015,6 +2020,75 @@
       </tags>
   </entry>
   <entry>
+    <title>ESP32 开发笔记（三）ESP32  连接 AWS IOT</title>
+    <url>/InfiniteYuanBlog/2018/01/12/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89ESP32%20%20%E8%BF%9E%E6%8E%A5%20AWS%20IOT/</url>
+    <content><![CDATA[<h1 id="ESP32-AWS-IOT-发布-订阅-示例"><a href="#ESP32-AWS-IOT-发布-订阅-示例" class="headerlink" title="ESP32 AWS IOT 发布/订阅 示例"></a>ESP32 AWS IOT 发布/订阅 示例</h1><p>首先提供源码吧：<a href="https://github.com/InfiniteYuan/esp32-aws-iot" target="_blank" rel="noopener">GitHub源码地址</a><br>这是一个适用于 ESP-IDF 中<a href="https://github.com/aws/aws-iot-device-sdk-embedded-C" target="_blank" rel="noopener">AWS IoT C SDK</a> 的 “subscribe_publish”示例。</p>
+<a id="more"></a>
+
+<h1 id="AWS-IOT-配置"><a href="#AWS-IOT-配置" class="headerlink" title="AWS IOT 配置"></a>AWS IOT 配置</h1><p>在运行工程前，我们需要正确配置 AWS IOT ：</p>
+<ul>
+<li><p>正确配置 esp-iot-solution 和 示例工程</p>
+<ul>
+<li>拉取最新的 esp-iot-solution</li>
+<li>保证能够正确编译一个工程</li>
+</ul>
+</li>
+<li><p>正确配置 AWS 事物模块：事物、证书、策略</p>
+<ul>
+<li><p>我们可以根据<a href="https://docs.aws.amazon.com/zh_cn/iot/latest/developerguide/iot-console-signin.html" target="_blank" rel="noopener">AWS IoT Developer Guide</a>，从<code>登录 AWS IOT 控制台</code> 这一步，一直配置到 <code>配置您的设备</code>这步，之后再进行下面的配置</p>
+</li>
+<li><p>安装私钥和证书</p>
+<p>  添加 <code>*.pem.key</code> 和 <code>*.pem.crt</code> 文件到 <code>main/cert</code> 目录中，并重命名为<code>private.pem.key</code>和<code>certificate.pem.crt</code>。</p>
+</li>
+<li><p>设置 AWS 端点主机名</p>
+<p>  您的 AWS IOT 帐户具有唯一终端主机名。要找到它，请打开 AWS IOT 控制台，然后单击左下方的“设置”按钮。端点主机名显示在此页面的“自定义端点”标题下。</p>
+<p>  之后我们在电脑终端运行<code>make menuconfig</code>并进入<code>component config</code>-&gt;<code>Amazon Web Service IoT Config</code>-&gt;<code>AWS IoT MQTT Hostname</code>，在这里我们输入上一步找到的主机名。</p>
+</li>
+<li><p>设置客户端 ID</p>
+<p>  在电脑终端中运行<code>make menuconfig</code>，在<code>example configuration</code>下，设置 <code>AWS IOT Client ID</code>的值</p>
+</li>
+<li><p>本地验证证书是否配置正确 </p>
+<p>当 ESP32 连接到 AWS IoT 时，根 CA 证书提供信任根。我们已经在文件 <code>main/certs/aws-root-ca.pem</code> 中提供了根 CA 证书（采用 PEM 格式）。</p>
+<p>如果要本地验证此根 CA 证书未更改，可以对 AWS MQTT 主机运行以下命令：</p>
+<p>运行 <code>openssl s_client -showcerts -connect hostname:8883 &lt; /dev/null</code> 命令去验证证书是否正确</p>
+<p>（将主机名替换为您的 AWS MQTT 端点主机。）根 CA 证书是打印的证书列表中的最后一个证书。 您可以复制粘贴它来代替现有的 <code>aws-root-ca.pem</code> 文件。</p>
+</li>
+</ul>
+</li>
+<li><p>正确配置 ESP32 网络连接</p>
+<p>  在电脑终端运行 <code>make menuconfig</code> 命令，在 <code>Example Configuration</code> 目录中配置 <code>WiFi SSID</code> 和 <code>WiFi Password</code></p>
+</li>
+</ul>
+<h1 id="监视来自设备的数据"><a href="#监视来自设备的数据" class="headerlink" title="监视来自设备的数据"></a>监视来自设备的数据</h1><p>下载完这个工程之后，程序会自动连接 AWS 并开始订阅/发布数据。</p>
+<p>这个工程会发布数据到<code>test_topic/node1</code>主题，在 AWS 中提供了一个用于测试订阅/发布数据的接口：</p>
+<ul>
+<li>在 AWS IOT 控制里，点击右上角的“MQTT Client”。</li>
+<li>点击“Generate Client ID去生成一个随机 ID。</li>
+<li>点击”Connect”</li>
+</ul>
+<p>在连接成功后，我们可以订阅 ESP32 发布的数据：</p>
+<ul>
+<li>点击”Subscribe to Topic”</li>
+<li>在”Subscription Topic”中输入<code>test_topic/node1</code></li>
+<li>点击”Subscribe”</li>
+</ul>
+<p>我们可以看到正在运行的示例中发布的 MQTT 数据。</p>
+<p>发布数据返回到设备：</p>
+<ul>
+<li>点击”Publish to Topic”</li>
+<li>在”Publish Topic”中输入<code>test_topic/node2</code></li>
+<li>在有效负载字段中输入消息</li>
+<li>点击“Publish”</li>
+</ul>
+]]></content>
+      <categories>
+        <category>ESP32 开发笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ESP32 开发笔记（九）使用 VS Code 快速开发 ESP32</title>
     <url>/InfiniteYuanBlog/2018/12/17/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B9%9D%EF%BC%89%E4%BD%BF%E7%94%A8%20VS%20Code%20%E5%BF%AB%E9%80%9F%E5%BC%80%E5%8F%91%20ESP32/</url>
     <content><![CDATA[<h1 id="使用-VS-Code-快速开发-ESP32"><a href="#使用-VS-Code-快速开发-ESP32" class="headerlink" title="使用 VS Code 快速开发 ESP32"></a>使用 VS Code 快速开发 ESP32</h1><h2 id="搭建开发环境"><a href="#搭建开发环境" class="headerlink" title="搭建开发环境"></a>搭建开发环境</h2><ul>
@@ -2025,6 +2099,8 @@
 <li>将 <code>esp-idf</code> 中的模板工程 <a href="https://github.com/espressif/esp-idf/tree/master/examples/get-started/hello_world" target="_blank" rel="noopener">hello_world</a> 在 VS Code 中打开</li>
 <li>在 VS Code 中开发项目</li>
 </ul>
+<a id="more"></a>
+
 <h2 id="VS-Code-任务、快捷键配置"><a href="#VS-Code-任务、快捷键配置" class="headerlink" title="VS Code 任务、快捷键配置"></a>VS Code 任务、快捷键配置</h2><h3 id="任务配置"><a href="#任务配置" class="headerlink" title="任务配置"></a>任务配置</h3><ul>
 <li>按下 <code>Ctrl+Shift+P</code></li>
 <li>输入、选择 <code>Tasks: Configure Task</code>(任务：配置任务)</li>
@@ -2097,73 +2173,6 @@
       </tags>
   </entry>
   <entry>
-    <title>ESP32 开发笔记（三）ESP32  连接 AWS IOT</title>
-    <url>/InfiniteYuanBlog/2018/01/12/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89ESP32%20%20%E8%BF%9E%E6%8E%A5%20AWS%20IOT/</url>
-    <content><![CDATA[<h1 id="ESP32-AWS-IOT-发布-订阅-示例"><a href="#ESP32-AWS-IOT-发布-订阅-示例" class="headerlink" title="ESP32 AWS IOT 发布/订阅 示例"></a>ESP32 AWS IOT 发布/订阅 示例</h1><p>首先提供源码吧：<a href="https://github.com/InfiniteYuan/esp32-aws-iot" target="_blank" rel="noopener">GitHub源码地址</a><br>这是一个适用于 ESP-IDF 中<a href="https://github.com/aws/aws-iot-device-sdk-embedded-C" target="_blank" rel="noopener">AWS IoT C SDK</a> 的 “subscribe_publish”示例。</p>
-<h1 id="AWS-IOT-配置"><a href="#AWS-IOT-配置" class="headerlink" title="AWS IOT 配置"></a>AWS IOT 配置</h1><p>在运行工程前，我们需要正确配置 AWS IOT ：</p>
-<ul>
-<li><p>正确配置 esp-iot-solution 和 示例工程</p>
-<ul>
-<li>拉取最新的 esp-iot-solution</li>
-<li>保证能够正确编译一个工程</li>
-</ul>
-</li>
-<li><p>正确配置 AWS 事物模块：事物、证书、策略</p>
-<ul>
-<li><p>我们可以根据<a href="https://docs.aws.amazon.com/zh_cn/iot/latest/developerguide/iot-console-signin.html" target="_blank" rel="noopener">AWS IoT Developer Guide</a>，从<code>登录 AWS IOT 控制台</code> 这一步，一直配置到 <code>配置您的设备</code>这步，之后再进行下面的配置</p>
-</li>
-<li><p>安装私钥和证书</p>
-<p>  添加 <code>*.pem.key</code> 和 <code>*.pem.crt</code> 文件到 <code>main/cert</code> 目录中，并重命名为<code>private.pem.key</code>和<code>certificate.pem.crt</code>。</p>
-</li>
-<li><p>设置 AWS 端点主机名</p>
-<p>  您的 AWS IOT 帐户具有唯一终端主机名。要找到它，请打开 AWS IOT 控制台，然后单击左下方的“设置”按钮。端点主机名显示在此页面的“自定义端点”标题下。</p>
-<p>  之后我们在电脑终端运行<code>make menuconfig</code>并进入<code>component config</code>-&gt;<code>Amazon Web Service IoT Config</code>-&gt;<code>AWS IoT MQTT Hostname</code>，在这里我们输入上一步找到的主机名。</p>
-</li>
-<li><p>设置客户端 ID</p>
-<p>  在电脑终端中运行<code>make menuconfig</code>，在<code>example configuration</code>下，设置 <code>AWS IOT Client ID</code>的值</p>
-</li>
-<li><p>本地验证证书是否配置正确 </p>
-<p>当 ESP32 连接到 AWS IoT 时，根 CA 证书提供信任根。我们已经在文件 <code>main/certs/aws-root-ca.pem</code> 中提供了根 CA 证书（采用 PEM 格式）。</p>
-<p>如果要本地验证此根 CA 证书未更改，可以对 AWS MQTT 主机运行以下命令：</p>
-<p>运行 <code>openssl s_client -showcerts -connect hostname:8883 &lt; /dev/null</code> 命令去验证证书是否正确</p>
-<p>（将主机名替换为您的 AWS MQTT 端点主机。）根 CA 证书是打印的证书列表中的最后一个证书。 您可以复制粘贴它来代替现有的 <code>aws-root-ca.pem</code> 文件。</p>
-</li>
-</ul>
-</li>
-<li><p>正确配置 ESP32 网络连接</p>
-<p>  在电脑终端运行 <code>make menuconfig</code> 命令，在 <code>Example Configuration</code> 目录中配置 <code>WiFi SSID</code> 和 <code>WiFi Password</code></p>
-</li>
-</ul>
-<h1 id="监视来自设备的数据"><a href="#监视来自设备的数据" class="headerlink" title="监视来自设备的数据"></a>监视来自设备的数据</h1><p>下载完这个工程之后，程序会自动连接 AWS 并开始订阅/发布数据。</p>
-<p>这个工程会发布数据到<code>test_topic/node1</code>主题，在 AWS 中提供了一个用于测试订阅/发布数据的接口：</p>
-<ul>
-<li>在 AWS IOT 控制里，点击右上角的“MQTT Client”。</li>
-<li>点击“Generate Client ID去生成一个随机 ID。</li>
-<li>点击”Connect”</li>
-</ul>
-<p>在连接成功后，我们可以订阅 ESP32 发布的数据：</p>
-<ul>
-<li>点击”Subscribe to Topic”</li>
-<li>在”Subscription Topic”中输入<code>test_topic/node1</code></li>
-<li>点击”Subscribe”</li>
-</ul>
-<p>我们可以看到正在运行的示例中发布的 MQTT 数据。</p>
-<p>发布数据返回到设备：</p>
-<ul>
-<li>点击”Publish to Topic”</li>
-<li>在”Publish Topic”中输入<code>test_topic/node2</code></li>
-<li>在有效负载字段中输入消息</li>
-<li>点击“Publish”</li>
-</ul>
-]]></content>
-      <categories>
-        <category>ESP32 开发笔记</category>
-      </categories>
-      <tags>
-        <tag>ESP32</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ESP32 开发笔记（二）OLED ssd1306 apds9960 手势控制</title>
     <url>/InfiniteYuanBlog/2018/01/12/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89OLED%20ssd1306%20apds9960%20%E6%89%8B%E5%8A%BF%E6%8E%A7%E5%88%B6/</url>
     <content><![CDATA[<h1 id="ESP32-OLED-Demo"><a href="#ESP32-OLED-Demo" class="headerlink" title="ESP32 OLED Demo"></a>ESP32 OLED Demo</h1><p>源码地址：<a href="https://github.com/InfiniteYuan/esp32_oled_gestrue" target="_blank" rel="noopener">GitHub 源码地址</a></p>
@@ -2175,6 +2184,8 @@
 <li>手势/触摸传感器控制 OLED 显示页面上下翻页</li>
 <li>通过触摸传感器手动进入低功耗模式</li>
 </ul>
+<a id="more"></a>
+
 <p>下图为 ESP32 OLED Demo 的硬件实物图：<br>    <br><br>   <img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTgwMTEyMTIxNzU2MjAx?x-oss-process=image/format,png" alt="硬件实物图"></p>
 <hr>
 <h2 id="硬件组成"><a href="#硬件组成" class="headerlink" title="硬件组成"></a>硬件组成</h2><p>该 DEMO 使用 ESP32_Button_Module_V2 作为开发板，包含以下元件：</p>
@@ -2276,6 +2287,8 @@
     <title>ESP32 开发笔记（五）XPT2046 触摸</title>
     <url>/InfiniteYuanBlog/2018/01/16/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89XPT2046%20%E8%A7%A6%E6%91%B8/</url>
     <content><![CDATA[<h1 id="ESP32-Touch-TFT"><a href="#ESP32-Touch-TFT" class="headerlink" title="ESP32 Touch TFT"></a>ESP32 Touch TFT</h1><p>GitHub地址：<a href="https://github.com/InfiniteYuan/esp32-touchTFT" target="_blank" rel="noopener">工程源码</a><br>该工程时使用了 lcd、xpt2046、esp32 实现了触摸屏基础功能</p>
+<a id="more"></a>
+
 <h1 id="编译、运行"><a href="#编译、运行" class="headerlink" title="编译、运行"></a>编译、运行</h1><p>请参考 esp-idf 的工程配置与运行</p>
 ]]></content>
       <categories>
@@ -2290,6 +2303,8 @@
     <url>/InfiniteYuanBlog/2018/11/20/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AB%EF%BC%89ESP32%20MP3%20%E6%92%AD%E6%94%BE%E5%99%A8/</url>
     <content><![CDATA[<h1 id="ESP32-MP3-播放器"><a href="#ESP32-MP3-播放器" class="headerlink" title="ESP32 MP3 播放器"></a>ESP32 MP3 播放器</h1><p>源码地址：<a href="https://github.com/InfiniteYuan/esp32-MP3" target="_blank" rel="noopener">GitHub</a></p>
 <h2 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h2><p>开发框架：<a href="https://github.com/espressif/esp-idf" target="_blank" rel="noopener">ESP-IDF</a>、<a href="https://github.com/espressif/esp-adf" target="_blank" rel="noopener">ESP-ADF</a><br>Embedded GUI: <a href="https://github.com/littlevgl/lvgl" target="_blank" rel="noopener">LittlevGL</a></p>
+<a id="more"></a>
+
 <h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><ul>
 <li>ESP-IDF:<a href="https://docs.espressif.com/projects/esp-idf/en/latest/get-started/index.html" target="_blank" rel="noopener">搭建步骤</a></li>
 <li>ESP-ADF:<a href="https://docs.espressif.com/projects/esp-adf/en/latest/get-started/index.html#setup-esp-idf" target="_blank" rel="noopener">搭建步骤</a></li>
@@ -2315,21 +2330,25 @@
 <h2 id="LittlevGL-介绍"><a href="#LittlevGL-介绍" class="headerlink" title="LittlevGL 介绍"></a>LittlevGL 介绍</h2><blockquote>
 <p>littlevGL is a free and open-source graphics library providing everything you need to create embedded GUI with easy-to-use graphical elements, beautiful visual effects and low memory footprint.<br><a href="https://littlevgl.com/" target="_blank" rel="noopener">LittlevGL 官网链接</a><br><a href="https://littlevgl.com/porting" target="_blank" rel="noopener">LittlevGL 移植教程</a><br><a href="https://littlevgl.com/basics" target="_blank" rel="noopener">LittlevGL 官方文档</a><br><a href="https://github.com/littlevgl/lvgl" target="_blank" rel="noopener">LittlevGL GitHub链接</a></p>
 </blockquote>
-<h4>关键特性：</h4>
- - Powerful building blocks buttons, charts, lists, sliders, images etc
- - Advanced graphics with animations, anti-aliasing, opacity, smooth scrolling
- - Various input devices touch pad, mouse, keyboard, encoder, buttons etc
- - Multi language support with UTF-8 decoding
- - Fully customizable graphical elements
- - Hardware independent to use with any microcontroller or display
- - Scalable to operate with few memory (50 kB Flash, 10 kB RAM)
- - OS, External memory and GPU supported but not required
- - Single frame buffer operation even with advances graphical effects
- - Written in C for maximal compatibility
- - Simulator to develop on PC without embedded hardware
- - Tutorials, examples, themes for rapid development
- - Documentation and API references online
+<a id="more"></a>
 
+<h4>关键特性：</h4>
+
+<ul>
+<li>Powerful building blocks buttons, charts, lists, sliders, images etc</li>
+<li>Advanced graphics with animations, anti-aliasing, opacity, smooth scrolling</li>
+<li>Various input devices touch pad, mouse, keyboard, encoder, buttons etc</li>
+<li>Multi language support with UTF-8 decoding</li>
+<li>Fully customizable graphical elements</li>
+<li>Hardware independent to use with any microcontroller or display</li>
+<li>Scalable to operate with few memory (50 kB Flash, 10 kB RAM)</li>
+<li>OS, External memory and GPU supported but not required</li>
+<li>Single frame buffer operation even with advances graphical effects</li>
+<li>Written in C for maximal compatibility</li>
+<li>Simulator to develop on PC without embedded hardware</li>
+<li>Tutorials, examples, themes for rapid development</li>
+<li>Documentation and API references online</li>
+</ul>
 <h2 id="移植过程"><a href="#移植过程" class="headerlink" title="移植过程"></a>移植过程</h2><ol>
 <li>在工程目录下新建一个 components 目录，放入 LittlevGL 源码</li>
 <li>在 components 目录下新建一个 include 目录，放入 lv_conf.h 文件，由 LittlevGL 源码目录中的 lv_conf_templ.h文件而来</li>
@@ -2373,6 +2392,8 @@
 <li>使用 ESP32 构建系统中的<a href="https://blog.csdn.net/qq_27114397/article/details/81152448#_449" target="_blank" rel="noopener">嵌入二进制数据</a>的方式，将其添加到 Flash 中的 <code>.rodata</code> 部分</li>
 <li>在 ESP32 程序中将 Flash 中的数组发送出去</li>
 </ol>
+<a id="more"></a>
+
 <h2 id="filetoarray-工具"><a href="#filetoarray-工具" class="headerlink" title="filetoarray 工具"></a>filetoarray 工具</h2><p>使用这个工具将 <code>.gz</code> 文件转换为包含十六进制数组和其长度的头文件。</p>
 <p>源码如下：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdarg.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    FILE *fp;</span><br><span class="line">    <span class="keyword">char</span> *<span class="built_in">buffer</span>;</span><br><span class="line">    <span class="keyword">long</span> flen;</span><br><span class="line">    <span class="keyword">char</span> *fname;</span><br><span class="line">    <span class="keyword">char</span> pname[<span class="number">1024</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ( argc == <span class="number">2</span> ) &#123;</span><br><span class="line">        fname = argv[<span class="number">1</span>];</span><br><span class="line">        <span class="built_in">strcpy</span>(pname, fname);</span><br><span class="line">        <span class="keyword">char</span> *dot = <span class="built_in">strchr</span>(pname, <span class="string">'.'</span>);</span><br><span class="line">        <span class="keyword">while</span> (dot != <span class="literal">NULL</span>) &#123;</span><br><span class="line">            *dot = <span class="string">'_'</span>;</span><br><span class="line">            dot = <span class="built_in">strchr</span>(pname, <span class="string">'.'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Filename not supplied\n"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fp = fopen(fname, <span class="string">"rb"</span>);</span><br><span class="line">    fseek(fp, <span class="number">0</span>, SEEK_END);</span><br><span class="line">    flen = ftell(fp);</span><br><span class="line">    rewind(fp);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">buffer</span> = (<span class="keyword">char</span> *)<span class="built_in">malloc</span>((flen + <span class="number">1</span>) * <span class="keyword">sizeof</span>(<span class="keyword">char</span>));</span><br><span class="line">    fread(<span class="built_in">buffer</span>, flen, <span class="number">1</span>, fp);</span><br><span class="line">    fclose(fp);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\n//File: %s, Size: %lu\n"</span>, fname, flen);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"#define %s_len %lu\n"</span>, pname, flen);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"const uint8_t %s[] PROGMEM = &#123;\n"</span>, pname);</span><br><span class="line">    <span class="keyword">long</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; flen; i++) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">" 0x%02X"</span>, (<span class="keyword">unsigned</span> <span class="keyword">char</span>)(<span class="built_in">buffer</span>[i]));</span><br><span class="line">        <span class="keyword">if</span> (i &lt; (flen - <span class="number">1</span>)) &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">","</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> ((i % <span class="number">16</span>) == <span class="number">15</span>) &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"\n"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\n&#125;;\n\n"</span>);</span><br><span class="line">    <span class="built_in">free</span>(<span class="built_in">buffer</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -2429,7 +2450,7 @@
   <entry>
     <title>ESP32 开发笔记（十三）ESP32 ping 功能</title>
     <url>/InfiniteYuanBlog/2019/11/22/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89ESP32%20ping%20%E5%8A%9F%E8%83%BD/</url>
-    <content><![CDATA[<h1 id="ping"><a href="#ping" class="headerlink" title="ping"></a>ping</h1><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">esp_err_t</span> <span class="title">pingResults</span><span class="params">(<span class="keyword">ping_target_id_t</span> msgType, esp_ping_found * pf)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"AvgTime:%.1fmS Sent:%d Rec:%d min(mS):%d max(mS):%d Resp(mS):%d Timeouts:%d Total Time:%d\n"</span>, (<span class="keyword">float</span>)pf-&gt;total_time/pf-&gt;recv_count, pf-&gt;send_count, pf-&gt;recv_count,  pf-&gt;min_time, pf-&gt;max_time ,pf-&gt;resp_time, pf-&gt;timeout_count, pf-&gt;total_time);</span><br><span class="line">    <span class="keyword">return</span> ESP_OK;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Start_Ping_ESP32</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">uint32_t</span> ip_pinG = ipaddr_addr(<span class="string">"163.177.151.109"</span>);<span class="comment">//百度IP地址</span></span><br><span class="line">    <span class="keyword">uint32_t</span> ping_count = <span class="number">2000</span>;<span class="comment">//ping的次数</span></span><br><span class="line">    <span class="keyword">uint32_t</span> ping_timeout = <span class="number">1000</span>; <span class="comment">//超时时间</span></span><br><span class="line">    <span class="keyword">uint32_t</span> ping_delay = <span class="number">2000</span>; <span class="comment">//ping 的间隔</span></span><br><span class="line">    ping_deinit();</span><br><span class="line">    esp_ping_set_target(PING_TARGET_IP_ADDRESS_COUNT, &amp;ping_count, <span class="keyword">sizeof</span>(<span class="keyword">uint32_t</span>));</span><br><span class="line">    esp_ping_set_target(PING_TARGET_RCV_TIMEO, &amp;ping_timeout, <span class="keyword">sizeof</span>(<span class="keyword">uint32_t</span>));</span><br><span class="line">    esp_ping_set_target(PING_TARGET_DELAY_TIME, &amp;ping_delay, <span class="keyword">sizeof</span>(<span class="keyword">uint32_t</span>));</span><br><span class="line">    esp_ping_set_target(PING_TARGET_IP_ADDRESS, &amp;ip_pinG, <span class="keyword">sizeof</span>(<span class="keyword">uint32_t</span>));</span><br><span class="line">    esp_ping_set_target(PING_TARGET_RES_FN, &amp;pingResults, <span class="keyword">sizeof</span>(pingResults));</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">uint8_t</span> res = <span class="number">0</span>;</span><br><span class="line">    res = ping_init();</span><br><span class="line">    <span class="keyword">if</span>(res == <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"PING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"error:%d\n"</span>,res);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    <content><![CDATA[<h1 id="ping"><a href="#ping" class="headerlink" title="ping"></a>ping</h1><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">esp_err_t</span> <span class="title">pingResults</span><span class="params">(<span class="keyword">ping_target_id_t</span> msgType, esp_ping_found * pf)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"AvgTime:%.1fmS Sent:%d Rec:%d min(mS):%d max(mS):%d Resp(mS):%d Timeouts:%d Total Time:%d\n"</span>, (<span class="keyword">float</span>)pf-&gt;total_time/pf-&gt;recv_count, pf-&gt;send_count, pf-&gt;recv_count,  pf-&gt;min_time, pf-&gt;max_time ,pf-&gt;resp_time, pf-&gt;timeout_count, pf-&gt;total_time);</span><br><span class="line">    <span class="keyword">return</span> ESP_OK;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Start_Ping_ESP32</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">uint32_t</span> ip_pinG = ipaddr_addr(<span class="string">"163.177.151.109"</span>);<span class="comment">//百度IP地址</span></span><br><span class="line">    <span class="keyword">uint32_t</span> ping_count = <span class="number">2000</span>;<span class="comment">//ping的次数</span></span><br><span class="line">    <span class="keyword">uint32_t</span> ping_timeout = <span class="number">1000</span>; <span class="comment">//超时时间</span></span><br><span class="line">    <span class="keyword">uint32_t</span> ping_delay = <span class="number">2000</span>; <span class="comment">//ping 的间隔</span></span><br><span class="line">    ping_deinit();</span><br><span class="line">    esp_ping_set_target(PING_TARGET_IP_ADDRESS_COUNT, &amp;ping_count, <span class="keyword">sizeof</span>(<span class="keyword">uint32_t</span>));</span><br><span class="line">    esp_ping_set_target(PING_TARGET_RCV_TIMEO, &amp;ping_timeout, <span class="keyword">sizeof</span>(<span class="keyword">uint32_t</span>));</span><br><span class="line">    esp_ping_set_target(PING_TARGET_DELAY_TIME, &amp;ping_delay, <span class="keyword">sizeof</span>(<span class="keyword">uint32_t</span>));</span><br><span class="line">    esp_ping_set_target(PING_TARGET_IP_ADDRESS, &amp;ip_pinG, <span class="keyword">sizeof</span>(<span class="keyword">uint32_t</span>));</span><br><span class="line">    esp_ping_set_target(PING_TARGET_RES_FN, &amp;pingResults, <span class="keyword">sizeof</span>(pingResults));</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">uint8_t</span> res = <span class="number">0</span>;</span><br><span class="line">    res = ping_init();</span><br><span class="line">    <span class="keyword">if</span>(res == <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"PING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"error:%d\n"</span>,res);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>ESP32 开发笔记</category>
@@ -2447,6 +2468,9 @@
 </blockquote>
 </li>
 <li>生成源文件<br>使用 LittlevGL 提供的字库文件<a href="https://littlevgl.com/ttf-font-to-c-array" target="_blank" rel="noopener">转换工具</a>，将 <code>ttf</code> 字库文件转换为源文件。</li>
+</ol>
+<a id="more"></a>
+<ol start="3">
 <li>将生成的源文件添加到 LittlevGL 工程中，添加以下代码声明字体：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">extern lv_font_t my_font_name;</span><br></pre></td></tr></table></figure>
 或者<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">LV_FONT_DECLARE(my_font_name);</span><br></pre></td></tr></table></figure>
 源代码中使用这个字体可以：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">style.text.font &#x3D; &amp;my_font_name;</span><br></pre></td></tr></table></figure>
@@ -2486,6 +2510,8 @@
     <url>/InfiniteYuanBlog/2020/05/17/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89%E4%BD%BF%E7%94%A8%20LittlevGL%20%E5%AE%9E%E7%8E%B0%202048%20%E5%B0%8F%E6%B8%B8%E6%88%8F/</url>
     <content><![CDATA[<h1 id="使用-LittlevGL-实现-2048-小游戏"><a href="#使用-LittlevGL-实现-2048-小游戏" class="headerlink" title="使用 LittlevGL 实现 2048 小游戏"></a>使用 LittlevGL 实现 2048 小游戏</h1><p>2048 这款益智小游戏，游戏的规则十分简单，简单易上手的数字小游戏，但又十分虐心。曾经也是风靡一时。</p>
 <p>现在我们在 ESP32 上自己动手实现 2048 这款小游戏吧。</p>
+<a id="more"></a>
+
 <h2 id="1-使用-LittlevGL"><a href="#1-使用-LittlevGL" class="headerlink" title="1 使用 LittlevGL"></a>1 使用 LittlevGL</h2><p>esp32-lvgl-gui 仓库已经适配了 LittlevGL V5.3，并适配了几款屏幕(ILI9341、ST7789、SSD1306、NT35510) 和 触摸驱动(FT5X06、XPT2046)。</p>
 <p>使用时，在 <code>menuconfig</code> 中选择你所使用的 屏幕 和 触摸驱动。</p>
 <p>编译代码：</p>
@@ -2532,6 +2558,8 @@
     <url>/InfiniteYuanBlog/2019/11/22/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89ESP32%20I2C%20Slave%20%E5%AE%9E%E7%8E%B0/</url>
     <content><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>这篇文章将介绍使用 ESP32 作为 I2C 实现 Random Read/Write 和  Sequential Read/Write 时序。</p>
 <p>首先通过下面的图了解下 Random Read 时序，I2C Master 通过这个时序读取任意数据地址开始的数据。<br><img src="https://img-blog.csdnimg.cn/20191123145556881.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="Random Read"></p>
+<a id="more"></a>
+
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">___________________________________________________________________________________________________________________________________________________</span><br><span class="line">| start | slave_addr + write_bit + ack | data address |start | slave_addr + read_bit + ack |  <span class="built_in">read</span> n<span class="number">-1</span> bytes + ack | <span class="built_in">read</span> <span class="number">1</span> <span class="keyword">byte</span> + nack | <span class="built_in">stop</span> |</span><br></pre></td></tr></table></figure>
 
 <blockquote>
@@ -2589,6 +2617,8 @@
 <li><a href="https://github.com/espressif/esp-who" target="_blank" rel="noopener">ESP-WHO</a></li>
 <li><a href="https://github.com/espressif/esp-idf" target="_blank" rel="noopener">ESP-IDF</a></li>
 </ul>
+<a id="more"></a>
+
 <h2 id="使用-quirc-二维码识别库"><a href="#使用-quirc-二维码识别库" class="headerlink" title="使用 quirc 二维码识别库"></a>使用 quirc 二维码识别库</h2><ul>
 <li><a href="https://github.com/dlbeer/quirc" target="_blank" rel="noopener">quirc</a></li>
 </ul>
@@ -2619,6 +2649,8 @@
 <li>通过手机端浏览器访问 ESP32 HTTP 服务器，查看当前摄像头采集的图像</li>
 <li>摄像头采集图像、LCD 实时显示刷新速率达到 22fps</li>
 </ul>
+<a id="more"></a>
+
 <h2 id="硬件连接"><a href="#硬件连接" class="headerlink" title="硬件连接"></a>硬件连接</h2><p>按照默认的<code>make menuconfig</code>中的默认配置连接即可。</p>
 <blockquote>
 <p>注: 如果使用<code>ESP-WROVER-KIT</code>开发板，请注意把 LCD 的 reset 引脚上拉，否则 LCD 无法正常复位。</p>
