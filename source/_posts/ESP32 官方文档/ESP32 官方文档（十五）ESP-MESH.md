@@ -406,7 +406,10 @@ ESP-MESH 允许通过配置启用/禁用自主通道切换。同样，也可以�
 > 根节点访问外部IP网络的吞吐量直接受 ESP-MESH 网络中节点数量和路由器带宽的影响。
 
 ## 进一步说明
+
  - 数据传输使用 Wi-Fi WPA2-PSK 加密
  - 网状网络 IE 使用 AES 加密
 
-[原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/mesh.html)
+## 参考资料
+
+ - [原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/mesh.html)

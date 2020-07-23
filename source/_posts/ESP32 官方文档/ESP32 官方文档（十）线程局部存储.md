@@ -42,4 +42,6 @@ ESP-IDF提供以下 多线程 API 来管理线程局部变量:
 
 ESP-IDF FreeRTOS 支持根据 C11 标准的线程局部变量(使用 `__thread` 关键字指定的变量). 有关此 GCC 功能的详细信息,请参阅https://gcc.gnu.org/onlinedocs/gcc-5.5.0/gcc/Thread-Local.html#Thread-Local. 这种变量的存储在任务堆栈上分配. 请注意,程序中所有此类变量的区域将分配到系统中每个任务的堆栈上,即使该任务根本不使用此类变量也是如此. 例如, ESP-IDF 系统任务(如 `ipc`, `timer` 任务等)也将分配额外的堆栈空间. 因此应谨慎使用此功能. 有一个权衡: C11 线程局部变量在编程中非常方便,只需使用几个 Xtensa 指令即可访问,但这个好处与系统中所有任务的额外堆栈使用成本有关. 由于变量的静态性质,系统中的所有任务都具有相同的 C11 线程局部变量集.
 
-[原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/thread-local-storage.html)
+## 参考资料
+
+ - [原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/thread-local-storage.html)

@@ -510,4 +510,6 @@ IDF `components/bootloader` 中的组件是特殊的,因为第二阶段引导加
 
 这是通过在 `components/bootloader/subproject` 下添加子项目来完成的.这个子项目有自己的 Makefile,但它希望通过 `components/bootloader/Makefile.projectbuild` 文件中的一些粘合剂从项目自己的 Makefile 中调用.有关详细信息,请参阅这些文件
 
-[原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html)
+## 参考资料
+
+ - [原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html)

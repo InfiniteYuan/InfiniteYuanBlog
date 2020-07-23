@@ -168,4 +168,6 @@ python gen_esp32part.py binary_partitions.bin
 
 请注意,更新分区表不会擦除已根据旧分区表存储的数据. 您可以使用 `make erase_flash` (或 `esptool.py erase_flash`)来擦除整个闪存内容.
 
-[原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/partition-tables.html)
+## 参考资料
+
+ - [原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/partition-tables.html)

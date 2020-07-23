@@ -68,4 +68,6 @@ ESP-IDF 没有针对此版本硅片中的错误的解决方法，它不能用于
 
 在 ESP-IDF 中，当您选择 `CONFIG_SPIRAM_CACHE_WORKAROUND` 时，将启用此标志。 ESP-IDF 还采取其他措施确保不使用 PSRAM 访问和违规指令集的组合：它链接到使用 gcc 标志重新编译的 Newlib 版本，不使用某些 ROM 函数并为 WiFi 分配静态内存叠加。
 
-[原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/external-ram.html)
+## 参考资料
+
+ - [原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/external-ram.html)

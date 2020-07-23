@@ -199,4 +199,6 @@ menuconfig 中的 `CONFIG_FREERTOS_THREAD_LOCAL_STORAGE_POINTERS` 可用于配�
 
 `CONFIG_FREERTOS_ASSERT_ON_UNTESTED_FUNCTION` 将触发 ESP-IDF FreeRTOS 中特定功能的暂停,这些功能尚未在 SMP 上下文中进行全面测试.
 
-[原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/freertos-smp.html)
+## 参考资料
+
+ - [原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/freertos-smp.html)

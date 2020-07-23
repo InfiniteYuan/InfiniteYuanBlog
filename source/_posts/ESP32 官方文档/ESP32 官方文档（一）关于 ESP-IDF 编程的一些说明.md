@@ -114,6 +114,7 @@ __NOINIT_ATTR uint32_t noinit_data;
 
 `RTC_NOINIT_ATTR`宏可用于将数据放入到这种类型的内存中.放在此部分中的数据,在从深度睡眠中醒来后也会保持其值.
 例如：
+
 ```
 RTC_NOINIT_ATTR uint32_t rtc_noinit_data;
 ```
@@ -121,6 +122,7 @@ RTC_NOINIT_ATTR uint32_t rtc_noinit_data;
 ### DMA 能力要求
 
 大多数 DMA 控制器(例如 SPI,sdmmc 等)都要求发送/接收缓冲区应放在 DRAM 中并进行字对齐.我们建议将 DMA 缓冲区放在静态变量中而不是堆栈中.使用`DMA_ATTR`宏声明全局/本地静态变量,如：
+
 ```
 DMA_ATTR uint8_t buffer[]="I want to send something";
 
@@ -135,7 +137,9 @@ void app_main()
     // other stuff
 }
 ```
+
 或者：
+
 ```
 void app_main()
 {
@@ -149,9 +153,11 @@ void app_main()
     // other stuff
 }
 ```
+
 在堆栈中放置DMA缓冲区仍然是允许的,但必须记住：
  1. 如果堆栈在 pSRAM 中,切勿尝试这样做.如果任务的堆栈放在 pSRAM 中,则必须执行[支持外部 RAM ](https://esp-idf.readthedocs.io/en/latest/api-guides/external-ram.html)文档(至少在 menuconfig 中启用 `SPIRAM_ALLOW_STACK_EXTERNAL_MEMORY` 选项)中所述的几个步骤.确保你的任务不在 pSRAM 中.
  2. 在将变量放在适当的位置之前的函数中使用 `WORD_ALIGNED_ATTR` 宏,如：
+
 ```
 void app_main()
 {
@@ -167,4 +173,6 @@ void app_main()
 }
 ```
 
-[原文链接](https://esp-idf.readthedocs.io/en/latest/api-guides/general-notes.html)
+## 参考资料
+
+ - [原文链接](https://esp-idf.readthedocs.io/en/latest/api-guides/general-notes.html)

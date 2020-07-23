@@ -95,4 +95,6 @@ CORE DUMP START 和 CORE DUMP END 行不得包含在 Core Dump 文本文件中�
  - –rom-elf,-r ROM_ELF. Path to ROM ELF file to use (if skipped “esp32_rom.elf” is used).
  - –print-mem,-m Print memory dump. Used only with “info_corefile”.
 
-[原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/core_dump.html)
+## 参考资料
+
+ - [原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/core_dump.html)

@@ -58,4 +58,6 @@ COMPONENT_ADD_LDFLAGS := -u ld_include_my_isr_file
  - 可以使用 `esp_intr_alloc` 和相关函数路由和处理高级中断. 但是,`esp_intr_alloc` 的处理程序和处理程序参数必须为 NULL.
  - 理论上,中等优先级中断也可以这种方式处理. 目前, ESP-IDF 不支持这一点.
 
-[原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/hlinterrupts.html)
+## 参考资料
+
+ - [原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/hlinterrupts.html)

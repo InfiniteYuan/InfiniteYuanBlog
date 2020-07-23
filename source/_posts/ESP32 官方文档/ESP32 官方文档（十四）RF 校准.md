@@ -45,4 +45,6 @@ PHY 初始化数据用于 RF 校准。 有两种方法可以获得 PHY 初始化
 1.  一个是默认的初始化数据，它位于头文件 `components/esp32/phy_init_data.h` 中。 它在编译后嵌入到应用程序二进制文件中，然后存储到只读存储器（DROM）中。 要使用默认初始化数据，请到 `menuconfig` 并禁用 `CONFIG_ESP32_PHY_INIT_DATA_IN_PARTITION`。
 2. 另一种是存储在分区中的初始化数据。 使用自定义分区表时，请确保包含 PHY 数据分区（类型：数据，子类型：phy）。 使用默认分区表，这是自动完成的。 如果初始化数据存储在分区中，则必须在那里闪存，否则将发生运行时错误。 要切换到存储在分区中的初始化数据，请到 `menuconfig` 并启用 `CONFIG_ESP32_PHY_INIT_DATA_IN_PARTITION`。
 
-[原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/RF_calibration.html)
+## 参考资料
+
+ - [原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/RF_calibration.html)

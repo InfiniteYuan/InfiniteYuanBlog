@@ -241,4 +241,6 @@ Backtrace: 0x4008e6c0:0x3ffc1780 0x4008e8b7:0x3ffc17a0 0x400d2138:0x3ffc17c0 0x4
 
 回溯应该指向 Stack Smashing 发生的函数. 检查功能代码以获得对本地阵列的无限制访问.
 
-[原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/fatal-errors.html)
+## 参考资料
+
+ - [原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/fatal-errors.html)

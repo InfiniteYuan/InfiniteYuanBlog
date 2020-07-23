@@ -92,4 +92,6 @@ void RTC_IRAM_ATTR esp_wake_deep_sleep(void) {
 
 如果您需要使用字符串或编写其他更复杂的代码，第二种方法是更好的选择。
 
-[原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/deep-sleep-stub.html)
+## 参考资料
+
+ - [原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/deep-sleep-stub.html)

@@ -117,4 +117,6 @@ if (err != ESP_OK) {
 
 如果抛出异常,但没有 `catch` 块,程序将被 `abort` 函数终止,并且将打印 `backtrace`. 有关回溯的更多信息,请参阅[错误](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/fatal-errors.html).
 
-[原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/error-handling.html)
+## 参考资料
+
+ - [原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/error-handling.html)

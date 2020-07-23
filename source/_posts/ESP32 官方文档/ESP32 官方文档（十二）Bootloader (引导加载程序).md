@@ -58,4 +58,6 @@ ota_1,    0,    ota_1,   ,         512K
 
 当前的引导加载程序实现允许客户覆盖它. 为此,您必须复制文件夹 `/esp-idf/components/bootloader`,然后编辑 `/your_project/components/bootloader/subproject/main/bootloader_main.c`. 在引导加载程序空间中,您无法使用其他组件的驱动程序和函数. 如有必要,则应将所需功能放在文件夹引导程序中(请注意,这会增加其大小). 有必要监视其大小,因为内存中可能存在覆盖层,导致损坏. 目前,引导加载程序仅限于地址 0x8000 的分区表.
 
-[原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/bootloader.html)
+## 参考资料
+
+ - [原文链接](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/bootloader.html)
