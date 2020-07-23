@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://img-blog.csdn.net/20180811135319400?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
 <meta property="og:image" content="https://img-blog.csdn.net/20180811140112726?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
 <meta property="article:published_time" content="2018-11-20T12:13:11.000Z">
-<meta property="article:modified_time" content="2020-07-23T08:01:41.041Z">
+<meta property="article:modified_time" content="2020-07-23T08:03:09.467Z">
 <meta property="article:author" content="InfiniteYuan">
 <meta property="article:tag" content="ESP32">
 <meta name="twitter:card" content="summary">
@@ -236,7 +236,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-23 08:01:41" itemprop="dateModified" datetime="2020-07-23T08:01:41+00:00">2020-07-23</time>
+                <time title="修改时间：2020-07-23 08:03:09" itemprop="dateModified" datetime="2020-07-23T08:03:09+00:00">2020-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -302,6 +302,8 @@
 <li>GPIO 34-39 只能设置为输入模式,没有软件上拉或下拉功能.</li>
 <li>这 34 个物理 GPIO pad 的序列号为:0-19, 21-23, 25-27, 32-39.其中 GPIO 34-39 仅用作输入管脚,其他的既可以作为输入又可以作为输出管脚.</li>
 </ul>
+<a id="more"></a>
+
 <p>当 GPIO 被连接到 “RTC” 低功耗和模拟子系统时,还有独立的 “RTC GPIO” 支持. 这些引脚功能可在深度睡眠,<a href="https://esp-idf.readthedocs.io/zh_CN/latest/api-guides/ulp.html" target="_blank" rel="noopener">超低功耗协处理器</a>运行时或使用 ADC/DAC/等 模拟功能时使用.</p>
 <p>下图描述了数字 pad(控制信号:FUNC_SEL、IE、OE、WPU、WDU 等)和 162 个外设输入以及 176 个外设输出信号(控制信号:SIG_IN_SEL、SIG_OUT_SEL、IE、OE 等)和快速外设输入/输出信号(控制信号:IE、OE 等)以及 RTC IO_MUX 之间的信号选择和连接关系.<br><img src="https://img-blog.csdn.net/20180811133142567?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="图1: IO_MUX、RTC IO_MUX 和GPIO 交换矩阵结构框图"></p>
 <center>图1: IO_MUX、RTC IO_MUX 和GPIO 交换矩阵结构框图</center>
