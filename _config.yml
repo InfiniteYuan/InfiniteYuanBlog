@@ -422,3 +422,15 @@ theme_config:
     # Internal version: 1.0.0
     # canvas_ribbon: //cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js
     canvas_ribbon:
+  # Table of Contents in the Sidebar
+  # Front-matter variable (unsupport wrap expand_all).
+  toc:
+    enable: true
+    # Automatically add list number to toc.
+    number: true
+    # If true, all words will placed on next lines if header width longer then sidebar width.
+    wrap: false
+    # If true, all level of TOC in a post will be displayed, rather than the activated part of it.
+    expand_all: true
+    # Maximum heading depth of generated toc.
+    max_depth: 6
