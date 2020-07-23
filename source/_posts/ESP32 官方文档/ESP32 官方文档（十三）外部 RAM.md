@@ -1,6 +1,6 @@
 ---
 title: ESP32 官方文档（十三）外部 RAM
-date: 2012-07-22 09:43:43
+date: 2018-09-02 17:03:34
 categories:
 - ESP32 官方文档
 tags:

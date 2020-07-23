@@ -1,6 +1,6 @@
 ---
 title: ESP32 官方文档（九）ESP-IDF FreeRTOS SMP Changes
-date: 2012-07-22 09:43:43
+date: 2018-09-02 12:00:02
 categories:
 - ESP32 官方文档
 tags:
