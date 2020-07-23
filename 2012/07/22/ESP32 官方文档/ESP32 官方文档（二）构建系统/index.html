@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/InfiniteYuanBlog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/InfiniteYuanBlog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/InfiniteYuanBlog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/InfiniteYuanBlog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/css/main.css">
+
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/InfiniteYuanBlog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/InfiniteYuanBlog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"infiniteyuan.github.io","root":"/InfiniteYuanBlog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="构建系统本文档解释了 Espressif 物联网开发框架构建系统和“组件”的概念. 如果您想知道如何组织新的 ESP-IDF 项目,请阅读本文档. 我们建议使用 esp-idf-template 项目作为项目的起点.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ESP32 官方文档（二）构建系统">
+<meta property="og:url" content="https://infiniteyuan.github.io/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%BA%8C%EF%BC%89%E6%9E%84%E5%BB%BA%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="InfiniteYuan">
+<meta property="og:description" content="构建系统本文档解释了 Espressif 物联网开发框架构建系统和“组件”的概念. 如果您想知道如何组织新的 ESP-IDF 项目,请阅读本文档. 我们建议使用 esp-idf-template 项目作为项目的起点.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190131111141734.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2012-07-22T09:43:43.000Z">
+<meta property="article:modified_time" content="2020-07-23T06:21:46.545Z">
+<meta property="article:author" content="InfiniteYuan">
+<meta property="article:tag" content="ESP32">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190131111141734.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%BA%8C%EF%BC%89%E6%9E%84%E5%BB%BA%E7%B3%BB%E7%BB%9F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ESP32 官方文档（二）构建系统 | InfiniteYuan</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/InfiniteYuanBlog/atom.xml" title="InfiniteYuan" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+      <div class="site-meta-headline">
+        <a>
+          <img class="custom-logo-image" src="/InfiniteYuanBlog/images/InfiniteYuanLogo.jpg" alt="InfiniteYuan">
+        </a>
+      </div>
+
+    <a href="/InfiniteYuanBlog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">InfiniteYuan</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/InfiniteYuanBlog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/InfiniteYuanBlog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">5</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/InfiniteYuanBlog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/InfiniteYuanBlog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/infiniteyuan" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%BA%8C%EF%BC%89%E6%9E%84%E5%BB%BA%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
+      <meta itemprop="name" content="InfiniteYuan">
+      <meta itemprop="description" content="Stay Hungry, Stay Funlish">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="InfiniteYuan">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ESP32 官方文档（二）构建系统
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2012-07-22 09:43:43" itemprop="dateCreated datePublished" datetime="2012-07-22T09:43:43+00:00">2012-07-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-23 06:21:46" itemprop="dateModified" datetime="2020-07-23T06:21:46+00:00">2020-07-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/" itemprop="url" rel="index"><span itemprop="name">ESP32 官方文档</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%BA%8C%EF%BC%89%E6%9E%84%E5%BB%BA%E7%B3%BB%E7%BB%9F/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%BA%8C%EF%BC%89%E6%9E%84%E5%BB%BA%E7%B3%BB%E7%BB%9F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>16k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>14 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="构建系统"><a href="#构建系统" class="headerlink" title="构建系统"></a>构建系统</h1><p>本文档解释了 Espressif 物联网开发框架构建系统和“组件”的概念.</p>
+<p>如果您想知道如何组织新的 <code>ESP-IDF</code> 项目,请阅读本文档.</p>
+<p>我们建议使用 <a href="https://github.com/espressif/esp-idf-template" target="_blank" rel="noopener">esp-idf-template</a> 项目作为项目的起点.</p>
+<a id="more"></a>
+
+<h2 id="使用构建系统"><a href="#使用构建系统" class="headerlink" title="使用构建系统"></a>使用构建系统</h2><p>esp-idf 中的 <code>README</code> 文件有如何使用构建系统构建项目的说明.</p>
+<h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p>一个 <code>ESP-IDF</code> 项目可以看作是多个组件的组合.例如,对于显示当前湿度的网络服务器,可能有:</p>
+<ul>
+<li>ESP32 基础库( libc,rom bindings 等)</li>
+<li>WiFi 驱动</li>
+<li>TCP / IP 协议堆栈</li>
+<li>FreeRTOS 操作系统</li>
+<li>Web 服务器</li>
+<li>湿度传感器驱动</li>
+<li>主程序</li>
+</ul>
+<p><code>ESP-IDF</code> 使这些组件结构更清晰并具有可配置性.为此,在编译项目时,构建环境将查找 <code>ESP-IDF</code> 目录、项目目录和(可选)其他自定义组件目录中的所有组件.之后,它允许用户使用基于文本的菜单系统去自定义每个组件来配置 <code>ESP-IDF</code> 项目.在配置完项目中的组件之后,构建程序将编译项目.</p>
+<h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><ul>
+<li>“项目”是一个目录,其中包含构建单个 “app” (可执行文件)所需的文件和配置,以及其他附加文件,如:分区表,数据/文件系统分区和引导程序.</li>
+<li>“项目配置”保存在项目根目录中的 <code>sdkconfig</code>  文件中.通过 <code>make menuconfig</code> 修改此文件以自定义项目配置.单个项目只包含一个项目配置.</li>
+<li>“app” 是由 esp-idf 构建的可执行文件.单个项目通常会构建两个应用程序 - 一个“项目应用程序”(主要可执行文件,即您的自定义固件)和一个“引导程序”(启动项目应用程序的初始引导程序).</li>
+<li>“组件”是独立代码的模块化部分,它们被编译成静态库(.a文件)并链接到应用程序.有些是由 esp-idf 本身提供的,有些则可能来自其他地方.</li>
+</ul>
+<p>有些东西不是项目的一部分:</p>
+<ul>
+<li>“ESP-IDF” 不是该项目的一部分.相反,它是独立的,并通过 <code>IDF_PATH</code> 环境变量链接到项目,该变量保存 <code>esp-idf</code> 目录的路径.这允许 IDF 框架与您的项目分离.</li>
+<li>用于编译的工具链不是项目的一部分.工具链应安装在系统命令行 <code>PATH</code> 中,或者工具链的路径设置为项目配置中编译器前缀的一部分.</li>
+</ul>
+<h3 id="示例项目"><a href="#示例项目" class="headerlink" title="示例项目"></a>示例项目</h3><p>一个示例项目目录结构可能如下所示:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">- myProject&#x2F;</span><br><span class="line">            - Makefile</span><br><span class="line">            - sdkconfig</span><br><span class="line">            - components&#x2F; - component1&#x2F; - component.mk</span><br><span class="line">                                        - Kconfig</span><br><span class="line">                                        - src1.c</span><br><span class="line">                          - component2&#x2F; - component.mk</span><br><span class="line">                                        - Kconfig</span><br><span class="line">                                        - src1.c</span><br><span class="line">                                        - include&#x2F; - component2.h</span><br><span class="line">            - main&#x2F;       - src1.c</span><br><span class="line">                          - src2.c</span><br><span class="line">                          - component.mk</span><br><span class="line"></span><br><span class="line">            - build&#x2F;</span><br></pre></td></tr></table></figure>
+<p>“myProject” 示例包含以下元素:</p>
+<ul>
+<li>顶层项目 Makefile .此 Makefile 设置 <code>PROJECT_NAME</code> 变量,并(可选)定义项目范围的 make 变量.它包括核心的 <code>$(IDF_PATH)/make/project.mk</code> Makefile 文件,它实现了 <code>ESP-IDF</code> 构建系统的其余部分.</li>
+<li>“sdkconfig” 项目配置文件.当 “make menuconfig” 运行时,将创建/更新此文件,并保存项目中所有组件的配置(包括 esp-idf 本身).“sdkconfig” 文件可能会也可能不会添加到项目的源代码管理系统中.</li>
+<li>可选的 “components” 目录包含属于项目一部分的组件.项目不必包含此类自定义组件,但它可用于构造可重用代码或包括不属于 ESP-IDF 的第三方组件.</li>
+<li>“main” 目录是一个特殊的“伪组件(pseudo-component)”,它包含项目本身的源代码.“main” 是默认名称,Makefile 变量<code>COMPONENT_DIRS</code>包含此组件,但您可以修改此变量(或设置 <code>EXTRA_COMPONENT_DIRS</code>)以查找其他位置的组件.</li>
+<li>“build” 目录是项目编译时创建的,包含项目编译时产生的文件.运行 make 后,该目录被创建,并包含临时目标文件和库以及最终的二进制输出文件 <code>bin</code>.此目录通常不会添加到源代码管理中,也不会随项目源代码一起发布.</li>
+</ul>
+<p>组件目录包含一个组件 makefile 文件 - <code>component.mk</code>.这可能包含变量定义,以控制组件的构建过程,以及它与整个项目的集成.有关更多详细信息,请参阅[组件Makefile](#组件 Makefile).</p>
+<p>每个组件还可以包括一个 <code>Kconfig</code> 文件,用于定义通过项目配置设置的组件配置选项.某些组件还可能包含 <code>Kconfig.projbuild</code> 和 <code>Makefile.projbuild</code> 文件,这些文件是用于覆盖项目部分的特殊文件.</p>
+<h3 id="项目-Makefile"><a href="#项目-Makefile" class="headerlink" title="项目 Makefile"></a>项目 Makefile</h3><p>每个项目都有一个 Makefile,其中包含整个项目的构建配置.默认情况下,项目 Makefile 可以非常小.</p>
+<h4 id="最小示例-Makefile"><a href="#最小示例-Makefile" class="headerlink" title="最小示例 Makefile"></a>最小示例 Makefile</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PROJECT_NAME :&#x3D; myProject</span><br><span class="line"></span><br><span class="line">include $(IDF_PATH)&#x2F;make&#x2F;project.mk</span><br></pre></td></tr></table></figure>
+
+<h4 id="强制项目变量"><a href="#强制项目变量" class="headerlink" title="强制项目变量"></a>强制项目变量</h4><ul>
+<li>PROJECT_NAME:项目名称.二进制输出文件将使用此名称 - 即 myProject.bin, myProject.elf.</li>
+</ul>
+<h4 id="可选项目变量"><a href="#可选项目变量" class="headerlink" title="可选项目变量"></a>可选项目变量</h4><p>这些变量都有默认值,并可以被自定义操作覆盖.查看 <code>make/project.mk</code> 以获取所有实现细节.</p>
+<ul>
+<li><code>PROJECT_PATH</code>:顶级项目目录.默认为包含 Makefile 的目录.许多其他项目变量都基于此变量.项目路径不能包含空格.</li>
+<li><code>BUILD_DIR_BASE</code>:所有 objects/libraries/binaries 文件的构建输出目录.默认为<code>$(PROJECT_PATH)/build</code>.</li>
+<li><code>COMPONENT_DIRS</code>:搜索组件的目录.默认为<code>$(IDF_PATH)/components</code>( idf 组件),<code>$(PROJECT_PATH)/components</code>(项目组件),<code>$(PROJECT_PATH)/main</code> 和 <code>EXTRA_COMPONENT_DIRS</code> (其他组件).如果您不想在这些位置搜索组件,请覆盖此变量.</li>
+<li><code>EXTRA_COMPONENT_DIRS</code>:用于搜索组件的其他目录的可选列表.</li>
+<li><code>COMPONENTS</code>:要构建到项目中的组件名称列表.默认为<code>COMPONENT_DIRS</code>目录中的所有组件.</li>
+<li><code>EXCLUDE_COMPONENTS</code>:在构建过程中要排除的组件名称的可选列表.请注意,这会减少构建时间,但不会减少二进制大小.</li>
+<li><code>TEST_EXCLUDE_COMPONENTS</code>:在单元测试的构建过程中要排除的可选组件名称列表.</li>
+</ul>
+<p>这些 Makefile 变量中的任何路径都应该是绝对路径.您可以使用<code>$(PROJECT_PATH)/ xxx</code>,<code>$(IDF_PATH)/ xxx</code>转换相对路径,或使用 Make 函数<code>$(abspath xxx)</code>.</p>
+<p>这些都变量应该在 Makefile 中的 <code>include $(IDF_PATH)/make/project.mk</code> 行之前设置.</p>
+<h3 id="组件-Makefile"><a href="#组件-Makefile" class="headerlink" title="组件 Makefile"></a>组件 Makefile</h3><p>每个项目都包含一个或多个组件,这些组件可以是 esp-idf 的一部分,也可以从其他组件目录添加.</p>
+<p>组件是包含 <code>component.mk</code> 文件的任何目录.</p>
+<h3 id="搜索组件"><a href="#搜索组件" class="headerlink" title="搜索组件"></a>搜索组件</h3><p>在<code>COMPONENT_DIRS</code>中的目录列表中搜索项目的组件.此列表中的目录可以是组件本身(即它们包含 <code>component.mk</code> 文件),也可以是子目录为组件的顶级目录(包含组件的目录).</p>
+<p>运行 <code>make list-components</code> 后,会输出这些变量,这可以帮助调试组件目录是否被找到.</p>
+<h4 id="具有相同名称的多个组件"><a href="#具有相同名称的多个组件" class="headerlink" title="具有相同名称的多个组件"></a>具有相同名称的多个组件</h4><p>当 esp-idf 找到所有要编译的组件时,它将按照 <code>COMPONENT_DIRS</code> 指定的顺序执行此操作; 默认情况下,首先是 idf 组件,第二个是项目组件,最后是 <code>EXTRA_COMPONENT_DIRS</code> 中的组件.如果这些目录中的两个或多个包含具有相同名称的组件子目录,则使用搜索的最后一个位置中的组件.例如,这允许通过简单地将组件从 esp-idf 组件目录复制到项目组件树然后在那里修改它来覆盖具有修改版本的 esp-idf 组件.如果以这种方式使用,esp-idf 目录本身可以保持不变.</p>
+<h4 id="最小组件-Makefile"><a href="#最小组件-Makefile" class="headerlink" title="最小组件 Makefile"></a>最小组件 Makefile</h4><p>最小的 <code>component.mk</code> 文件是一个空文件.如果文件为空,则设置默认组件行为:</p>
+<ul>
+<li>与 makefile 在相同的目录中的所有源文件(<code>*.c</code>,<code>*.cpp</code>,<code>*.cc</code>,<code>*.S</code>)将被编译到组件库中</li>
+<li>子目录 “include” 将被添加到所有其他组件的全局 include 搜索路径中.</li>
+<li>组件库将链接到项目应用程序中.</li>
+</ul>
+<p>有关更完整的示例组件 makefile,请参阅[示例组件 makefile](#示例组件 Makefile).</p>
+<p>请注意,空的 <code>component.mk</code> 文件(调用默认组件构建行为)和没有 <code>component.mk</code> 文件(这意味着不会发生默认组件构建行为)之间存在差异.组件可能没有 <code>component.mk</code> 文件,如果它只包含影响项目配置或构建过程的其他文件.</p>
+<h4 id="预设组件变量"><a href="#预设组件变量" class="headerlink" title="预设组件变量"></a>预设组件变量</h4><p>以下特定组件的变量可在<code>component.mk</code>中使用,但不应修改:</p>
+<ul>
+<li><code>COMPONENT_PATH</code>:组件目录.计算包含 <code>component.mk</code> 的目录的绝对路径.组件路径不能包含空格.</li>
+<li><code>COMPONENT_NAME</code>:组件的名称.默认为组件目录的名称.</li>
+<li><code>COMPONENT_BUILD_DIR</code>:组件构建目录.计算 <code>$(BUILD_DIR_BASE)</code> 中要构建此组件源文件的目录的绝对路径.每次构建组件时,这也是当前工作目录,因此 make 等目标中的相对路径都是相对于此目录.</li>
+<li><code>COMPONENT_LIBRARY</code>:将为此组件构建的静态库文件的名称(相对于组件构建目录).默认为 <code>$(COMPONENT_NAME).a</code>.</li>
+</ul>
+<p>以下变量在项目级别设置,但会导出在组件构建中使用:</p>
+<ul>
+<li><code>PROJECT_NAME</code>:项目名称,在项目 Makefile 中设置</li>
+<li><code>PROJECT_PATH</code>:包含项目 Makefile 的项目目录的绝对路径.</li>
+<li><code>COMPONENTS</code>:此构建中包含的所有组件的名称.</li>
+<li><code>CONFIG_ *</code>:项目配置中的每个值都有一个 make 中可用的对应变量.所有名称都以 <code>CONFIG_</code> 开头.</li>
+<li><code>CC</code>,<code>LD</code>,<code>AR</code>,<code>OBJCOPY</code>:gcc xtensa 交叉工具链中每个工具的完整路径.</li>
+<li><code>HOSTCC</code>,<code>HOSTLD</code>,<code>HOSTAR</code>:来自主机本机工具链的每个工具的全名.</li>
+<li><code>IDF_VER</code>:ESP-IDF 版本,使用 git 命令 <code>git describe</code> 从 <code>$(IDF_PATH)/version.txt</code> 文件(如果存在)中检索.这里推荐的格式是单独的一行指定主要 IDF 发布版本,例如标记版本的 <code>v2.0</code> 或任意提交的 <code>v2.0-275-g0efaa4f</code>.应用程序可以通过调用 <code>esp_get_idf_version()</code> 来使用它.</li>
+<li><code>PROJECT_VER</code>: 项目版本<ul>
+<li>如果 <code>PROJECT_VER</code> 变量在项目 Makefile 文件中设置，则将使用其值。</li>
+<li>否则，如果 <code>$PROJECT_PATH/version.txt</code> 存在，其内容将用作 <code>PROJECT_VER</code>。</li>
+<li>否则，如果项目位于 Git 存储库中，则将使用git describe的输出。</li>
+<li>否则，<code>PROJECT_VER</code> 将为“1”。</li>
+</ul>
+</li>
+</ul>
+<p>如果您修改 <code>component.mk</code> 中的任何这些变量,那么这不会阻止构建其他组件,但它可能使您的组件难以构建或者调试.</p>
+<h4 id="可选项目范围的组件变量"><a href="#可选项目范围的组件变量" class="headerlink" title="可选项目范围的组件变量"></a>可选项目范围的组件变量</h4><p>可以在 <code>component.mk</code> 中设置以下变量来控制整个项目中的构建设置:</p>
+<ul>
+<li><code>COMPONENT_ADD_INCLUDEDIRS</code>:相对于组件目录的路径,将添加到项目中所有组件的 “include” 搜索路径.如果未被覆盖,则默认<code>include</code>.如果仅需要编译此特定组件的 “include” 目录,请将其添加到 <code>COMPONENT_PRIV_INCLUDEDIRS</code></li>
+<li><code>COMPONENT_ADD_LDFLAGS</code>:为 LDFLAGS 添加链接器参数以用于应用程序可执行文件.默认为 <code>-l$(COMPONENT_NAME)</code>.如果将预编译库添加到此目录,请将它们添加为绝对路径 <code>-e$(COMPONENT_PATH)/libwhatever.a</code></li>
+<li><code>COMPONENT_DEPENDS</code>:应在此组件之前编译的组件名称的可选列表.对于链接时依赖性,这不是必需的,因为所有组件”include”目录始终可用.如果一个组件生成一个”include”文件,然后您想要包含在另一个组件中,则这是必要的.大多数组件不需要设置此变量.</li>
+<li><code>COMPONENT_ADD_LINKER_DEPS</code>:相对组件路径的文件的可选列表，如果它们发生更改，应触发 ELF 文件的重新链接。 通常用于链接描述文件和二进制库。大多数组件不需要设置此变量。</li>
+</ul>
+<p>以下变量仅适用于属于 esp-idf 本身的组件:</p>
+<ul>
+<li><code>COMPONENT_SUBMODULES</code>:组件使用的 git 子模块路径(相对于 COMPONENT_PATH)的可选列表.这些将由构建过程检查(并在必要时初始化).如果组件位于 IDF_PATH 目录之外,则忽略此变量.</li>
+</ul>
+<h4 id="可选特定的组件变量"><a href="#可选特定的组件变量" class="headerlink" title="可选特定的组件变量"></a>可选特定的组件变量</h4><p>可以在<code>component.mk</code>中设置以下变量来控制该组件的构建:</p>
+<ul>
+<li><code>COMPONENT_PRIV_INCLUDEDIRS</code>:目录路径,必须相对于组件目录,该组件目录将仅添加到此组件源文件的”include”搜索路径中.</li>
+<li><code>COMPONENT_EXTRA_INCLUDES</code>:编译组件源文件时使用的任何额外包含路径.这些将以’-I’为前缀,并按原样传递给编译器.与<code>COMPONENT_PRIV_INCLUDEDIRS</code>变量类似,但这些路径不会相对于组件目录进行扩展.</li>
+<li><code>COMPONENT_SRCDIRS</code>:目录路径,必须相对于组件目录,将用以搜索源文件(<code>* .cpp</code>,<code>* .c</code>,<code>* .S</code>).默认为’.’,即组件目录本身.覆盖它以指定包含源文件的不同目录列表.</li>
+<li><code>COMPONENT_OBJS</code>:要编译的对象文件.默认值是<code>COMPONENT_SRCDIRS</code>中找到的每个源文件的 a.o 文件.覆盖此列表允许您排除<code>COMPONENT_SRCDIRS</code>中的源文件,否则将被编译.请参阅指定源文件</li>
+<li><code>COMPONENT_EXTRA_CLEAN</code>:相对于组件构建目录的路径,使用<code>component.mk</code>文件中的自定义make规则生成的任何文件,以及作为make clean的一部分需要删除的文件.有关示例,请参阅<a href="#_428">源代码生成</a>.</li>
+<li><code>COMPONENT_OWNBUILDTARGET</code>＆<code>COMPONENT_OWNCLEANTARGET</code>:这些目标允许您完全覆盖组件的默认构建行为.有关详细信息,请参阅[完全覆盖组件 Makefile](#完全覆盖组件 Makefile).</li>
+<li><code>COMPONENT_CONFIG_ONLY</code>:如果设置,则此标志指示组件根本不生成任何内置输出(即未构建 <code>COMPONENT_LIBRARY</code>),并忽略大多数其他组件变量.此标志用于 IDF 内部组件,其中仅包含 KConfig.projbuild 和/或 Makefile.projbuild 文件以配置项目,但没有源文件.</li>
+<li><code>CFLAGS</code>:传递给 C 编译器的标志.根据项目设置定义一组默认 <code>CFLAGS</code>.可以通过 <code>CFLAGS +=</code> 进行组件特定的添加.也可以(尽管不推荐)完全覆盖该组件的变量.</li>
+<li><code>CPPFLAGS</code>:传递给 C 预处理器的标志(用于. c , .cpp 和 .S 文件).根据项目设置定义一组默认的 <code>CPPFLAGS</code>.可以通过 <code>CPPFLAGS +=</code> 进行组件特定的添加.也可以(尽管不推荐)完全覆盖该组件的变量.</li>
+<li><code>CXXFLAGS</code>:传递给 C++ 编译器的标志.根据项目设置定义一组默认的 <code>CXXFLAGS</code>.可以通过 <code>CXXFLAGS +=</code> 进行组件特定的添加.也可以(尽管不推荐)完全覆盖该组件的变量.</li>
+</ul>
+<p>要将编译标志应用于单个源文件,可以将变量覆盖添加为目标,即:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apps&#x2F;dhcpserver.o: CFLAGS +&#x3D; -Wno-unused-variable</span><br></pre></td></tr></table></figure>
+
+<h3 id="组件配置"><a href="#组件配置" class="headerlink" title="组件配置"></a>组件配置</h3><p>每个组件还可以有一个 Kconfig 文件,与 <code>component.mk</code> 在同一目录下.Kconfig 中包含要添加到此组件的 “make menuconfig” 的配置设置.</p>
+<p>运行 menuconfig 时,可在 “Component Settings” 菜单下找到这些设置.</p>
+<p>要创建组件 KConfig 文件,最简单的方法是使用 esp-idf 中的 KConfig 文件做修改.</p>
+<p>有关示例,请参阅<a href="#添加条件配置">添加条件配置</a>.</p>
+<h3 id="示例：添加二进制库、组件配置文件-Kconfig"><a href="#示例：添加二进制库、组件配置文件-Kconfig" class="headerlink" title="示例：添加二进制库、组件配置文件 Kconfig"></a>示例：添加二进制库、组件配置文件 Kconfig</h3><p><img src="https://img-blog.csdnimg.cn/20190131111141734.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">#</span><br><span class="line"># Component Makefile</span><br><span class="line">#</span><br><span class="line">ifdef CONFIG_BT_ENABLED</span><br><span class="line"></span><br><span class="line">COMPONENT_SRCDIRS :&#x3D; .</span><br><span class="line"></span><br><span class="line">COMPONENT_ADD_INCLUDEDIRS :&#x3D; include</span><br><span class="line"></span><br><span class="line"># add pre-compiled libraries</span><br><span class="line">LIBS :&#x3D; btdm_app</span><br><span class="line"></span><br><span class="line">COMPONENT_ADD_LDFLAGS     :&#x3D; -lbt -L $(COMPONENT_PATH)&#x2F;lib \</span><br><span class="line">                           $(addprefix -l,$(LIBS))</span><br><span class="line"></span><br><span class="line"># re-link program if BT binary libs change</span><br><span class="line">COMPONENT_ADD_LINKER_DEPS :&#x3D; $(patsubst %,$(COMPONENT_PATH)&#x2F;lib&#x2F;lib%.a,$(LIBS))</span><br><span class="line"></span><br><span class="line">COMPONENT_SUBMODULES +&#x3D; lib</span><br><span class="line"></span><br><span class="line">ifeq ($(GCC_NOT_5_2_0), 1)</span><br><span class="line"># TODO: annotate fallthroughs in Bluedroid code with comments</span><br><span class="line">CFLAGS +&#x3D; -Wno-implicit-fallthrough</span><br><span class="line">endif</span><br><span class="line"></span><br><span class="line">endif</span><br><span class="line"></span><br><span class="line">ifdef CONFIG_BLUEDROID_ENABLED</span><br><span class="line"></span><br><span class="line">COMPONENT_PRIV_INCLUDEDIRS +&#x3D;   bluedroid&#x2F;bta&#x2F;include                   \</span><br><span class="line">                                bluedroid&#x2F;bta&#x2F;ar&#x2F;include</span><br><span class="line"></span><br><span class="line">COMPONENT_ADD_INCLUDEDIRS +&#x3D;    bluedroid&#x2F;api&#x2F;include&#x2F;api</span><br><span class="line"></span><br><span class="line">COMPONENT_SRCDIRS +&#x3D;    bluedroid&#x2F;bta&#x2F;dm                      \</span><br><span class="line">                        bluedroid&#x2F;bta&#x2F;gatt </span><br><span class="line"></span><br><span class="line">ifeq ($(GCC_NOT_5_2_0), 1)</span><br><span class="line">bluedroid&#x2F;bta&#x2F;sdp&#x2F;bta_sdp_act.o: CFLAGS +&#x3D; -Wno-unused-const-variable</span><br><span class="line">bluedroid&#x2F;btc&#x2F;core&#x2F;btc_config.o: CFLAGS +&#x3D; -Wno-unused-const-variable</span><br><span class="line">bluedroid&#x2F;stack&#x2F;btm&#x2F;btm_sec.o: CFLAGS +&#x3D; -Wno-unused-const-variable</span><br><span class="line">bluedroid&#x2F;stack&#x2F;smp&#x2F;smp_keys.o: CFLAGS +&#x3D; -Wno-unused-const-variable</span><br><span class="line">endif</span><br><span class="line"></span><br><span class="line">endif</span><br></pre></td></tr></table></figure>
+
+<h3 id="预处理器定义"><a href="#预处理器定义" class="headerlink" title="预处理器定义"></a>预处理器定义</h3><p>ESP-IDF 构建系统在命令行上添加以下 C 预处理器定义:</p>
+<ul>
+<li><code>ESP_PLATFORM</code> - 可用于检测在 ESP-IDF 内发生的构建.</li>
+<li><code>IDF_VER</code> - ESP-IDF 版本,有关详细信息,请参阅<a href="https://esp-idf.readthedocs.io/en/latest/api-guides/build-system.html#preset-component-variables" target="_blank" rel="noopener">预设组件变量</a>.</li>
+<li><code>PROJECT_VER</code>：项目版本，有关详细信息,请参阅<a href="https://esp-idf.readthedocs.io/en/latest/api-guides/build-system.html#preset-component-variables" target="_blank" rel="noopener">预设组件变量</a>.</li>
+<li><code>PROJECT_NAME</code>：项目名称，在项目 Makefile 中设置.</li>
+</ul>
+<h3 id="构建过程内部"><a href="#构建过程内部" class="headerlink" title="构建过程内部"></a>构建过程内部</h3><h4 id="顶级-Project-Makefile"><a href="#顶级-Project-Makefile" class="headerlink" title="顶级:Project Makefile"></a>顶级:Project Makefile</h4><ul>
+<li>“make” 总是从项目目录和项目 makefile 运行,通常名为 Makefile.</li>
+<li>项目 makefile 设置 <code>PROJECT_NAME</code>,并可选择自定义其他可选项目变量</li>
+<li>项目 makefile 包含 <code>$(IDF_PATH)/make/project.mk</code>,其中包含项目级的 Make 逻辑.</li>
+<li><code>project.mk</code> 填写默认的项目级 make 变量,并包含项目配置中的 make 变量.如果生成的包含项目配置的 makefile 已过期,则会重新生成(通过 <code>project_config.mk</code> 中的 targets),然后 make 进程从顶部重新开始.</li>
+<li><code>project.mk</code> 根据默认组件目录或可选项目变量中设置的自定义组件列表构建需要要构建的组件列表.</li>
+<li>每个组件都可以设置一些<a href="#可选项目范围的组件变量">可选项目范围的组件变量</a>.这些包含在 <code>component_project_vars.mk</code> 生成的 makefile 中 - 每个组件有一个.这些生成的 makefile 包含在 <code>project.mk</code>中.如果有任何缺失或过时,它们将被重新生成(通过对组件 makefile 的递归调用),然后 make 进程从顶部重新开始.</li>
+<li>组件中的 Makefile.projbuild 文件包含在 make 进程中,以添加额外的目标或配置.</li>
+<li>默认情况下,项目 makefile 还为每个组件生成顶级构建和清理目标,并设置 app 和 clean 目标以调用这些子目标.</li>
+<li>为了编译每个组件,对组件 makefile 执行递归 make.</li>
+</ul>
+<p>为了更好地理解项目构建过程,请通读 <code>project.mk</code> 文件本身.</p>
+<h4 id="第二级-组件Makefile"><a href="#第二级-组件Makefile" class="headerlink" title="第二级:组件Makefile"></a>第二级:组件Makefile</h4><ul>
+<li>每次调用组件 makefile 都是通过 <code>$(IDF_PATH)/make/component_wrapper.mk</code> 包装器 makefile 进行的.</li>
+<li>此组件包装器包含所有组件 <code>Makefile.componentbuild</code> 文件,使这些文件中的任何配方,变量等可用于每个组件.</li>
+<li>调用<code>component_wrapper.mk</code>时将当前目录设置为组件构建目录,并将<code>COMPONENT_MAKEFILE</code>变量设置为<code>component.mk</code>的绝对路径.</li>
+<li><code>component_wrapper.mk</code>为所有组件变量设置默认值,然后包括可以覆盖或修改这些变量的component.mk文件.</li>
+<li>如果未定义 <code>COMPONENT_OWNBUILDTARGET</code> 和 <code>COMPONENT_OWNCLEANTARGET</code>,则会为组件的源文件和必备组件 <code>COMPONENT_LIBRARY</code> 静态库文件创建缺省构建和清除目标.</li>
+<li><code>component_project_vars.mk</code> 文件在 <code>component_wrapper.mk</code> 中有自己的目标,如果由于组件 makefile 或项目配置的更改而需要重建此文件,则从 <code>project.mk</code> 进行评估.</li>
+</ul>
+<p>为了更好地理解组件制作过程,请通读 <code>component_wrapper.mk</code> 文件和 esp-idf 中包含的一些 <code>component.mk</code> 文件.</p>
+<h3 id="以非交互方式运行"><a href="#以非交互方式运行" class="headerlink" title="以非交互方式运行"></a>以非交互方式运行</h3><p>在不希望交互式提示的情况下运行 <code>make</code> 时(例如:在 IDE 或自动构建系统中)将 <code>BATCH_BUILD = 1</code> 附加到 make 参数(或将其设置为环境变量).</p>
+<p>设置 <code>BATCH_BUILD</code> 意味着以下内容:</p>
+<ul>
+<li>详细输出(与 <code>V = 1</code> 相同,见下文).如果您不想要详细输出,设置 <code>V = 0</code>.</li>
+<li>如果项目配置缺少新配置项(来自新组件或 esp-idf 更新),则项目使用默认值,而不是提示用户输入每个项目.</li>
+<li>如果构建系统需要调用<code>menuconfig</code>,则会打印错误并且构建失败.</li>
+</ul>
+<h3 id="高级-Make-用法"><a href="#高级-Make-用法" class="headerlink" title="高级 Make 用法"></a>高级 Make 用法</h3><ul>
+<li><code>make app</code>，<code>make bootloader</code>，<code>make partition table</code> 可用于仅根据需要从项目中构建 <code>app</code>，<code>bootloader</code> 或 <code>partition table</code>。</li>
+<li><code>make erase_flash</code> 和 <code>make erase_ota</code> 将分别使用 <code>esptool.py</code> 从 Flash 中擦除整个 Flash 和 OTA 分区选择配置。</li>
+<li><code>make size</code> 打印有关应用程序的一些大小信息。<code>make size-components</code> 和 <code>make size-files</code> 是类似的目标，分别打印更详细的每个组件或每个源文件信息。</li>
+</ul>
+<h3 id="调试-Make-Process"><a href="#调试-Make-Process" class="headerlink" title="调试 Make Process"></a>调试 Make Process</h3><p>调试 esp-idf 构建系统的一些技巧:</p>
+<ul>
+<li>将 <code>V = 1</code> 附加到 make 参数(或将其设置为环境变量)将使 make 回显所有已执行的命令,以及为 sub-make 输入的每个目录.</li>
+<li>运行 <code>make -w</code> 将导致 make 在为 sub-make 输入时回显每个目录 - 与 <code>V = 1</code> 相同但不回显所有命令.</li>
+<li>运行 <code>make --trace</code> (可能除了上述参数之一)将打印出构建时的每个目标,以及导致它构建的依赖项.</li>
+<li>运行 <code>make -p</code> 会打印每个 makefile 中每个生成的目标的(非常详细的)摘要.</li>
+</ul>
+<p>有关更多调试技巧和一般制作信息,请参阅 GNU制作手册.</p>
+<h4 id="警告未定义的变量"><a href="#警告未定义的变量" class="headerlink" title="警告未定义的变量"></a>警告未定义的变量</h4><p>默认情况下,如果引用了未定义的变量(如<code>$(DOES_NOT_EXIST)</code>),构建过程将打印警告.这对于查找变量名称中的错误非常有用.</p>
+<p>如果您不想要此行为,可以在 SDK 工具配置下的 menuconfig 顶级菜单中禁用它.</p>
+<p>请注意,如果在 Makefile 中使用<code>ifdef</code>或<code>ifndef</code>,则此选项不会触发警告.</p>
+<h3 id="覆盖项目的部分内容"><a href="#覆盖项目的部分内容" class="headerlink" title="覆盖项目的部分内容"></a>覆盖项目的部分内容</h3><h4 id="Makefile-projbuild"><a href="#Makefile-projbuild" class="headerlink" title="Makefile.projbuild"></a>Makefile.projbuild</h4><p>对于具有必须在顶级项目 make pass 中进行求值的构建要求的组件,可以在组件目录中创建名为 <code>Makefile.projbuild</code> 的文件.在计算 <code>project.mk</code> 时会包含此 makefile.</p>
+<p>例如,如果您的组件需要为整个项目添加 CFLAGS (不仅仅是为了自己的源文件),那么您可以在 Makefile.projbuild 中设置 <code>CFLAGS +=</code>.</p>
+<p><code>Makefile.projbuild</code> 文件在 esp-idf 中大量使用,用于定义项目范围的构建功能,例如 <code>esptool.py</code> 命令行参数和 <code>bootloader</code> “特殊应用程序”.</p>
+<p>请注意,<code>Makefile.projbuild</code> 对于最常见的组件使用不是必需的 - 例如向项目添加 include 目录,或者将 LDFLAGS 添加到最终链接步骤.可以通过 <code>component.mk</code> 文件本身自定义这些值.有关详细信息,请参阅<a href="#可选项目范围的组件变量">可选项目范围的组件变量</a>.</p>
+<p>在此文件中设置变量或目标时要小心.由于这些值包含在顶级项目 makefile 中,因此它们可以影响或破坏所有组件的功能！</p>
+<h4 id="KConfig-projbuild"><a href="#KConfig-projbuild" class="headerlink" title="KConfig.projbuild"></a>KConfig.projbuild</h4><p>这相当于 <code>Makefile.projbuild</code> 的组件配置 KConfig 文件.如果要在 menuconfig 的顶层包含配置选项,而不是在 “Component Configuration” 子菜单中,则可以在 <code>component.mk</code> 文件旁边的 KConfig.projbuild 文件中定义这些选项.</p>
+<p>在此文件中添加配置值时要小心,因为它们将包含在整个项目配置中.在可能的情况下,通常最好为组件配置创建 KConfig 文件.</p>
+<h4 id="Makefile-componentbuild"><a href="#Makefile-componentbuild" class="headerlink" title="Makefile.componentbuild"></a>Makefile.componentbuild</h4><p>对于组件例如,包括从其他文件生成源文件的工具,必须能够将配置,宏或变量定义添加到每个组件的组件构建过程中.这是通过在组件目录中包含 Makefile.componentbuild 来完成的.在包含组件的 component.mk 之前,此文件会包含在 component_wrapper.mk 中.与 Makefile.projbuild 类似,请注意这些文件:因为它们包含在每个组件构建中,所以只有在编译完全不同的组件时才会出现 Makefile.componentbuild 错误.</p>
+<h4 id="仅配置组件"><a href="#仅配置组件" class="headerlink" title="仅配置组件"></a>仅配置组件</h4><p>一些不包含源文件的特殊组件,只有 <code>Kconfig.projbuild</code> 和 <code>Makefile.projbuild</code>,可以在 component.mk 文件中设置标志 <code>COMPONENT_CONFIG_ONLY</code>.如果设置了此标志,则忽略大多数其他组件变量,并且不会为组件运行构建步骤.</p>
+<h3 id="示例组件-Makefile"><a href="#示例组件-Makefile" class="headerlink" title="示例组件 Makefile"></a>示例组件 Makefile</h3><p>因为构建环境试图设置大多数时间都能工作的合理默认值,所以 component.mk 可能非常小甚至是空的(请参阅<a href="#最小组件Makefile">最小组件 Makefile</a>).但是,某些功能通常需要覆盖组件变量.</p>
+<p>以下是<code>component.mk</code> makefile 的一些更高级的示例:</p>
+<h4 id="添加源文件目录"><a href="#添加源文件目录" class="headerlink" title="添加源文件目录"></a>添加源文件目录</h4><p>默认情况下,将忽略子目录.如果您的项目在子目录而不是组件的根目录中有源文件,那么您可以通过设置<code>COMPONENT_SRCDIRS</code> 告诉构建系统:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">COMPONENT_SRCDIRS:&#x3D; src1 src2</span><br></pre></td></tr></table></figure>
+<p>这将编译 src1/ 和 src2/ 子目录中的所有源文件.</p>
+<h4 id="指定源文件"><a href="#指定源文件" class="headerlink" title="指定源文件"></a>指定源文件</h4><p>标准 component.mk 逻辑将源目录中的所有 .S 和 .c 文件添加为无条件编译的源.通过将 <code>COMPONENT_OBJS</code> 变量手动设置为需要生成的对象的名称,可以绕过该逻辑并对要编译的对象进行硬编码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">COMPONENT_OBJS :&#x3D; file1.o file2.o thing&#x2F;filea.o thing&#x2F;fileb.o anotherthing&#x2F;main.o</span><br><span class="line">COMPONENT_SRCDIRS :&#x3D; . thing anotherthing</span><br></pre></td></tr></table></figure>
+<p>请注意,还必须设置 <code>COMPONENT_SRCDIRS</code>.</p>
+<h4 id="添加条件配置"><a href="#添加条件配置" class="headerlink" title="添加条件配置"></a>添加条件配置</h4><p>配置系统可有条件地编译某些文件,具体取决于 <code>make menuconfig</code> 中选择的选项.为此, ESP-IDF 具有 <code>compile_only_if</code> 和 <code>compile_only_if_not</code> 宏:</p>
+<p><code>Kconfig</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">config FOO_ENABLE_BAR</span><br><span class="line">    bool &quot;Enable the BAR feature.&quot;</span><br><span class="line">    help</span><br><span class="line">        This enables the BAR feature of the FOO component.</span><br></pre></td></tr></table></figure>
+<p><code>component.mk</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(call compile_only_if,$(CONFIG_FOO_ENABLE_BAR),bar.o)</span><br></pre></td></tr></table></figure>
+<p>从示例中可以看出,<code>compile_only_if</code> 宏将条件和目标文件列表作为参数.如果条件为真(在这种情况下:如果在 menuconfig 中启用了 BAR 功能),将始终编译目标文件(在本例中为 bar.o).相反的情况也是如此:如果条件不成立, bar.o 将永远不会被编译.<code>compile_only_if_not</code> 执行相反的操作:如果条件为false则编译,如果条件为 true 则不编译.</p>
+<p>这也可用于选择或删除一种实现,如下所示:</p>
+<p><code>Kconfig</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">config ENABLE_LCD_OUTPUT</span><br><span class="line">    bool &quot;Enable LCD output.&quot;</span><br><span class="line">    help</span><br><span class="line">        Select this if your board has a LCD.</span><br><span class="line"></span><br><span class="line">config ENABLE_LCD_CONSOLE</span><br><span class="line">    bool &quot;Output console text to LCD&quot;</span><br><span class="line">    depends on ENABLE_LCD_OUTPUT</span><br><span class="line">    help</span><br><span class="line">        Select this to output debugging output to the lcd</span><br><span class="line"></span><br><span class="line">config ENABLE_LCD_PLOT</span><br><span class="line">    bool &quot;Output temperature plots to LCD&quot;</span><br><span class="line">    depends on ENABLE_LCD_OUTPUT</span><br><span class="line">    help</span><br><span class="line">        Select this to output temperature plots</span><br></pre></td></tr></table></figure>
+
+<p>component.mk:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># If LCD is enabled, compile interface to it, otherwise compile dummy interface</span><br><span class="line">$(call compile_only_if,$(CONFIG_ENABLE_LCD_OUTPUT),lcd-real.o lcd-spi.o)</span><br><span class="line">$(call compile_only_if_not,$(CONFIG_ENABLE_LCD_OUTPUT),lcd-dummy.o)</span><br><span class="line"></span><br><span class="line">#We need font if either console or plot is enabled</span><br><span class="line">$(call compile_only_if,$(or $(CONFIG_ENABLE_LCD_CONSOLE),$(CONFIG_ENABLE_LCD_PLOT)), font.o)</span><br></pre></td></tr></table></figure>
+<p>请注意使用 Make ‘or’ 功能来包含字体文件.其他替换函数,如 ‘and’ 以及 ‘if’ 也适用于此处.也可以使用不来自 menuconfig 的变量: ESP-IDF 使用默认的构建配置来判断一个空的变量或只包含空格为false,而其中包含任何非空格的变量为true.</p>
+<p>(注意:本文档的旧版本建议有条件地将目标文件名添加到 <code>COMPONENT_OBJS</code>.虽然这仍然可行,但只有当组件的所有目标文件都明确命名时才会起作用,并且不会通过 <code>make clear</code> 中的取消选择的目标文件通过.)</p>
+<h4 id="源代码生成"><a href="#源代码生成" class="headerlink" title="源代码生成"></a>源代码生成</h4><p>某些组件将出现源文件未随组件本身提供但必须从另一个文件生成的情况.假设我们的组件有一个头文件,该文件由 BMP 文件的转换后的二进制数据组成,使用名为 bmp2h 的假设工具进行转换.然后将头文件包含在名为 graphics_lib.c 的 C 源文件中:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">COMPONENT_EXTRA_CLEAN :&#x3D; logo.h</span><br><span class="line"></span><br><span class="line">graphics_lib.o: logo.h</span><br><span class="line"></span><br><span class="line">logo.h: $(COMPONENT_PATH)&#x2F;logo.bmp</span><br><span class="line">    bmp2h -i $^ -o $@</span><br></pre></td></tr></table></figure>
+<p>在此示例中,将在当前目录(构建目录)中生成 <code>graphics_lib.o</code> 和 <code>logo.h</code>,而 logo.bmp 随组件一起提供并位于组件路径下.因为 logo.h 是一个生成的文件,所以当调用 make clean 时需要清理它,这就是为什么它被添加到 <code>COMPONENT_EXTRA_CLEAN</code> 变量中.</p>
+<h4 id="Cosmetic-Improvements"><a href="#Cosmetic-Improvements" class="headerlink" title="Cosmetic Improvements"></a>Cosmetic Improvements</h4><p>因为 logo.h 是一个生成的文件,所以当调用 make clean 时需要清理它,这就是为什么它被添加到 <code>COMPONENT_EXTRA_CLEAN</code> 变量中.</p>
+<p>将 logo.h 添加到 <code>graphics_lib.o</code> 依赖项会导致在编译 <code>graphics_lib.c</code> 之前生成它.</p>
+<p>如果另一个组件中的源文件包含 <code>logo.h</code>,则必须将此组件的名称添加到另一个组件的 <code>COMPONENT_DEPENDS</code> 列表中,以确保组件按顺序构建.</p>
+<h4 id="嵌入二进制数据"><a href="#嵌入二进制数据" class="headerlink" title="嵌入二进制数据"></a>嵌入二进制数据</h4><p>有时您有一个文件,包含组件需要使用的二进制数据或文本数据 - 但您不希望将文件重新格式化为 C 文件.</p>
+<p>您可以在 component.mk 中设置变量 <code>COMPONENT_EMBED_FILES</code>,以这种方式给出要嵌入的文件的名称:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">COMPONENT_EMBED_FILES:&#x3D; server_root_cert.der</span><br></pre></td></tr></table></figure>
+<p>或者,如果文件是字符串,则可以使用变量 <code>COMPONENT_EMBED_TXTFILES</code>.这将把文本文件的内容嵌入为以 null 结尾的字符串:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">COMPONENT_EMBED_TXTFILES:&#x3D; server_root_cert.pem</span><br></pre></td></tr></table></figure>
+<p>文件的内容将被添加到 flash 中的 .rodata 部分,并通过符号名称提供,如下所示:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">extern const uint8_t server_root_cert_pem_start [] asm(“_ binary_server_root_cert_pem_start”);</span><br><span class="line">extern const uint8_t server_root_cert_pem_end [] asm(“_ binary_server_root_cert_pem_end”);</span><br></pre></td></tr></table></figure>
+<p>名称是根据文件的全名生成的,如 <code>COMPONENT_EMBED_FILES</code> 中所示.字符 <code>/</code>,<code>.</code>等用下划线代替.符号名称中的 <code>_binary</code> 前缀由 <code>objcopy</code> 添加,对于文本和二进制文件都是相同的.</p>
+<p>有关使用此技术的示例,请参阅<a href="https://github.com/espressif/esp-idf/tree/be81d2c/examples/protocols/https_request" target="_blank" rel="noopener">protocols/https_request</a>-证书文件内容在编译时从文本 .pem 文件加载.</p>
+<h3 id="完全覆盖组件-Makefile"><a href="#完全覆盖组件-Makefile" class="headerlink" title="完全覆盖组件 Makefile"></a>完全覆盖组件 Makefile</h3><p>显然,在某些情况下,所有这些不足以满足某个组件,例如,当组件基本上是另一个第三方组件的包装器时,该第三方组件最初不打算在此构建系统下编译.在这种情况下,可以通过设置 <code>COMPONENT_OWNBUILDTARGET</code> 和可能的 <code>COMPONENT_OWNCLEANTARGET</code> 并在 <code>component.mk</code> 目标中定义名为 <code>build</code> 和 <code>clean</code> 的自己的目标来完全放弃 esp-idf 构建系统.构建目标可以执行任何操作,只要它为项目生成过程创建 $(COMPONENT_LIBRARY) 以链接到应用程序二进制文件.</p>
+<p>(实际上,即使这不是必需的-如果重写 <code>COMPONENT_ADD_LDFLAGS</code> 变量,则组件可以指示链接器链接其他二进制文件.)</p>
+<h3 id="自定义-sdkconfig-默认值"><a href="#自定义-sdkconfig-默认值" class="headerlink" title="自定义 sdkconfig 默认值"></a>自定义 sdkconfig 默认值</h3><p>例如,您不希望指定完整 sdkconfig 配置的项目或其他项目,但您确实希望覆盖 esp-idf 默认值中的某些键值,则可以在项目目录中创建文件 <code>sdkconfig.defaults</code>.运行 <code>make defconfig</code> 或从头创建新配置时将使用此文件.</p>
+<p>要覆盖此文件的名称,请设置 <code>SDKCONFIG_DEFAULTS</code> 环境变量.</p>
+<h3 id="保存-flash-参数"><a href="#保存-flash-参数" class="headerlink" title="保存 flash 参数"></a>保存 flash 参数</h3><p>在某些情况下,我们希望在没有 IDF 的情况下烧写目标板.对于这种情况,我们希望保存构建的二进制文件, <code>esptool.py</code> 和 <code>esptool write_flash</code> 参数.编写脚本以保存二进制文件和 <code>esptool.py</code> 很简单.我们可以使用命令 <code>make print_flash_cmd</code>,它会打印 flash 参数:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--flash_mode dio --flash_freq 40m --flash_size detect 0x1000 bootloader &#x2F; bootloader.bin 0x10000 example_app.bin 0x8000 partition_table_unit_test_app.bin</span><br></pre></td></tr></table></figure>
+<p>然后使用 flash 参数作为 <code>esptool write_flash</code> 参数的 arguemnts:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python esptool.py --chip esp32 --port &#x2F; dev &#x2F; ttyUSB0 --baud 921600 - before default_reset - after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0x1000 bootloader &#x2F; bootloader.bin 0x10000 example_app .bin 0x8000 partition_table_unit_test_app.bin</span><br></pre></td></tr></table></figure>
+
+<h2 id="构建-Bootloader"><a href="#构建-Bootloader" class="headerlink" title="构建 Bootloader"></a>构建 Bootloader</h2><p>引导程序默认构建为 “make all” 的一部分,或者可以通过 “make bootloader-clean” 独立构建.还有 “make bootloader-list-components” 来查看引导加载程序构建中包含的组件.</p>
+<p>IDF <code>components/bootloader</code> 中的组件是特殊的,因为第二阶段引导加载程序是主项目的单独.ELF和.BIN文件.但是,它与主项目共享其配置和构建目录.</p>
+<p>这是通过在 <code>components/bootloader/subproject</code> 下添加子项目来完成的.这个子项目有自己的 Makefile,但它希望通过 <code>components/bootloader/Makefile.projectbuild</code> 文件中的一些粘合剂从项目自己的 Makefile 中调用.有关详细信息,请参阅这些文件</p>
+<p><a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html" target="_blank" rel="noopener">原文链接</a></p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2012/07/22/ESP32 官方文档/ESP32 官方文档（一）关于 ESP-IDF 编程的一些说明/" rel="bookmark">ESP32 官方文档（一）关于 ESP-IDF 编程的一些说明</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2012/07/22/ESP32 官方文档/ESP32 官方文档（三）分区表/" rel="bookmark">ESP32 官方文档（三）分区表</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2012/07/22/ESP32 官方文档/ESP32 官方文档（四）错误处理/" rel="bookmark">ESP32 官方文档（四）错误处理</a></div>
+    </li>
+  </ul>
+
+        <div class="reward-container">
+  <div>如果这篇文章对你有帮助，那么不妨？</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/InfiniteYuanBlog/tags/ESP32/" rel="tag"><i class="fa fa-tag"></i> ESP32</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%9B%9B%EF%BC%89%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/" rel="prev" title="ESP32 官方文档（四）错误处理">
+      <i class="fa fa-chevron-left"></i> ESP32 官方文档（四）错误处理
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2012/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%B8%89%EF%BC%89%E5%88%86%E5%8C%BA%E8%A1%A8/" rel="next" title="ESP32 官方文档（三）分区表">
+      ESP32 官方文档（三）分区表 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#构建系统"><span class="nav-number">1.</span> <span class="nav-text">构建系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用构建系统"><span class="nav-number">1.1.</span> <span class="nav-text">使用构建系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#概要"><span class="nav-number">1.2.</span> <span class="nav-text">概要</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#概念"><span class="nav-number">1.2.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例项目"><span class="nav-number">1.2.2.</span> <span class="nav-text">示例项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#项目-Makefile"><span class="nav-number">1.2.3.</span> <span class="nav-text">项目 Makefile</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#最小示例-Makefile"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">最小示例 Makefile</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#强制项目变量"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">强制项目变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可选项目变量"><span class="nav-number">1.2.3.3.</span> <span class="nav-text">可选项目变量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组件-Makefile"><span class="nav-number">1.2.4.</span> <span class="nav-text">组件 Makefile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#搜索组件"><span class="nav-number">1.2.5.</span> <span class="nav-text">搜索组件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#具有相同名称的多个组件"><span class="nav-number">1.2.5.1.</span> <span class="nav-text">具有相同名称的多个组件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#最小组件-Makefile"><span class="nav-number">1.2.5.2.</span> <span class="nav-text">最小组件 Makefile</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#预设组件变量"><span class="nav-number">1.2.5.3.</span> <span class="nav-text">预设组件变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可选项目范围的组件变量"><span class="nav-number">1.2.5.4.</span> <span class="nav-text">可选项目范围的组件变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可选特定的组件变量"><span class="nav-number">1.2.5.5.</span> <span class="nav-text">可选特定的组件变量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组件配置"><span class="nav-number">1.2.6.</span> <span class="nav-text">组件配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例：添加二进制库、组件配置文件-Kconfig"><span class="nav-number">1.2.7.</span> <span class="nav-text">示例：添加二进制库、组件配置文件 Kconfig</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#预处理器定义"><span class="nav-number">1.2.8.</span> <span class="nav-text">预处理器定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构建过程内部"><span class="nav-number">1.2.9.</span> <span class="nav-text">构建过程内部</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#顶级-Project-Makefile"><span class="nav-number">1.2.9.1.</span> <span class="nav-text">顶级:Project Makefile</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二级-组件Makefile"><span class="nav-number">1.2.9.2.</span> <span class="nav-text">第二级:组件Makefile</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#以非交互方式运行"><span class="nav-number">1.2.10.</span> <span class="nav-text">以非交互方式运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高级-Make-用法"><span class="nav-number">1.2.11.</span> <span class="nav-text">高级 Make 用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调试-Make-Process"><span class="nav-number">1.2.12.</span> <span class="nav-text">调试 Make Process</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#警告未定义的变量"><span class="nav-number">1.2.12.1.</span> <span class="nav-text">警告未定义的变量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#覆盖项目的部分内容"><span class="nav-number">1.2.13.</span> <span class="nav-text">覆盖项目的部分内容</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Makefile-projbuild"><span class="nav-number">1.2.13.1.</span> <span class="nav-text">Makefile.projbuild</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#KConfig-projbuild"><span class="nav-number">1.2.13.2.</span> <span class="nav-text">KConfig.projbuild</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Makefile-componentbuild"><span class="nav-number">1.2.13.3.</span> <span class="nav-text">Makefile.componentbuild</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#仅配置组件"><span class="nav-number">1.2.13.4.</span> <span class="nav-text">仅配置组件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例组件-Makefile"><span class="nav-number">1.2.14.</span> <span class="nav-text">示例组件 Makefile</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#添加源文件目录"><span class="nav-number">1.2.14.1.</span> <span class="nav-text">添加源文件目录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#指定源文件"><span class="nav-number">1.2.14.2.</span> <span class="nav-text">指定源文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加条件配置"><span class="nav-number">1.2.14.3.</span> <span class="nav-text">添加条件配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#源代码生成"><span class="nav-number">1.2.14.4.</span> <span class="nav-text">源代码生成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Cosmetic-Improvements"><span class="nav-number">1.2.14.5.</span> <span class="nav-text">Cosmetic Improvements</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#嵌入二进制数据"><span class="nav-number">1.2.14.6.</span> <span class="nav-text">嵌入二进制数据</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#完全覆盖组件-Makefile"><span class="nav-number">1.2.15.</span> <span class="nav-text">完全覆盖组件 Makefile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义-sdkconfig-默认值"><span class="nav-number">1.2.16.</span> <span class="nav-text">自定义 sdkconfig 默认值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#保存-flash-参数"><span class="nav-number">1.2.17.</span> <span class="nav-text">保存 flash 参数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构建-Bootloader"><span class="nav-number">1.3.</span> <span class="nav-text">构建 Bootloader</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="InfiniteYuan"
+      src="/InfiniteYuanBlog/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">InfiniteYuan</p>
+  <div class="site-description" itemprop="description">Stay Hungry, Stay Funlish</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/InfiniteYuanBlog/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/InfiniteYuanBlog/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/InfiniteYuanBlog/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/infiniteyuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;infiniteyuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">InfiniteYuan</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">29k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">27 分钟</span>
+
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        站点访客数:<span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        站点阅读量:<span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/InfiniteYuanBlog/lib/anime.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/InfiniteYuanBlog/js/utils.js"></script>
+
+<script src="/InfiniteYuanBlog/js/motion.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/schemes/muse.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/next-boot.js"></script>
+
+<script src="/InfiniteYuanBlog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/InfiniteYuanBlog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '2spSMheFYziIJlzCVs7fvHeG-gzGzoHsz',
+      appKey     : 'aj8lFtI7EyFfrWCx902T0szo',
+      placeholder: "ヾﾉ≧∀≦)o来啊，快活啊!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
