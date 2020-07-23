@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/InfiniteYuanBlog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/InfiniteYuanBlog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/InfiniteYuanBlog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/InfiniteYuanBlog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/css/main.css">
+
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/InfiniteYuanBlog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/InfiniteYuanBlog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"infiniteyuan.github.io","root":"/InfiniteYuanBlog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Flash 加密Flash 加密功能用于加密 ESP32 连接的 SPI  Flash 的内容。启用 Flash 加密后，通过物理方式读取 SPI Flash 的内容不足以恢复大多数 Flash 内容。 Flash 加密与安全启动功能是分离的，您可以使用 Flash 加密而无需启用安全启动。但是，我们建议将这两种功能一起用于安全的环境。在没有安全启动的情况下，需要执行其他配置以确保 Flash 加">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ESP32 官方文档（八）Flash 加密">
+<meta property="og:url" content="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%85%AB%EF%BC%89Flash%20%E5%8A%A0%E5%AF%86/index.html">
+<meta property="og:site_name" content="InfiniteYuan">
+<meta property="og:description" content="Flash 加密Flash 加密功能用于加密 ESP32 连接的 SPI  Flash 的内容。启用 Flash 加密后，通过物理方式读取 SPI Flash 的内容不足以恢复大多数 Flash 内容。 Flash 加密与安全启动功能是分离的，您可以使用 Flash 加密而无需启用安全启动。但是，我们建议将这两种功能一起用于安全的环境。在没有安全启动的情况下，需要执行其他配置以确保 Flash 加">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-09-02T00:13:51.000Z">
+<meta property="article:modified_time" content="2020-07-23T07:16:53.989Z">
+<meta property="article:author" content="InfiniteYuan">
+<meta property="article:tag" content="ESP32">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%85%AB%EF%BC%89Flash%20%E5%8A%A0%E5%AF%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ESP32 官方文档（八）Flash 加密 | InfiniteYuan</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/InfiniteYuanBlog/atom.xml" title="InfiniteYuan" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+      <div class="site-meta-headline">
+        <a>
+          <img class="custom-logo-image" src="/InfiniteYuanBlog/images/InfiniteYuanLogo.jpg" alt="InfiniteYuan">
+        </a>
+      </div>
+
+    <a href="/InfiniteYuanBlog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">InfiniteYuan</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/InfiniteYuanBlog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/InfiniteYuanBlog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">17</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/InfiniteYuanBlog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/InfiniteYuanBlog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/infiniteyuan" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%85%AB%EF%BC%89Flash%20%E5%8A%A0%E5%AF%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
+      <meta itemprop="name" content="InfiniteYuan">
+      <meta itemprop="description" content="Stay Hungry, Stay Funlish">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="InfiniteYuan">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ESP32 官方文档（八）Flash 加密
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-09-02 00:13:51" itemprop="dateCreated datePublished" datetime="2018-09-02T00:13:51+00:00">2018-09-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-23 07:16:53" itemprop="dateModified" datetime="2020-07-23T07:16:53+00:00">2020-07-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/" itemprop="url" rel="index"><span itemprop="name">ESP32 官方文档</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/InfiniteYuanBlog/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%85%AB%EF%BC%89Flash%20%E5%8A%A0%E5%AF%86/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%85%AB%EF%BC%89Flash%20%E5%8A%A0%E5%AF%86/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>9.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>9 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Flash-加密"><a href="#Flash-加密" class="headerlink" title="Flash 加密"></a>Flash 加密</h1><p>Flash 加密功能用于加密 ESP32 连接的 SPI  Flash 的内容。启用 Flash 加密后，通过物理方式读取 SPI Flash 的内容不足以恢复大多数 Flash 内容。</p>
+<p>Flash 加密与安全启动功能是分离的，您可以使用 Flash 加密而无需启用<a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/secure-boot.html" target="_blank" rel="noopener">安全启动</a>。但是，我们建议将这两种功能一起用于安全的环境。在没有安全启动的情况下，需要执行其他配置以确保 Flash 加密的有效性。有关更多详细信息，请参阅<a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#flash-encryption-without-secure-boot" target="_blank" rel="noopener">使用无安全启动的 Flash 加密</a>.</p>
+<blockquote>
+<p>启用闪存加密会限制您进一步更新 ESP32 的选项。请务必阅读本文档(包括 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#flash-encryption-limitations" target="_blank" rel="noopener">Flash 加密限制</a>)并了解启用闪存加密的含义。</p>
+</blockquote>
+<a id="more"></a>
+
+<h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1 背景"></a>1 背景</h2><ul>
+<li><p>使用带有 256 位密钥的 AES 加密闪存的内容。闪存加密密钥存储在芯片内部的 efuse 中，并且(默认情况下)受软件访问保护。</p>
+</li>
+<li><p>通过 ESP32 的闪存缓存映射功能，Flash 访问是透明的 - 映射到地址空间的任何闪存区域在读取时都将被透明地解密。</p>
+</li>
+<li><p>通过使用明文数据烧录 ESP32 来应用加密，并且(如果启用了加密)引导加载程序会在首次启动时对数据进行加密。</p>
+</li>
+<li><p>并非所有闪存都是加密的。以下类型的闪存数据已加密:</p>
+<ul>
+<li><p>引导程序</p>
+</li>
+<li><p>安全启动引导加载程序摘要(如果启用了安全启动)</p>
+</li>
+<li><p>分区表</p>
+</li>
+<li><p>所有 “app” 类型分区</p>
+</li>
+<li><p>分区表中标有 “encrypted” 标志的任何分区</p>
+<p> 可能希望一些数据分区保持未加密以便于访问，或者使用对于数据被加密时无效的闪存友好更新算法。由于 NVS 库与闪存加密不直接兼容，因此无法加密用于非易失性存储的 NVS 分区。有关更多详细信息，请参阅 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/storage/nvs_flash.html#nvs-encryption" target="_blank" rel="noopener">NVS 加密</a>。</p>
+</li>
+</ul>
+</li>
+<li><p>闪存加密密钥存储在 ESP32 芯片内部的 efuse 密钥块 1 中。默认情况下，此密钥具有读写保护功能，因此软件无法访问或更改密钥。</p>
+</li>
+<li><p>默认情况下，Efuse Block 1 编码方案为 “None”，并且在该块中存储 256 位密钥。在某些 ESP32 上，编码方案设置为 3/4 编码 (CODING_SCHEME efuse 的值为 1)，并且必须在该块中存储 192 位密钥。有关详细信息，请参见 《ESP32 技术参考手册》第 20.3.1.3 节 “系统参数 coding_scheme”。在所有情况下，算法都在 256 位密钥上运行，通过重复一些位（<a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#flash-encryption-algorithm" target="_blank" rel="noopener">具体细节</a>）来扩展  192 位密钥。当 <code>esptool.py</code> 连接到芯片或 <code>espefuse.py summary</code> 输出时，编码方案显示在 Features 行中。</p>
+</li>
+<li><p>闪存加密算法是 AES-256，其中密钥是“调整”的，每个 32 字节闪存块的偏移地址。这意味着每个 32 字节块(两个连续的 16 字节 AES 块)使用从闪存加密密钥派生的唯一密钥进行加密。</p>
+</li>
+<li><p>虽然芯片上运行的软件可以透明地解密闪存内容，但默认情况下，当启用闪存加密时，UART 引导加载程序无法解密(或加密)数据。</p>
+</li>
+<li><p>如果可以启用闪存加密，则编写<a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#using-encrypted-flash" target="_blank" rel="noopener">使用加密闪存</a>的代码时，编程人员必须采取一定的预防措施。</p>
+</li>
+</ul>
+<h2 id="2-Flash-加密初始化"><a href="#2-Flash-加密初始化" class="headerlink" title="2 Flash 加密初始化"></a>2 Flash 加密初始化</h2><p>这是默认(推荐) Flash 加密初始化过程。可以为开发或其他目的自定义此过程，有关详细信息，请参阅 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#flash-encryption-advanced-features" target="_blank" rel="noopener">Flash 加密高级功能</a>。</p>
+<blockquote>
+<p>在首次启动时启用闪存加密后，硬件通过串行重新闪存最多允许3次后续闪存烧录。必须遵循特殊过程(在<a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#updating-encrypted-flash-serial" target="_blank" rel="noopener">串口烧录</a>中记录)才能执行这些更新。</p>
+</blockquote>
+<ul>
+<li>如果启用了安全启动，则使用纯文本数据进行物理重新刷新需要“可重新映射”的安全启动摘要(请参阅 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#flash-encryption-and-secure-boot" target="_blank" rel="noopener">Flash 加密和安全启动</a>)。</li>
+<li>OTA 更新可用于更新 Flash 内容，而不计入此限制。</li>
+<li>在开发中启用闪存加密时，请使用预生成的闪存加密密钥，以允许使用预加密数据进行无限次重新闪存。</li>
+</ul>
+<p>启用闪存加密的过程:</p>
+<ul>
+<li>必须在启用闪存加密支持的情况下编译引导加载程序。在 <code>make menuconfig</code> 中，导航到“安全功能”，然后选择“是”以“启动时启用闪存加密”。</li>
+<li>如果同时启用安全启动，最好同时选择这些选项。首先阅读<a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/secure-boot.html" target="_blank" rel="noopener">安全启动</a>文档。</li>
+<li>正常构建并刷新引导加载程序，分区表和工厂应用程序映像。这些分区最初写入未加密的闪存。</li>
+</ul>
+<blockquote>
+<p>启用安全启动和闪存加密时，引导加载程序应用程序二进制 <code>bootloader.bin</code> 可能会变得太大。请参阅 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/secure-boot.html#secure-boot-bootloader-size" target="_blank" rel="noopener">Bootloader 大小</a>。</p>
+</blockquote>
+<ul>
+<li>首次启动时，引导加载程序会看到 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#flash-crypt-cnt" target="_blank" rel="noopener">FLASH_CRYPT_CNT efuse</a> 设置为 0 (出厂默认值)，因此它使用硬件随机数生成器生成闪存加密密钥。该密钥存储在efuse中。密钥是读写保护，以防止进一步的软件访问。</li>
+<li>然后，引导加载程序就地对所有加密分区进行加密。就地加密可能需要一些时间(对于大型分区，最多需要一分钟.)</li>
+</ul>
+<blockquote>
+<p>第一次启动加密通道运行时，请勿中断ESP32的电源。如果电源中断，闪存内容将被破坏，并且需要再次使用未加密的数据烧录。像这样的重新烧录不会计入烧录限制。</p>
+</blockquote>
+<ul>
+<li>烧录完成后。在 UART 引导加载程序运行时，激活(默认情况下)以禁用加密的闪存访问。有关高级详细信息，请参阅<a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#uart-bootloader-encryption" target="_blank" rel="noopener">启用 UART Bootloader 加密/解密</a>。</li>
+<li><code>FLASH_CRYPT_CONFIG efuse</code> 也会被烧制到最大值(0xF)，以最大化闪存算法中调整的关键位数。有关高级详细信息，请参阅<a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#setting-flash-crypt-config" target="_blank" rel="noopener">设置 FLASH_CRYPT_CONFIG</a>。</li>
+<li>最后，<a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#flash-crypt-cnt" target="_blank" rel="noopener">FLASH_CRYPT_CNT efuse</a> 以初始值 1 进行刻录。这个 efuse 激活透明闪存加密层，并限制后续重新刷新的次数。有关 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#flash-crypt-cnt" target="_blank" rel="noopener">FLASH_CRYPT_CNT efuse</a> 的详细信息，请参阅<a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#updating-encrypted-flash" target="_blank" rel="noopener">更新加密的 Flash</a> 部分。</li>
+<li>引导加载程序重置自身以重新加密的闪存重新引导。</li>
+</ul>
+<h2 id="3-使用加密的-Flash"><a href="#3-使用加密的-Flash" class="headerlink" title="3 使用加密的 Flash"></a>3 使用加密的 Flash</h2><p>ESP32 应用程序代码可以通过调用 <code>esp_flash_encryption_enabled()</code> 来检查当前是否启用了闪存加密。</p>
+<p>启用闪存加密后，从代码访问闪存内容时需要注意一些事项。</p>
+<h3 id="3-1-Flash-加密的范围"><a href="#3-1-Flash-加密的范围" class="headerlink" title="3.1 Flash 加密的范围"></a>3.1 Flash 加密的范围</h3><p>只要将 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#flash-crypt-cnt" target="_blank" rel="noopener">FLASH_CRYPT_CNT efuse</a> 设置为设置了奇数位的值，就会透明地解密通过 MMU 的闪存缓存访问的所有闪存内容。这包括:</p>
+<ul>
+<li>Flash 中的可执行应用程序代码 (IROM)。</li>
+<li>存储在闪存 (DROM) 中的所有只读数据。</li>
+<li>通过 <code>esp_spi_flash_mmap()</code> 访问的任何数据。</li>
+<li>ROM 引导加载程序读取软件引导加载程序映像。</li>
+</ul>
+<blockquote>
+<p>MMU Flash 缓存无条件地解密所有数据。在闪存中未加密存储的数据将通过闪存缓存“透明地解密”，并且看起来像随机垃圾这样的软件。</p>
+</blockquote>
+<h3 id="3-2-读取加密的-Flash"><a href="#3-2-读取加密的-Flash" class="headerlink" title="3.2 读取加密的 Flash"></a>3.2 读取加密的 Flash</h3><p>要在不使用闪存缓存 MMU 映射的情况下读取数据，我们建议使用分区读取函数 <code>esp_partition_read()</code>。使用此功能时，只有从加密分区读取数据时才会解密数据。其他分区将以未加密方式读取。通过这种方式，软件可以以相同的方式访问加密和非加密的闪存。</p>
+<p>通过其他 SPI 读取 APIs 读取的数据不会被解密:</p>
+<ul>
+<li>通过 <code>esp_spi_flash_read()</code> 读取的数据不会被解密</li>
+<li>通过 ROM 函数 <code>SPIRead()</code> 读取的数据不会被解密 (esp-idf 应用程序不支持此功能)</li>
+<li>使用非易失性存储 (NVS) API 存储的数据始终存储并读取解密。</li>
+</ul>
+<h3 id="3-3-写加密的-Flash"><a href="#3-3-写加密的-Flash" class="headerlink" title="3.3 写加密的 Flash"></a>3.3 写加密的 Flash</h3><p>在可能的情况下，我们建议使用分区写入函数 <code>esp_partition_write</code>。使用此功能时，只有在写入加密分区时才会加密数据。数据将被写入未加密的其他分区。通过这种方式，软件可以以相同的方式访问加密和非加密的闪存.</p>
+<p>当 <code>write_encrypted</code> 参数设置为 true 时，<code>esp_spi_flash_write</code> 函数将写入数据。否则，数据将以未加密的方式写入.</p>
+<p>ROM 函数 <code>esp_rom_spiflash_write_encrypted</code> 将加密数据写入闪存，ROM 函数 <code>SPIWrite</code> 将未加密写入闪存。(esp-idf 应用程序不支持这些功能).</p>
+<p>未加密数据的最小写入大小为 4 个字节(对齐为 4 个字节)。由于数据是以块为单位加密的，因此加密数据的最小写入大小为 16 字节(对齐为16字节).</p>
+<h2 id="4-更像加密的-Flash"><a href="#4-更像加密的-Flash" class="headerlink" title="4 更像加密的 Flash"></a>4 更像加密的 Flash</h2><h3 id="4-1-OTA-更新"><a href="#4-1-OTA-更新" class="headerlink" title="4.1 OTA 更新"></a>4.1 OTA 更新</h3><p>只要使用 <code>esp_partition_write</code> 函数，对加密分区的 OTA 更新将自动加密写入.</p>
+<h3 id="4-2-串口烧录"><a href="#4-2-串口烧录" class="headerlink" title="4.2 串口烧录"></a>4.2 串口烧录</h3><p><code>FLASH_CRYPT_CNT efuse</code> 允许通过串口烧录(或其他物理方法)使用新的明文数据更新闪存，最多 3 次.</p>
+<p>该过程涉及烧录明文数据，然后碰撞 <code>FLASH_CRYPT_CNT efuse</code> 的值，这会导致引导加载程序重新加密此数据.</p>
+<h4 id="4-2-1-限制更新"><a href="#4-2-1-限制更新" class="headerlink" title="4.2.1 限制更新"></a>4.2.1 限制更新</h4><p>这种类型只有 4 个明文串行更新周期，包括初始加密闪存.</p>
+<p>禁用第四次加密后，<code>FLASH_CRYPT_CNT efuse</code> 的最大值为 0xFF，永久禁用加密.</p>
+<p>通过预生成的 Flash 加密密钥使用 OTA 更新或重新刷新可以超过此限制.</p>
+<h4 id="4-2-2-串口烧录的注意事项"><a href="#4-2-2-串口烧录的注意事项" class="headerlink" title="4.2.2 串口烧录的注意事项"></a>4.2.2 串口烧录的注意事项</h4><ul>
+<li>通过串口重新烧录时，重新刷新最初用明文数据写入的每个分区(包括 bootloader)。可以跳过不是“当前选择的” OTA 分区的应用程序分区(除非在那里找到明文应用程序映像，否则不会重新加密这些分区.)但是，标有“加密”标志的任何分区都将无条件地重新分区。加密，意味着任何已加密的数据将被加密两次并被破坏.<ul>
+<li>使用 <code>make flash</code> 应烧录所有需要闪存的分区.</li>
+</ul>
+</li>
+<li>如果启用了安全启动，则除非您使用“可重新启动”选项进行安全启动，否则无法通过串口重新刷新纯文本数据。请参阅 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#flash-encryption-and-secure-boot" target="_blank" rel="noopener">Flash加密和安全启动</a>.</li>
+</ul>
+<h3 id="4-3-串口重新烧录程序"><a href="#4-3-串口重新烧录程序" class="headerlink" title="4.3 串口重新烧录程序"></a>4.3 串口重新烧录程序</h3><ul>
+<li>正常的构建应用程序.</li>
+<li>正常的使用明文数据刷新设备 (make flash 或 esptool.py 命令.)闪存所有先前加密的分区，包括引导加载程序(参见上一节).</li>
+<li>此时，设备将无法启动(消息为 flash read err，1000)，因为它希望看到加密的引导加载程序，但引导加载程序是纯文本.</li>
+<li>通过运行命令 <code>espefuse.py burn_efuse FLASH_CRYPT_CNT</code> 来刻录 <code>FLASH_CRYPT_CNT efuse</code>。 <code>espefuse.py</code> 会自动将位数递增 1，从而禁用加密.</li>
+<li>重置设备，它将重新加密明文分区，然后再次刻录 <code>FLASH_CRYPT_CNT efuse</code> 以重新启用加密.</li>
+</ul>
+<h4 id="4-3-1-禁用串口更新"><a href="#4-3-1-禁用串口更新" class="headerlink" title="4.3.1 禁用串口更新"></a>4.3.1 禁用串口更新</h4><p>要防止通过串口进行进一步的明文更新，请在启用闪存加密后(即首次启动完成后)使用 <code>espefuse.py</code> 写保护 <code>FLASH_CRYPT_CNT efuse</code> :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">espefuse.py --port PORT write_protect_efuse FLASH_CRYPT_CNT</span><br></pre></td></tr></table></figure>
+
+<p>这可以防止进一步修改以禁用或重新启用闪存加密.</p>
+<h3 id="4-4-通过预生成的-Flash-加密密钥重新烧录"><a href="#4-4-通过预生成的-Flash-加密密钥重新烧录" class="headerlink" title="4.4 通过预生成的 Flash 加密密钥重新烧录"></a>4.4 通过预生成的 Flash 加密密钥重新烧录</h3><p>可以在主机上预生成闪存加密密钥，并将其刻录到 ESP32 的 efuse 密钥块中。这允许数据在主机上预加密并烧录到 ESP32，而无需明文闪存更新.</p>
+<p>这对于开发很有用，因为它消除了 4 次刷新限制。它还允许在启用安全启动的情况下重新刷新应用程序，因为每次都不需要重新启动引导加载程序.</p>
+<blockquote>
+<p>此方法仅用于协助开发，而不用于生产设备。如果为生产预生成闪存加密，请确保密钥是从高质量的随机数源生成的，并且不要跨多个设备共享相同的闪存加密密钥.</p>
+</blockquote>
+<h4 id="4-4-1-预生成-Flash-加密密钥"><a href="#4-4-1-预生成-Flash-加密密钥" class="headerlink" title="4.4.1 预生成 Flash 加密密钥"></a>4.4.1 预生成 Flash 加密密钥</h4><p>Flash 加密密钥是 32 字节的随机数据。您可以使用 <code>espsecure.py</code> 生成随机密钥:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">espsecure.py generate_flash_encryption_key my_flash_encryption_key.bin</span><br></pre></td></tr></table></figure>
+
+<p>(这些数据的随机性仅与操作系统一样好，而且是Python安装的随机数据源.)</p>
+<p>或者，如果您使用安全启动并具有安全启动签名密钥，则可以生成安全启动专用签名密钥的确定性SHA-256摘要，并将其用作闪存加密密钥:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">espsecure.py digest_private_key --keyfile secure_boot_signing_key.pem my_flash_encryption_key.bin</span><br></pre></td></tr></table></figure>
+
+<p>(如果为安全启动启用可重新映射模式，则使用相同的 32 个字节作为安全启动摘要键.)</p>
+<p>以这种方式从安全启动签名密钥生成闪存加密密钥意味着您只需要存储一个密钥文件。然而，该方法根本不适用于生产设备.</p>
+<h4 id="4-4-2-刻录-Flash-加密密钥"><a href="#4-4-2-刻录-Flash-加密密钥" class="headerlink" title="4.4.2 刻录 Flash 加密密钥"></a>4.4.2 刻录 Flash 加密密钥</h4><p>生成闪存加密密钥后，需要将其刻录到 ESP32 的 efuse 密钥块。这必须在首次加密启动之前完成，否则 ESP32 将生成软件无法访问或修改的随机密钥.</p>
+<p>要将密钥刻录到设备(仅限一次):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">espefuse.py --port PORT burn_key flash_encryption my_flash_encryption_key.bin</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-4-3-带有预生成密钥的第一次烧录"><a href="#4-4-3-带有预生成密钥的第一次烧录" class="headerlink" title="4.4.3 带有预生成密钥的第一次烧录"></a>4.4.3 带有预生成密钥的第一次烧录</h4><p>烧录密钥后，按照与默认 Flash 加密初始化相同的步骤操作，并为第一次启动时刷新纯文本图像。引导加载程序将使用预先烧制的密钥启用闪存加密并加密所有分区.</p>
+<h4 id="4-4-4-使用预生成密钥重新烧录"><a href="#4-4-4-使用预生成密钥重新烧录" class="headerlink" title="4.4.4 使用预生成密钥重新烧录"></a>4.4.4 使用预生成密钥重新烧录</h4><p>在首次启动时启用加密后，重新烧录加密镜像需要额外的手动步骤。这是我们预先加密我们希望在闪存中更新的数据的地方.</p>
+<p>假设这是用于刷新明文数据的常规命令:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">esptool.py --port &#x2F;dev&#x2F;ttyUSB0 --baud 115200 write_flash 0x10000 build&#x2F;my-app.bin</span><br></pre></td></tr></table></figure>
+
+<p>二进制应用程序映像 build/my-app.bin 写入偏移量 0x10000。此文件名和偏移量需要用于加密数据，如下所示:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">espsecure.py encrypt_flash_data --keyfile my_flash_encryption_key.bin --address 0x10000 -o build&#x2F;my-app-encrypted.bin build&#x2F;my-app.bin</span><br></pre></td></tr></table></figure>
+
+<p>此示例命令将使用提供的密钥加密 my-app.bin，并生成加密文件 my-app-encrypted.bin。确保 address 参数与计划闪存二进制文件的地址匹配.</p>
+<p>然后，使用esptool.py刷新加密的二进制文件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">esptool.py --port &#x2F;dev&#x2F;ttyUSB0 --baud 115200 write_flash 0x10000 build&#x2F;my-app-encrypted.bin</span><br></pre></td></tr></table></figure>
+
+<p>不需要进一步的步骤或 efuse 操作，因为我们闪存时数据已经加密.</p>
+<h2 id="5-禁用-Flash-加密"><a href="#5-禁用-Flash-加密" class="headerlink" title="5 禁用 Flash 加密"></a>5 禁用 Flash 加密</h2><p>如果由于某种原因意外启用了闪存加密，则下一次明文数据闪存将使ESP32软化(设备将连续重启，打印错误闪存读错误， 1000).</p>
+<p>您可以通过编写 <code>FLASH_CRYPT_CNT efuse</code> 再次禁用闪存加密:</p>
+<ul>
+<li>首先，运行 <code>make menuconfig</code> 并取消选中“安全功能”下的“启用闪存加密启动”.</li>
+<li>退出 <code>menuconfig</code> 并保存新配置.</li>
+<li>再次运行 <code>make menuconfig</code> 并仔细检查你是否真的禁用了这个选项！ 如果启用此选项，则引导加载程序将在引导时立即重新启用加密.</li>
+<li>运行 <code>make flash</code> 以构建并刷新新的引导加载程序和应用程序，而不启用闪存加密.</li>
+<li>运行 <code>espefuse.py</code> (在 components/esptool_py/esptool 中)以禁用 <code>FLASH_CRYPT_CNT efuse</code>)::</li>
+</ul>
+<p>重置 ESP32 并禁用闪存加密，引导加载程序将正常启动.</p>
+<h2 id="6-Flash-加密的局限性"><a href="#6-Flash-加密的局限性" class="headerlink" title="6 Flash 加密的局限性"></a>6 Flash 加密的局限性</h2><p>Flash 加密可防止加密闪存的明文读出，从而保护固件免受未经授权的读取和修改.了解闪存加密系统的局限性非常重要:</p>
+<ul>
+<li>Flash 加密仅与密钥一样强大.因此，我们建议在首次启动时在设备上生成密钥(默认行为).如果在设备外生成密钥(请参阅通过预生成的 Flash 加密密钥重新刷新)，请确保遵循正确的步骤.</li>
+<li>并非所有数据都是加密存储的.如果在闪存上存储数据，请检查您使用的方法(库，API 等)是否支持闪存加密.</li>
+<li>Flash 加密不会阻止攻击者理解闪存的高级布局.这是因为相同的 AES 密钥用于每对相邻的 16 字节 AES 块.当这些相邻的 16 字节块包含相同的内容(例如空或填充区域)时，这些块将加密以产生匹配的加密块对.这可能允许攻击者在加密设备之间进行高级别比较(即判断两个设备是否可能运行相同的固件版本).</li>
+<li>出于同样的原因，攻击者总能知道一对相邻的 16 字节块 (32 字节对齐)何时包含相同的内容.如果将敏感数据存储在闪存中，请记住这一点，设计闪存存储器，以免发生这种情况(使用计数器字节或每 16 字节一些其他不相同的值就足够了).</li>
+</ul>
+<h2 id="7-Flash-加密和安全启动"><a href="#7-Flash-加密和安全启动" class="headerlink" title="7 Flash 加密和安全启动"></a>7 Flash 加密和安全启动</h2><p>建议一起使用闪存加密和安全启动。但是，如果启用了安全启动，则重新刷新设备会有其他限制:</p>
+<ul>
+<li>OTA 更新不受限制(前提是新应用程序使用安全启动签名密钥正确签名).</li>
+<li>只有选择了 Reflashable Secure Boot 模式并且预先生成安全启动密钥并将其刻录到 ESP32 (参见安全启动文档)，才能进行明文串口烧录更新。在此配置中， make bootloader 将生成预先消化的引导加载程序和安全引导摘要文件，以便在偏移量 0x0 处烧录。当遵循明文串行重新刷新步骤时，必须在烧录其他明文数据之前重新刷新该文件.</li>
+<li>如果未重新启动引导加载程序，仍可以通过预生成的 Flash 加密密钥重新刷新。重新刷新引导加载程序需要在安全引导配置中启用相同的 Reflashable 选项.</li>
+</ul>
+<h2 id="8-使用没有安全启动的-Flash-加密"><a href="#8-使用没有安全启动的-Flash-加密" class="headerlink" title="8 使用没有安全启动的 Flash 加密"></a>8 使用没有安全启动的 Flash 加密</h2><p>如果在没有安全启动的情况下使用闪存加密，则可以使用串行重新烧录加载未经授权的代码。有关详细信息，请参阅串行烧录 然后，这个未授权的代码可以读取所有加密的分区(以解密的形式)，使闪存加密无效。这可以通过写保护 <code>FLASH_CRYPT_CNT efuse</code> 来避免，从而禁止串口重新烧录。FLASH_CRYPT_CNT可以使用命令对efuse进行写保护:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">espefuse.py --port PORT write_protect_efuse FLASH_CRYPT_CNT</span><br></pre></td></tr></table></figure>
+
+<p>或者，应用程序可以在其启动过程中调用 <code>esp_flash_write_protect_crypt_cnt()</code>.</p>
+<h2 id="9-Flash-加密高级功能"><a href="#9-Flash-加密高级功能" class="headerlink" title="9 Flash 加密高级功能"></a>9 Flash 加密高级功能</h2><p>以下信息对于高级使用闪存加密非常有用:</p>
+<h3 id="9-1-加密分区标志"><a href="#9-1-加密分区标志" class="headerlink" title="9.1 加密分区标志"></a>9.1 加密分区标志</h3><p>某些分区默认是加密的。否则，可以将任何分区标记为需要加密:</p>
+<p>在分区表描述 CSV 文件中，有一个标志字段.</p>
+<p>通常留空，如果在此字段中写入 “encrypted” ，则分区将在分区表中标记为已加密，此处写入的数据将被视为已加密(与应用程序分区相同):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Name,   Type, SubType, Offset,  Size, Flags</span><br><span class="line">nvs,      data, nvs,     0x9000,  0x6000</span><br><span class="line">phy_init, data, phy,     0xf000,  0x1000</span><br><span class="line">factory,  app,  factory, 0x10000, 1M</span><br><span class="line">secret_data, 0x40, 0x01, 0x20000, 256K, encrypted</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>默认分区表都不包含任何加密数据分区.</li>
+<li>没有必要将 “app” 分区标记为已加密，它们始终被视为已加密.</li>
+<li>如果未启用闪存加密，则“加密”标志不执行任何操作.</li>
+<li>如果您希望保护此数据不受物理访问读取或修改的影响，则可以将 phy_init 数据标记为可选的phy分区.</li>
+<li>无法将 nvs 分区标记为已加密.</li>
+</ul>
+<h3 id="9-2-启用-UART-Bootloader-加密-解密"><a href="#9-2-启用-UART-Bootloader-加密-解密" class="headerlink" title="9.2 启用 UART Bootloader 加密/解密"></a>9.2 启用 UART Bootloader 加密/解密</h3><p>默认情况下，首次启动时，闪存加密过程将刻录 <code>DISABLE_DL_ENCRYPT</code> ， <code>DISABLE_DL_DECRYPT</code> 和 <code>DISABLE_DL_CACHE</code> :</p>
+<p>在 UART 引导加载程序引导模式下运行时， <code>DISABLE_DL_ENCRYPT</code> 禁用闪存加密操作.<br> <code>DISABLE_DL_DECRYPT</code> 在 UART 引导加载程序模式下运行时禁用透明闪存解密，即使 <code>FLASH_CRYPT_CNT efuse</code> 设置为在正常操作中启用它也是如此.<br>在 UART 引导加载程序模式下运行时， <code>DISABLE_DL_CACHE</code> 禁用整个 MMU 闪存缓存.<br>可以仅刻录其中一些 efuses，并在第一次引导之前对其余部分进行写保护(使用未设置值 0)，以便保留它们。例如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">espefuse.py --port PORT burn_efuse DISABLE_DL_DECRYPT</span><br><span class="line">espefuse.py --port PORT write_protect_efuse DISABLE_DL_ENCRYPT</span><br></pre></td></tr></table></figure>
+
+<p>(注意，这些 efuse 中的所有 3 个都是通过一个写保护位禁用的，因此写保护将保护所有这些保护位.因此，在写保护之前必须设置任何位.)</p>
+<blockquote>
+<p>由于 esptool.py 不支持写入或读取加密闪存，因此写保护这些 efuse 以保持它们不被设置目前不是非常有用.</p>
+</blockquote>
+<blockquote>
+<p>如果未设置 <code>DISABLE_DL_DECRYPT(0)</code>， 这有效地使闪存加密无效，因为具有物理访问权限的攻击者可以使用UART引导加载程序模式(使用自定义存根代码)来读取闪存内容.</p>
+</blockquote>
+<h3 id="9-3-设置-FLASH-CRYPT-CONFIG"><a href="#9-3-设置-FLASH-CRYPT-CONFIG" class="headerlink" title="9.3 设置 FLASH_CRYPT_CONFIG"></a>9.3 设置 <code>FLASH_CRYPT_CONFIG</code></h3><p><code>FLASH_CRYPT_CONFIG efuse</code> 确定闪存加密密钥中用块偏移“调整”的位数。有关详细信息，请参阅 Flash 加密算法.</p>
+<p>引导加载程序的首次引导始终将此值设置为最大 0xF.</p>
+<p>可以手动编写这些 efuse， 并在首次启动之前写保护，以便选择不同的调整值。不建议这样做.</p>
+<p>强烈建议在值为零时永远不要写保护 <code>FLASH_CRYPT_CONFIG</code>。如果此 efuse 设置为零，则不会调整闪存加密密钥中的任何位，并且闪存加密算法等同于 AES ECB 模式.</p>
+<h2 id="10-技术细节"><a href="#10-技术细节" class="headerlink" title="10 技术细节"></a>10 技术细节</h2><p>以下部分提供有关闪存加密操作的一些参考信息.</p>
+<h3 id="10-1-FLASH-CRYPT-CNT-efuse"><a href="#10-1-FLASH-CRYPT-CNT-efuse" class="headerlink" title="10.1 FLASH_CRYPT_CNT efuse"></a>10.1 <code>FLASH_CRYPT_CNT efuse</code></h3><p><code>FLASH_CRYPT_CNT</code> 是一个 8 位 efuse 字段，用于控制闪存加密。Flash 加密根据此 efuse 中设置为 “1” 的位数启用或禁用:</p>
+<ul>
+<li>设置偶数位 (0,2,4,6,8) 时:禁用闪存加密，无法解密任何加密数据.<ul>
+<li>如果引导加载程序是使用“启动时启用闪存加密”构建的，那么它将看到这种情况并立即重新加密闪存，无论它何时找到未加密的数据.完成后，它会将 efuse 中的另一位设置为 “1”，这意味着现在设置了奇数个位.<ul>
+<li>在第一次纯文本引导时，位计数具有全新值 0，并且引导加载程序在加密后将其更改为位计数 1 (值 0x01).</li>
+<li>在下一次明文闪存更新后，将位计数手动更新为 2 (值 0x03).重新加密引导加载程序后，将 efuse 位计数更改为 3 (值 0x07).</li>
+<li>在下一个明文闪存之后，将位计数手动更新为 4 (值 0x0F).重新加密引导加载程序后，将 efuse 位计数更改为 5 (值 0x1F).</li>
+<li>在最后的明文闪存之后，位计数被手动更新为 6 (值 0x3F).重新加密引导加载程序后，将 efuse 位计数更改为7 (值 0x7F).</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>设置奇数位 (1,3,5,7) 时:启用透明读取加密闪存.</li>
+<li>设置完所有 8 位后(efuse 值 0xFF):禁用透明读取加密闪存，永久无法访问任何加密数据。Bootloader 通常会检测到这种情况并停止.为避免使用此状态加载未经授权的代码，必须使用安全引导或 <code>FLASH_CRYPT_CNT efuse</code> 必须写保护.</li>
+</ul>
+<h3 id="10-2-Flash-加密算法"><a href="#10-2-Flash-加密算法" class="headerlink" title="10.2 Flash 加密算法"></a>10.2 Flash 加密算法</h3><ul>
+<li><p>AES-256 以 16 字节数据块运行.闪存加密引擎以 32 字节块，两个串联的 AES 块加密和解密数据.</p>
+</li>
+<li><p>AES 算法在闪存加密中反转使用，因此闪存加密“加密”操作是 AES 解密，“解密”操作是AES加密.这是出于性能原因，并未改变算法的有效性.</p>
+</li>
+<li><p>主闪存加密密钥存储在 efuse(BLOCK1) 中，默认情况下不受进一步写入或软件读取的影响.</p>
+</li>
+<li><p>每个 32 字节块(两个相邻的 16 字节 AES 块)使用唯一密钥加密.密钥源自efuse中的主闪存加密密钥，与闪存中该块的偏移量进行异或(“键调整”).</p>
+</li>
+<li><p>具体的调整取决于 <code>FLASH_CRYPT_CONFIG efuse</code> 的设置.这是一个 4 位 efuse， 其中每个位都能对特定范围的关键位进行异或运算:</p>
+<ul>
+<li>位 1， 该值的 0-66 位被异或.</li>
+<li>位 2， 该值的 67-131 位被异或.</li>
+<li>位 3， 该值的 132-194 被异或.</li>
+<li>位 4， 该值的 195-256 位被异或.<br>建议始终保留 <code>FLASH_CRYPT_CONFIG</code> 以设置默认值 0xF，以便所有关键位与块偏移进行异或.有关详细信息，请参阅设置 <code>FLASH_CRYPT_CONFIG</code>.</li>
+</ul>
+</li>
+<li><p>块偏移的高 19 位(第 5 位到第 23 位)与主闪存加密密钥进行异或.选择此范围有两个原因:最大闪存大小为 16MB(24 位)，每个块为 32 字节，因此最低有效 5 位 始终为零.</p>
+</li>
+<li><p>从 19 个块偏移位中的每一个到闪存加密密钥的 256 位存在特定映射，以确定哪个位与哪个位进行异或.请参阅 espsecure.py 源代码中的变量 <code>_FLASH_ENCRYPTION_TWEAK_PATTERN</code> 以获取完整的映射.</p>
+</li>
+<li><p>要查看 Python 中实现的完整闪存加密算法，请参阅 espsecure.py 源代码中的 <code>_flash_encryption_operation()</code> 函数.</p>
+</li>
+</ul>
+<h2 id="11-参考资料"><a href="#11-参考资料" class="headerlink" title="11 参考资料"></a>11 参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html" target="_blank" rel="noopener">原文链接</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/07/22/ESP32 官方文档/ESP32 官方文档（一）关于 ESP-IDF 编程的一些说明/" rel="bookmark">ESP32 官方文档（一）关于 ESP-IDF 编程的一些说明</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/09/01/ESP32 官方文档/ESP32 官方文档（七）ESP32 Core Dump/" rel="bookmark">ESP32 官方文档（七）ESP32 Core Dump</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/29/ESP32 官方文档/ESP32 官方文档（三）分区表/" rel="bookmark">ESP32 官方文档（三）分区表</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/09/02/ESP32 官方文档/ESP32 官方文档（九）ESP-IDF FreeRTOS SMP Changes/" rel="bookmark">ESP32 官方文档（九）ESP-IDF FreeRTOS SMP Changes</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/07/22/ESP32 官方文档/ESP32 官方文档（二）构建系统/" rel="bookmark">ESP32 官方文档（二）构建系统</a></div>
+    </li>
+  </ul>
+
+        <div class="reward-container">
+  <div>如果这篇文章对你有帮助，那么不妨？</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/InfiniteYuanBlog/tags/ESP32/" rel="tag"><i class="fa fa-tag"></i> ESP32</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2018/09/01/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%B8%83%EF%BC%89ESP32%20Core%20Dump/" rel="prev" title="ESP32 官方文档（七）ESP32 Core Dump">
+      <i class="fa fa-chevron-left"></i> ESP32 官方文档（七）ESP32 Core Dump
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%B9%9D%EF%BC%89ESP-IDF%20FreeRTOS%20SMP%20Changes/" rel="next" title="ESP32 官方文档（九）ESP-IDF FreeRTOS SMP Changes">
+      ESP32 官方文档（九）ESP-IDF FreeRTOS SMP Changes <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Flash-加密"><span class="nav-number">1.</span> <span class="nav-text">Flash 加密</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-背景"><span class="nav-number">1.1.</span> <span class="nav-text">1 背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Flash-加密初始化"><span class="nav-number">1.2.</span> <span class="nav-text">2 Flash 加密初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-使用加密的-Flash"><span class="nav-number">1.3.</span> <span class="nav-text">3 使用加密的 Flash</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Flash-加密的范围"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 Flash 加密的范围</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-读取加密的-Flash"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 读取加密的 Flash</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-写加密的-Flash"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.3 写加密的 Flash</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-更像加密的-Flash"><span class="nav-number">1.4.</span> <span class="nav-text">4 更像加密的 Flash</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-OTA-更新"><span class="nav-number">1.4.1.</span> <span class="nav-text">4.1 OTA 更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-串口烧录"><span class="nav-number">1.4.2.</span> <span class="nav-text">4.2 串口烧录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-1-限制更新"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">4.2.1 限制更新</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-2-串口烧录的注意事项"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">4.2.2 串口烧录的注意事项</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-串口重新烧录程序"><span class="nav-number">1.4.3.</span> <span class="nav-text">4.3 串口重新烧录程序</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3-1-禁用串口更新"><span class="nav-number">1.4.3.1.</span> <span class="nav-text">4.3.1 禁用串口更新</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-通过预生成的-Flash-加密密钥重新烧录"><span class="nav-number">1.4.4.</span> <span class="nav-text">4.4 通过预生成的 Flash 加密密钥重新烧录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-4-1-预生成-Flash-加密密钥"><span class="nav-number">1.4.4.1.</span> <span class="nav-text">4.4.1 预生成 Flash 加密密钥</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-4-2-刻录-Flash-加密密钥"><span class="nav-number">1.4.4.2.</span> <span class="nav-text">4.4.2 刻录 Flash 加密密钥</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-4-3-带有预生成密钥的第一次烧录"><span class="nav-number">1.4.4.3.</span> <span class="nav-text">4.4.3 带有预生成密钥的第一次烧录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-4-4-使用预生成密钥重新烧录"><span class="nav-number">1.4.4.4.</span> <span class="nav-text">4.4.4 使用预生成密钥重新烧录</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-禁用-Flash-加密"><span class="nav-number">1.5.</span> <span class="nav-text">5 禁用 Flash 加密</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Flash-加密的局限性"><span class="nav-number">1.6.</span> <span class="nav-text">6 Flash 加密的局限性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-Flash-加密和安全启动"><span class="nav-number">1.7.</span> <span class="nav-text">7 Flash 加密和安全启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-使用没有安全启动的-Flash-加密"><span class="nav-number">1.8.</span> <span class="nav-text">8 使用没有安全启动的 Flash 加密</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-Flash-加密高级功能"><span class="nav-number">1.9.</span> <span class="nav-text">9 Flash 加密高级功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#9-1-加密分区标志"><span class="nav-number">1.9.1.</span> <span class="nav-text">9.1 加密分区标志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-2-启用-UART-Bootloader-加密-解密"><span class="nav-number">1.9.2.</span> <span class="nav-text">9.2 启用 UART Bootloader 加密&#x2F;解密</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-3-设置-FLASH-CRYPT-CONFIG"><span class="nav-number">1.9.3.</span> <span class="nav-text">9.3 设置 FLASH_CRYPT_CONFIG</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-技术细节"><span class="nav-number">1.10.</span> <span class="nav-text">10 技术细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#10-1-FLASH-CRYPT-CNT-efuse"><span class="nav-number">1.10.1.</span> <span class="nav-text">10.1 FLASH_CRYPT_CNT efuse</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-2-Flash-加密算法"><span class="nav-number">1.10.2.</span> <span class="nav-text">10.2 Flash 加密算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-参考资料"><span class="nav-number">1.11.</span> <span class="nav-text">11 参考资料</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="InfiniteYuan"
+      src="/InfiniteYuanBlog/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">InfiniteYuan</p>
+  <div class="site-description" itemprop="description">Stay Hungry, Stay Funlish</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/InfiniteYuanBlog/archives/">
+        
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/InfiniteYuanBlog/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/InfiniteYuanBlog/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/infiniteyuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;infiniteyuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">InfiniteYuan</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">93k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:24</span>
+
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        站点访客数:<span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        站点阅读量:<span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/InfiniteYuanBlog/lib/anime.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/InfiniteYuanBlog/js/utils.js"></script>
+
+<script src="/InfiniteYuanBlog/js/motion.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/schemes/muse.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/next-boot.js"></script>
+
+<script src="/InfiniteYuanBlog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/InfiniteYuanBlog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '2spSMheFYziIJlzCVs7fvHeG-gzGzoHsz',
+      appKey     : 'aj8lFtI7EyFfrWCx902T0szo',
+      placeholder: "ヾﾉ≧∀≦)o来啊，快活啊!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

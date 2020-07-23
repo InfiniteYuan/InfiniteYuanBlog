@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/InfiniteYuanBlog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/InfiniteYuanBlog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/InfiniteYuanBlog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/InfiniteYuanBlog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/css/main.css">
+
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/InfiniteYuanBlog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/InfiniteYuanBlog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"infiniteyuan.github.io","root":"/InfiniteYuanBlog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="ESP-MESH 编程指南这是 ESP-MESH 的编程指南，包括 API 参考和编码示例。本指南分为以下几部分：  ESP-MESH 编程模型 编写 ESP-MESH 应用程序 自组织网络 应用实例 API 参考  有关 ESP-MESH 协议的文档，请参阅 ESP-MESH API 指南。 ESP-MESH 编程模型软件栈ESP-MESH 软件栈构建在 Wi-Fi 驱动&#x2F;FreeRTOS 之上">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ESP32 官方文档（十六）ESP-MESH 编程指南">
+<meta property="og:url" content="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/03/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89ESP-MESH%20%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="InfiniteYuan">
+<meta property="og:description" content="ESP-MESH 编程指南这是 ESP-MESH 的编程指南，包括 API 参考和编码示例。本指南分为以下几部分：  ESP-MESH 编程模型 编写 ESP-MESH 应用程序 自组织网络 应用实例 API 参考  有关 ESP-MESH 协议的文档，请参阅 ESP-MESH API 指南。 ESP-MESH 编程模型软件栈ESP-MESH 软件栈构建在 Wi-Fi 驱动&#x2F;FreeRTOS 之上">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019030215595528.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190302162721734.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190302173636709.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2019-03-02T19:03:45.000Z">
+<meta property="article:modified_time" content="2020-07-23T07:16:53.989Z">
+<meta property="article:author" content="InfiniteYuan">
+<meta property="article:tag" content="ESP32">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/2019030215595528.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/03/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89ESP-MESH%20%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ESP32 官方文档（十六）ESP-MESH 编程指南 | InfiniteYuan</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/InfiniteYuanBlog/atom.xml" title="InfiniteYuan" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+      <div class="site-meta-headline">
+        <a>
+          <img class="custom-logo-image" src="/InfiniteYuanBlog/images/InfiniteYuanLogo.jpg" alt="InfiniteYuan">
+        </a>
+      </div>
+
+    <a href="/InfiniteYuanBlog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">InfiniteYuan</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/InfiniteYuanBlog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/InfiniteYuanBlog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">17</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/InfiniteYuanBlog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/InfiniteYuanBlog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/infiniteyuan" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/03/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89ESP-MESH%20%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
+      <meta itemprop="name" content="InfiniteYuan">
+      <meta itemprop="description" content="Stay Hungry, Stay Funlish">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="InfiniteYuan">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ESP32 官方文档（十六）ESP-MESH 编程指南
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-03-02 19:03:45" itemprop="dateCreated datePublished" datetime="2019-03-02T19:03:45+00:00">2019-03-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-23 07:16:53" itemprop="dateModified" datetime="2020-07-23T07:16:53+00:00">2020-07-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/" itemprop="url" rel="index"><span itemprop="name">ESP32 官方文档</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/InfiniteYuanBlog/2019/03/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89ESP-MESH%20%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2019/03/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89ESP-MESH%20%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>9.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>9 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="ESP-MESH-编程指南"><a href="#ESP-MESH-编程指南" class="headerlink" title="ESP-MESH 编程指南"></a>ESP-MESH 编程指南</h1><p>这是 ESP-MESH 的编程指南，包括 API 参考和编码示例。本指南分为以下几部分：</p>
+<ul>
+<li>ESP-MESH 编程模型</li>
+<li>编写 ESP-MESH 应用程序</li>
+<li>自组织网络</li>
+<li>应用实例</li>
+<li>API 参考</li>
+</ul>
+<p>有关 ESP-MESH 协议的文档，请参阅 <a href="https://mp.csdn.net/postedit/86743079" target="_blank" rel="noopener">ESP-MESH API 指南</a>。</p>
+<h2 id="ESP-MESH-编程模型"><a href="#ESP-MESH-编程模型" class="headerlink" title="ESP-MESH 编程模型"></a>ESP-MESH 编程模型</h2><h3 id="软件栈"><a href="#软件栈" class="headerlink" title="软件栈"></a>软件栈</h3><p>ESP-MESH 软件栈构建在 Wi-Fi 驱动/FreeRTOS 之上，并且在某些情况下可以使用 LwIP 栈（即根节点）。下图说明了 ESP-MESH 软件栈。<br><img src="https://img-blog.csdnimg.cn/2019030215595528.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="ESP-MESH 软件栈"></p>
+<h3 id="系统事件"><a href="#系统事件" class="headerlink" title="系统事件"></a>系统事件</h3><p>应用程序通过 ESP-MESH 事件与 ESP-MESH 交互。由于 ESP-MESH 构建在 Wi-Fi 栈的顶部，因此应用程序也可以通过 Wi-Fi 事件任务与 Wi-Fi 驱动交互。下图说明了 ESP-MESH 应用程序中各种系统事件的接口。<br><img src="https://img-blog.csdnimg.cn/20190302162721734.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="ESP-MESH 系统事件"><br><code>mesh_event_id_t</code> 定义所有可能的  ESP-MESH 系统事件，并且可以指示诸如父/子的连接/断开之类的事件。在可以使用 ESP-MESH 系统事件之前，应用程序必须通过 <code>esp_mesh_set_config()</code> 注册 Mesh 事件回调。 回调用于从 ESP-MESH 栈以及 LwIP 栈接收事件，并且应包含与应用程序相关的每个事件的处理程序。</p>
+<p>系统事件的典型用例包括使用诸如 <code>MESH_EVENT_PARENT_CONNECTED</code> 和 <code>MESH_EVENT_CHILD_CONNECTED</code> 之类的事件来指示节点何时可以分别开始上游和下游传输数据。 同样，<code>MESH_EVENT_ROOT_GOT_IP</code> 和 <code>MESH_EVENT_ROOT_LOST_IP</code> 可用于指示根节点何时能够和不能将数据传输到外部 IP 网络。</p>
+<blockquote>
+<p>在自组织模式下使用 ESP-MESH 时，用户必须确保不会调用 Wi-Fi API。这是因为自组织模式将在内部进行 Wi-Fi API 调用以连接/断开/扫描等。来自应用程序的任何 Wi-Fi 调用（包括来自回调函数和 Wi-Fi 事件处理程序的调用）可能干扰 ESP-MESH 的自组织行为。因此，在调用 <code>esp_mesh_start()</code> 之后，并且在调用 <code>esp_mesh_stop()</code> 之前，用户不应该调用 Wi-Fi API。</p>
+</blockquote>
+<h3 id="LwIP-amp-ESP-MESH"><a href="#LwIP-amp-ESP-MESH" class="headerlink" title="LwIP &amp; ESP-MESH"></a>LwIP &amp; ESP-MESH</h3><p><strong>应用程序可以直接访问 ESP-MESH 栈，而无需通过 LwIP 栈。仅根节点需要 LwIP 栈向/从外部 IP 网络发送/接收数据。</strong> 但是，由于每个节点都可能成为根节点（由于自动根节点选择），每个节点仍必须初始化 LwIP 栈。</p>
+<p><strong>每个节点都需要通过调用 <code>tcpip_adapter_init()</code> 来初始化 LwIP 栈。为了防止非根节点访问 LwIP 栈，应用程序应在 LwIP 栈初始化后停止以下服务</strong>：</p>
+<ul>
+<li>SoftAP 接口上的 DHCP 服务器服务。</li>
+<li>Station 接口上的 DHCP 客户端服务。</li>
+</ul>
+<p>以下代码段演示了如何为 ESP-MESH 应用程序初始化 LwIP。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;*  tcpip initialization *&#x2F;</span><br><span class="line">tcpip_adapter_init();</span><br><span class="line">&#x2F;*</span><br><span class="line"> * for mesh</span><br><span class="line"> * stop DHCP server on softAP interface by default</span><br><span class="line"> * stop DHCP client on station interface by default</span><br><span class="line"> *&#x2F;</span><br><span class="line">ESP_ERROR_CHECK(tcpip_adapter_dhcps_stop(TCPIP_ADAPTER_IF_AP));</span><br><span class="line">ESP_ERROR_CHECK(tcpip_adapter_dhcpc_stop(TCPIP_ADAPTER_IF_STA));</span><br><span class="line">&#x2F;* do not specify system event callback, use NULL instead. *&#x2F;</span><br><span class="line">ESP_ERROR_CHECK(esp_event_loop_init(NULL, NULL));</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>ESP-MESH 要求根节点与路由器连接。因此，如果节点成为根节点，则相应的处理程序必须启动 DHCP 客户端服务并立即获取 IP 地址。这样做将允许其他节点开始向/从外部 IP 网络发送/接收分组。但是，如果使用静态 IP 设置，则不需要此步骤。</p>
+</blockquote>
+<h2 id="编写-ESP-MESH-应用程序"><a href="#编写-ESP-MESH-应用程序" class="headerlink" title="编写 ESP-MESH 应用程序"></a>编写 ESP-MESH 应用程序</h2><p><strong>启动 ESP-MESH 的先决条件是初始化 LwIP 和 Wi-Fi。</strong> 以下代码片段演示了初始化 ESP-MESH 之前必要的先决条件步骤。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">tcpip_adapter_init();</span><br><span class="line">&#x2F;*</span><br><span class="line"> * for mesh</span><br><span class="line"> * stop DHCP server on softAP interface by default</span><br><span class="line"> * stop DHCP client on station interface by default</span><br><span class="line"> *&#x2F;</span><br><span class="line">ESP_ERROR_CHECK(tcpip_adapter_dhcps_stop(TCPIP_ADAPTER_IF_AP));</span><br><span class="line">ESP_ERROR_CHECK(tcpip_adapter_dhcpc_stop(TCPIP_ADAPTER_IF_STA));</span><br><span class="line">&#x2F;* do not specify system event callback, use NULL instead. *&#x2F;</span><br><span class="line">ESP_ERROR_CHECK(esp_event_loop_init(NULL, NULL));</span><br><span class="line"></span><br><span class="line">&#x2F;*  Wi-Fi initialization *&#x2F;</span><br><span class="line">wifi_init_config_t config &#x3D; WIFI_INIT_CONFIG_DEFAULT();</span><br><span class="line">ESP_ERROR_CHECK(esp_wifi_init(&amp;config));</span><br><span class="line">ESP_ERROR_CHECK(esp_wifi_set_storage(WIFI_STORAGE_FLASH));</span><br><span class="line">ESP_ERROR_CHECK(esp_wifi_start());</span><br></pre></td></tr></table></figure>
+
+<p>初始化 LwIP 和 Wi-Fi 后，启动和运行 ESP-MESH 网络的过程可归纳为以下三个步骤：</p>
+<ul>
+<li>初始化 Mesh</li>
+<li>配置 ESP-MESH 网络</li>
+<li>启动 Mesh</li>
+</ul>
+<h3 id="初始化-Mesh"><a href="#初始化-Mesh" class="headerlink" title="初始化 Mesh"></a>初始化 Mesh</h3><p>以下代码段演示了如何初始化 ESP-MESH</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;*  mesh initialization *&#x2F;</span><br><span class="line">ESP_ERROR_CHECK(esp_mesh_init());</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置-ESP-MESH-网络"><a href="#配置-ESP-MESH-网络" class="headerlink" title="配置 ESP-MESH 网络"></a>配置 ESP-MESH 网络</h3><p><strong>ESP-MESH 通过 <code>esp_mesh_set_config()</code> 配置，它使用 <code>mesh_cfg_t</code> 结构接收其参数。</strong> 该结构包含用于配置 ESP-MESH 的以下参数：</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Channel</td>
+<td>Range from 1 to 14</td>
+</tr>
+<tr>
+<td>Event Callback</td>
+<td>Callback for Mesh Events, see mesh_event_cb_t</td>
+</tr>
+<tr>
+<td>Mesh ID</td>
+<td>ID of ESP-MESH Network, see mesh_addr_t</td>
+</tr>
+<tr>
+<td>Router</td>
+<td>Router Configuration, see mesh_router_t</td>
+</tr>
+<tr>
+<td>Mesh AP</td>
+<td>Mesh AP Configuration, see mesh_ap_cfg_t</td>
+</tr>
+<tr>
+<td>Crypto Functions</td>
+<td>Crypto Functions for Mesh IE, see mesh_crypto_funcs_t</td>
+</tr>
+</tbody></table>
+<p>以下代码段演示了如何配置 ESP-MESH。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* Enable the Mesh IE encryption by default *&#x2F;</span><br><span class="line">mesh_cfg_t cfg &#x3D; MESH_INIT_CONFIG_DEFAULT();</span><br><span class="line">&#x2F;* mesh ID *&#x2F;</span><br><span class="line">memcpy((uint8_t *) &amp;cfg.mesh_id, MESH_ID, 6);</span><br><span class="line">&#x2F;* mesh event callback *&#x2F;</span><br><span class="line">cfg.event_cb &#x3D; &amp;mesh_event_handler;</span><br><span class="line">&#x2F;* channel (must match the router&#39;s channel) *&#x2F;</span><br><span class="line">cfg.channel &#x3D; CONFIG_MESH_CHANNEL;</span><br><span class="line">&#x2F;* router *&#x2F;</span><br><span class="line">cfg.router.ssid_len &#x3D; strlen(CONFIG_MESH_ROUTER_SSID);</span><br><span class="line">memcpy((uint8_t *) &amp;cfg.router.ssid, CONFIG_MESH_ROUTER_SSID, cfg.router.ssid_len);</span><br><span class="line">memcpy((uint8_t *) &amp;cfg.router.password, CONFIG_MESH_ROUTER_PASSWD,</span><br><span class="line">       strlen(CONFIG_MESH_ROUTER_PASSWD));</span><br><span class="line">&#x2F;* mesh softAP *&#x2F;</span><br><span class="line">cfg.mesh_ap.max_connection &#x3D; CONFIG_MESH_AP_CONNECTIONS;</span><br><span class="line">memcpy((uint8_t *) &amp;cfg.mesh_ap.password, CONFIG_MESH_AP_PASSWD,</span><br><span class="line">       strlen(CONFIG_MESH_AP_PASSWD));</span><br><span class="line">ESP_ERROR_CHECK(esp_mesh_set_config(&amp;cfg));</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动-Mesh"><a href="#启动-Mesh" class="headerlink" title="启动 Mesh"></a>启动 Mesh</h3><p>以下代码段演示了如何启动 ESP-MESH。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* mesh start *&#x2F;</span><br><span class="line">ESP_ERROR_CHECK(esp_mesh_start());</span><br></pre></td></tr></table></figure>
+
+<p><strong>启动 ESP-MESH 后，应用程序应检查 ESP-MESH 事件以确定它何时连接到网络。连接后，应用程序可以使用 <code>esp_mesh_send()</code> 和 <code>esp_mesh_recv()</code> 通过 ESP-MESH 网络开始发送和接收数据包。</strong></p>
+<h2 id="自组织网络"><a href="#自组织网络" class="headerlink" title="自组织网络"></a>自组织网络</h2><p>自组织网络是 ESP-MESH 的一项功能，节点可以自动扫描/选择/连接/重新连接到其他节点和路由器。此功能允许 ESP-MESH 网络通过使网络对动态网络拓扑和条件具有鲁棒性来实现高度自治。启用自组织网络后，ESP-MESH 网络中的节点无需自主执行以下操作：</p>
+<ul>
+<li>选择或选择根节点（请参阅<a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/mesh.html#mesh-building-a-network" target="_blank" rel="noopener">构建网络</a>中的自动根节点选择）</li>
+<li>选择首选父节点（请参阅<a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/mesh.html#mesh-building-a-network" target="_blank" rel="noopener">构建网络</a>中的父节点选择）</li>
+<li>检测到断开连接时自动重新连接（请参阅<a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/mesh.html#mesh-managing-a-network" target="_blank" rel="noopener">管理网络</a>中的中间父节点故障）</li>
+</ul>
+<p>启用自组织网络后，ESP-MESH 栈将在内部调用 Wi-Fi 驱动程序 API。因此，应用层不应对 Wi-Fi 驱动程序 API 进行任何调用，同时启用自组织网络，否则可能会干扰 ESP-MESH。</p>
+<h3 id="切换自组织网络"><a href="#切换自组织网络" class="headerlink" title="切换自组织网络"></a>切换自组织网络</h3><p>应用程序在运行时通过调用 <code>esp_mesh_set_self_organized()</code> 函数可以启用或禁用自组织网络。该函数具有以下两个参数：</p>
+<ul>
+<li><code>bool enable</code> 指定是启用还是禁用自组织网络。</li>
+<li><code>bool select_parent</code> 指定在启用自组织网络时是否应选择新的父节点。根据节点类型和节点的当前状态，选择新父级具有不同的效果。禁用自组织网络时，此参数未使用。</li>
+</ul>
+<h3 id="禁用自组织网络"><a href="#禁用自组织网络" class="headerlink" title="禁用自组织网络"></a>禁用自组织网络</h3><p>以下代码段演示了如何禁用自组织网络。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;Disable self organized networking</span><br><span class="line">esp_mesh_set_self_organized(false, false);</span><br></pre></td></tr></table></figure>
+
+<p>当禁用自组织网络时，ESP-MESH 将尝试维持节点当前的 Wi-Fi 状态。</p>
+<ul>
+<li>如果节点先前已连接到其他节点，则它将保持连接状态。</li>
+<li>如果节点先前已断开连接并且正在扫描父节点或路由器，则它将停止扫描。</li>
+<li>如果节点先前尝试重新连接到父节点或路由器，它将停止重新连接。</li>
+</ul>
+<h3 id="启用自组织网络"><a href="#启用自组织网络" class="headerlink" title="启用自组织网络"></a>启用自组织网络</h3><p>在启用自组织网络时，ESP-MESH 将尝试维持节点当前的 Wi-Fi 状态。但是，根据节点类型以及是否选择了新父节点，节点的 Wi-Fi 状态可能会发生变化。下表显示了启用自组织网络的效果。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190302173636709.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>以下代码演示了如何启用自组织网络。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;Enable self organized networking and select a new parent</span><br><span class="line">esp_mesh_set_self_organized(true, true);</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;Enable self organized networking and manually reconnect</span><br><span class="line">esp_mesh_set_self_organized(true, false);</span><br><span class="line">esp_mesh_connect();</span><br></pre></td></tr></table></figure>
+
+<h3 id="调用-Wi-Fi-驱动程序-API"><a href="#调用-Wi-Fi-驱动程序-API" class="headerlink" title="调用 Wi-Fi 驱动程序 API"></a>调用 Wi-Fi 驱动程序 API</h3><p>应用程序可能希望在使用 ESP-MESH 时直接调用 Wi-Fi 驱动程序 API 的情况。例如，应用程序可能想要手动扫描相邻的 AP。但是，<strong>在应用程序调用任何 Wi-Fi 驱动程序 API 之前，必须禁用自组织网络。</strong> 这将阻止 ESP-MESH 栈尝试调用任何 Wi-Fi 驱动程序 API ，ESP-MESH 栈的这些调用可能干扰应用程序的调用。</p>
+<p>因此，<strong>应该在调用 <code>esp_mesh_set_self_organized()</code> 进行禁用和启用自组织网络之间放置对 Wi-Fi 驱动程序 API 的调用。</strong> 以下代码段演示了应用程序在使用 ESP-MESH 时如何安全地调用 <code>esp_wifi_scan_start()</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;Disable self organized networking</span><br><span class="line">esp_mesh_set_self_organized(0, 0);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;Stop any scans already in progress</span><br><span class="line">esp_wifi_scan_stop();</span><br><span class="line">&#x2F;&#x2F;Manually start scan. Will automatically stop when run to completion</span><br><span class="line">esp_wifi_scan_start();</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;Process scan results</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;Re-enable self organized networking if still connected</span><br><span class="line">esp_mesh_set_self_organized(1, 0);</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;Re-enable self organized networking if non-root and disconnected</span><br><span class="line">esp_mesh_set_self_organized(1, 1);</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;Re-enable self organized networking if root and disconnected</span><br><span class="line">esp_mesh_set_self_organized(1, 0);  &#x2F;&#x2F;Don&#39;t select new parent</span><br><span class="line">esp_mesh_connect();                 &#x2F;&#x2F;Manually reconnect to router</span><br></pre></td></tr></table></figure>
+
+<h2 id="应用实例"><a href="#应用实例" class="headerlink" title="应用实例"></a>应用实例</h2><p>ESP-IDF 包含这些 ESP-MESH 示例项目：</p>
+<p><a href="https://github.com/espressif/esp-idf/tree/ebdcbe8c6/examples/mesh/internal_communication" target="_blank" rel="noopener">内部通信示例</a>演示了如何设置 ESP-MESH 网络并让根节点向网络中的每个节点发送数据包。</p>
+<p><a href="https://github.com/espressif/esp-idf/tree/ebdcbe8c6/examples/mesh/manual_networking" target="_blank" rel="noopener">手动网络示例</a>演示了如何在没有自组织功能的情况下使用 ESP-MESH。此示例显示如何对节点进行编程以手动扫描潜在父节点列表，并根据自定义条件选择父节点。</p>
+<h2 id="API-参考"><a href="#API-参考" class="headerlink" title="API 参考"></a>API 参考</h2><h3 id="头文件"><a href="#头文件" class="headerlink" title="头文件"></a>头文件</h3><ul>
+<li>esp32/include/esp_mesh.h</li>
+</ul>
+<h3 id="相关函数"><a href="#相关函数" class="headerlink" title="相关函数"></a>相关函数</h3><ul>
+<li>esp_err_tesp_mesh_init(void)</li>
+<li>esp_err_tesp_mesh_deinit(void)</li>
+<li>esp_err_tesp_mesh_start(void)</li>
+<li>esp_err_tesp_mesh_stop(void)</li>
+<li>esp_err_tesp_mesh_send(constmesh_addr_t *to, constmesh_data_t *data, int flag, constmesh_opt_topt[], int opt_count)</li>
+<li>esp_err_tesp_mesh_recv(mesh_addr_t *from, mesh_data_t *data, int timeout_ms, int *flag, mesh_opt_topt[], int opt_count)</li>
+<li>esp_err_tesp_mesh_recv_toDS(mesh_addr_t *from, mesh_addr_t *to, mesh_data_t *data, int timeout_ms, int *flag, mesh_opt_topt[], int opt_count)</li>
+<li>esp_err_tesp_mesh_set_config(constmesh_cfg_t *config)</li>
+<li>esp_err_tesp_mesh_get_config(mesh_cfg_t *config)</li>
+<li>esp_err_tesp_mesh_set_router(constmesh_router_t *router)</li>
+<li>esp_err_tesp_mesh_get_router(mesh_router_t *router)</li>
+<li>esp_err_tesp_mesh_set_id(constmesh_addr_t *id)</li>
+<li>esp_err_tesp_mesh_get_id(mesh_addr_t *id)</li>
+<li>esp_err_tesp_mesh_set_type(mesh_type_ttype)</li>
+<li>mesh_type_tesp_mesh_get_type(void)</li>
+<li>esp_err_tesp_mesh_set_max_layer(int max_layer)</li>
+<li>int esp_mesh_get_max_layer(void)</li>
+<li>esp_err_tesp_mesh_set_ap_password(const uint8_t *pwd, int len)</li>
+<li>esp_err_tesp_mesh_set_ap_authmode(wifi_auth_mode_tauthmode)</li>
+<li>wifi_auth_mode_tesp_mesh_get_ap_authmode(void)</li>
+<li>esp_err_tesp_mesh_set_ap_connections(int connections)</li>
+<li>int esp_mesh_get_ap_connections(void)</li>
+<li>int esp_mesh_get_layer(void)</li>
+<li>esp_err_tesp_mesh_get_parent_bssid(mesh_addr_t *bssid)</li>
+<li>bool esp_mesh_is_root(void)</li>
+<li>esp_err_tesp_mesh_set_self_organized(bool enable, bool select_parent)</li>
+<li>bool esp_mesh_get_self_organized(void)</li>
+<li>esp_err_tesp_mesh_waive_root(constmesh_vote_t *vote, int reason)</li>
+<li>esp_err_tesp_mesh_set_vote_percentage(float percentage)</li>
+<li>float esp_mesh_get_vote_percentage(void)</li>
+<li>esp_err_tesp_mesh_set_ap_assoc_expire(int seconds)</li>
+<li>int esp_mesh_get_ap_assoc_expire(void)</li>
+<li>int esp_mesh_get_total_node_num(void)</li>
+<li>int esp_mesh_get_routing_table_size(void)</li>
+<li>esp_err_tesp_mesh_get_routing_table(mesh_addr_t *mac, int len, int *size)</li>
+<li>esp_err_tesp_mesh_post_toDS_state(bool reachable)</li>
+<li>esp_err_tesp_mesh_get_tx_pending(mesh_tx_pending_t *pending)</li>
+<li>esp_err_tesp_mesh_get_rx_pending(mesh_rx_pending_t *pending)</li>
+<li>int esp_mesh_available_txupQ_num(constmesh_addr_t *addr, uint32_t *xseqno_in)</li>
+<li>esp_err_tesp_mesh_set_xon_qsize(int qsize)</li>
+<li>int esp_mesh_get_xon_qsize(void)</li>
+<li>esp_err_tesp_mesh_allow_root_conflicts(bool allowed)</li>
+<li>bool esp_mesh_is_root_conflicts_allowed(void)</li>
+<li>esp_err_tesp_mesh_set_group_id(constmesh_addr_t *addr, int num)</li>
+<li>esp_err_tesp_mesh_delete_group_id(constmesh_addr_t *addr, int num)</li>
+<li>int esp_mesh_get_group_num(void)</li>
+<li>esp_err_tesp_mesh_get_group_list(mesh_addr_t *addr, int num)</li>
+<li>bool esp_mesh_is_my_group(constmesh_addr_t *addr)</li>
+<li>esp_err_tesp_mesh_set_capacity_num(int num)</li>
+<li>int esp_mesh_get_capacity_num(void)</li>
+<li>esp_err_tesp_mesh_set_ie_crypto_funcs(const mesh_crypto_funcs_t *crypto_funcs)</li>
+<li>esp_err_tesp_mesh_set_ie_crypto_key(const char *key, int len)</li>
+<li>esp_err_tesp_mesh_get_ie_crypto_key(char *key, int len)</li>
+<li>esp_err_tesp_mesh_set_root_healing_delay(int delay_ms)</li>
+<li>int esp_mesh_get_root_healing_delay(void)</li>
+<li>esp_err_tesp_mesh_set_event_cb(constmesh_event_cb_tevent_cb)</li>
+<li>esp_err_tesp_mesh_fix_root(bool enable)</li>
+<li>bool esp_mesh_is_root_fixed(void)</li>
+<li>esp_err_tesp_mesh_set_parent(constwifi_config_t *parent, constmesh_addr_t *parent_mesh_id, mesh_type_tmy_type, int my_layer)</li>
+<li>esp_err_tesp_mesh_scan_get_ap_ie_len(int *len)</li>
+<li>esp_err_tesp_mesh_scan_get_ap_record(wifi_ap_record_t *ap_record, void *buffer)</li>
+<li>esp_err_tesp_mesh_flush_upstream_packets(void)</li>
+<li>esp_err_tesp_mesh_get_subnet_nodes_num(constmesh_addr_t *child_mac, int *nodes_num)</li>
+<li>esp_err_tesp_mesh_get_subnet_nodes_list(constmesh_addr_t *child_mac, mesh_addr_t *nodes, int nodes_num)</li>
+<li>esp_err_tesp_mesh_disconnect(void)</li>
+<li>esp_err_tesp_mesh_connect(void)</li>
+<li>esp_err_tesp_mesh_flush_scan_result(void)</li>
+<li>esp_err_tesp_mesh_switch_channel(const uint8_t *new_bssid, int csa_newchan, int csa_count)</li>
+<li>esp_err_tesp_mesh_get_router_bssid(uint8_t *router_bssid)</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/network/esp_mesh.html" target="_blank" rel="noopener">原文链接</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/07/22/ESP32 官方文档/ESP32 官方文档（一）关于 ESP-IDF 编程的一些说明/" rel="bookmark">ESP32 官方文档（一）关于 ESP-IDF 编程的一些说明</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/09/01/ESP32 官方文档/ESP32 官方文档（七）ESP32 Core Dump/" rel="bookmark">ESP32 官方文档（七）ESP32 Core Dump</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/29/ESP32 官方文档/ESP32 官方文档（三）分区表/" rel="bookmark">ESP32 官方文档（三）分区表</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/09/02/ESP32 官方文档/ESP32 官方文档（九）ESP-IDF FreeRTOS SMP Changes/" rel="bookmark">ESP32 官方文档（九）ESP-IDF FreeRTOS SMP Changes</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/07/22/ESP32 官方文档/ESP32 官方文档（二）构建系统/" rel="bookmark">ESP32 官方文档（二）构建系统</a></div>
+    </li>
+  </ul>
+
+        <div class="reward-container">
+  <div>如果这篇文章对你有帮助，那么不妨？</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/InfiniteYuanBlog/tags/ESP32/" rel="tag"><i class="fa fa-tag"></i> ESP32</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2019/02/01/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89ESP-MESH/" rel="prev" title="ESP32 官方文档（十五）ESP-MESH">
+      <i class="fa fa-chevron-left"></i> ESP32 官方文档（十五）ESP-MESH
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ESP-MESH-编程指南"><span class="nav-number">1.</span> <span class="nav-text">ESP-MESH 编程指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ESP-MESH-编程模型"><span class="nav-number">1.1.</span> <span class="nav-text">ESP-MESH 编程模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#软件栈"><span class="nav-number">1.1.1.</span> <span class="nav-text">软件栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统事件"><span class="nav-number">1.1.2.</span> <span class="nav-text">系统事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LwIP-amp-ESP-MESH"><span class="nav-number">1.1.3.</span> <span class="nav-text">LwIP &amp; ESP-MESH</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编写-ESP-MESH-应用程序"><span class="nav-number">1.2.</span> <span class="nav-text">编写 ESP-MESH 应用程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化-Mesh"><span class="nav-number">1.2.1.</span> <span class="nav-text">初始化 Mesh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-ESP-MESH-网络"><span class="nav-number">1.2.2.</span> <span class="nav-text">配置 ESP-MESH 网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动-Mesh"><span class="nav-number">1.2.3.</span> <span class="nav-text">启动 Mesh</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自组织网络"><span class="nav-number">1.3.</span> <span class="nav-text">自组织网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#切换自组织网络"><span class="nav-number">1.3.1.</span> <span class="nav-text">切换自组织网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#禁用自组织网络"><span class="nav-number">1.3.2.</span> <span class="nav-text">禁用自组织网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启用自组织网络"><span class="nav-number">1.3.3.</span> <span class="nav-text">启用自组织网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调用-Wi-Fi-驱动程序-API"><span class="nav-number">1.3.4.</span> <span class="nav-text">调用 Wi-Fi 驱动程序 API</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用实例"><span class="nav-number">1.4.</span> <span class="nav-text">应用实例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API-参考"><span class="nav-number">1.5.</span> <span class="nav-text">API 参考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#头文件"><span class="nav-number">1.5.1.</span> <span class="nav-text">头文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#相关函数"><span class="nav-number">1.5.2.</span> <span class="nav-text">相关函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.6.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="InfiniteYuan"
+      src="/InfiniteYuanBlog/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">InfiniteYuan</p>
+  <div class="site-description" itemprop="description">Stay Hungry, Stay Funlish</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/InfiniteYuanBlog/archives/">
+        
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/InfiniteYuanBlog/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/InfiniteYuanBlog/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/infiniteyuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;infiniteyuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">InfiniteYuan</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">93k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:24</span>
+
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        站点访客数:<span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        站点阅读量:<span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/InfiniteYuanBlog/lib/anime.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/InfiniteYuanBlog/js/utils.js"></script>
+
+<script src="/InfiniteYuanBlog/js/motion.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/schemes/muse.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/next-boot.js"></script>
+
+<script src="/InfiniteYuanBlog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/InfiniteYuanBlog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '2spSMheFYziIJlzCVs7fvHeG-gzGzoHsz',
+      appKey     : 'aj8lFtI7EyFfrWCx902T0szo',
+      placeholder: "ヾﾉ≧∀≦)o来啊，快活啊!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
