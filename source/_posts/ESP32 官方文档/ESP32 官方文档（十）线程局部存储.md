@@ -17,6 +17,8 @@ tags:
 [多线程 API](#%E5%A4%9A%E7%BA%BF%E7%A8%8B-api):ESP-IDF 的多线程 API.
 [C11 标准](#c11-%E6%A0%87%E5%87%86):C11 标准引入了特殊关键字来将变量声明为线程局部.
 
+<!--more-->
+
 ## FreeRTOS 原生 API
 
 ESP-IDF FreeRTOS 提供以下 AP I来管理线程局部变量:

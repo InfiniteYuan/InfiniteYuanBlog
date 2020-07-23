@@ -11,6 +11,8 @@ tags:
 
 Xtensa 架构支持 32 个中断,分为 8 个级别,以及各种异常. 在 ESP32 上,中断复用器允许使用[中断分配器](https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/system/intr_alloc.html)将大多数中断源路由到这些中断. 通常,中断将以 C 语言写入,但 ESP-IDF 也允许在汇编中写入高级中断,从而允许非常低的中断延迟.
 
+<!--more-->
+
 ## 中断级别
 
 |级别|标识|备注|

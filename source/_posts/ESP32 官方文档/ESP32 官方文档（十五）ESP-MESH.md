@@ -22,8 +22,12 @@ ESP-MESH 是一种基于 Wi-Fi 协议构建的网络协议。ESP-MESH 允许在�
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20190201113539338.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70)
 ESP-MESH 与传统的 Wi-Fi 网络的不同之处在于节点不需要连接到中心节点。相反，允许节点与相邻节点连接。节点相互负责传递彼此的传输。这允许 ESP-MESH 网络具有更大的覆盖区域，因为节点仍然可以实现互连而无需在中心节点的范围内。同样，ESP-MESH 也不易受到过载的影响，因为网络上允许的节点数量不再受单个中心节点的限制。
 
+<!--more-->
+
 ## ESP-MESH概念
+
 ### 术语
+
 |术语|说明|
 |----|----|
 | 节点 | 任何属于或可以属于 ESP-MESH 网络的设备 |

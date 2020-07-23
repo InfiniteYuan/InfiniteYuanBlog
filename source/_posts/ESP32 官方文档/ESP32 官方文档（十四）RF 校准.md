@@ -15,6 +15,8 @@ ESP32 在 RF 初始化期间支持三种 RF 校准方法：
  2. 完全校准
  3. 没有校准
 
+<!--more-->
+
 ## 部分校准
 
 在 RF 初始化期间，默认情况下使用部分校准方法进行 RF 校准。 它基于存储在 NVS 中的完整校准数据完成。 要使用此方法，请到 `menuconfig` 并启用 `CONFIG_ESP32_PHY_CALIBRATION_AND_DATA_STORAGE`。

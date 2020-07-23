@@ -37,6 +37,8 @@ ESP-IDF FreeRTOS 是 vanilla FreeRTOS 的修改版本,支持对称多处理 (SMP
 
 [配置 ESP-IDF FreeRTOS](%E9%85%8D%E7%BD%AE-esp-idf-freertos):可以使用 `make meunconfig` 配置 ESP-IDF FreeRTOS 的几个方面,例如在 Unicore 模式下运行 ESP-IDF,或配置每个任务将具有的线程本地存储指针的数量.
 
+<!--more-->
+
 ## 反向移植特性
 
 以下功能已从 FreeRTOS v9.0.0 反向移植到 ESP-IDF.

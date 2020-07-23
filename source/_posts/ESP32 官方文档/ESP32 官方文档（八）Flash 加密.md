@@ -15,6 +15,8 @@ Flash 加密与安全启动功能是分离的，您可以使用 Flash 加密而�
 
 > 启用闪存加密会限制您进一步更新 ESP32 的选项。请务必阅读本文档(包括 [Flash 加密限制](https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#flash-encryption-limitations))并了解启用闪存加密的含义。
 
+<!--more-->
+
 ## 1 背景
 
  - 使用带有 256 位密钥的 AES 加密闪存的内容。闪存加密密钥存储在芯片内部的 efuse 中，并且(默认情况下)受软件访问保护。

@@ -16,6 +16,8 @@ ESP-IDF 支持在不可恢复的软件错误上生成 Core Dump。这个技术�
  - `info_corefile` - 打印崩溃的任务的寄存器，调用堆栈，系统中可用任务的列表，内存区域和存储在 Core Dump (TCB 和堆栈)中的内存内容。
  - `dbg_corefile` - 创建 Core Dump ELF 文件并使用此文件运行 GDB 调试会话。用户可以手动检查内存，变量和任务状态。请注意，由于并非所有内存都保存在 Core Dump 中，因此只有堆栈上分配的变量值才有意义。
 
+<!--more-->
+
 ## 配置
 
 有许多与 Core Dump 相关的配置选项，用户可以在应用程序的配置菜单中选择 (`make menuconfig`)。
