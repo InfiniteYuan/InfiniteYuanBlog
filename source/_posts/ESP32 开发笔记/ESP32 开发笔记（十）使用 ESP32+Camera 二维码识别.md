@@ -16,6 +16,8 @@ tags:
  - [ESP-WHO](https://github.com/espressif/esp-who)
  - [ESP-IDF](https://github.com/espressif/esp-idf)
 
+<!--more-->
+
 ## 使用 quirc 二维码识别库
 
  - [quirc](https://github.com/dlbeer/quirc)

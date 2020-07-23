@@ -14,6 +14,8 @@ tags:
 首先通过下面的图了解下 Random Read 时序，I2C Master 通过这个时序读取任意数据地址开始的数据。
 ![Random Read](https://img-blog.csdnimg.cn/20191123145556881.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70)
 
+<!--more-->
+
 ```c
 ___________________________________________________________________________________________________________________________________________________
 | start | slave_addr + write_bit + ack | data address |start | slave_addr + read_bit + ack |  read n-1 bytes + ack | read 1 byte + nack | stop |

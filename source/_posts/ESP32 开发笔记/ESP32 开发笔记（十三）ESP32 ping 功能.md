@@ -16,6 +16,8 @@ esp_err_t pingResults(ping_target_id_t msgType, esp_ping_found * pf)
     printf("AvgTime:%.1fmS Sent:%d Rec:%d min(mS):%d max(mS):%d Resp(mS):%d Timeouts:%d Total Time:%d\n", (float)pf->total_time/pf->recv_count, pf->send_count, pf->recv_count,  pf->min_time, pf->max_time ,pf->resp_time, pf->timeout_count, pf->total_time);
     return ESP_OK;
 }
+
+<!--more-->
 void Start_Ping_ESP32(void){
  
     uint32_t ip_pinG = ipaddr_addr("163.177.151.109");//百度IP地址

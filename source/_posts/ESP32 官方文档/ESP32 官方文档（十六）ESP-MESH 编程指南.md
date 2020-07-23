@@ -19,6 +19,8 @@ tags:
 
 有关 ESP-MESH 协议的文档，请参阅 [ESP-MESH API 指南](https://mp.csdn.net/postedit/86743079)。
 
+<!--more-->
+
 ## ESP-MESH 编程模型
 
 ### 软件栈

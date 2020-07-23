@@ -16,6 +16,8 @@ tags:
 开发框架：[ESP-IDF](https://github.com/espressif/esp-idf)、[ESP-ADF](https://github.com/espressif/esp-adf)
 Embedded GUI: [LittlevGL](https://github.com/littlevgl/lvgl)
 
+<!--more-->
+
 ## 环境搭建
 
  - ESP-IDF:[搭建步骤](https://docs.espressif.com/projects/esp-idf/en/latest/get-started/index.html)

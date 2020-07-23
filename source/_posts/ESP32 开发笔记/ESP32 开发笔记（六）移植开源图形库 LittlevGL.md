@@ -13,13 +13,17 @@ ESP32 移植 LittlevGL 的源码：[GitHub 源码地址](https://github.com/Infi
 欢迎 Star ～
 
 ## LittlevGL 介绍
+
 >littlevGL is a free and open-source graphics library providing everything you need to create embedded GUI with easy-to-use graphical elements, beautiful visual effects and low memory footprint.
 >[LittlevGL 官网链接](https://littlevgl.com/)
 [LittlevGL 移植教程](https://littlevgl.com/porting)
 [LittlevGL 官方文档](https://littlevgl.com/basics)
 [LittlevGL GitHub链接](https://github.com/littlevgl/lvgl)
 
+<!--more-->
+
 <h4>关键特性：</h4>
+
  - Powerful building blocks buttons, charts, lists, sliders, images etc
  - Advanced graphics with animations, anti-aliasing, opacity, smooth scrolling
  - Various input devices touch pad, mouse, keyboard, encoder, buttons etc

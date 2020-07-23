@@ -19,6 +19,8 @@ tags:
 - 将 `esp-idf` 中的模板工程 [hello_world](https://github.com/espressif/esp-idf/tree/master/examples/get-started/hello_world) 在 VS Code 中打开
 - 在 VS Code 中开发项目
 
+<!--more-->
+
 ## VS Code 任务、快捷键配置
 
 ### 任务配置

@@ -12,6 +12,8 @@ tags:
 首先提供源码吧：[GitHub源码地址](https://github.com/InfiniteYuan/esp32-aws-iot)
 这是一个适用于 ESP-IDF 中[AWS IoT C SDK](https://github.com/aws/aws-iot-device-sdk-embedded-C) 的 “subscribe_publish”示例。
 
+<!--more-->
+
 # AWS IOT 配置
 
 在运行工程前，我们需要正确配置 AWS IOT ：

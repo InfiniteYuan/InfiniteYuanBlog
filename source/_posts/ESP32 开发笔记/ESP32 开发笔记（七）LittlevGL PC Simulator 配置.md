@@ -21,6 +21,8 @@ You can try out the Littlev Graphics Library using only your PC without any deve
  - The touch pad is replaced by your mouse
  - The written code is portable, you can simply copy it when using an embedded hardware
 
+<!--more-->
+
 ## 配置流程
 
 <h3>Install Eclipse CDT</h3>

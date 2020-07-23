@@ -22,7 +22,7 @@ ESP32 移植 uGFX 的源码：[GitHub 源码地址](https://github.com/InfiniteY
  6. /src 公共源码
  7. /tools 相关工具
 
--------------------
+<!--more-->
 
 ## 移植过程
 

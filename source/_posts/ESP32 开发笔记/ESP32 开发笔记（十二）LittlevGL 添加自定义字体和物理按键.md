@@ -14,6 +14,8 @@ tags:
 > 请注意字体许可证
 2. 生成源文件
 使用 LittlevGL 提供的字库文件[转换工具](https://littlevgl.com/ttf-font-to-c-array)，将 `ttf` 字库文件转换为源文件。
+
+<!--more-->
 3. 将生成的源文件添加到 LittlevGL 工程中，添加以下代码声明字体：
 ```
 extern lv_font_t my_font_name; 

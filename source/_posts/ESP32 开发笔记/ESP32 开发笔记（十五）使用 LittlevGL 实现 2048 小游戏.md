@@ -13,6 +13,8 @@ tags:
 
 现在我们在 ESP32 上自己动手实现 2048 这款小游戏吧。
 
+<!--more-->
+
 ## 1 使用 LittlevGL
 
 esp32-lvgl-gui 仓库已经适配了 LittlevGL V5.3，并适配了几款屏幕(ILI9341、ST7789、SSD1306、NT35510) 和 触摸驱动(FT5X06、XPT2046)。

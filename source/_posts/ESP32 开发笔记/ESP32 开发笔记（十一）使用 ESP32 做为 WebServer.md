@@ -25,6 +25,8 @@ tags:
  2. 使用 ESP32 构建系统中的[嵌入二进制数据](https://blog.csdn.net/qq_27114397/article/details/81152448#_449)的方式，将其添加到 Flash 中的 `.rodata` 部分
  3. 在 ESP32 程序中将 Flash 中的数组发送出去
 
+<!--more-->
+
 ## filetoarray 工具
 
 使用这个工具将 `.gz` 文件转换为包含十六进制数组和其长度的头文件。

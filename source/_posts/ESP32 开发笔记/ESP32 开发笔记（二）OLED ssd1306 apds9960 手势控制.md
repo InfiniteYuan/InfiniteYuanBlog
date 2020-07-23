@@ -21,6 +21,8 @@ ESP32 OLED demo 实现了以下功能：
 - 手势/触摸传感器控制 OLED 显示页面上下翻页
 - 通过触摸传感器手动进入低功耗模式
 
+<!--more-->
+
 下图为 ESP32 OLED Demo 的硬件实物图：
     <br>
    ![硬件实物图](https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTgwMTEyMTIxNzU2MjAx?x-oss-process=image/format,png)
