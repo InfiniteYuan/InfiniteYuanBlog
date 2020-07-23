@@ -28,7 +28,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（一）开发环境搭建</title>
-    <url>/InfiniteYuanBlog/2018/11/20/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</url>
+    <url>/InfiniteYuanBlog/2018/01/16/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<h1 id="ESP32-开发环境搭建"><a href="#ESP32-开发环境搭建" class="headerlink" title="ESP32 开发环境搭建"></a>ESP32 开发环境搭建</h1><p>ESP32 整体的开发资料相对比较多,官方网站在 github 上提供了详细的开发环境搭建步骤:<a href="https://esp-idf.readthedocs.io/en/latest/index.html#" target="_blank" rel="noopener">ESP-IDF Programming Guide</a></p>
 <a id="more"></a>
 ]]></content>
@@ -41,7 +41,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（二）GPIO &amp; RTC GPIO</title>
-    <url>/InfiniteYuanBlog/2018/11/20/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89GPIO%20&amp;%20RTC%20GPIO/</url>
+    <url>/InfiniteYuanBlog/2018/08/08/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89GPIO%20&amp;%20RTC%20GPIO/</url>
     <content><![CDATA[<h1 id="GPIO-amp-RTC-GPIO"><a href="#GPIO-amp-RTC-GPIO" class="headerlink" title="GPIO &amp; RTC GPIO"></a>GPIO &amp; RTC GPIO</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP32 芯片具有 40 个物理 GPIO pads (焊盘).某些 GPIO pad 既不能使用,在芯片封装上也没有相应的引脚(请参阅技术参考手册).所以只有 34 个物理 GPIO pads 可供使用.每个 pad 都可用作一个通用 IO,或连接一个内部的外设信号.IO_MUX、RTC IO_MUX 和 GPIO 交换矩阵用于将信号从外设传输至 GPIO pad.这些模块共同组成了芯片的 IO 控制.</p>
 <p>注意:</p>
 <ul>
