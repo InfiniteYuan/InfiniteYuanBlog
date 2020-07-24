@@ -152,7 +152,7 @@ theme_config:
   # Sidebar Avatar
   avatar:
     # Replace the default image and set the url here.
-    url: /images/avatar.gif
+    url: /InfiniteYuanBlog/images/InfiniteYuanLogo.jpg #/images/avatar.gif
     # If true, the avatar will be dispalyed in circle.
     rounded: true
     # If true, the avatar will be rotated with the cursor.
