@@ -22,20 +22,20 @@
     var CONFIG = {"hostname":"infiniteyuan.github.io","root":"/InfiniteYuanBlog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="Stay Hungry, Stay Funlish">
+  <meta name="description" content="NVS - Non-volatile storage非易失性存储（NVS）库主要用于在闪存中存储键值对。本节介绍 NVS 使用的一些概念。 底层存储目前，NVS 通过 spi_flash_{read|write|erase}  API 使用主闪存的一部分。该库使用具有 data 类型和 nvs 子类型的所有分区。应用程序可以通过 nvs_open API 选择使用带有标签 nvs 的分区或通过 n">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ESP32 学习笔记（十二）MCPWM">
-<meta property="og:url" content="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/01/16/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%8C%EF%BC%89MCPWM/index.html">
+<meta property="og:title" content="ESP32 学习笔记（二十六）NVS">
+<meta property="og:url" content="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/04/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%85%AD%EF%BC%89NVS/index.html">
 <meta property="og:site_name" content="InfiniteYuan">
-<meta property="og:description" content="Stay Hungry, Stay Funlish">
+<meta property="og:description" content="NVS - Non-volatile storage非易失性存储（NVS）库主要用于在闪存中存储键值对。本节介绍 NVS 使用的一些概念。 底层存储目前，NVS 通过 spi_flash_{read|write|erase}  API 使用主闪存的一部分。该库使用具有 data 类型和 nvs 子类型的所有分区。应用程序可以通过 nvs_open API 选择使用带有标签 nvs 的分区或通过 n">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2018-01-16T19:49:38.000Z">
-<meta property="article:modified_time" content="2020-07-24T01:13:09.280Z">
+<meta property="article:published_time" content="2019-04-12T20:33:16.000Z">
+<meta property="article:modified_time" content="2020-07-24T01:37:05.791Z">
 <meta property="article:author" content="InfiniteYuan">
 <meta property="article:tag" content="ESP32">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/01/16/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%8C%EF%BC%89MCPWM/">
+<link rel="canonical" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/04/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%85%AD%EF%BC%89NVS/">
 
 
 <script id="page-configurations">
@@ -48,7 +48,7 @@
   };
 </script>
 
-  <title>ESP32 学习笔记（十二）MCPWM | InfiniteYuan</title>
+  <title>ESP32 学习笔记（二十六）NVS | InfiniteYuan</title>
   
 
 
@@ -129,7 +129,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/InfiniteYuanBlog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">45</span></a>
+    <a href="/InfiniteYuanBlog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">62</span></a>
 
   </li>
         <li class="menu-item menu-item-tags">
@@ -201,7 +201,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/01/16/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%8C%EF%BC%89MCPWM/">
+    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/04/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%85%AD%EF%BC%89NVS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
@@ -214,7 +214,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          ESP32 学习笔记（十二）MCPWM
+          ESP32 学习笔记（二十六）NVS
         </h1>
 
         <div class="post-meta">
@@ -224,14 +224,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2018-01-16 19:49:38" itemprop="dateCreated datePublished" datetime="2018-01-16T19:49:38+00:00">2018-01-16</time>
+              <time title="创建时间：2019-04-12 20:33:16" itemprop="dateCreated datePublished" datetime="2019-04-12T20:33:16+00:00">2019-04-12</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-24 01:13:09" itemprop="dateModified" datetime="2020-07-24T01:13:09+00:00">2020-07-24</time>
+                <time title="修改时间：2020-07-24 01:37:05" itemprop="dateModified" datetime="2020-07-24T01:37:05+00:00">2020-07-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -259,8 +259,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/InfiniteYuanBlog/2018/01/16/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%8C%EF%BC%89MCPWM/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2018/01/16/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%8C%EF%BC%89MCPWM/" itemprop="commentCount"></span>
+    <a title="valine" href="/InfiniteYuanBlog/2019/04/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%85%AD%EF%BC%89NVS/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2019/04/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%85%AD%EF%BC%89NVS/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -270,14 +270,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>0</span>
+              <span>1.7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -289,7 +289,49 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <h1 id="NVS-Non-volatile-storage"><a href="#NVS-Non-volatile-storage" class="headerlink" title="NVS - Non-volatile storage"></a>NVS - Non-volatile storage</h1><p>非易失性存储（NVS）库主要用于在闪存中存储键值对。本节介绍 NVS 使用的一些概念。</p>
+<h2 id="底层存储"><a href="#底层存储" class="headerlink" title="底层存储"></a>底层存储</h2><p>目前，NVS 通过 <code>spi_flash_{read|write|erase}</code>  API 使用主闪存的一部分。该库使用具有 data 类型和 nvs 子类型的所有分区。应用程序可以通过 <code>nvs_open</code> API 选择使用带有标签 nvs 的分区或通过 <code>nvs_open_from_part</code> API 使用指定名称的任意分区。</p>
+<blockquote>
+<p>如果 NVS 分区被截断（例如，更改分区表布局时），则应擦除其内容。ESP-IDF 构建系统提供 <code>make erase_flash</code> 以擦除闪存芯片的所有内容。</p>
+</blockquote>
+<blockquote>
+<p>NVS 最适合存储许多小值，而不是 “string” 和 “blob” 类型的大值。如果需要存储大的 blob 或字符串，请考虑使用在损耗均衡库之上的 FAT 文件系统提供的功能。</p>
+</blockquote>
+<a id="more"></a>
+
+<h2 id="键值对"><a href="#键值对" class="headerlink" title="键值对"></a>键值对</h2><p>NVS 在键值对上操作。键是 ASCII 字符串，最大键长度当前为 15 个字符。值可以具有以下类型之一：</p>
+<ul>
+<li>整形: uint8_t, int8_t, uint16_t, int16_t, uint32_t, int32_t, uint64_t, int64_t</li>
+<li>以0结尾的字符串</li>
+<li>可变长的二进制数据(blob)</li>
+</ul>
+<blockquote>
+<p>字符串值目前限制为 4000 字节。这包括空终止符。Blob 值限制为 508000 字节或（分区大小的 97.6％- 4000）字节，以较低者为准。</p>
+</blockquote>
+<p>键必须是唯一的。为已存在的键写入值的行为如下：</p>
+<ul>
+<li>如果新值相同，则更新值</li>
+<li>如果新值与旧值的数据类型不同，则返回错误</li>
+</ul>
+<p>读取值时也会执行数据类型检查。如果读取操作的数据类型与值的数据类型不匹配，则返回错误。</p>
+<h2 id="命名空间"><a href="#命名空间" class="headerlink" title="命名空间"></a>命名空间</h2><p>为了缓解不同组件之间键名称中的潜在冲突，NVS 将每个键值对分配给一个命名空间。命名空间名称遵循与键名相同的规则，即最多15个字符的长度。命名空间名称在 <code>nvs_open</code> 或 <code>nvs_open_from_part</code> 调用中指定。此调用返回一个不透明句柄，该句柄用于后续调用 <code>nvs_read_ *</code>，<code>nvs_write_ *</code> 和 <code>nvs_commit</code> 函数。这样，handle 与命名空间相关联，并且键名不会与其他命名空间中的相同名称冲突。 请注意，不同 NVS 分区中具有相同名称的命名空间被视为单独的命名空间。</p>
+<h2 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h2><p>NVS 与 ESP32 闪存加密系统不直接兼容。然而，如果 NVS 加密与 ESP32 闪存加密一起使用，数据仍可以加密形式存储。</p>
+<h2 id="内部"><a href="#内部" class="headerlink" title="内部"></a>内部</h2><h3 id="键值对的日志"><a href="#键值对的日志" class="headerlink" title="键值对的日志"></a>键值对的日志</h3><p>NVS 按顺序存储键值对，新的键值对添加在最后。当必须更新任何给定密钥的值时，在日志的末尾添加新的键值对，并将旧的键值对标记为已擦除。</p>
+<h3 id="页面和条目"><a href="#页面和条目" class="headerlink" title="页面和条目"></a>页面和条目</h3><p>NVS 库在其操作中使用两个主要实体：页面和条目。Page 是一个逻辑结构，用于存储整个日志的一部分。逻辑页面对应于闪存的一个物理扇区。正在使用的页面具有与之关联的序列号。序列号在页面上强制排序。较高的序列号对应于稍后创建的页面。</p>
+<h3 id="页面结构"><a href="#页面结构" class="headerlink" title="页面结构"></a>页面结构</h3><p>页面由三部分组成：标题，条目状态位图和条目本身。要与 ESP32 闪存加密兼容，条目大小为 32 个字节。对于整数类型，条目包含一个键值对。对于字符串和 blob，条目包含键值对的一部分。</p>
+<h3 id="条目状态位图和条目"><a href="#条目状态位图和条目" class="headerlink" title="条目状态位图和条目"></a>条目状态位图和条目</h3><p>每个条目可以处于以下三种状态之一。每个状态在入口状态位图中用两位表示。位图中的最后四位（256-2 * 126）未使用。</p>
+<ul>
+<li>空（2’b11）</li>
+<li>被写（2’b10）</li>
+<li>删除（2’b00）</li>
+</ul>
+<h3 id="条目结构"><a href="#条目结构" class="headerlink" title="条目结构"></a>条目结构</h3><p>对于基本类型的值（当前长度为 1 到 8 个字节的整数），条目包含一个键值对。对于字符串和 blob 类型，条目包含整个键值对的一部分。对于字符串，如果键值对跨越多个条目，则所有条目都存储在同一页面中。通过将 Blob 划分为更小的块，允许Blob跨越多个页面。为了跟踪这些块，存储称为“blob 索引”条目的附加固定长度元数据条目。早期格式的 blob 仍然受支持（可以读取和修改）。但是，一旦修改了blob，就会使用新格式存储它们。</p>
+<p>可变长度值（字符串和 blob）写入后续条目，每个条目 32 个字节。第一个条目的 Span 字段表示使用了多少条目。</p>
+<h3 id="命名空间-1"><a href="#命名空间-1" class="headerlink" title="命名空间"></a>命名空间</h3><p>如上所述，每个键值对属于一个名称空间。命名空间标识符（字符串）存储为名称空间中键值对的键，索引为0。与这些键对应的值是这些命名空间的索引。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/storage/nvs_flash.html" target="_blank" rel="noopener">Non-volatile storage library</a></li>
+</ul>
+
     </div>
 
     
@@ -305,13 +347,13 @@
       <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/12/ESP32 学习笔记/ESP32 学习笔记（七）I2S - Inter—IC Sound/" rel="bookmark">ESP32 学习笔记（七）I2S - Inter—IC Sound</a></div>
     </li>
     <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2020/07/04/ESP32 学习笔记/ESP32 学习笔记（三十） ESP32 性能分析，与 Cortex-M4 性能比较/" rel="bookmark">ESP32 学习笔记（三十） ESP32 性能分析，与 Cortex-M4 性能比较</a></div>
+    </li>
+    <li class="popular-posts-item">
       <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/11/ESP32 学习笔记/ESP32 学习笔记（三）UART - Universal Asynchronous Receiver Transmitter/" rel="bookmark">ESP32 学习笔记（三）UART - Universal Asynchronous Receiver/Transmitter</a></div>
     </li>
     <li class="popular-posts-item">
       <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/13/ESP32 学习笔记/ESP32 学习笔记（九）SPI - SPI Slave/" rel="bookmark">ESP32 学习笔记（九）SPI - SPI Slave</a></div>
-    </li>
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/08/ESP32 学习笔记/ESP32 学习笔记（二）GPIO & RTC GPIO/" rel="bookmark">ESP32 学习笔记（二）GPIO & RTC GPIO</a></div>
     </li>
   </ul>
 
@@ -338,12 +380,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/InfiniteYuanBlog/2018/01/16/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89XPT2046%20%E8%A7%A6%E6%91%B8/" rel="prev" title="ESP32 开发笔记（五）XPT2046 触摸">
-      <i class="fa fa-chevron-left"></i> ESP32 开发笔记（五）XPT2046 触摸
+    <a href="/InfiniteYuanBlog/2019/03/26/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%BA%94%EF%BC%89%E8%84%89%E5%86%B2%E8%AE%A1%E6%95%B0%E5%99%A8/" rel="prev" title="ESP32 学习笔记（二十五）脉冲计数器">
+      <i class="fa fa-chevron-left"></i> ESP32 学习笔记（二十五）脉冲计数器
     </a></div>
       <div class="post-nav-item">
-    <a href="/InfiniteYuanBlog/2018/01/16/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89Pulse%20Counter/" rel="next" title="ESP32 学习笔记（十三）Pulse Counter">
-      ESP32 学习笔记（十三）Pulse Counter <i class="fa fa-chevron-right"></i>
+    <a href="/InfiniteYuanBlog/2019/04/28/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%80%EF%BC%89%E4%BD%BF%E7%94%A8%20ESP32%20%E5%81%9A%E4%B8%BA%20WebServer/" rel="next" title="ESP32 开发笔记（十一）使用 ESP32 做为 WebServer">
+      ESP32 开发笔记（十一）使用 ESP32 做为 WebServer <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -404,6 +446,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#NVS-Non-volatile-storage"><span class="nav-number">1.</span> <span class="nav-text">NVS - Non-volatile storage</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#底层存储"><span class="nav-number">1.1.</span> <span class="nav-text">底层存储</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#键值对"><span class="nav-number">1.2.</span> <span class="nav-text">键值对</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命名空间"><span class="nav-number">1.3.</span> <span class="nav-text">命名空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安全性"><span class="nav-number">1.4.</span> <span class="nav-text">安全性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内部"><span class="nav-number">1.5.</span> <span class="nav-text">内部</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#键值对的日志"><span class="nav-number">1.5.1.</span> <span class="nav-text">键值对的日志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#页面和条目"><span class="nav-number">1.5.2.</span> <span class="nav-text">页面和条目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#页面结构"><span class="nav-number">1.5.3.</span> <span class="nav-text">页面结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#条目状态位图和条目"><span class="nav-number">1.5.4.</span> <span class="nav-text">条目状态位图和条目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#条目结构"><span class="nav-number">1.5.5.</span> <span class="nav-text">条目结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命名空间-1"><span class="nav-number">1.5.6.</span> <span class="nav-text">命名空间</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.6.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -419,7 +462,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/InfiniteYuanBlog/archives/">
         
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">62</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -474,13 +517,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">155k</span>
+    <span title="站点总字数">201k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">2:21</span>
+    <span title="站点阅读时长">3:02</span>
 
 </div>
 

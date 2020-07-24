@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/InfiniteYuanBlog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/InfiniteYuanBlog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/InfiniteYuanBlog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/InfiniteYuanBlog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/css/main.css">
+
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/InfiniteYuanBlog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/InfiniteYuanBlog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"infiniteyuan.github.io","root":"/InfiniteYuanBlog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="高分辨率定时器概述虽然 FreeRTOS 提供软件定时器，但这些定时器有一些限制：  最大分辨率等于 RTOS 滴答周期 低优先级任务调度定时器回调  硬件定时器没有这两个限制，但通常使用起来不方便。例如，应用程序组件可能需要在将来的某些时间触发定时器事件，但硬件定时器仅包含一个用于中断生成的“比较”值。这意味着需要在硬件计时器之上构建一些设施来管理待处理事件列表，可以在发生相应的硬件中断时为这些">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ESP32 学习笔记（十九）High Resolution Timer">
+<meta property="og:url" content="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/12/24/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B9%9D%EF%BC%89High%20Resolution%20Timer/index.html">
+<meta property="og:site_name" content="InfiniteYuan">
+<meta property="og:description" content="高分辨率定时器概述虽然 FreeRTOS 提供软件定时器，但这些定时器有一些限制：  最大分辨率等于 RTOS 滴答周期 低优先级任务调度定时器回调  硬件定时器没有这两个限制，但通常使用起来不方便。例如，应用程序组件可能需要在将来的某些时间触发定时器事件，但硬件定时器仅包含一个用于中断生成的“比较”值。这意味着需要在硬件计时器之上构建一些设施来管理待处理事件列表，可以在发生相应的硬件中断时为这些">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-12-24T11:22:42.000Z">
+<meta property="article:modified_time" content="2020-07-24T01:37:05.791Z">
+<meta property="article:author" content="InfiniteYuan">
+<meta property="article:tag" content="ESP32">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/12/24/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B9%9D%EF%BC%89High%20Resolution%20Timer/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ESP32 学习笔记（十九）High Resolution Timer | InfiniteYuan</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/InfiniteYuanBlog/atom.xml" title="InfiniteYuan" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+      <div class="site-meta-headline">
+        <a>
+          <img class="custom-logo-image" src="/InfiniteYuanBlog/images/InfiniteYuanLogo.jpg" alt="InfiniteYuan">
+        </a>
+      </div>
+
+    <a href="/InfiniteYuanBlog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">InfiniteYuan</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/InfiniteYuanBlog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/InfiniteYuanBlog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">62</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/InfiniteYuanBlog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/InfiniteYuanBlog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">4</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/infiniteyuan" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/12/24/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B9%9D%EF%BC%89High%20Resolution%20Timer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
+      <meta itemprop="name" content="InfiniteYuan">
+      <meta itemprop="description" content="Stay Hungry, Stay Funlish">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="InfiniteYuan">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ESP32 学习笔记（十九）High Resolution Timer
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-12-24 11:22:42" itemprop="dateCreated datePublished" datetime="2018-12-24T11:22:42+00:00">2018-12-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-24 01:37:05" itemprop="dateModified" datetime="2020-07-24T01:37:05+00:00">2020-07-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">ESP32 学习笔记</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/InfiniteYuanBlog/2018/12/24/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B9%9D%EF%BC%89High%20Resolution%20Timer/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2018/12/24/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B9%9D%EF%BC%89High%20Resolution%20Timer/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="高分辨率定时器"><a href="#高分辨率定时器" class="headerlink" title="高分辨率定时器"></a>高分辨率定时器</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>虽然 FreeRTOS 提供软件定时器，但这些定时器有一些限制：</p>
+<ul>
+<li>最大分辨率等于 RTOS 滴答周期</li>
+<li>低优先级任务调度定时器回调</li>
+</ul>
+<p>硬件定时器没有这两个限制，但通常使用起来不方便。例如，应用程序组件可能需要在将来的某些时间触发定时器事件，但硬件定时器仅包含一个用于中断生成的“比较”值。这意味着需要在硬件计时器之上构建一些设施来管理待处理事件列表，可以在发生相应的硬件中断时为这些事件调度回调。</p>
+<p><code>esp_timer</code> API 集提供了这样的功能。在内部，<code>esp_timer</code> 使用 32 位硬件定时器（FRC1，“传统”定时器）。<code>esp_timer</code> 提供单次和周期定时器，微秒时间分辨率和 64 位范围。</p>
+<p>从高优先级的 <code>esp_timer</code> 任务调度定时器回调。由于所有回调都是从同一任务调度的，因此建议仅从回调本身执行尽可能少的工作，而是使用队列将事件发布到优先级较低的任务。</p>
+<p>如果优先级高于 <code>esp_timer</code> 的其他任务正在运行，则回调调度将延迟，直到 <code>esp_timer</code> 任务有机会运行。例如，如果正在进行 <code>SPI</code> 闪存操作，则会发生这种情况。</p>
+<p>创建和启动计时器，并调度回调需要一些时间。因此，单触发 <code>esp_timer</code> 的超时值有一个下限。如果调用 <code>esp_timer_start_once()</code> 时超时值小于20us，则仅在大约 20us 后调度回调。</p>
+<p>周期性 <code>esp_timer</code> 还对最小定时器周期施加 50us 限制。周期小于 50us 的定期软件定时器不实用，因为它们会占用大部分 CPU 时间。如果发现需要小周期的定时器，请考虑使用专用硬件外设或 DMA 功能。</p>
+<a id="more"></a>
+
+<h2 id="使用-esp-timer-API"><a href="#使用-esp-timer-API" class="headerlink" title="使用 esp_timer API"></a>使用 <code>esp_timer</code> API</h2><p>单个计时器由 <code>esp_timer_handle_t</code> 类型表示。定时器有与之关联的回调函数。每次计时器过去时，都会从 <code>esp_timer</code> 任务调用此回调函数。</p>
+<ul>
+<li>要创建计时器，请调用 <code>esp_timer_create()</code>。</li>
+<li>要在不再需要时删除计时器，请调用 <code>esp_timer_delete()</code>。</li>
+</ul>
+<p>定时器可以以单次模式或定期模式启动。</p>
+<ul>
+<li>要以单次模式启动计时器，请调用 <code>esp_timer_start_once()</code>，传递应该调用回调的时间间隔。调用回调时，会认为计时器已停止。</li>
+<li>要以周期模式启动定时器，请调用 <code>esp_timer_start_periodic()</code>，传递应调用回调的周期。计时器一直运行，直到调用 <code>esp_timer_stop()</code>。</li>
+</ul>
+<p>请注意，调用 <code>esp_timer_start_once()</code> 或 <code>esp_timer_start_periodic()</code> 时，计时器不能运行。要重新启动正在运行的计时器，请先调用 <code>esp_timer_stop()</code>，然后调用其中一个启动函数。</p>
+<h2 id="获得当前时间"><a href="#获得当前时间" class="headerlink" title="获得当前时间"></a>获得当前时间</h2><p><code>esp_timer</code> 还提供了一个便捷函数来获取自启动以来经过的时间，精度为微秒：<code>esp_timer_get_time()</code>。此函数返回自 <code>esp_timer</code> 初始化以来的微秒数，这通常在调用 <code>app_main</code> 函数之前不久发生。</p>
+<p>与 <code>gettimeofday</code> 函数不同，<code>esp_timer_get_time()</code> 返回的值：</p>
+<ul>
+<li>芯片从深度睡眠中唤醒后，从零开始</li>
+<li>没有应用时区或 DST 调整</li>
+</ul>
+<h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><ul>
+<li><a href="https://github.com/espressif/esp-idf/tree/7b13308/examples/system/esp_timer" target="_blank" rel="noopener">system/esp_timer</a></li>
+</ul>
+<h2 id="API-参考"><a href="#API-参考" class="headerlink" title="API 参考"></a>API 参考</h2><ul>
+<li><a href="https://github.com/espressif/esp-idf/blob/7b13308/components/esp32/include/esp_timer.h" target="_blank" rel="noopener">esp32/include/esp_timer.h</a></li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/system/esp_timer.html" target="_blank" rel="noopener">High Resolution Timer</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/01/16/ESP32 学习笔记/ESP32 学习笔记（一）开发环境搭建/" rel="bookmark">ESP32 学习笔记（一）开发环境搭建</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/12/ESP32 学习笔记/ESP32 学习笔记（七）I2S - Inter—IC Sound/" rel="bookmark">ESP32 学习笔记（七）I2S - Inter—IC Sound</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2020/07/04/ESP32 学习笔记/ESP32 学习笔记（三十） ESP32 性能分析，与 Cortex-M4 性能比较/" rel="bookmark">ESP32 学习笔记（三十） ESP32 性能分析，与 Cortex-M4 性能比较</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/11/ESP32 学习笔记/ESP32 学习笔记（三）UART - Universal Asynchronous Receiver Transmitter/" rel="bookmark">ESP32 学习笔记（三）UART - Universal Asynchronous Receiver/Transmitter</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/13/ESP32 学习笔记/ESP32 学习笔记（九）SPI - SPI Slave/" rel="bookmark">ESP32 学习笔记（九）SPI - SPI Slave</a></div>
+    </li>
+  </ul>
+
+        <div class="reward-container">
+  <div>如果这篇文章对你有帮助，那么不妨？</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/InfiniteYuanBlog/tags/ESP32/" rel="tag"><i class="fa fa-tag"></i> ESP32</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2018/12/17/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B9%9D%EF%BC%89%E4%BD%BF%E7%94%A8%20VS%20Code%20%E5%BF%AB%E9%80%9F%E5%BC%80%E5%8F%91%20ESP32/" rel="prev" title="ESP32 开发笔记（九）使用 VS Code 快速开发 ESP32">
+      <i class="fa fa-chevron-left"></i> ESP32 开发笔记（九）使用 VS Code 快速开发 ESP32
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2019/02/01/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89ESP-MESH/" rel="next" title="ESP32 官方文档（十五）ESP-MESH">
+      ESP32 官方文档（十五）ESP-MESH <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#高分辨率定时器"><span class="nav-number">1.</span> <span class="nav-text">高分辨率定时器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-esp-timer-API"><span class="nav-number">1.2.</span> <span class="nav-text">使用 esp_timer API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获得当前时间"><span class="nav-number">1.3.</span> <span class="nav-text">获得当前时间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用示例"><span class="nav-number">1.4.</span> <span class="nav-text">应用示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API-参考"><span class="nav-number">1.5.</span> <span class="nav-text">API 参考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.6.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="InfiniteYuan"
+      src="/InfiniteYuanBlog/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">InfiniteYuan</p>
+  <div class="site-description" itemprop="description">Stay Hungry, Stay Funlish</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/InfiniteYuanBlog/archives/">
+        
+          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/InfiniteYuanBlog/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/InfiniteYuanBlog/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/infiniteyuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;infiniteyuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">InfiniteYuan</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">201k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">3:02</span>
+
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        站点访客数:<span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        站点阅读量:<span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/InfiniteYuanBlog/lib/anime.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/InfiniteYuanBlog/js/utils.js"></script>
+
+<script src="/InfiniteYuanBlog/js/motion.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/schemes/muse.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/next-boot.js"></script>
+
+<script src="/InfiniteYuanBlog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/InfiniteYuanBlog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '2spSMheFYziIJlzCVs7fvHeG-gzGzoHsz',
+      appKey     : 'aj8lFtI7EyFfrWCx902T0szo',
+      placeholder: "ヾﾉ≧∀≦)o来啊，快活啊!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

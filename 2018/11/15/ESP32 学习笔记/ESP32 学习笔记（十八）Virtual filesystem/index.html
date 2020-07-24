@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/InfiniteYuanBlog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/InfiniteYuanBlog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/InfiniteYuanBlog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/InfiniteYuanBlog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/css/main.css">
+
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/InfiniteYuanBlog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/InfiniteYuanBlog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"infiniteyuan.github.io","root":"/InfiniteYuanBlog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Virtual filesystem component概述虚拟文件系统(VFS)组件为可以对类文件对象执行操作的驱动程序提供统一的接口。这可以是真实的文件系统(FAT，SPIFFS 等)，也可以是有文件类接口的设备驱动程序。 该组件允许 C 库函数(如 fopen 和fprintf )与 FS 驱动程序一起使用。在高层次，每个 FS 驱动程序与某些路径前缀相关联。当其中一个 C 库函数需要打开文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ESP32 学习笔记（十八）Virtual filesystem">
+<meta property="og:url" content="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/11/15/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%85%AB%EF%BC%89Virtual%20filesystem/index.html">
+<meta property="og:site_name" content="InfiniteYuan">
+<meta property="og:description" content="Virtual filesystem component概述虚拟文件系统(VFS)组件为可以对类文件对象执行操作的驱动程序提供统一的接口。这可以是真实的文件系统(FAT，SPIFFS 等)，也可以是有文件类接口的设备驱动程序。 该组件允许 C 库函数(如 fopen 和fprintf )与 FS 驱动程序一起使用。在高层次，每个 FS 驱动程序与某些路径前缀相关联。当其中一个 C 库函数需要打开文">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-11-15T17:24:06.000Z">
+<meta property="article:modified_time" content="2020-07-24T01:37:05.791Z">
+<meta property="article:author" content="InfiniteYuan">
+<meta property="article:tag" content="ESP32">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/11/15/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%85%AB%EF%BC%89Virtual%20filesystem/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ESP32 学习笔记（十八）Virtual filesystem | InfiniteYuan</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/InfiniteYuanBlog/atom.xml" title="InfiniteYuan" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+      <div class="site-meta-headline">
+        <a>
+          <img class="custom-logo-image" src="/InfiniteYuanBlog/images/InfiniteYuanLogo.jpg" alt="InfiniteYuan">
+        </a>
+      </div>
+
+    <a href="/InfiniteYuanBlog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">InfiniteYuan</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/InfiniteYuanBlog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/InfiniteYuanBlog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">62</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/InfiniteYuanBlog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/InfiniteYuanBlog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">4</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/infiniteyuan" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/11/15/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%85%AB%EF%BC%89Virtual%20filesystem/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
+      <meta itemprop="name" content="InfiniteYuan">
+      <meta itemprop="description" content="Stay Hungry, Stay Funlish">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="InfiniteYuan">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ESP32 学习笔记（十八）Virtual filesystem
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-11-15 17:24:06" itemprop="dateCreated datePublished" datetime="2018-11-15T17:24:06+00:00">2018-11-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-24 01:37:05" itemprop="dateModified" datetime="2020-07-24T01:37:05+00:00">2020-07-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">ESP32 学习笔记</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/InfiniteYuanBlog/2018/11/15/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%85%AB%EF%BC%89Virtual%20filesystem/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2018/11/15/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%85%AB%EF%BC%89Virtual%20filesystem/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Virtual-filesystem-component"><a href="#Virtual-filesystem-component" class="headerlink" title="Virtual filesystem component"></a>Virtual filesystem component</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>虚拟文件系统(VFS)组件为可以对类文件对象执行操作的驱动程序提供统一的接口。这可以是真实的文件系统(FAT，SPIFFS 等)，也可以是有文件类接口的设备驱动程序。</p>
+<p>该组件允许 C 库函数(如 <code>fopen</code> 和<code>fprintf</code> )与 FS 驱动程序一起使用。在高层次，每个 FS 驱动程序与某些路径前缀相关联。当其中一个 C 库函数需要打开文件时，VFS 组件将搜索与该文件路径关联的 FS 驱动程序，并将该调用转发给该驱动程序。VFS 还将给定文件的读取，写入和其他调用转发到同一 FS 驱动程序。</p>
+<p>例如，可以使用 <code>/fat</code> 前缀注册 FAT 文件系统驱动程序，并调用 <code>fopen(“/fat/file.txt”，“w”)</code>。然后，VFS 组件将调用 FAT 驱动程序的 <code>open</code> 函数并将 <code>/file.txt</code> 参数传递给它(以及适当的模式标志)。对返回的 <code>FILE *</code> 流的所有后续 C 库函数调用也将被转发到 FAT 驱动程序。</p>
+<a id="more"></a>
+
+<h2 id="FS注册"><a href="#FS注册" class="headerlink" title="FS注册"></a>FS注册</h2><p>要注册 FS 驱动程序，应用程序需要在 <code>esp_vfs_t</code> 结构的实例中定义，并使用 <code>FS API</code> 的函数指针填充它：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">esp_vfs_t myfs &#x3D; &#123;</span><br><span class="line">    .flags &#x3D; ESP_VFS_FLAG_DEFAULT,</span><br><span class="line">    .write &#x3D; &amp;myfs_write,</span><br><span class="line">    .open &#x3D; &amp;myfs_open,</span><br><span class="line">    .fstat &#x3D; &amp;myfs_fstat,</span><br><span class="line">    .close &#x3D; &amp;myfs_close,</span><br><span class="line">    .read &#x3D; &amp;myfs_read,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">ESP_ERROR_CHECK(esp_vfs_register(&quot;&#x2F;data&quot;, &amp;myfs, NULL));</span><br></pre></td></tr></table></figure>
+<p>根据 FS 驱动程序声明其 API 的方式，应使用 <code>read</code>，<code>write</code> 等，或 <code>read_p</code>，<code>write_p</code> 等。</p>
+<p>情况1：声明 API 函数时没有额外的上下文指针(FS 驱动程序是单例)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ssize_t myfs_write(int fd, const void * data, size_t size);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; In definition of esp_vfs_t:</span><br><span class="line">    .flags &#x3D; ESP_VFS_FLAG_DEFAULT,</span><br><span class="line">    .write &#x3D; &amp;myfs_write,</span><br><span class="line">&#x2F;&#x2F; ... other members initialized</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; When registering FS, context pointer (third argument) is NULL:</span><br><span class="line">ESP_ERROR_CHECK(esp_vfs_register(&quot;&#x2F;data&quot;, &amp;myfs, NULL));</span><br></pre></td></tr></table></figure>
+<p>情况2：使用额外的上下文指针声明 API 函数(FS 驱动程序支持多个实例)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ssize_t myfs_write(myfs_t* fs, int fd, const void * data, size_t size);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; In definition of esp_vfs_t:</span><br><span class="line">    .flags &#x3D; ESP_VFS_FLAG_CONTEXT_PTR,</span><br><span class="line">    .write_p &#x3D; &amp;myfs_write,</span><br><span class="line">&#x2F;&#x2F; ... other members initialized</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; When registering FS, pass the FS context pointer into the third argument</span><br><span class="line">&#x2F;&#x2F; (hypothetical myfs_mount function is used for illustrative purposes)</span><br><span class="line">myfs_t* myfs_inst1 &#x3D; myfs_mount(partition1-&gt;offset, partition1-&gt;size);</span><br><span class="line">ESP_ERROR_CHECK(esp_vfs_register(&quot;&#x2F;data1&quot;, &amp;myfs, myfs_inst1));</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Can register another instance:</span><br><span class="line">myfs_t* myfs_inst2 &#x3D; myfs_mount(partition2-&gt;offset, partition2-&gt;size);</span><br><span class="line">ESP_ERROR_CHECK(esp_vfs_register(&quot;&#x2F;data2&quot;, &amp;myfs, myfs_inst2));</span><br></pre></td></tr></table></figure>
+
+<h2 id="同步输入-输出多路复用"><a href="#同步输入-输出多路复用" class="headerlink" title="同步输入/输出多路复用"></a>同步输入/输出多路复用</h2><p>如果要通过 <code>select()</code> 使用同步输入/输出多路复用，则需要使用 <code>start_select()</code> 和 <code>end_select()</code> 函数注册 VFS，类似于以下示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; In definition of esp_vfs_t:</span><br><span class="line">    .start_select &#x3D; &amp;uart_start_select,</span><br><span class="line">    .end_select &#x3D; &amp;uart_end_select,</span><br><span class="line">&#x2F;&#x2F; ... other members initialized</span><br></pre></td></tr></table></figure>
+<p>调用 <code>start_select()</code> 以设置用于检测属于给定 VFS 的文件描述符的读/写/错误条件的环境。调用 <code>end_select()</code> 来停止/取消初始化/释放由 <code>start_select()</code> 设置的环境。请参阅 <a href="https://github.com/espressif/esp-idf/blob/fb7ba1b/components/vfs/vfs_uart.c" target="_blank" rel="noopener"><code>vfs/vfs_uart.c</code></a> 中 UART 外设的参考实现，尤其是函数 <code>esp_vfs_dev_uart_register()</code>，<code>uart_start_select()</code> 和 <code>uart_end_select()</code>。</p>
+<p>演示使用带有 VFS 文件描述符的 <code>select()</code> 的示例是 <a href="https://github.com/espressif/esp-idf/tree/fb7ba1b/examples/peripherals/uart_select" target="_blank" rel="noopener"><code>peripherals/uart_select</code></a> 和 <a href="https://github.com/espressif/esp-idf/tree/fb7ba1b/examples/system/select" target="_blank" rel="noopener"></a> 示例。</p>
+<p>如果 <code>select()</code> 仅用于套接字文件描述符，那么可以启用 <code>CONFIG_USE_ONLY_LWIP_SELECT</code> 选项，这可以减少代码大小并提高性能。</p>
+<h2 id="路径"><a href="#路径" class="headerlink" title="路径"></a>路径</h2><p>每个注册的 FS 都有一个与之关联的路径前缀。该前缀可以被认为是该分区的 <code>“mount point”</code>(挂载点)。</p>
+<p>如果嵌套安装点，则在打开文件时将使用具有最长匹配路径前缀的安装点。例如，假设以下文件系统在 VFS 中注册：</p>
+<ul>
+<li>FS 1 on /data</li>
+<li>FS 2 on /data/static<br>然后：</li>
+<li>打开名为 <code>/data/log.txt</code> 的文件时将使用 FS 1</li>
+<li>打开名为 <code>/data/static/index.html</code> 的文件时将使用 FS 2</li>
+<li>即使 FS 2 中不存在 <code>/index.html</code>，也不会搜索 FS 1 <code>/static/index.html</code>。</li>
+</ul>
+<p>作为一般规则，挂载点名称必须以路径分隔符(<code>/</code>)开头，并且必须在路径分隔符后包含至少一个字符。但是，也支持空挂载点名称，并且可以在应用程序需要提供“回退”文件系统或完全覆盖VFS功能的情况下使用。如果没有前缀匹配给定的路径，则将使用此类文件系统。</p>
+<p>VFS 不以任何特殊方式处理路径名中的点(.)。VFS 不会将 <code>...</code> 视为对父目录的引用。即在上面的例子中，使用路径 <code>/data/static/../log.txt</code> 不会导致调用 FS 1 来打开 <code>/log.txt</code>。特定 FS 驱动程序(如 FATFS)可能以不同方式处理文件名中的点。</p>
+<p>打开文件时，FS 驱动程序只会获得文件的相对路径。例如：</p>
+<ul>
+<li><code>myfs</code> 驱动程序使用 <code>/data</code> 注册为路径前缀</li>
+<li>和应用程序调用 <code>fopen(“/data/config.json”，...)</code></li>
+<li>然后 VFS 组件将调用 <code>myfs_open(“/config.json”，...)</code>。</li>
+<li><code>myfs</code> 驱动程序将打开 <code>/config.json</code> 文件</li>
+</ul>
+<p>VFS 不会对总文件路径长度施加限制，但会将 FS 路径前缀限制为 <code>ESP_VFS_PATH_MAX</code> 字符。各个 FS 驱动程序可能有自己的文件名长度限制。</p>
+<h2 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h2><p>文件描述符是从 <code>0</code> 到 <code>FD_SETSIZE -1</code> 其中 <code>FD_SETSIZE</code> 在newlib的 <code>sys/types.h</code> 中定义。最大的文件描述符(由 <code>CONFIG_LWIP_MAX_SOCKETS</code> 配置)保留给套接字。VFS 组件包含一个名为 <code>s_fd_table</code> 的查找表，用于将全局文件描述符映射到 <code>s_vfs</code> 数组中注册的 VFS 驱动程序索引。</p>
+<h2 id="标准-IO-流-stdin，stdout，stderr"><a href="#标准-IO-流-stdin，stdout，stderr" class="headerlink" title="标准 IO 流(stdin，stdout，stderr)"></a>标准 IO 流(stdin，stdout，stderr)</h2><p>如果“UART for console output”menuconfig选项未设置为“None”，则 <code>stdin</code>，<code>stdout</code> 和 <code>stderr</code> 配置为读取和写入 UART。可以将 UART0 或 UART1 用于标准 IO。默认情况下，使用 UART0，波特率为 115200，TX 引脚为 GPIO1，RX 引脚为 GPIO3。可以在 menuconfig 中更改这些参数。</p>
+<p>写入 <code>stdout</code> 或 <code>stderr</code> 会将字符发送到 UART 发送 FIFO。从 <code>stdin</code> 读取将从 UART 接收 FIFO 中检索字符。</p>
+<p>默认情况下，VFS 使用简单的函数来读取和写入 UART。写入忙 - 等待直到所有数据都被放入 UART FIFO，并且读取是非阻塞的，只返回 FIFO 中的数据。由于这种非阻塞读取行为，更高级别的 C 库调用，例如 <code>fscanf(“％d \ n”，＆var);</code> 可能没有预期的结果。</p>
+<p>使用 UART 驱动程序的应用程序可能会指示 VFS 使用驱动程序的中断驱动，阻塞读写功能。这可以通过调用 <code>esp_vfs_dev_uart_use_driver</code> 函数来完成。也可以使用 <code>esp_vfs_dev_uart_use_nonblocking</code> 调用恢复到基本的非阻塞函数。</p>
+<p>VFS 还为输入和输出提供可选的换行转换功能。在内部，大多数应用程序发送和接收由 LF(‘n’’)字符终止的行。不同的终端程序可能需要不同的线路终端，例如 CR 或 CRLF。应用程序可以通过 menuconfig 或通过调用 <code>esp_vfs_dev_uart_set_rx_line_endings</code> 和 <code>esp_vfs_dev_uart_set_tx_line_endings</code> 函数单独为输入和输出配置它。</p>
+<h2 id="标准流和-FreeRTOS-任务"><a href="#标准流和-FreeRTOS-任务" class="headerlink" title="标准流和 FreeRTOS 任务"></a>标准流和 FreeRTOS 任务</h2><p><code>stdin</code>，<code>stdout</code> 和 <code>stderr</code> 的 <code>FILE</code> 对象在所有 FreeRTOS 任务之间共享，但指向这些对象的指针存储在每个任务的 <code>struct _reent</code> 中。以下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fprintf(stderr，“42\n”);</span><br></pre></td></tr></table></figure>
+<p>实际上被翻译成这个(由预处理器)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fprintf(__ getreent() -&gt; _stderr，“42\n”);</span><br></pre></td></tr></table></figure>
+<p>其中 <code>__getreent()</code>函数返回一个指向 <code>struct _reent</code>的每个任务指针 <code>(newlib/include/sys/reent.h＃L370-L417)</code>。此结构在每个任务的 TCB 上分配。初始化任务时，<code>struct _reent</code> 的 <code>_stdin</code>，<code>_stdout</code> 和 <code>_stderr</code> 成员被设置为 <code>_GLOBAL_REENT</code> 的 <code>_stdin</code>，<code>_stdout</code> 和 <code>_stderr</code> 的值(即在 FreeRTOS 启动之前使用的结构)。</p>
+<p>这样的设计会产生以下后果：</p>
+<ul>
+<li>可以为任何给定任务设置 <code>stdin</code>，<code>stdout</code> 和 <code>stderr</code>，而不会影响其他任务，例如通过做 <code>stdin = fopen(“/dev/uart/1”，“r”)</code>。</li>
+<li>使用 fclose 关闭默认 <code>stdin</code>，<code>stdout</code> 或 <code>stderr</code> 将关闭 <code>FILE</code> 流对象 - 这将影响所有其他任务。</li>
+<li>要更改新任务的默认 <code>stdin</code>，<code>stdout</code>，<code>stderr</code> 流，请在创建任务之前修改 <code>_GLOBAL_REENT - &gt; _ stdin(_stdout，_stderr)</code>。</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/storage/vfs.html" target="_blank" rel="noopener">Virtual filesystem</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/01/16/ESP32 学习笔记/ESP32 学习笔记（一）开发环境搭建/" rel="bookmark">ESP32 学习笔记（一）开发环境搭建</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/12/ESP32 学习笔记/ESP32 学习笔记（七）I2S - Inter—IC Sound/" rel="bookmark">ESP32 学习笔记（七）I2S - Inter—IC Sound</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2020/07/04/ESP32 学习笔记/ESP32 学习笔记（三十） ESP32 性能分析，与 Cortex-M4 性能比较/" rel="bookmark">ESP32 学习笔记（三十） ESP32 性能分析，与 Cortex-M4 性能比较</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/11/ESP32 学习笔记/ESP32 学习笔记（三）UART - Universal Asynchronous Receiver Transmitter/" rel="bookmark">ESP32 学习笔记（三）UART - Universal Asynchronous Receiver/Transmitter</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/13/ESP32 学习笔记/ESP32 学习笔记（九）SPI - SPI Slave/" rel="bookmark">ESP32 学习笔记（九）SPI - SPI Slave</a></div>
+    </li>
+  </ul>
+
+        <div class="reward-container">
+  <div>如果这篇文章对你有帮助，那么不妨？</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/InfiniteYuanBlog/tags/ESP32/" rel="tag"><i class="fa fa-tag"></i> ESP32</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2018/11/15/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%83%EF%BC%89SDMMC%20Host%20Driver/" rel="prev" title="ESP32 学习笔记（十七）SDMMC Host Driver">
+      <i class="fa fa-chevron-left"></i> ESP32 学习笔记（十七）SDMMC Host Driver
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2018/11/20/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AB%EF%BC%89ESP32%20MP3%20%E6%92%AD%E6%94%BE%E5%99%A8/" rel="next" title="ESP32 开发笔记（八）ESP32 MP3 播放器">
+      ESP32 开发笔记（八）ESP32 MP3 播放器 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Virtual-filesystem-component"><span class="nav-number">1.</span> <span class="nav-text">Virtual filesystem component</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FS注册"><span class="nav-number">1.2.</span> <span class="nav-text">FS注册</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#同步输入-输出多路复用"><span class="nav-number">1.3.</span> <span class="nav-text">同步输入&#x2F;输出多路复用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#路径"><span class="nav-number">1.4.</span> <span class="nav-text">路径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件描述符"><span class="nav-number">1.5.</span> <span class="nav-text">文件描述符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标准-IO-流-stdin，stdout，stderr"><span class="nav-number">1.6.</span> <span class="nav-text">标准 IO 流(stdin，stdout，stderr)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标准流和-FreeRTOS-任务"><span class="nav-number">1.7.</span> <span class="nav-text">标准流和 FreeRTOS 任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.8.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="InfiniteYuan"
+      src="/InfiniteYuanBlog/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">InfiniteYuan</p>
+  <div class="site-description" itemprop="description">Stay Hungry, Stay Funlish</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/InfiniteYuanBlog/archives/">
+        
+          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/InfiniteYuanBlog/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/InfiniteYuanBlog/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/infiniteyuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;infiniteyuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">InfiniteYuan</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">201k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">3:02</span>
+
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        站点访客数:<span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        站点阅读量:<span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/InfiniteYuanBlog/lib/anime.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/InfiniteYuanBlog/js/utils.js"></script>
+
+<script src="/InfiniteYuanBlog/js/motion.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/schemes/muse.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/next-boot.js"></script>
+
+<script src="/InfiniteYuanBlog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/InfiniteYuanBlog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '2spSMheFYziIJlzCVs7fvHeG-gzGzoHsz',
+      appKey     : 'aj8lFtI7EyFfrWCx902T0szo',
+      placeholder: "ヾﾉ≧∀≦)o来啊，快活啊!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

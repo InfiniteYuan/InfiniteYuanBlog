@@ -105,6 +105,23 @@
       </tags>
   </entry>
   <entry>
+    <title>ESP32 学习笔记（三十） ESP32 性能分析，与 Cortex-M4 性能比较</title>
+    <url>/InfiniteYuanBlog/2020/07/04/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%E5%8D%81%EF%BC%89%20ESP32%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%EF%BC%8C%E4%B8%8E%20Cortex-M4%20%E6%80%A7%E8%83%BD%E6%AF%94%E8%BE%83/</url>
+    <content><![CDATA[<h1 id="关于-EEMBC"><a href="#关于-EEMBC" class="headerlink" title="关于 EEMBC"></a>关于 EEMBC</h1><p><a href="https://www.eembc.org/about/" target="_blank" rel="noopener">About EEMBC</a></p>
+<p>EEMBC 为自动驾驶，移动成像，物联网，移动设备和许多其他应用程序中使用的硬件和软件制定性能基准。</p>
+<p>EEMBC 基准测试得分的主要受众是创建依赖嵌入式微控制器和微处理器的系统的公司：从智能手机到太阳能电池板的所有产品。尽管此类制造商通常具有自己的专有基准，但是 EEMBC 提供了一种有吸引力的替代方案，可替代购买硬件，进行设置，然后在候选处理器组上进行所有测量的所有复杂性。 EEMBC 基准套件通过提供统一，严格定义的测量标准，使制造商可以轻松地比较替代解决方案，从而使制造商避免了此繁琐的过程。这不仅使大型制造商受益，而且使开发人员，集成商，</p>
+<a id="more"></a>
+
+<h2 id="ESP32-8266-与-Cortex-M3-M4-性能比较"><a href="#ESP32-8266-与-Cortex-M3-M4-性能比较" class="headerlink" title="ESP32/8266 与 Cortex-M3/M4 性能比较"></a>ESP32/8266 与 Cortex-M3/M4 性能比较</h2><p><a href="https://www.eembc.org/coremark/view.php?benchmark_seq=13244,13243,1139,1506" target="_blank" rel="noopener">ESP32/8266 与 Cortex-M3/M4 性能比较</a><br><img src="https://img-blog.csdnimg.cn/20200704114043419.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ESP32 学习笔记（三）UART - Universal Asynchronous Receiver/Transmitter</title>
     <url>/InfiniteYuanBlog/2018/08/11/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89UART%20-%20Universal%20Asynchronous%20Receiver%20Transmitter/</url>
     <content><![CDATA[<h1 id="UART-Universal-Asynchronous-Receiver-Transmitter"><a href="#UART-Universal-Asynchronous-Receiver-Transmitter" class="headerlink" title="UART - Universal Asynchronous Receiver/Transmitter"></a>UART - Universal Asynchronous Receiver/Transmitter</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>嵌入式应用通常要求一个简单的并且占用系统资源少的方法来传输数据.通用异步收发传输器(UART) 即可以满足这些要求,它能够灵活地与外部设备进行全双工数据交换.ESP32 芯片中有 3 个UART 控制器可供使用,并且兼容不同的 UART 设备.另外,UART 还可以用作红外数据交换(IrDA) 或 RS-485 调制解调器.</p>
@@ -234,6 +251,646 @@
 </ul>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
 <li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/peripherals/spi_slave.html" target="_blank" rel="noopener">SPI Slave driver</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（二十一）电源管理</title>
+    <url>/InfiniteYuanBlog/2019/03/11/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B8%80%EF%BC%89%E7%94%B5%E6%BA%90%E7%AE%A1%E7%90%86/</url>
+    <content><![CDATA[<h1 id="电源管理"><a href="#电源管理" class="headerlink" title="电源管理"></a>电源管理</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP-IDF 中包含的电源管理算法可以根据应用组件的要求调整 APB 频率，CPU 频率，并使芯片进入 light sleep 模式，以尽可能低的功耗运行应用程序。</p>
+<p>应用程序组件可以通过创建和获取电源管理锁来表达其要求。</p>
+<p>例如，由 APB 提供时钟的外围设备的驱动器可以在使用外围设备的时间内请求将 APB 频率设置为80MHz。另一个例子是，当有任务准备好运行时，RTOS 将请求 CPU 以最高配置频率运行。又一个例子是需要启用中断的外围驱动器。这样的驱动程序可以请求禁用 light sleep。</p>
+<p>当然，要求更高的 APB 或 CPU 频率或禁用 light sleep 会导致更高的电流消耗。组件应尽可能在最短的时间内限制电源管理锁的使用。</p>
+<a id="more"></a>
+
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>可以使用 <code>CONFIG_PM_ENABLE</code> 选项在编译时启用电源管理。</p>
+<p>启用电源管理功能的代价是增加了中断延迟。额外延迟取决于许多因素，其中包括 CPU 频率，单/双核模式，是否需要执行频率切换。最小额外延迟为 0.2us（当 CPU 频率为 240MHz，并且未启用频率调整时），最大额外延迟为 40us（启用频率调整时，在中断输入时执行从 40MHz 到 80MHz 的切换）。</p>
+<p>通过调用 <code>esp_pm_configure()</code> 函数，可以在应用程序中启用动态频率调整（DFS）和自动光睡眠。它的参数是定义频率缩放设置的结构，<code>esp_pm_config_esp32_t</code>。在此结构中，需要初始化 3 个字段：</p>
+<ul>
+<li><code>max_freq_mhz</code>  - 最大 CPU 频率，以 MHZ 为单位（即采用 <code>ESP_PM_CPU_FREQ_MAX</code> 时使用的频率）。 这通常设置为 <code>CONFIG_ESP32_DEFAULT_CPU_FREQ_MHZ</code>。</li>
+<li><code>min_freq_mhz</code>  - 最小 CPU 频率，以 MHz 为单位（即仅采用 <code>ESP_PM_APB_FREQ_MAX</code> 锁定时使用的频率）。 这可以设置为 XTAL 频率，或 XTAL 频率除以整数。 请注意，10MHz 是可以生成 1MHz 的默认 REF_TICK 时钟的最低频率。</li>
+<li><code>light_sleep_enable</code>  - 当没有锁定时，系统是否应自动进入 light sleep 状态（true/false）。</li>
+</ul>
+<blockquote>
+<p>自动 light sleep 模式基于 FreeRTOS Tickless Idle 功能。如果在 menuconfig 中未启用 <code>CONFIG_FREERTOS_USE_TICKLESS_IDLE</code>选项，则 <code>esp_pm_configure()</code> 将返回 <code>ESP_ERR_NOT_SUPPORTED</code> 错误，但请求自动 light sleep。</p>
+</blockquote>
+<blockquote>
+<p>在 light sleep 模式下，外设是时钟门控的，不会产生中断（来自 GPIO 和内部外设）。睡眠模式文档中描述的唤醒源可用于从 light sleep 状态唤醒。例如，EXT0 和 EXT1 唤醒源可用于从 GPIO 唤醒。</p>
+</blockquote>
+<p>或者，可以在 menuconfig 中启用 <code>CONFIG_PM_DFS_INIT_AUTO</code> 选项。如果启用，最大 CPU 频率由 <code>CONFIG_ESP32_DEFAULT_CPU_FREQ_MHZ</code> 设置决定，最小 CPU 频率设置为 XTAL 频率。</p>
+<h2 id="电源管理锁"><a href="#电源管理锁" class="headerlink" title="电源管理锁"></a>电源管理锁</h2><p>如概述中所述，应用程序可以获取/释放锁以控制电源管理算法。当应用程序锁定时，对于每个锁定，电源管理算法操作以下面描述的方式受到限制。释放锁定时，将删除此类限制。</p>
+<p>应用程序的不同部分可以采用相同的锁定。 在这种情况下，锁定必须被释放的次数与获取的次数相同，以便恢复功率管理算法。</p>
+<p>在 ESP32 中，支持三种类型的锁：</p>
+<ul>
+<li><code>ESP_PM_CPU_FREQ_MAX</code><br>请求 CPU 频率为 <code>esp_pm_configure()</code> 设置的最大值。对于 ESP32，此值可以设置为 80,160 或 240MHz。</li>
+<li><code>ESP_PM_APB_FREQ_MAX</code><br>请求 APB 频率处于最大支持值。对于 ESP32，这是 80MHz。</li>
+<li><code>ESP_PM_NO_LIGHT_SLEEP</code><br>防止使用自动 light sleep 模式。</li>
+</ul>
+<h2 id="ESP32-的电源管理算法"><a href="#ESP32-的电源管理算法" class="headerlink" title="ESP32 的电源管理算法"></a>ESP32 的电源管理算法</h2><p>启用动态频率调整后，CPU 频率将按如下方式切换：</p>
+<ul>
+<li><p>如果最大 CPU 频率（使用 <code>esp_pm_configure()</code> 或 <code>CONFIG_ESP32_DEFAULT_CPU_FREQ_MHZ</code> 设置）为 240 MHz：</p>
+<ol>
+<li>获取 <code>ESP_PM_CPU_FREQ_MAX</code> 或 <code>ESP_PM_APB_FREQ_MAX</code> 时，CPU 频率为 240 MHz，APB 频率为 80 MHz。</li>
+<li>否则，频率将切换到使用 <code>esp_pm_configure()</code>设置的最小值。</li>
+</ol>
+</li>
+<li><p>如果最大 CPU 频率为 160 MHz：</p>
+<ol>
+<li>获取 <code>ESP_PM_CPU_FREQ_MAX</code> 时，CPU 频率设置为 160 MHz，APB 频率设置为 80 MHz。</li>
+<li>当未获取 <code>ESP_PM_CPU_FREQ_MAX</code> 但 <code>ESP_PM_APB_FREQ_MAX</code> 为时，CPU 和 APB 频率设置为 80 MHz。</li>
+<li>否则，频率将切换到使用 <code>esp_pm_configure()</code> 设置的最小值。</li>
+</ol>
+</li>
+<li><p>如果最大 CPU 频率为 80 MHz：</p>
+<ol>
+<li>获取 <code>ESP_PM_CPU_FREQ_MAX</code> 或 <code>ESP_PM_APB_FREQ_MAX</code> 锁时，CPU 和 APB 频率将为 80 MHz。</li>
+<li>否则，频率将切换到使用 <code>esp_pm_configure()</code> 设置的最小值。</li>
+</ol>
+</li>
+<li><p>如果未获取任何锁定，并且在调用 <code>esp_pm_configure()</code> 时启用了轻度睡眠，则系统将进入轻度睡眠模式(light sleep)。轻度睡眠的持续时间将由以下因素确定：</p>
+<ul>
+<li>FreeRTOS 任务因有限超时而被阻止<ul>
+<li>定时器使用高分辨率计时器 API 注册</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>轻度睡眠持续时间将被选择为在最近的事件之前唤醒（任务被解锁或计时器过去）。</p>
+<h2 id="动态频率调整和外设驱动程序"><a href="#动态频率调整和外设驱动程序" class="headerlink" title="动态频率调整和外设驱动程序"></a>动态频率调整和外设驱动程序</h2><p>启用 DFS 后，APB 频率可在单个 RTOS 滴答内多次更改。即使 APB 频率发生变化，一些外围设备也能正常工作; 有些不能。</p>
+<p>即使 APB 频率发生变化，以下外设也能正常工作：</p>
+<ul>
+<li>UART：如果 REF_TICK 用作时钟源（请参阅 uart_config_t 的 use_ref_tick 成员）。</li>
+<li>LEDC：如果 REF_TICK 用作时钟源（参见 <code>ledc_timer_config()</code> 函数）。</li>
+<li>RMT：如果 REF_TICK 用作时钟源。 目前，驱动程序不支持 REF_TICK，但可以通过清除相应通道的 <code>RMT_REF_ALWAYS_ON_CHx</code> 位来启用它。</li>
+</ul>
+<p>目前，以下外围驱动程序知道 DFS，并将在事务持续时间内使用 <code>ESP_PM_APB_FREQ_MAX</code> 锁定：</p>
+<ul>
+<li>SPI master</li>
+<li>SDMMC</li>
+</ul>
+<p>启用驱动程序时，以下驱动程序将保持 <code>ESP_PM_APB_FREQ_MAX</code> 锁定：</p>
+<ul>
+<li>SPI slave  - 在调用 <code>spi_slave_initialize()</code> 和 <code>spi_slave_free()</code> 之间。</li>
+<li>以太网 - 在调用 <code>esp_eth_enable()</code> 和 <code>esp_eth_disable()</code> 之间。</li>
+<li>WiFi  - 在调用 <code>esp_wifi_start()</code> 和 <code>esp_wifi_stop()</code> 之间。 如果启用了调制解调器睡眠(modem sleep)，则在禁用无线电时的一段时间内将释放锁定。</li>
+<li>蓝牙 - 在调用 <code>esp_bt_controller_enable()</code> 和 <code>esp_bt_controller_disable()</code> 之间。</li>
+<li>CAN  - 调用 <code>can_driver_install()</code> 和 <code>can_driver_uninstall()</code> 之间</li>
+</ul>
+<p>以下外围驱动程序尚未处理 DFS。应用程序需要在必要时获取/释放锁定：</p>
+<ul>
+<li>I2C</li>
+<li>I2S</li>
+<li>MCPWM</li>
+<li>PCNT</li>
+<li>Sigma-delta</li>
+<li>Timer group</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/system/power_management.html" target="_blank" rel="noopener">Power Management</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（二十七） ESP32 的启动过程 [转]</title>
+    <url>/InfiniteYuanBlog/2020/03/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B8%83%EF%BC%89%20ESP32%20%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%20%5B%E8%BD%AC%5D/</url>
+    <content><![CDATA[<h1 id="ESP32-的启动过程"><a href="#ESP32-的启动过程" class="headerlink" title="ESP32 的启动过程"></a>ESP32 的启动过程</h1><p>原文来自：<a href="https://www.esp32.com/viewtopic.php?f=25&amp;t=8030&amp;p=33812#p33812" target="_blank" rel="noopener">https://www.esp32.com/viewtopic.php?f=25&amp;t=8030&amp;p=33812#p33812</a></p>
+<h2 id="关于-ROM"><a href="#关于-ROM" class="headerlink" title="[关于 ROM]"></a>[关于 ROM]</h2><p>在 esp32 上电运行后，芯片运行的第一个程序。这段程序是芯片设计与生产的时候，固化在硬件电路中的。所以它是不可修改的(Read Only Memory)。<br>esp32 的 ROM 负责检测芯片的strapping配置，来决定芯片应该处于什么状态。比如，esp32 上电后，ROM 程序会检查 [GPIO0, GPIO2, GPIO4, MTDO, GPIO5]的状态。<br>如果 GPIO0 / GPIO2 同时为低电平，则会进入下载模式，等待串口通信信息。<br>如果GPIO0为高电平，则会进入Flash 运行模式，启动SPI 驱动，并加载Flash中的程序段。</p>
+<a id="more"></a>
+
+<p>BOOT_MODE[5:0]:<br>(pull-up, pull-down, pull-down, pull-up, pull-up, SW4 /5/4/3/2/1/ )<br>[GPIO0, GPIO2, GPIO4, MTDO, GPIO5]<br>1 x x x x –&gt; SPI Boot<br>0 0 x x x –&gt; Download Boot (Jonit-Detection of UART0+UART1+SDIO_Slave)</p>
+<p>下载模式的串口输出如下(115200), ROM默认会输出当前所处的模式。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">rst:<span class="number">0x1</span> (POWERON_RESET),boot:<span class="number">0x3</span> (DOWNLOAD_BOOT(UART0/UART1/SDIO_REI_REO_V2))</span><br><span class="line">waiting <span class="keyword">for</span> download</span><br></pre></td></tr></table></figure>
+
+<p>其中，boot:0x3 表示的是芯片strapping pin脚的状态，<br>0x03对应 [GPIO0, GPIO2, GPIO4, MTDO, GPIO5] 的值为 [ 0, 0, 0, 1, 1]<br>所以处于 Download Boot 模式。</p>
+<h2 id="关于下载模式"><a href="#关于下载模式" class="headerlink" title="[关于下载模式]"></a>[关于下载模式]</h2><p>当 esp32 处于下载模式时，会等待串口通信同步，并按照通信协议等待接收指令(协议可参考该文档：<a href="https://github.com/espressif/esptool/wiki/Serial-Protocol" target="_blank" rel="noopener">Serial-Protocol</a><br>通过esptool脚本，可以进行寄存器的读写，固件下载，程序运行等操作。</p>
+<h2 id="关于STUB"><a href="#关于STUB" class="headerlink" title="[关于STUB]"></a>[关于STUB]</h2><p>在 ROM 模式，由于芯片处于低频工作的状态，通信速率受限。<br>在 esptool 中，会将一段小程序加载到 esp32 的 RAM 中，并跳转执行 RAM 中的小程序。这段小程序包含了 ROM 中相同的串口通信协议，并对其进行了扩充。感兴趣的开发者，(可以参考这里 <a href="https://github.com/espressif/esptool/tree/master/flasher_stub" target="_blank" rel="noopener">flasher_stub</a>)</p>
+<h2 id="关于-Flash-Boot-模式"><a href="#关于-Flash-Boot-模式" class="headerlink" title="[关于 Flash Boot 模式]"></a>[关于 Flash Boot 模式]</h2><p>如果芯片启动时，GPIO0 为高电平，芯片会进入 Flash 运行模式。 此时，启动 SPI 驱动，并加载 Flash 中的程序段。ROM 会读取外置 Flash 的 0x1000 地址，加载并运行二级 bootloader。</p>
+<h2 id="关于-Bootloader"><a href="#关于-Bootloader" class="headerlink" title="[关于 Bootloader]"></a>[关于 Bootloader]</h2><p>bootloader 可以认为是一个独立的小程序，bootloader 会对芯片频率进行初始化，并且读取系统 SPI 的配置信息，对 Flash 运行模式以及频率进行配置，然后根据分区表的定义，从对应的地址加载应用程序，并且运行应用程序固件。</p>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（二十三）看门狗</title>
+    <url>/InfiniteYuanBlog/2019/03/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B8%89%EF%BC%89%E7%9C%8B%E9%97%A8%E7%8B%97/</url>
+    <content><![CDATA[<h1 id="看门狗"><a href="#看门狗" class="headerlink" title="看门狗"></a>看门狗</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP-IDF 支持两种类型的看门狗：中断看门狗定时器和任务看门狗定时器（TWDT）。中断看门狗定时器和 TWDT 都可以使用 make menuconfig 启用，但 TWDT 也可以在运行时启用。中断看门狗负责检测 FreeRTOS 任务切换长时间被阻止的情况。TWDT 负责检测运行的任务在长时间没有让出 CPU 的情况。</p>
+<h2 id="中断看门狗"><a href="#中断看门狗" class="headerlink" title="中断看门狗"></a>中断看门狗</h2><p>中断看门狗可确保 FreeRTOS 任务切换中断长时间不被阻止。这种情况很不好，因为没有其他任务能获得 CPU 运行时间，包括可能重要的任务，如 WiFi 任务和空闲任务。阻塞的任务切换中断可能发生当一个程序运行到无限循环并且中断被禁用或挂起中断。</p>
+<p>中断监视程序的默认操作是调用 panic 处理程序。将会把寄存器转储以便于使用 OpenOCD 或 gdbstub找到，在禁用中断的情况下会阻塞哪些代码。根据 panic 处理程序的配置，它还可以盲目地重置 CPU，这在生产环境中可能是首选。</p>
+<p>中断看门狗是围绕定时器组 1 中的硬件看门狗构建的。如果由于某种原因这个看门狗无法执行调用 panic 处理程序的 NMI 处理程序（例如，因为 IRAM 被垃圾覆盖），它将硬重置 SOC。</p>
+<a id="more"></a>
+
+<h2 id="任务看门狗定时器"><a href="#任务看门狗定时器" class="headerlink" title="任务看门狗定时器"></a>任务看门狗定时器</h2><p>负责检测运行的任务在长时间没有让出 CPU 的情况。这是 CPU “饥饿”的症状，通常是由一个高优先级任务不让出 CPU 资源的循环引起，从而使较低优先级任务无法获得 CPU 资源。这可能是外围设备上的代码写得不好，也可能是陷入无限循环的任务。</p>
+<p>默认情况下，TWDT 将监视每个 CPU 的空闲任务，但任何任务都可以选择由 TWDT 监视。每个观察任务必须定期“重置” TWDT 以指示它们已被分配 CPU 时间。如果任务未在 TWDT 超时期限内重置，则将打印一条警告，其中包含有关哪些任务未能及时重置 TWDT 以及哪些任务当前正在 ESP32 CPU 上运行的信息。并且还有可能在用户代码中重新定义函数 <code>esp_task_wdt_isr_user_handler</code> 以接收此事件。</p>
+<p>TWDT 围绕定时器组 0 中的硬件看门狗定时器构建。可以通过调用 <code>esp_task_wdt_init（）</code> 来初始化 TWDT，这将配置硬件定时器。然后，任务可以使用 <code>esp_task_wdt_add（）</code> 订阅 TWDT 监视。每个订阅的任务必须定期调用 <code>esp_task_wdt_reset（）</code> 来重置 TWDT。任何订阅任务无法定期调用 <code>esp_task_wdt_reset（）</code> 表示一个或多个任务已经缺乏 CPU 资源或者陷入某个循环。</p>
+<p>可以使用 <code>esp_task_wdt_delete（）</code> 从 TWDT 取消订阅监视的任务。已取消订阅的任务不应再调用 <code>esp_task_wdt_reset（）</code>。一旦所有任务都从 TWDT 取消订阅，可以通过调用 <code>esp_task_wdt_deinit（）</code> 来取消初始化 TWDT。</p>
+<p>默认情况下，make menuconfig 中的 CONFIG_TASK_WDT 将被启用，导致 TWDT 在启动期间自动初始化。同样，CONFIG_TASK_WDT_CHECK_IDLE_TASK_CPU0 和 CONFIG_TASK_WDT_CHECK_IDLE_TASK_CPU1 也会默认启用，导致两个空闲任务在启动期间订阅 TWDT。</p>
+<h2 id="JTAG-和-看门狗"><a href="#JTAG-和-看门狗" class="headerlink" title="JTAG 和 看门狗"></a>JTAG 和 看门狗</h2><p>在使用 OpenOCD 进行调试时，每次到达断点时都会暂停 CPU。但是，如果看门狗定时器在遇到断点时继续运行，它们最终会触发复位，从而很难调试代码。 因此，OpenOCD 将在每个断点处禁用中断和任务看门狗的硬件定时器。 此外，OpenOCD 在离开断点时不会重新启用它们。 这意味着中断看门狗和任务看门狗功能将基本上被禁用。 当 ESP32 通过 JTAG 连接到 OpenOCD 时，不会产生任何看门狗警告或 panic。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/system/wdts.html" target="_blank" rel="noopener">Watchdogs</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（二十九） ESP32 低功耗模式</title>
+    <url>/InfiniteYuanBlog/2020/05/31/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B9%9D%EF%BC%89%20ESP32%20%E4%BD%8E%E5%8A%9F%E8%80%97%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="ESP32-低功耗模式"><a href="#ESP32-低功耗模式" class="headerlink" title="ESP32 低功耗模式"></a>ESP32 低功耗模式</h1><h2 id="1-概要"><a href="#1-概要" class="headerlink" title="1 概要"></a>1 概要</h2><p>ESP32 系列芯片提供三种可配置的睡眠模式，针对这些睡眠模式,我们提供了了多种低功耗解决方案，用户可以结合具体需求选择睡眠模式并进行配置。三种睡眠模式如下:</p>
+<ul>
+<li>Modem-sleep 模式：CPU 可运行，时钟可被配置。Wi-Fi/蓝牙基带和射频关闭。</li>
+<li>Light-sleep 模式：CPU 暂停运行，Wi-Fi/蓝牙基带和射频关闭。<strong>RTC 存储器和外设以及 ULP 协处理器运行</strong>。任何唤醒事件(MAC、主机、RTC 定时器或外部中断)都会唤醒芯片。</li>
+<li>Deep-sleep 模式：CPU 和大部分外设都会掉电，Wi-Fi/蓝牙基带和射频关闭，只有 <strong>RTC 存储器和 RTC 外设以及 ULP 协处理器</strong>可以工作。Wi-Fi 和蓝牙连接数据存储在 RTC 中。</li>
+</ul>
+<p>三种模式的区别如下：</p>
+<a id="more"></a>
+
+<p><img src="https://img-blog.csdnimg.cn/2020061714483194.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70#pic_center" alt="三种模式的区别"></p>
+<hr>
+<h2 id="2-Modem-sleep-模式"><a href="#2-Modem-sleep-模式" class="headerlink" title="2 Modem-sleep 模式"></a>2 Modem-sleep 模式</h2><p>目前 ESP32 的 Modem-sleep 仅工作在 Station 模式下,连接路由器后生效。Station 会周期性在工作状态和睡眠状态两者之间切换。<br>ESP32 通过 Wi-Fi 的 DTIM Beacon 机制与路由器保持连接。在 Modem-sleep 模式下，系统可以自动被唤醒，无需配置唤醒源。</p>
+<blockquote>
+<p>一般路由器的 DTIM Beacon 间隔为 100 ms ~ 1,000 ms。</p>
+</blockquote>
+<blockquote>
+<p>DTIM (Delivery Traffic Indication Message): 使用无线路由器时无线发送数据包的频率。</p>
+</blockquote>
+<p>在 Modem-sleep 模式下，ESP32 会在两次 DTIM Beacon 间隔时间内，关闭 Wi-Fi 模块电路，达到省电效果，在下次 Beacon 到来前自动唤醒。睡眠时间由路由器的 DTIM Beacon 时间决定。Modem-sleep 模式可以保持与路由器的 Wi-Fi 连接，并通过路由器接收来自手机或者服务器的交互信息。</p>
+<h3 id="2-1-API-说明"><a href="#2-1-API-说明" class="headerlink" title="2.1 API 说明"></a>2.1 API 说明</h3><p>通过以下接口配置 Modem-sleep 模式，<code>type</code> 可选参数：</p>
+<ul>
+<li><code>WIFI_PS_NONE</code>: 不使用 Modem-sleep 模式</li>
+<li><code>WIFI_PS_MIN_MODEM</code>: ESP32 接收 Beacon 的间隔与路由器的 DTIM 间隔相同，即 1 个路由器间隔</li>
+<li><code>WIFI_PS_MAX_MODEM</code>: ESP32 接收 Beacon 的间隔可由程序进行配置，间隔周期 <code>wifi_sta_config_t</code> 结构体中 <code>listen_interval</code> 值决定，单位为 路由器的 Beacon 间隔，默认值为 3（即 3 个路由器 Beacon 间隔）</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">enum</span> &#123;</span><br><span class="line">    WIFI_PS_NONE,        <span class="comment">/**&lt; No power save */</span></span><br><span class="line">    WIFI_PS_MIN_MODEM,   <span class="comment">/**&lt; Minimum modem power saving. In this mode, station wakes up to receive beacon every DTIM period */</span></span><br><span class="line">    WIFI_PS_MAX_MODEM,   <span class="comment">/**&lt; Maximum modem power saving. In this mode, interval to receive beacons is determined by the listen_interval parameter in wifi_sta_config_t */</span></span><br><span class="line">&#125; <span class="keyword">wifi_ps_type_t</span>;</span><br><span class="line"><span class="function"><span class="keyword">esp_err_t</span> <span class="title">esp_wifi_set_ps</span><span class="params">(<span class="keyword">wifi_ps_type_t</span> type)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><code>type</code> 参数为 <code>WIFI_PS_MAX_MODEM</code> ，ESP32 接收 Beacon 的间隔 <code>listen_interval</code> 配置方法：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LISTEN_INTERVAL 3</span></span><br><span class="line"><span class="keyword">wifi_config_t</span> wifi_config = &#123;</span><br><span class="line">    .sta = &#123;</span><br><span class="line">        .ssid = <span class="string">"SSID"</span>,</span><br><span class="line">        .password = <span class="string">"Password"</span>,</span><br><span class="line">        .listen_interval = LISTEN_INTERVAL,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));</span><br><span class="line">ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_STA, &amp;wifi_config));</span><br><span class="line">ESP_ERROR_CHECK(esp_wifi_start());</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-应用"><a href="#2-2-应用" class="headerlink" title="2.2 应用"></a>2.2 应用</h3><p>Modem-sleep 一般用于 CPU 持续处于工作状态并需要保持 Wi-Fi 连接的应用场景，例如，使用 ESP32 本地语音唤醒功能，CPU 需要持续采集和处理音频数据。</p>
+<hr>
+<h2 id="3-Light-sleep-模式"><a href="#3-Light-sleep-模式" class="headerlink" title="3 Light-sleep 模式"></a>3 Light-sleep 模式</h2><p>Light-sleep 的工作模式与 Modem-sleep 相似，不同的是，除了关闭 Wi-Fi 模块电路以外，在 Light-sleep 模式下，还会关闭时钟并暂停内部 CPU，比 Modem-sleep 功耗更低。有两种方式使 CPU 进入 Light-sleep 模式：</p>
+<ul>
+<li>强制 Light-sleep： 通过调用 API 强制 CPU 进入 Light-sleep 模式，强制进入 Light-sleep 模式后，<strong>不能通过路由器接收</strong>来自手机或者服务器的交互信息</li>
+<li>自动 Light-sleep： 配置为自动休眠方式后，会在 CPU 处于空闲的状态下自动进入 Light-sleep 模式，<strong>能通过路由器接收</strong>来自手机或者服务器的交互信息</li>
+</ul>
+<h3 id="3-1-强制-Light-sleep"><a href="#3-1-强制-Light-sleep" class="headerlink" title="3.1 强制 Light-sleep"></a>3.1 强制 Light-sleep</h3><p>参考示例: <a href="https://github.com/espressif/esp-idf/tree/release/v3.2/examples/system/light_sleep" target="_blank" rel="noopener">light_sleep</a></p>
+<p>开发者可以使系统强制进入 Light-sleep 模式，即调用强制 Light-sleep 接口，强制关闭 Wi-Fi 模块电路并暂停内部 CPU。强制休眠后，能通过定时器、 GPIO（RTC IO 和 Digital IO）和 UART 唤醒。从 Light-sleep 唤醒后，会从进入休眠的位置继续执行程序。强制进入 Light-sleep 模式后，可以保持与路由器的 Wi-Fi 连接，但不能通过路由器接收来自手机或者服务器的交互信息。</p>
+<blockquote>
+<p>注意：</p>
+</blockquote>
+<blockquote>
+<ol>
+<li>强制 Light-sleep 接口调用后，并不会立即休眠，而是等到系统空闲后才进入休眠，</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="2">
+<li>强制进入 Light-sleep 模式后，不能接收 IP 网络发送的网络数据。</li>
+</ol>
+</blockquote>
+<h4 id="3-1-1-API-说明"><a href="#3-1-1-API-说明" class="headerlink" title="3.1.1 API 说明"></a>3.1.1 API 说明</h4><ol>
+<li>配置唤醒源后，可使用 <code>esp_light_sleep_start()</code>  函数进入 Light-sleep 模式。在没有配置唤醒源的情况下也可以进入轻度睡眠状态，在这种情况下，芯片将无限期地处于 Light-sleep 模式，直到外部复位。</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* Enter sleep mode */</span></span><br><span class="line">esp_light_sleep_start();</span><br><span class="line"><span class="comment">/* Execution continues here after wakeup */</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-1-2-应用"><a href="#3-1-2-应用" class="headerlink" title="3.1.2 应用"></a>3.1.2 应用</h4><p>强制 Light-sleep 模式可用于需要保持与路由器的连接，不需要实时响应路由器发来的数据的场景。</p>
+<h3 id="3-2-自动-Light-sleep"><a href="#3-2-自动-Light-sleep" class="headerlink" title="3.2 自动 Light-sleep"></a>3.2 自动 Light-sleep</h3><p>参考示例: <a href="https://github.com/espressif/esp-idf/tree/release/v3.2/examples/wifi/power_save" target="_blank" rel="noopener">power_save</a></p>
+<p>开发者可配置系统在空闲时自动进入 Light-sleep 模式，并能在需要 CPU 工作时自动唤醒，无需配置唤醒源。在配置为自动 Light-sleep 后，可以保持与路由器的 Wi-Fi 连接，并通过路由器接收来自手机或者服务器的交互信息，对用户体验没有影响。<br>通常自动 Light-sleep 会与 Modem-sleep 模式 以及电源管理功能共同使用，电源管理功能允许系统根据 CPU 负载动态调节 CPU 频率以降低功耗。</p>
+<blockquote>
+<p>若系统应用中有小于 DTIM Beacon 间隔时间的循环定时,系统将不能进入 Light-sleep 模式。</p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20200617144640674.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70#pic_center" alt="此处输入图片的描述"></p>
+<h4 id="3-2-1-API-说明"><a href="#3-2-1-API-说明" class="headerlink" title="3.2.1 API 说明"></a>3.2.1 API 说明</h4><ol>
+<li>通过 <code>esp_err_t esp_pm_configure(const void* vconfig)</code> 接口配置电源管理功能，参数 <code>light_sleep_enable</code> 为 true 时使能自动休眠功能。</li>
+</ol>
+<blockquote>
+<p>使能 自动 Light-sleep 功能，需要使能 <a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/kconfig.html#config-freertos-use-tickless-idle" target="_blank" rel="noopener">CONFIG_FREERTOS_USE_TICKLESS_IDLE</a> 和 <a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/kconfig.html#config-pm-enable" target="_blank" rel="noopener">CONFIG_PM_ENABLE</a></p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">if</span> CONFIG_PM_ENABLE</span></span><br><span class="line">    <span class="comment">// Configure dynamic frequency scaling:</span></span><br><span class="line">    <span class="comment">// maximum and minimum frequencies are set in sdkconfig,</span></span><br><span class="line">    <span class="comment">// automatic light sleep is enabled if tickless idle support is enabled.</span></span><br><span class="line">    <span class="keyword">esp_pm_config_esp32_t</span> pm_config = &#123;</span><br><span class="line">            .max_freq_mhz = CONFIG_EXAMPLE_MAX_CPU_FREQ_MHZ,</span><br><span class="line">            .min_freq_mhz = CONFIG_EXAMPLE_MIN_CPU_FREQ_MHZ,</span><br><span class="line">#<span class="keyword">if</span> CONFIG_FREERTOS_USE_TICKLESS_IDLE</span><br><span class="line">            .light_sleep_enable = <span class="literal">true</span></span><br><span class="line">#endif</span><br><span class="line">    &#125;;</span><br><span class="line">    ESP_ERROR_CHECK( esp_pm_configure(&amp;pm_config) );</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// CONFIG_PM_ENABLE</span></span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-2-2-应用"><a href="#3-2-2-应用" class="headerlink" title="3.2.2 应用"></a>3.2.2 应用</h4><p>自动 Light-sleep 模式可用于需要保持与路由器的连接，可以实时响应路由器发来的数据的场景。并且在未接收到命令时，CPU 可以处于空闲状态。比如 Wi-Fi 开关的应用，大部分时间 CPU 都是空闲的，直到收到控制命令，CPU 才需要进行 GPIO 的操作。</p>
+<hr>
+<h2 id="3-3-Deep-sleep-模式"><a href="#3-3-Deep-sleep-模式" class="headerlink" title="3.3 Deep-sleep 模式"></a>3.3 Deep-sleep 模式</h2><p>参考示例: <a href="https://github.com/espressif/esp-idf/tree/release/v3.2/examples/system/deep_sleep" target="_blank" rel="noopener">deep_sleep</a></p>
+<p>相对于其他两种模式，系统无法自动进入 Deep-sleep，需要由用户调用接口函数 <code>esp_deep_sleep_start()</code> 进入 Deep-sleep 模式。在该模式下，芯片会断开所有 Wi-Fi 连接与数据连接，进入 Deep-sleep 模式，只有 <strong>RTC 存储器和 RTC 外设以及 ULP 协处理器</strong>可以工作。从 Deep-sleep 唤醒后，CPU 将软件复位重启。</p>
+<h3 id="3-3-1-API-说明"><a href="#3-3-1-API-说明" class="headerlink" title="3.3.1 API 说明"></a>3.3.1 API 说明</h3><ol>
+<li>配置唤醒源后，可使用 <code>esp_deep_sleep_start()</code> 函数进入 Deep-sleep 模式。在没有配置唤醒源的情况下也可以进入 Deep-sleep 状态，在这种情况下，芯片将无限期地处于 Deep-sleep 模式，直到外部复位。</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* Enter deep sleep */</span></span><br><span class="line">esp_deep_sleep_start();</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-2-应用"><a href="#3-3-2-应用" class="headerlink" title="3.3.2 应用"></a>3.3.2 应用</h3><p>Deep-sleep 可以用于低功耗的传感器应用,或者大部分时间都不需要进行数据传输的情况。设备可以每隔一段时间从 Deep-sleep 状态醒来测量数据并上传,之后继续进入 Deep-sleep。也可以将多个数据存储于 RTC memory(RTC memory 在 Deep-sleep 模式下仍然可以保存数据),然后一次发送出去。</p>
+<hr>
+<h2 id="4-唤醒方式"><a href="#4-唤醒方式" class="headerlink" title="4 唤醒方式"></a>4 唤醒方式</h2><p>针对 <strong>强制 Lighe-sleep</strong> 和 <strong>Deep-sleep</strong> 需要配置唤醒源的情况，有以下唤醒方式可以选择：</p>
+<blockquote>
+<p>部分唤醒方式仅支持 Light-sleep</p>
+</blockquote>
+<h3 id="4-1-GPIO"><a href="#4-1-GPIO" class="headerlink" title="4.1 GPIO"></a>4.1 GPIO</h3><ol>
+<li><p>External wakeup (ext0)</p>
+<p>RTC IO 模块包含当其中 <strong>一个 RTC IO</strong> 的电平为唤醒电平（可配置为逻辑高或低）触发唤醒的逻辑。</p>
+<p>RTC IO 是 RTC 外设电源域的一部分，因此如果使能该唤醒源，RTC 外设将在睡眠期间保持上电状态。在 ESP32 的修订版 0 和 1 中，此唤醒源与 ULP 和触摸唤醒源不兼容。</p>
+<p>由于在此模式下启用了 RTC IO 模块，因此也可以使用内部上拉或下拉电阻。</p>
+<p><code>esp_sleep_enable_ext0_wakeup()</code> 函数可用于启用此唤醒源。</p>
+</li>
+<li><p>External wakeup (ext1)</p>
+<p>RTC 控制器包含使用 <strong>多个 RTC IO</strong> 触发唤醒的逻辑。两个逻辑功能之一可用于触发唤醒：</p>
+<ul>
+<li>如果任何一个所选 IO 为高电平，则唤醒（<code>ESP_EXT1_WAKEUP_ANY_HIGH</code>）</li>
+<li>如果所有选定的 IO 都为低电平，则唤醒（<code>ESP_EXT1_WAKEUP_ALL_LOW</code>）</li>
+</ul>
+<p>该唤醒源由 RTC 控制器实现。因此，RTC 外设和 RTC 存储器可以在此模式下断电。</p>
+<p>但是，如果 RTC 外设断电，内部上拉和下拉电阻将被禁用。要使用内部上拉或下拉电阻，请在睡眠期间请求 RTC 外设电源域保持上电。</p>
+<p><code>esp_sleep_enable_ext1_wakeup()</code> 函数可用于启用此唤醒源。</p>
+</li>
+<li><p>Touch pad wakeup</p>
+<p>RTC IO 模块包含触摸传感器中断时触发唤醒的逻辑。您需要在芯片开始睡眠之前配置触摸传感器中断。</p>
+<p>当 RTC 外设未被强制上电时，ESP32 的修订版 0 和 1 仅支持此唤醒模式。</p>
+<p><code>esp_sleep_enable_touchpad_wakeup()</code> 函数可用于启用此唤醒源。</p>
+</li>
+<li><p>GPIO wakeup <strong>(light sleep only)</strong></p>
+<p>除了上面描述的 EXT0 和 EXT1 唤醒源之外，在 Light-sleep 模式下还有一种从外部输入唤醒的方法。通过该唤醒源，每个引脚可以使用 <code>gpio_wakeup_enable()</code> 函数单独配置为高电平或低电平唤醒。与 EXT0 和 EXT1 唤醒源（只能与 RTC IO 一起使用）不同，此唤醒源可用于任何 IO（RTC 或数字）。</p>
+<p><code>esp_sleep_enable_gpio_wakeup()</code> 函数可用于启用此唤醒源。</p>
+</li>
+</ol>
+<h3 id="4-2-ULP-协处理器唤醒"><a href="#4-2-ULP-协处理器唤醒" class="headerlink" title="4.2 ULP 协处理器唤醒"></a>4.2 ULP 协处理器唤醒</h3><p>参考示例: <a href="https://github.com/espressif/esp-idf/tree/release/v3.2/examples/system/ulp" target="_blank" rel="noopener">system/ulp</a></p>
+<p>ULP 协处理器可以在芯片处于睡眠模式时运行，并且可以用于轮询传感器，监视 ADC 或触摸传感器值，并在检测到特定事件时唤醒芯片。ULP 协处理器是 RTC 外设电源域的一部分，它运行存储在 RTC 慢速存储器中的程序。如果请求此唤醒模式，RTC 慢速存储器将在睡眠期间启动。在 ULP 协处理器开始运行程序之前，RTC 外设将自动上电; 程序停止运行后，RTC 外设将再次自动关闭。</p>
+<p>当 RTC 外设未被强制上电时，ESP32 的修订版 0 和 1 仅支持此唤醒模式。</p>
+<p><code>esp_sleep_enable_ulp_wakeup()</code> 函数可用于启用此唤醒源。</p>
+<h3 id="4-3-Timer"><a href="#4-3-Timer" class="headerlink" title="4.3 Timer"></a>4.3 Timer</h3><p>RTC 控制器具有内置定时器，可用于在预定义的时间后唤醒芯片。时间以微秒精度指定，但实际分辨率取决于为 RTC SLOW_CLK 选择的时钟源。</p>
+<p>此唤醒模式不需要在睡眠期间打开 RTC 外设或 RTC 存储器。</p>
+<p><code>esp_sleep_enable_timer_wakeup()</code> 函数可用于启用此唤醒源。</p>
+<h3 id="4-4-UART-wakeup-light-sleep-only"><a href="#4-4-UART-wakeup-light-sleep-only" class="headerlink" title="4.4 UART wakeup (light sleep only)"></a>4.4 UART wakeup (light sleep only)</h3><p>仅支持  Light-sleep 模式。当 ESP32 从外部设备接收 UART 输入时，通常需要在输入数据可用时唤醒芯片。UART 外设包含一项功能，当看到 RX 引脚上的一定数量的上升沿时，可以将芯片从 Light-sleep 状态唤醒。可以使用 <code>uart_set_wakeup_threshold()</code> 函数设置此上升沿数。请注意，唤醒后 UART 不会接收触发唤醒的字符（及其前面的任何字符）。这意味着外部设备通常需要在发送数据之前向 ESP32 发送额外字符以触发唤醒。</p>
+<p><code>esp_sleep_enable_uart_wakeup()</code> 函数可用于启用此唤醒源。</p>
+<h2 id="5-GPIO-Hold-功能"><a href="#5-GPIO-Hold-功能" class="headerlink" title="5 GPIO Hold 功能"></a>5 GPIO Hold 功能</h2><p>每个 IO pad(包括 RTC pad)都有单独的 hold 功能，由 RTC 寄存器控制。pad 的 hold 功能被置上后，pad 在置上 hold 那一刻的状态被强制保持，无论内部信号如何变化，修改 IO_MUX 配置或者 GPIO 配置，都不会改变 pad 的状态。应用如果希望在看门狗超时触发内核复位和系统复位时或者 Deep-sleep 时 pad 的状态不被改变，就需要提前把 hold 置上。</p>
+<blockquote>
+<p>在 Deep-sleep 模式下使用 Hold 功能，可能会增加功耗。并且如果使用内部上拉或下拉电阻，需要在睡眠期间使 RTC 外设电源域保持上电。</p>
+</blockquote>
+<blockquote>
+<p>在睡眠模式下，部分引脚的电源域可能关掉了，所以无法 Hold 功能无法生效，这时需要确认能否打开电源域。例如：GPIO16、17 会在 light sleep 下关闭电源域 VDD_SDIO，所以无法 Hold，这时需要在 esp_light_sleep_start() 中修改代码打开电源域。</p>
+</blockquote>
+<p>针对 RTC IO，可对<strong>单个 RTC Pad 使能 Hold 功能</strong>:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">rtc_gpio_init(<span class="number">27</span>);</span><br><span class="line">rtc_gpio_set_direction(<span class="number">27</span>, RTC_GPIO_MODE_OUTPUT_ONLY);</span><br><span class="line">rtc_gpio_set_level(<span class="number">27</span>, <span class="number">1</span>);</span><br><span class="line">rtc_gpio_pullup_en(<span class="number">27</span>);</span><br><span class="line">rtc_gpio_hold_en(<span class="number">27</span>);</span><br></pre></td></tr></table></figure>
+
+<p>针对 数字 IO，会对<strong>所有 数字 IO 使能 Hold 功能</strong>:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">gpio_pad_select_gpio(<span class="number">26</span>);</span><br><span class="line">gpio_set_direction(<span class="number">26</span>, GPIO_MODE_OUTPUT);</span><br><span class="line">gpio_set_level(<span class="number">26</span>, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">gpio_hold_en(<span class="number">26</span>);</span><br><span class="line"><span class="comment">/*When the chip is in Deep-sleep mode, all digital gpio will hold the state before sleep, and when the chip is woken up, the status of digital gpio will not be held.*/</span></span><br><span class="line">gpio_deep_sleep_hold_en();</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-常见问题"><a href="#6-常见问题" class="headerlink" title="6 常见问题"></a>6 常见问题</h2><ol>
+<li><p>进入 Deep-sleep 后，功耗较高</p>
+<p> 有这些原因可能会导致功耗较高：</p>
+<ul>
+<li><code>esp_sleep_enable_ext0_wakeup()</code> 需要打开 RTC 外设，产生额外的 100mA 左右的电流消耗，调用 <code>esp_sleep_enable_ext1_wakeup()</code> 则不需要打开 RTC 外设，即不会产生额外的电流。</li>
+<li>在 IDF 3.1.1 前的版本可能存在使用 wifi 并关闭后进入睡眠模式，功耗比未使用 wifi 后进入睡眠模式高 1mA 左右。这种情况下，需要在进入睡眠模式前调用 <code>adc_power_off()</code> 关闭 ADC 以解决这个问题。</li>
+<li>使用 Hold 功能保持一个固定电平，可能会增加功耗 1mA 左右，这种情况也是由于打开 RTC 外设导致。</li>
+<li>某些 GPIO 漏电，一些 ESP32 IO 具有内部上拉或下拉，默认情况下启用。如果外部电路在 Deep-sleep 模式下驱动此引脚，则由于流过这些上拉和下拉的电流，电流消耗可能会增加。要隔离引脚，防止额外的电流消耗，请调用 <code>rtc_gpio_isolate()</code> 函数。例如：ESP32-WROVER 模组上，外部上拉 GPIO12。GPIO12 在 ESP32 芯片中也有内部下拉。这意味着在 Deep-sleep 中，一些电流将流过这些外部和内部电阻，从而增加电流消耗。</li>
+<li>某些 IO 芯片内外电压不匹配，可能会增加电流消耗。如果存在电压不匹配的情况，需要在进入睡眠模式前配置 IO 为 Disable 模式，并使能 Hold 功能。</li>
+</ul>
+</li>
+<li><p>使能 自动 Light-sleep 后，功耗较高</p>
+<ul>
+<li>存在任务持续运行占用 CPU 资源，导致 CPU 负载过大无法休眠。若是这种情况，请检测是否存在 任务 持续运行，并优化当前应用程序流程使 CPU 能周期性空闲进入 Light-sleep 模式。</li>
+<li>若系统应用中有小于 DTIM Beacon 间隔时间的循环定时，系统将不能进入 Light-sleep 模式。</li>
+<li>若未使用最新 IDF 3.2 版本，可能会因为某些外设使用（例如：I2C、I2S），导致无法自动进入 Light-sleep 模式。若是这个问题，请更新到最新的 IDF 3.2 版本。</li>
+<li>若系统不需要 FreeRTOS 时钟配置为 1000 Hz，可将 FreeRTOS 时钟降低为 100 Hz，可显著降低功耗。</li>
+</ul>
+</li>
+<li><p>自动 Light-sleep 调试方法</p>
+<ul>
+<li>在 menuconfig 中使能 <a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/kconfig.html#config-pm-profiling" target="_blank" rel="noopener">CONFIG_PM_PROFILING</a> ，如果使能，<code>esp_pm_*</code> 函数将跟踪每个电源管理锁的保留时间，<code>esp_pm_dump_locks</code> 函数将打印此信息。 此功能可用于分析哪些锁阻止芯片进入低功耗状态，并查看芯片在每种省电模式下花费的时间，并应在应用程序中保持禁用状态。</li>
+<li>在 menuconfig 中使能 <a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/kconfig.html#config-pm-trace" target="_blank" rel="noopener">CONFIG_PM_TRACE</a>，如果使能，某些 GPIO 将用于发出 RTOS 滴答，频率切换，进入/退出空闲状态等事件的信号。有关 GPIO 列表，请参阅 <code>pm_trace.c</code> 文件。 此功能旨在用于分析/调试电源管理实现的行为时使用，并应在应用程序中保持禁用状态。</li>
+</ul>
+</li>
+</ol>
+<h2 id="7-不同功耗模式下的功耗"><a href="#7-不同功耗模式下的功耗" class="headerlink" title="7 不同功耗模式下的功耗"></a>7 不同功耗模式下的功耗</h2><p><img src="https://img-blog.csdnimg.cn/20200617144756531.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70#pic_center" alt="不同功耗模式下的功耗"></p>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（二十二）睡眠模式</title>
+    <url>/InfiniteYuanBlog/2019/03/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%BA%8C%EF%BC%89%E7%9D%A1%E7%9C%A0%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="睡眠模式"><a href="#睡眠模式" class="headerlink" title="睡眠模式"></a>睡眠模式</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP32 有轻度睡眠(light sleep)和深度睡眠(deep sleep)两种省电模式。</p>
+<p>在轻度睡眠模式下，数字外设，大多数 RAM 和 CPU 都是时钟门控的，电源电压会降低。从轻度睡眠退出后，外围设备和 CPU 恢复运行，其内部状态将得以保留。</p>
+<p>在深度睡眠模式下，CPU，大多数 RAM 以及从 APB_CLK 提供时钟的所有数字外设都将断电。芯片中仍然可以通电的唯一部分是：RTC 控制器，RTC 外设（包括 ULP 协处理器）和 RTC 存储器（慢速和快速）。</p>
+<p>可以使用多种唤醒源从深度和轻度睡眠模式唤醒。可以组合这些唤醒源，在这种情况下，当触发任何一个源时芯片将被唤醒。可以使用 <code>esp_sleep_enable_X_wakeup</code> API 启用唤醒源，并可以使用 <code>esp_sleep_disable_wakeup_source()</code> API 禁用唤醒源。下一节将详细介绍这些 API。在进入浅色或深度睡眠模式之前，可以随时配置唤醒源。</p>
+<p>此外，应用程序可以使用 <code>esp_sleep_pd_config()</code> API 强制 RTC 外设和 RTC 存储器的特定掉电模式。</p>
+<p>配置唤醒源后，应用程序可以使用 <code>esp_light_sleep_start()</code> 或 <code>esp_deep_sleep_start()</code> API 进入睡眠模式。此时，将根据请求的唤醒源配置硬件，RTC 控制器将关闭 CPU 或数字外设的电源或关闭电源。</p>
+<a id="more"></a>
+
+<h2 id="WiFi-BT-和睡眠模式"><a href="#WiFi-BT-和睡眠模式" class="headerlink" title="WiFi/BT 和睡眠模式"></a>WiFi/BT 和睡眠模式</h2><p>在深度睡眠和轻度睡眠模式下，无线外围设备断电。 在进入深度睡眠或轻度睡眠模式之前，应用程序必须调用适当的函数（<code>esp_bluedroid_disable()</code>，<code>esp_bt_controller_disable()</code>，<code>esp_wifi_stop()</code>）禁用 WiFi 和 BT。 即使不调用这些功能，也不会在深度睡眠或轻度睡眠中保持 WiFi 和 BT 连接。</p>
+<p>如果需要维护 WiFi 连接，请启用 WiFi 调制解调器睡眠(modem sleep)，并启用自动轻度睡眠功能（请参阅<a href="https://blog.csdn.net/qq_27114397/article/details/88411347" target="_blank" rel="noopener">电源管理 API</a>）。这将允许系统在需要 WiFi 驱动程序时自动从睡眠中唤醒，从而保持与 AP 的连接。</p>
+<h2 id="唤醒源"><a href="#唤醒源" class="headerlink" title="唤醒源"></a>唤醒源</h2><h3 id="定时器"><a href="#定时器" class="headerlink" title="定时器"></a>定时器</h3><p>RTC 控制器具有内置定时器，可用于在预定义的时间后唤醒芯片。时间以微秒精度指定，但实际分辨率取决于为 RTC SLOW_CLK 选择的时钟源。有关 RTC 时钟选项的详细信息，请参见“ESP32 技术参考手册”的“复位和时钟”一章。</p>
+<p>此唤醒模式不需要在睡眠期间打开 RTC 外围设备或 RTC 存储器。</p>
+<p><code>esp_sleep_enable_timer_wakeup()</code> 函数可用于使用定时器启用深度睡眠唤醒。</p>
+<h3 id="Touch-pad"><a href="#Touch-pad" class="headerlink" title="Touch pad"></a>Touch pad</h3><p>RTC IO 模块包含触摸传感器中断时触发唤醒的逻辑。您需要在芯片开始深度睡眠之前配置触摸传感器。</p>
+<p>当 RTC 外设未被强制上电时（即 <code>ESP_PD_DOMAIN_RTC_PERIPH</code> 应设置为 <code>ESP_PD_OPTION_AUTO</code>），ESP32 的修订版 0 和 1 仅支持此唤醒模式。</p>
+<p><code>esp_sleep_enable_touchpad_wakeup()</code> 函数可用于启用此唤醒源。</p>
+<h3 id="External-唤醒-ext0"><a href="#External-唤醒-ext0" class="headerlink" title="External 唤醒(ext0)"></a>External 唤醒(ext0)</h3><p>RTC IO 模块包含当其中 <strong>一个 RTC GPIO</strong> 的电平为预定义的逻辑电平时触发唤醒的逻辑。RTC IO 是 RTC 外设电源域的一部分，因此如果请求唤醒源，RTC 外设将在深度睡眠期间保持通电状态。</p>
+<p>由于在此模式下启用了 RTC IO 模块，因此也可以使用内部上拉或下拉电阻。在调用 <code>esp_sleep_start()</code> 之前，需要使用 <code>rtc_gpio_pullup_en()</code> 和 <code>rtc_gpio_pulldown_en()</code> 函数由应用程序配置它们。</p>
+<p>在 ESP32 的修订版 0 和 1 中，此唤醒源与 ULP 和触摸唤醒源不兼容。</p>
+<p><code>esp_sleep_enable_ext0_wakeup()</code> 函数可用于启用此唤醒源。</p>
+<blockquote>
+<p>从睡眠状态唤醒后，用于唤醒的 IO pad 将被配置为 RTC IO。在将此 pad 用作数字 GPIO 之前，请使用 <code>rtc_gpio_deinit(gpio_num)</code> 函数重新配置它。</p>
+</blockquote>
+<h3 id="External-唤醒-ext1"><a href="#External-唤醒-ext1" class="headerlink" title="External 唤醒(ext1)"></a>External 唤醒(ext1)</h3><p>RTC 控制器包含使用 <strong>多个 RTC GPIO</strong> 触发唤醒的逻辑。两个逻辑功能之一可用于触发唤醒：</p>
+<ul>
+<li>如果任何所选引脚为高电平，则唤醒（<code>ESP_EXT1_WAKEUP_ANY_HIGH</code>）</li>
+<li>如果所有选定的引脚都为低电平，则唤醒（<code>ESP_EXT1_WAKEUP_ALL_LOW</code>）</li>
+</ul>
+<p>该唤醒源由 RTC 控制器实现。因此，RTC 外设和 RTC 存储器可以在此模式下断电。但是，如果 RTC 外设断电，内部上拉和下拉电阻将被禁用。要使用内部上拉或下拉电阻，请在睡眠期间请求 RTC 外设电源域保持开启，并在进入睡眠模式之前使用 rtc_gpio_ 函数配置上拉/下拉电阻：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_PERIPH, ESP_PD_OPTION_ON);</span><br><span class="line">gpio_pullup_dis(gpio_num);</span><br><span class="line">gpio_pulldown_en(gpio_num);</span><br></pre></td></tr></table></figure>
+
+<p><code>esp_sleep_enable_ext1_wakeup()</code>  函数可用于启用此唤醒源。</p>
+<blockquote>
+<p>从睡眠状态唤醒后，用于唤醒的 IO pad 将被配置为 RTC IO。在将此 pad 用作数字 GPIO 之前，请使用 <code>rtc_gpio_deinit(gpio_num)</code> 函数重新配置它。</p>
+</blockquote>
+<h3 id="ULP-协处理器唤醒"><a href="#ULP-协处理器唤醒" class="headerlink" title="ULP 协处理器唤醒"></a>ULP 协处理器唤醒</h3><p>ULP 协处理器可以在芯片处于睡眠模式时运行，并且可以用于轮询传感器，监视 ADC 或触摸传感器值，并在检测到特定事件时唤醒芯片。ULP 协处理器是 RTC 外设电源域的一部分，它运行存储在 RTC 慢速存储器中的程序。如果请求此唤醒模式，RTC 慢速内存将在睡眠期间启动。在 ULP 协处理器开始运行程序之前，RTC 外设将自动上电; 程序停止运行后，RTC 外设将再次自动关闭。</p>
+<p>当 RTC 外设未被强制上电时（即 <code>ESP_PD_DOMAIN_RTC_PERIPH</code> 应设置为 <code>ESP_PD_OPTION_AUTO</code>），ESP32 的修订版 0 和 1 仅支持此唤醒模式。</p>
+<p><code>esp_sleep_enable_ulp_wakeup()</code>  函数可用于启用此唤醒源。</p>
+<h3 id="GPIO-唤醒-仅-light-sleep"><a href="#GPIO-唤醒-仅-light-sleep" class="headerlink" title="GPIO 唤醒(仅 light sleep)"></a>GPIO 唤醒(仅 light sleep)</h3><p>除了上面描述的 EXT0 和 EXT1 唤醒源之外，在轻度睡眠模式下还有一种从外部输入唤醒的方法。通过该唤醒源，每个引脚可以单独使用 <code>gpio_wakeup_enable()</code> 函数配置为高电平或低电平唤醒。与 EXT0 和 EXT1 唤醒源（只能与 RTC IO 一起使用）不同，此唤醒源可用于任何 IO（RTC 或数字）。</p>
+<p><code>esp_sleep_enable_gpio_wakeup()</code> 函数可用于启用此唤醒源。</p>
+<h3 id="UART-唤醒-仅-light-sleep"><a href="#UART-唤醒-仅-light-sleep" class="headerlink" title="UART 唤醒(仅 light sleep)"></a>UART 唤醒(仅 light sleep)</h3><p>当 ESP32 从外部设备接收 UART 输入时，通常需要在输入数据可用时唤醒芯片。UART 外设包含一项功能，当看到 RX 引脚上的一定数量的上升沿时，可以将芯片从轻度睡眠状态唤醒。可以使用 <code>uart_set_wakeup_threshold()</code> 函数设置此上升沿数。请注意，唤醒后 UART 不会接收触发唤醒的字符（及其前面的任何字符）。 这意味着外部设备通常需要在发送数据之前向 ESP32 发送额外字符以触发唤醒。</p>
+<p><code>esp_sleep_enable_uart_wakeup()</code> 函数可用于启用此唤醒源。</p>
+<h2 id="RTC外设和存储器掉电"><a href="#RTC外设和存储器掉电" class="headerlink" title="RTC外设和存储器掉电"></a>RTC外设和存储器掉电</h2><p>默认情况下，<code>esp_deep_sleep_start()</code> 和 <code>esp_light_sleep_start()</code> 函数将关闭所有启用的唤醒源不再需要的 RTC 电源域。要覆盖此行为，请提供 <code>esp_sleep_pd_config()</code> 函数。</p>
+<p>注意：在 ESP32 的版本 0 中，RTC 快速存储器将始终在深度睡眠中保持启用状态，以便深度睡眠存根可以在复位后运行。 如果应用程序在深度睡眠后不需要干净的重置行为，则可以覆盖此项。</p>
+<p>如果程序中的某些变量放入RTC慢速存储器（例如，使用 <code>RTC_DATA_ATTR</code> 属性），RTC 慢速存储器将默认保持通电状态。 如果需要，可以使用 <code>esp_sleep_pd_config()</code> 函数覆盖它。</p>
+<h2 id="进入轻度睡眠"><a href="#进入轻度睡眠" class="headerlink" title="进入轻度睡眠"></a>进入轻度睡眠</h2><p>配置唤醒源后，可使用 <code>esp_light_sleep_start()</code> 函数进入轻度睡眠模式。在没有配置唤醒源的情况下也可以进入轻度睡眠状态，在这种情况下，芯片将无限期地处于轻度睡眠模式，直到外部复位。</p>
+<h2 id="进入深度睡眠"><a href="#进入深度睡眠" class="headerlink" title="进入深度睡眠"></a>进入深度睡眠</h2><p>配置唤醒源后，可使用 <code>esp_deep_sleep_start()</code> 函数进入深度睡眠模式。在没有配置唤醒源的情况下也可以进入深度睡眠状态，在这种情况下，芯片将无限期地处于深度睡眠模式，直到外部复位。</p>
+<h2 id="IO-配置"><a href="#IO-配置" class="headerlink" title="IO 配置"></a>IO 配置</h2><p>一些 ESP32 IO 具有内部上拉或下拉，默认情况下启用。如果外部电路在深度睡眠模式下驱动此引脚，则由于流过这些上拉和下拉的电流，电流消耗可能会增加。</p>
+<p>要隔离引脚，防止额外的电流消耗，请调用 <code>rtc_gpio_isolate()</code> 函数。</p>
+<p>例如，在 ESP32-WROVER 模块上，外部上拉 GPIO12。GPIO12 在 ESP32 芯片中也有内部下拉。这意味着在深度睡眠中，一些电流将流过这些外部和内部电阻，从而将深度睡眠电流增加到最小可能值以上。在 <code>esp_deep_sleep_start()</code> 之前添加以下代码以删除此额外电流：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">rtc_gpio_isolate(GPIO_NUM_12);</span><br></pre></td></tr></table></figure>
+
+<h2 id="UART-输出处理"><a href="#UART-输出处理" class="headerlink" title="UART 输出处理"></a>UART 输出处理</h2><p>在进入睡眠模式之前，<code>esp_deep_sleep_start()</code> 将刷新 UART FIFO 的内容。</p>
+<p>使用 <code>esp_light_sleep_start()</code> 进入轻度睡眠模式时，UART FIFO 不会被刷新。相反，UART 输出将被暂停，FIFO 中的剩余字符将在从轻度睡眠唤醒后发送出去。</p>
+<h2 id="检查睡眠唤醒原因"><a href="#检查睡眠唤醒原因" class="headerlink" title="检查睡眠唤醒原因"></a>检查睡眠唤醒原因</h2><p><code>esp_sleep_get_wakeup_cause()</code> 函数可用于检查哪个唤醒源触发了从睡眠模式中唤醒。</p>
+<p>对于 TouchPad 和 ext1 唤醒源，可以使用 <code>esp_sleep_get_touchpad_wakeup_status()</code> 和 <code>esp_sleep_get_ext1_wakeup_status()</code> 函数识别引起唤醒的引脚或 TouchPad。</p>
+<h2 id="禁用睡眠唤醒源"><a href="#禁用睡眠唤醒源" class="headerlink" title="禁用睡眠唤醒源"></a>禁用睡眠唤醒源</h2><p>先前配置的唤醒源可以在之后使用 <code>esp_sleep_disable_wakeup_source()</code> API 禁用。此功能将停用触发对给定唤醒源。此外，如果参数为 ESP_SLEEP_WAKEUP_ALL，它可以禁用所有触发器。</p>
+<h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><p>深度睡眠的基本功能的实现在 protocols/sntp 示例中给出，其中 ESP 模块被周期性地唤醒以从 NTP 服务器检索时间。</p>
+<p>system/deep_sleep 示例中更广泛的说明了各种深度睡眠唤醒触发器和 ULP 协处理器编程的使用。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/system/sleep_modes.html" target="_blank" rel="noopener">Sleep Modes</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（二十五）脉冲计数器</title>
+    <url>/InfiniteYuanBlog/2019/03/26/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%BA%94%EF%BC%89%E8%84%89%E5%86%B2%E8%AE%A1%E6%95%B0%E5%99%A8/</url>
+    <content><![CDATA[<h1 id="脉冲计数器"><a href="#脉冲计数器" class="headerlink" title="脉冲计数器"></a>脉冲计数器</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>PCNT（脉冲计数器）模块用于计算输入信号的上升沿和/或下降沿的数量。每个脉冲计数器单元都有一个 16 位有符号计数器寄存器和两个通道，可配置为递增或递减计数器。每个通道都有一个接收待检测信号边沿的信号输入，以及一个可用于启用或禁用信号输入的控制输入。输入具有可选滤波器，可用于丢弃信号中不需要的毛刺。</p>
+<h2 id="功能概述"><a href="#功能概述" class="headerlink" title="功能概述"></a>功能概述</h2><p>此 API 的功能描述分为四个部分：</p>
+<ul>
+<li>配置 - 描述计数器的配置参数以及如何设置计数器。</li>
+<li>操作计数器 - 提供有关暂停，测量和清除计数器的控制功能相关信息。</li>
+<li>滤波脉冲 - 介绍滤波脉冲和计数器控制信号的可选项。</li>
+<li>使用中断 - 介绍如何在计数器的特定状态上触发中断。</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>PCNT 模块有 8 个独立的计数“单元”，编号从 0 到 7. 在 API 中，它们使用 <code>pcnt_unit_t</code> 引用。每个单元有两个独立的通道，编号为 0 和 1，并用 <code>pcnt_channel_t</code> 指定。</p>
+<p>使用 <code>pcnt_config_t</code> 为每个单元的通道单独提供配置，并涵盖：</p>
+<ul>
+<li>此配置所指的单元和通道编号。</li>
+<li>脉冲输入和脉冲门输入的GPIO编号。</li>
+<li>两对参数：<code>pcnt_ctrl_mode_t</code> 和 <code>pcnt_count_mode_t</code>，用于定义计数器如何响应，具体取决于控制信号的状态以及如何计算脉冲的正/负边沿。</li>
+<li>当脉冲计数满足特定限制时，用于建立观察点和触发中断的两个极限值（最小值/最大值）。</li>
+</ul>
+<p>然后通过调用上面的 <code>pcnt_config_t</code> 作为输入参数的函数 <code>pcnt_unit_config()</code> 来完成特定通道的设置。</p>
+<p>要在配置中禁用脉冲或控制输入引脚，请提供 <code>PCNT_PIN_NOT_USED</code> 而不是 GPIO 编号。</p>
+<h2 id="操作计数器"><a href="#操作计数器" class="headerlink" title="操作计数器"></a>操作计数器</h2><p>使用 <code>pcnt_unit_config()</code> 进行设置后，计数器立即开始运行。可以通过调用 <code>pcnt_get_counter_value()</code> 获取累积的脉冲计数。</p>
+<p>有几个函数可以控制计数器的操作：<code>pcnt_counter_pause()</code>，<code>pcnt_counter_resume()</code> 和 <code>pcnt_counter_clear()</code></p>
+<p>也可以通过调用 <code>pcnt_set_mode()</code> 使用 <code>pcnt_unit_config()</code> 动态更改计数器模式。</p>
+<p>如果需要，可以使用 <code>pcnt_set_pin()</code> “动态”更改脉冲输入引脚和控制输入引脚。要禁用特定输入，请提供功能参数 <code>PCNT_PIN_NOT_USED</code> 而不是 GPIO 编号。</p>
+<blockquote>
+<p>为了使计数器不会错过任何脉冲，脉冲持续时间应该长于一个 APB_CLK 周期（12.5 ns）。脉冲在 APB_CLK 时钟的边沿上采样，如果在边缘之间落下，则可能会丢失。这适用于对带或不带过滤器的操作。</p>
+</blockquote>
+<h2 id="滤波脉冲"><a href="#滤波脉冲" class="headerlink" title="滤波脉冲"></a>滤波脉冲</h2><p>PCNT 单元在每个脉冲和控制输入上都有滤波器，增加了忽略信号中短暂毛刺的选项。</p>
+<p>通过调用 <code>pcnt_set_filter_value()</code> 在 APB_CLK 时钟周期中提供忽略脉冲的长度。可以使用 <code>pcnt_get_filter_value()</code> 检查当前过滤器设置。APB_CLK 时钟以 80 MHz运行。</p>
+<p>通过调用 <code>pcnt_filter_enable()</code>/<code>pcnt_filter_disable()</code> 将过滤器投入运行/暂停。</p>
+<h2 id="使用中断"><a href="#使用中断" class="headerlink" title="使用中断"></a>使用中断</h2><p>在 <code>pcnt_evt_type_t</code> 中定义的五个计数器状态监视事件能够触发中断。事件发生在脉冲计数器达到特定值：</p>
+<ul>
+<li>最小或最大计数值：在配置中讨论的 <code>pcnt_config_t</code> 中提供的 <code>counter_l_lim</code> 或 <code>counter_h_lim</code></li>
+<li>使用函数 <code>pcnt_set_event_value()</code> 设置阈值 0 或阈值 1 值。</li>
+<li>脉冲计数=0</li>
+</ul>
+<p>要注册，启用或禁用中断以服务上述事件，请调用 <code>pcnt_isr_register()</code>，<code>pcnt_intr_enable()</code> 和 <code>pcnt_intr_disable()</code>。要在达到阈值时启用或禁用事件，还需要调用函数 <code>pcnt_event_enable()</code> 和 <code>pcnt_event_disable()</code>。</p>
+<p>要检查当前设置的阈值，请使用函数 <code>pcnt_get_event_value()</code>。</p>
+<h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><p>带控制信号和事件中断的脉冲计数器示例：<a href="https://github.com/espressif/esp-idf/tree/106dc0590/examples/peripherals/pcnt" target="_blank" rel="noopener">peripherals/pcnt</a>.</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/peripherals/pcnt.html" target="_blank" rel="noopener">Pulse Counter</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（二十八） ESP32 串口下载过程(使用 esptool) [转]</title>
+    <url>/InfiniteYuanBlog/2020/03/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%85%AB%EF%BC%89%20ESP32%20%E4%B8%B2%E5%8F%A3%E4%B8%8B%E8%BD%BD%E8%BF%87%E7%A8%8B(%E4%BD%BF%E7%94%A8%20esptool)%20%5B%E8%BD%AC%5D/</url>
+    <content><![CDATA[<h1 id="ESP32-串口下载过程-使用-esptool"><a href="#ESP32-串口下载过程-使用-esptool" class="headerlink" title="ESP32 串口下载过程(使用 esptool)"></a>ESP32 串口下载过程(使用 esptool)</h1><p>原文链接：<a href="https://www.esp32.com/viewtopic.php?f=25&amp;t=8161&amp;p=34283#p34283" target="_blank" rel="noopener">https://www.esp32.com/viewtopic.php?f=25&amp;t=8161&amp;p=34283#p34283</a></p>
+<p>通常，我们会通过 python 脚本，从 PC 端，通过串口给 esp32 芯片或者模块下载固件程序。<br>通过 esptool (<a href="https://github.com/espressif/esptool" target="_blank" rel="noopener">https://github.com/espressif/esptool</a>) 脚本，我们可以很方便的实现。</p>
+<p>但有时，我们也希望能通过其他单片机的串口，给 esp32/esp8266 进行固件更新。（前提是外部单片机能够控制esp32 进入串口下载模式)。<br>完整的串口通信协议可以参考这里(<a href="https://github.com/espressif/esptool/w" target="_blank" rel="noopener">https://github.com/espressif/esptool/w</a> … -Protocol)<br>为了方便调试，我们可以通过运行 esptool，来查看上位机与esp32之间的通信过程。</p>
+<a id="more"></a>
+
+<p>首先，esp32 的串口通信协议基于 SLIP (Serial Line Internet Protocol)。任何一个数据包以0xC0开始，以0xC0结尾。数据包内容中的0xC0替换为0xDB 0xDC。数据包内容中的0xDB替换为0xDB 0xDD.</p>
+<p>在运行esptool的同时，在命令中添加 –trace 参数，即可查看通信过程中的串口数据。</p>
+<p>以读取 flash id 的过程为例：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">python esptool.py -b <span class="number">115200</span> -p /dev/cu.SLAB_USBtoUART --trace --no-stub flash_id</span><br></pre></td></tr></table></figure>
+
+<p>从输出的 log 中，我们可以看到串口通信的具体内容。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">TRACE +<span class="number">0.000</span> command op=<span class="number">0x09</span> data len=<span class="number">16</span> wait_response=<span class="number">1</span> timeout=<span class="number">3.000</span> data=<span class="number">1</span>c20006040000080ffffffff00000000</span><br><span class="line">TRACE +<span class="number">0.000</span> Write <span class="number">26</span> bytes: </span><br><span class="line">    c000091000000000 <span class="number">001</span>c200060400000 | .......... .`@..</span><br><span class="line">    <span class="number">80f</span>fffffff000000 <span class="number">00</span>c0             | ..........</span><br><span class="line">TRACE +<span class="number">0.004</span> Read <span class="number">1</span> bytes: c0</span><br><span class="line">TRACE +<span class="number">0.000</span> Read <span class="number">13</span> bytes: <span class="number">01090400</span>c840160000000000c0</span><br><span class="line">TRACE +<span class="number">0.000</span> Received full packet: <span class="number">01090400</span>c840160000000000</span><br></pre></td></tr></table></figure>
+
+<p>上面的 log 中，串口向 esp32 发送 26 字节十六进制序列</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">c000091000000000001c20006040000080ffffffff00000000c0</span><br></pre></td></tr></table></figure>
+
+<p>esp32 向串口返回13字节十六进制序列</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">c001090400c840160000000000c0</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（二十六）NVS</title>
+    <url>/InfiniteYuanBlog/2019/04/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%85%AD%EF%BC%89NVS/</url>
+    <content><![CDATA[<h1 id="NVS-Non-volatile-storage"><a href="#NVS-Non-volatile-storage" class="headerlink" title="NVS - Non-volatile storage"></a>NVS - Non-volatile storage</h1><p>非易失性存储（NVS）库主要用于在闪存中存储键值对。本节介绍 NVS 使用的一些概念。</p>
+<h2 id="底层存储"><a href="#底层存储" class="headerlink" title="底层存储"></a>底层存储</h2><p>目前，NVS 通过 <code>spi_flash_{read|write|erase}</code>  API 使用主闪存的一部分。该库使用具有 data 类型和 nvs 子类型的所有分区。应用程序可以通过 <code>nvs_open</code> API 选择使用带有标签 nvs 的分区或通过 <code>nvs_open_from_part</code> API 使用指定名称的任意分区。</p>
+<blockquote>
+<p>如果 NVS 分区被截断（例如，更改分区表布局时），则应擦除其内容。ESP-IDF 构建系统提供 <code>make erase_flash</code> 以擦除闪存芯片的所有内容。</p>
+</blockquote>
+<blockquote>
+<p>NVS 最适合存储许多小值，而不是 “string” 和 “blob” 类型的大值。如果需要存储大的 blob 或字符串，请考虑使用在损耗均衡库之上的 FAT 文件系统提供的功能。</p>
+</blockquote>
+<a id="more"></a>
+
+<h2 id="键值对"><a href="#键值对" class="headerlink" title="键值对"></a>键值对</h2><p>NVS 在键值对上操作。键是 ASCII 字符串，最大键长度当前为 15 个字符。值可以具有以下类型之一：</p>
+<ul>
+<li>整形: uint8_t, int8_t, uint16_t, int16_t, uint32_t, int32_t, uint64_t, int64_t</li>
+<li>以0结尾的字符串</li>
+<li>可变长的二进制数据(blob)</li>
+</ul>
+<blockquote>
+<p>字符串值目前限制为 4000 字节。这包括空终止符。Blob 值限制为 508000 字节或（分区大小的 97.6％- 4000）字节，以较低者为准。</p>
+</blockquote>
+<p>键必须是唯一的。为已存在的键写入值的行为如下：</p>
+<ul>
+<li>如果新值相同，则更新值</li>
+<li>如果新值与旧值的数据类型不同，则返回错误</li>
+</ul>
+<p>读取值时也会执行数据类型检查。如果读取操作的数据类型与值的数据类型不匹配，则返回错误。</p>
+<h2 id="命名空间"><a href="#命名空间" class="headerlink" title="命名空间"></a>命名空间</h2><p>为了缓解不同组件之间键名称中的潜在冲突，NVS 将每个键值对分配给一个命名空间。命名空间名称遵循与键名相同的规则，即最多15个字符的长度。命名空间名称在 <code>nvs_open</code> 或 <code>nvs_open_from_part</code> 调用中指定。此调用返回一个不透明句柄，该句柄用于后续调用 <code>nvs_read_ *</code>，<code>nvs_write_ *</code> 和 <code>nvs_commit</code> 函数。这样，handle 与命名空间相关联，并且键名不会与其他命名空间中的相同名称冲突。 请注意，不同 NVS 分区中具有相同名称的命名空间被视为单独的命名空间。</p>
+<h2 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h2><p>NVS 与 ESP32 闪存加密系统不直接兼容。然而，如果 NVS 加密与 ESP32 闪存加密一起使用，数据仍可以加密形式存储。</p>
+<h2 id="内部"><a href="#内部" class="headerlink" title="内部"></a>内部</h2><h3 id="键值对的日志"><a href="#键值对的日志" class="headerlink" title="键值对的日志"></a>键值对的日志</h3><p>NVS 按顺序存储键值对，新的键值对添加在最后。当必须更新任何给定密钥的值时，在日志的末尾添加新的键值对，并将旧的键值对标记为已擦除。</p>
+<h3 id="页面和条目"><a href="#页面和条目" class="headerlink" title="页面和条目"></a>页面和条目</h3><p>NVS 库在其操作中使用两个主要实体：页面和条目。Page 是一个逻辑结构，用于存储整个日志的一部分。逻辑页面对应于闪存的一个物理扇区。正在使用的页面具有与之关联的序列号。序列号在页面上强制排序。较高的序列号对应于稍后创建的页面。</p>
+<h3 id="页面结构"><a href="#页面结构" class="headerlink" title="页面结构"></a>页面结构</h3><p>页面由三部分组成：标题，条目状态位图和条目本身。要与 ESP32 闪存加密兼容，条目大小为 32 个字节。对于整数类型，条目包含一个键值对。对于字符串和 blob，条目包含键值对的一部分。</p>
+<h3 id="条目状态位图和条目"><a href="#条目状态位图和条目" class="headerlink" title="条目状态位图和条目"></a>条目状态位图和条目</h3><p>每个条目可以处于以下三种状态之一。每个状态在入口状态位图中用两位表示。位图中的最后四位（256-2 * 126）未使用。</p>
+<ul>
+<li>空（2’b11）</li>
+<li>被写（2’b10）</li>
+<li>删除（2’b00）</li>
+</ul>
+<h3 id="条目结构"><a href="#条目结构" class="headerlink" title="条目结构"></a>条目结构</h3><p>对于基本类型的值（当前长度为 1 到 8 个字节的整数），条目包含一个键值对。对于字符串和 blob 类型，条目包含整个键值对的一部分。对于字符串，如果键值对跨越多个条目，则所有条目都存储在同一页面中。通过将 Blob 划分为更小的块，允许Blob跨越多个页面。为了跟踪这些块，存储称为“blob 索引”条目的附加固定长度元数据条目。早期格式的 blob 仍然受支持（可以读取和修改）。但是，一旦修改了blob，就会使用新格式存储它们。</p>
+<p>可变长度值（字符串和 blob）写入后续条目，每个条目 32 个字节。第一个条目的 Span 字段表示使用了多少条目。</p>
+<h3 id="命名空间-1"><a href="#命名空间-1" class="headerlink" title="命名空间"></a>命名空间</h3><p>如上所述，每个键值对属于一个名称空间。命名空间标识符（字符串）存储为名称空间中键值对的键，索引为0。与这些键对应的值是这些命名空间的索引。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/storage/nvs_flash.html" target="_blank" rel="noopener">Non-volatile storage library</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（二十四）SPIFFS 文件系统</title>
+    <url>/InfiniteYuanBlog/2019/03/23/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%9B%9B%EF%BC%89SPIFFS%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</url>
+    <content><![CDATA[<h1 id="SPIFFS-文件系统"><a href="#SPIFFS-文件系统" class="headerlink" title="SPIFFS 文件系统"></a>SPIFFS 文件系统</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>SPIFFS 是一个文件系统，用于嵌入式目标上的 SPI NOR 闪存设备。它支持磨损均衡，文件系统一致性检查等。</p>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><ul>
+<li>目前，spiffs 不支持目录。它产生扁平结构。如果 SPIFFS 安装在 /spiffs 下创建一个带有路径 /spiffs/tmp/myfile.txt 的文件，则会在 SPIFFS 中创建一个名为 /tmp/myfile.txt 的文件，而不是在目录 /spiffs/tmp 下创建一个名为的 myfile.txt。</li>
+<li>它不是实时堆栈。一次写入操作可能持续时间比另一次更长。</li>
+<li>目前，它没法检测或处理块被损坏的情况。</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h2><p>主机端工具用于创建 SPIFS 分区镜像文件(.bin)，其中一个工具是 <a href="https://github.com/igrr/mkspiffs" target="_blank" rel="noopener">mkspiffs</a>。您可以使用它从给定文件夹创建镜像文件，然后使用 <code>esptool.py</code> 下载该镜像文件到设备中</p>
+<p>为此，您需要获取一些参数：</p>
+<ul>
+<li>块大小：4096（SPI Flash的标准）</li>
+<li>页面大小：256（SPI Flash标准）</li>
+<li>图像大小：分区大小（以字节为单位）（可以从分区表中获取）</li>
+<li>分区偏移：分区的起始地址（可以从分区表中获取）</li>
+</ul>
+<p>例如：<br>将目标文件夹打包为 1 兆字节镜像文件：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mkspiffs -c [src_folder] -b 4096 -p 256 -s 0x100000 spiffs.bin</span><br></pre></td></tr></table></figure>
+
+<p>要在偏移量 0x110000 处将镜像文件烧录到 ESP32：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python esptool.py --chip esp32 --port [port] --baud [baud] write_flash -z 0x110000 spiffs.bin</span><br></pre></td></tr></table></figure>
+
+<h2 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h2><ol>
+<li>无法从 SPIFFS 中读取到文件内容</li>
+</ol>
+<p>这种情况是由于通过工具制作的文件系统格式与程序中的文件系统格式不同导致，可通过运行 <code>./mkspiffs --version</code> 在你的 mkspiffs 目录和 <code>grep SPIFFS sdkconfig</code> 在你的工程目录，之后对比两者配置的不同之处。</p>
+<p>例如：</p>
+<p>运行 <code>./mkspiffs --version</code> 在 mkspiffs 目录中：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">mkspiffs ver. <span class="number">0.2</span><span class="number">.3</span><span class="number">-6</span>-g983970e</span><br><span class="line">Build configuration name: generic</span><br><span class="line">SPIFFS ver. <span class="number">0.3</span><span class="number">.7</span><span class="number">-5</span>-gf5e26c4</span><br><span class="line">Extra build flags: (none)</span><br><span class="line">SPIFFS configuration:</span><br><span class="line">  SPIFFS_OBJ_NAME_LEN: <span class="number">32</span></span><br><span class="line">  SPIFFS_OBJ_META_LEN: <span class="number">0</span></span><br><span class="line">  SPIFFS_USE_MAGIC: <span class="number">1</span></span><br><span class="line">  SPIFFS_USE_MAGIC_LENGTH: <span class="number">1</span></span><br><span class="line">  SPIFFS_ALIGNED_OBJECT_INDEX_TABLES: <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<p>运行 <code>grep SPIFFS sdkconfig</code> 在工程目录中：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"># SPIFFS Configuration</span><br><span class="line">CONFIG_SPIFFS_MAX_PARTITIONS=<span class="number">3</span></span><br><span class="line"># SPIFFS Cache Configuration</span><br><span class="line">CONFIG_SPIFFS_CACHE=y</span><br><span class="line">CONFIG_SPIFFS_CACHE_WR=y</span><br><span class="line">CONFIG_SPIFFS_CACHE_STATS=</span><br><span class="line">CONFIG_SPIFFS_PAGE_CHECK=y</span><br><span class="line">CONFIG_SPIFFS_GC_MAX_RUNS=<span class="number">10</span></span><br><span class="line">CONFIG_SPIFFS_GC_STATS=</span><br><span class="line">CONFIG_SPIFFS_PAGE_SIZE=<span class="number">256</span></span><br><span class="line">CONFIG_SPIFFS_OBJ_NAME_LEN=<span class="number">32</span></span><br><span class="line">CONFIG_SPIFFS_USE_MAGIC=y</span><br><span class="line">CONFIG_SPIFFS_USE_MAGIC_LENGTH=y</span><br><span class="line">CONFIG_SPIFFS_META_LENGTH=<span class="number">4</span></span><br><span class="line">CONFIG_SPIFFS_USE_MTIME=y</span><br><span class="line">CONFIG_SPIFFS_DBG=</span><br><span class="line">CONFIG_SPIFFS_API_DBG=</span><br><span class="line">CONFIG_SPIFFS_GC_DBG=</span><br><span class="line">CONFIG_SPIFFS_CACHE_DBG=</span><br><span class="line">CONFIG_SPIFFS_CHECK_DBG=</span><br><span class="line">CONFIG_SPIFFS_TEST_VISUALISATION=</span><br></pre></td></tr></table></figure>
+
+<p>对比之后我们发现有 <code>SPIFFS_OBJ_META_LEN:0</code>（mkspiffs）和 <code>CONFIG_SPIFFS_META_LENGTH=4</code>（sdkconfig） 不同，这个可能就是导致无法从文件系统中读取的原因。那我们重新构建一下 <code>mkspiffs</code>，通过在 mkspiffs 目录中运行以下命令：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">make clean</span><br><span class="line">make dist BUILD_CONFIG_NAME=<span class="string">"-esp-idf"</span> CPPFLAGS=<span class="string">"-DSPIFFS_OBJ_META_LEN=4"</span></span><br></pre></td></tr></table></figure>
+
+<p>这时，我们重新比较下两者的差别:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">mkspiffs ver. <span class="number">0.2</span><span class="number">.3</span><span class="number">-6</span>-g983970e</span><br><span class="line">Build configuration name: esp-idf</span><br><span class="line">SPIFFS ver. <span class="number">0.3</span><span class="number">.7</span><span class="number">-5</span>-gf5e26c4</span><br><span class="line">Extra build flags: -DSPIFFS_OBJ_META_LEN=<span class="number">4</span></span><br><span class="line">SPIFFS configuration:</span><br><span class="line">  SPIFFS_OBJ_NAME_LEN: <span class="number">32</span></span><br><span class="line">  SPIFFS_OBJ_META_LEN: <span class="number">4</span>			<span class="comment">// 这里已经改变为和工程中的 SPIFFS 格式配置相同</span></span><br><span class="line">  SPIFFS_USE_MAGIC: <span class="number">1</span></span><br><span class="line">  SPIFFS_USE_MAGIC_LENGTH: <span class="number">1</span></span><br><span class="line">  SPIFFS_ALIGNED_OBJECT_INDEX_TABLES: <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"># SPIFFS Configuration</span><br><span class="line">CONFIG_SPIFFS_MAX_PARTITIONS=<span class="number">3</span></span><br><span class="line"># SPIFFS Cache Configuration</span><br><span class="line">CONFIG_SPIFFS_CACHE=y</span><br><span class="line">CONFIG_SPIFFS_CACHE_WR=y</span><br><span class="line">CONFIG_SPIFFS_CACHE_STATS=</span><br><span class="line">CONFIG_SPIFFS_PAGE_CHECK=y</span><br><span class="line">CONFIG_SPIFFS_GC_MAX_RUNS=<span class="number">10</span></span><br><span class="line">CONFIG_SPIFFS_GC_STATS=</span><br><span class="line">CONFIG_SPIFFS_PAGE_SIZE=<span class="number">256</span></span><br><span class="line">CONFIG_SPIFFS_OBJ_NAME_LEN=<span class="number">32</span></span><br><span class="line">CONFIG_SPIFFS_USE_MAGIC=y</span><br><span class="line">CONFIG_SPIFFS_USE_MAGIC_LENGTH=y</span><br><span class="line">CONFIG_SPIFFS_META_LENGTH=<span class="number">4</span></span><br><span class="line">CONFIG_SPIFFS_USE_MTIME=y</span><br><span class="line">CONFIG_SPIFFS_DBG=</span><br><span class="line">CONFIG_SPIFFS_API_DBG=</span><br><span class="line">CONFIG_SPIFFS_GC_DBG=</span><br><span class="line">CONFIG_SPIFFS_CACHE_DBG=</span><br><span class="line">CONFIG_SPIFFS_CHECK_DBG=</span><br><span class="line">CONFIG_SPIFFS_TEST_VISUALISATION=</span><br></pre></td></tr></table></figure>
+
+<p>这样应该就可以解决不能从文件系统中读取文件内容了。</p>
+<h2 id="mkspiffs-工具构建"><a href="#mkspiffs-工具构建" class="headerlink" title="mkspiffs 工具构建"></a>mkspiffs 工具构建</h2><p>构建 mkspiffs 的过程：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">git clone https:<span class="comment">//github.com/igrr/mkspiffs.git</span></span><br><span class="line">git submodule update --init</span><br><span class="line">make dist</span><br><span class="line"><span class="meta"># make dist CPPFLAGS=<span class="meta-string">"-DSPIFFS_OBJ_META_LEN=4"</span> BUILD_CONFIG_NAME=-custom <span class="comment">//可选</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="SPIFFS-配置"><a href="#SPIFFS-配置" class="headerlink" title="SPIFFS 配置"></a>SPIFFS 配置</h3><p>在 mkspiffs 构建时设置的某些 SPIFFS 选项会影响生成的文件系统映像的格式。在构建 mkspiffs 和构建使用 SPIFFS 的应用程序时，请确保将此类选项设置为相同的值。</p>
+<p>这些选项包括：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">SPIFFS_OBJ_NAME_LEN</span><br><span class="line">SPIFFS_OBJ_META_LEN</span><br><span class="line">SPIFFS_USE_MAGIC</span><br><span class="line">SPIFFS_USE_MAGIC_LENGTH</span><br><span class="line">SPIFFS_ALIGNED_OBJECT_INDEX_TABLES</span><br></pre></td></tr></table></figure>
+
+<p>可能是其他人要查看这些选项的默认值，请检查此存储库中的 <code>include/spiffs_config.h</code> 文件。</p>
+<p>要在构建时覆盖某些选项，请传递额外的 CPPFLAGS。您还可以设置 BUILD_CONFIG_NAME 变量以区分构建的二进制文件：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">make clean</span><br><span class="line">make dist CPPFLAGS=<span class="string">"-DSPIFFS_OBJ_META_LEN=4"</span> BUILD_CONFIG_NAME=-custom</span><br></pre></td></tr></table></figure>
+
+<p>要检查构建mkspiff时设置的选项，请使用 <code>--version</code> 命令：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ mkspiffs --version</span><br><span class="line">mkspiffs ver. <span class="number">0.2</span><span class="number">.2</span></span><br><span class="line">Build configuration name: custom</span><br><span class="line">SPIFFS ver. <span class="number">0.3</span><span class="number">.7</span><span class="number">-5</span>-gf5e26c4</span><br><span class="line">Extra build flags: -DSPIFFS_OBJ_META_LEN=<span class="number">4</span></span><br><span class="line">SPIFFS configuration:</span><br><span class="line">  SPIFFS_OBJ_NAME_LEN: <span class="number">32</span></span><br><span class="line">  SPIFFS_OBJ_META_LEN: <span class="number">4</span></span><br><span class="line">  SPIFFS_USE_MAGIC: <span class="number">1</span></span><br><span class="line">  SPIFFS_USE_MAGIC_LENGTH: <span class="number">1</span></span><br><span class="line">  SPIFFS_ALIGNED_OBJECT_INDEX_TABLES: <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/storage/spiffs.html" target="_blank" rel="noopener">SPIFFS Filesystem</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（二十）RTC 和低功耗管理</title>
+    <url>/InfiniteYuanBlog/2019/03/04/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%EF%BC%89RTC%20%E5%92%8C%E4%BD%8E%E5%8A%9F%E8%80%97%E7%AE%A1%E7%90%86/</url>
+    <content><![CDATA[<h1 id="RTC-和低功耗管理"><a href="#RTC-和低功耗管理" class="headerlink" title="RTC 和低功耗管理"></a>RTC 和低功耗管理</h1><p>ESP32 采用了先进的电源管理技术，可以在不同的功耗模式之间切换。</p>
+<h2 id="1-功耗模式"><a href="#1-功耗模式" class="headerlink" title="1 功耗模式"></a>1 功耗模式</h2><ul>
+<li>Active 模式:芯片射频处于工作状态。芯片可以接收、发射和侦听信号。</li>
+<li>Modem-sleep 模式:CPU 可运行，时钟可被配置。Wi-Fi/蓝牙基带和射频关闭。</li>
+<li>Light-sleep 模式:CPU 暂停运行。RTC 存储器和外设以及 ULP 协处理器运行。任何唤醒事件(MAC、主机、RTC 定时器或外部中断)都会唤醒芯片。</li>
+<li>Deep-sleep 模式:CPU 和大部分外设都会掉电，只有 RTC 存储器和 RTC 外设处于工作状态。Wi-Fi 和蓝牙连接数据存储在 RTC 中。ULP 协处理器可以工作。</li>
+<li>Hibernation 模式:内置的 8 MHz 振荡器和 ULP 协处理器均被禁用。RTC 内存恢复电源被切断。只有1 个位于低速时钟上的 RTC 时钟定时器和某些 RTC GPIO 在工作。RTC 时钟定时器或 RTC GPIO 可以将芯片从 Hibernation 模式中唤醒。</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="2-低功耗模式功耗"><a href="#2-低功耗模式功耗" class="headerlink" title="2 低功耗模式功耗"></a>2 低功耗模式功耗</h2><p>设备在不同的功耗模式下有不同的电流消耗，详情请见下表。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190304100817958.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="不同功耗模式下的功耗">)<img src="https://img-blog.csdnimg.cn/201903041011254.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="射频功耗参数"></p>
+<h2 id="3-说明"><a href="#3-说明" class="headerlink" title="3 说明"></a>3 说明</h2><ul>
+<li>ESP32 系列芯片中，ESP32-D0WDQ6 与 ESP32-D0WD 的 CPU 最大频率为 240 MHz;ESP32-D2WD 与 ESP32-S0WD 的 CPU 最大频率为 160 MHz。</li>
+<li>在 Wi-Fi 开启的场景中，芯片会在 Active 和 Modem-sleep 模式之间切换，功耗也会在两种模式间变化。</li>
+<li>Modem-sleep 模式下，CPU 频率自动变化，频率取决于 CPU 负载和使用的外设。</li>
+<li>Deep-sleep 模式下，仅 ULP 协处理器处于工作状态时，可以操作 GPIO 及低功耗 I2C。</li>
+<li>当系统处于超低功耗传感器监测模式时，ULP 协处理器和传感器周期性工作,ADC 以 1% 占空比工作，系统功耗典型值为 100 μA。</li>
+</ul>
+<h2 id="4-参考资料"><a href="#4-参考资料" class="headerlink" title="4 参考资料"></a>4 参考资料</h2><ul>
+<li><a href="https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf" target="_blank" rel="noopener">ESP32 技术参考手册</a></li>
+<li><a href="https://infiniteyuan.blog.csdn.net/article/details/106451678" target="_blank" rel="noopener">ESP32 学习笔记（二十九） ESP32 低功耗模式</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -657,9 +1314,153 @@
       </tags>
   </entry>
   <entry>
+    <title>ESP32 学习笔记（十七）SDMMC Host Driver</title>
+    <url>/InfiniteYuanBlog/2018/11/15/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%83%EF%BC%89SDMMC%20Host%20Driver/</url>
+    <content><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>在 ESP32 上，SDMMC 主机外设有两个插槽：</p>
+<ul>
+<li>插槽 0(<code>SDMMC_HOST_SLOT_0</code>)是一个 8 位插槽。它使用 <code>PIN MUX</code> 中的 <code>HS1_ *</code> 信号。</li>
+<li>插槽 1(<code>SDMMC_HOST_SLOT_1</code>)是一个 4 位插槽。它使用 <code>PIN MUX</code> 中的 <code>HS2_ *</code> 信号。</li>
+</ul>
+<p>这些插槽的引脚映射如下表所示：<br>|Signal|Slot 0|Slot 1|<br>|:—:|:—:|:—:|<br>|CMD |    GPIO11     |GPIO15|<br>CLK     |GPIO6|     GPIO14|<br>|D0 |    GPIO7     |GPIO2|<br>|D1     |GPIO8 |    GPIO4|<br>|D2     |GPIO9     |GPIO12|<br>|D3     |GPIO10     |GPIO13|<br>|D4     |GPIO16      ||<br>|D5     |GPIO17|     |<br>|D6     |GPIO5|      |<br>|D7     |GPIO18||<br>|CD     |any input via GPIO matrix|any input via GPIO matrix|<br>|WP     |any input via GPIO matrix|any input via GPIO matrix|</p>
+<p>可以使用 GPIO 矩阵将卡检测和写保护信号路由到任意引脚。要使用这些引脚，请在调用 <code>sdmmc_host_init_slot()</code> 之前设置 <code>sdmmc_slot_config_t</code> 结构的 <code>gpio_cd</code> 和 <code>gpio_wp</code> 成员。请注意，在使用 SDIO 卡时，建议不要指定卡检测引脚，因为在 ESP32 卡检测信号中也可以触发 SDIO 从机中断。</p>
+<blockquote>
+<p>插槽0(HS1_ *)使用的引脚也用于连接 ESP-WROOM32 和 ESP32-WROVER 模块中的 SPI 闪存芯片。这些引脚不能在 SD 卡和 SPI 闪存之间共享。如果需要使用 Slot 0，请将 SPI flash连接到不同的引脚并相应地设置 Efuses。</p>
+</blockquote>
+<a id="more"></a>
+
+<h2 id="支持的速度模式"><a href="#支持的速度模式" class="headerlink" title="支持的速度模式"></a>支持的速度模式</h2><p>SDMMC 主机驱动程序支持以下速度模式：</p>
+<ul>
+<li>默认速度(20MHz)，4 线/1 线(带 SD 卡)和8 线(带 3.3V eMMC)。</li>
+<li>高速(40MHz)，4 线/1 线(带 SD 卡)和8 线(带 3.3V eMMC)</li>
+<li>高速DDR(40MHz)，4 线(带 3.3V eMMC)</li>
+</ul>
+<p>目前不支持的是：</p>
+<ul>
+<li>高速 DDR 模式，8 线 eMMC</li>
+<li>UHS-I 1.8V 模式，4 线 SD 卡</li>
+</ul>
+<h2 id="使用SDMMC主机驱动程序"><a href="#使用SDMMC主机驱动程序" class="headerlink" title="使用SDMMC主机驱动程序"></a>使用SDMMC主机驱动程序</h2><p>在下面列出的所有功能中，大多数应用程序将直接使用 <code>sdmmc_host_init()</code>，<code>sdmmc_host_init_slot()</code> 和 <code>sdmmc_host_deinit()</code>。</p>
+<p>其他函数，例如 <code>sdmmc_host_set_bus_width()</code>，<code>sdmmc_host_set_card_clk()</code> 和 <code>sdmmc_host_do_transaction()</code> 将由 SD/MMC 协议层通过 <code>sdmmc_host_t</code> 结构中的函数指针调用。</p>
+<h2 id="配置总线宽度和频率"><a href="#配置总线宽度和频率" class="headerlink" title="配置总线宽度和频率"></a>配置总线宽度和频率</h2><p>使用 <code>sdmmc_host_t</code> 和 <code>sdmmc_slot_config_t</code>(<code>SDMMC_HOST_DEFAULT</code> 和 <code>SDMMC_SLOT_CONFIG_DEFAULT</code>)的默认初始化程序，SDMMC 主机驱动程序将尝试使用该卡支持的最宽总线(SD 为 4 行，eMMC 为 8 行)和 20MHz 频率。</p>
+<p>在可以实现 40MHz 频率通信的设计中，可以通过更改 <code>sdmmc_host_t</code> 的 <code>max_freq_khz</code> 字段来增加总线频率：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">sdmmc_host_t</span> host = SDMMC_HOST_DEFAULT();</span><br><span class="line">host.max_freq_khz = SDMMC_FREQ_HIGHSPEED;</span><br></pre></td></tr></table></figure>
+
+<p>要配置总线宽度，请设置 <code>sdmmc_slot_config_t</code> 的宽度字段。例如，要设置 1 位模式：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">sdmmc_slot_config_t</span> slot = SDMMC_SLOT_CONFIG_DEFAULT();</span><br><span class="line">slot.<span class="built_in">width</span> = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="更多"><a href="#更多" class="headerlink" title="更多"></a>更多</h2><p>有关实现协议层的更高级别驱动程序，请参阅 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/storage/sdmmc.html" target="_blank" rel="noopener">SD/SDIO/MMC驱动程序</a>。</p>
+<p>有关使用 SPI 控制器的类似驱动程序，请参阅 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/peripherals/sdspi_host.html" target="_blank" rel="noopener">SD SPI主机驱动程序</a>，并且仅限于 SD 协议的 SPI 模式。</p>
+<p>有关上拉支持以及有关模块和设备的兼容性，请参阅 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/peripherals/sd_pullup_requirements.html" target="_blank" rel="noopener">SD上拉要求</a>。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/peripherals/sdmmc_host.html" target="_blank" rel="noopener">SDMMC Host Driver</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ESP32 学习笔记（十三）Pulse Counter</title>
-    <url>/InfiniteYuanBlog/2018/01/16/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89Pulse%20Counter/</url>
-    <content><![CDATA[]]></content>
+    <url>/InfiniteYuanBlog/2018/08/13/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89Pulse%20Counter/</url>
+    <content><![CDATA[<h1 id="Pulse-Counter"><a href="#Pulse-Counter" class="headerlink" title="Pulse Counter"></a>Pulse Counter</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>PCNT（脉冲计数器）模块用于计算输入信号的上升沿和/或下降沿的数量。每个脉冲计数器单元都有一个 16 位有符号计数器寄存器和两个通道，可配置为递增或递减计数器。每个通道都有一个接收待检测信号边沿的信号输入，以及一个可用于启用或禁用信号输入的控制输入。输入具有可选滤波器，可用于丢弃信号中不需要的毛刺。</p>
+<h2 id="功能概述"><a href="#功能概述" class="headerlink" title="功能概述"></a>功能概述</h2><p>此API的功能描述分为四个部分：</p>
+<ul>
+<li>配置 - 描述计数器的配置参数以及如何设置计数器。</li>
+<li>操作计数器 - 提供有关暂停，测量和清除计数器的控制功能的信息。</li>
+<li>滤波脉冲 - 描述滤波脉冲和计数器控制信号的选项。</li>
+<li>使用中断 - 介绍如何在计数器的特定状态上触发中断。</li>
+</ul>
+<a id="more"></a>
+
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>PCNT 模块有 8 个独立的计数“单位”，编号从 0 到 7。在 API 中，它们使用 <code>pcnt_unit_t</code> 引用。每个单元有两个独立的通道，编号为 0 和 1，并用 <code>pcnt_channel_t</code> 指定。</p>
+<p>使用 <code>pcnt_config_t</code> 为每个单元的通道单独提供配置，并涵盖：</p>
+<ul>
+<li>此配置所指的单元和通道编号。</li>
+<li>脉冲输入和脉冲门输入的 GPIO 编号。</li>
+<li>两对参数：<code>pcnt_ctrl_mode_t</code> 和 <code>pcnt_count_mode_t</code>，用于定义计数器如何响应，具体取决于控制信号的状态以及如何计算脉冲的正/负边沿。</li>
+<li>当脉冲计数满足特定限制时，用于建立观察点和触发中断的两个极限值（最小值/最大值）。</li>
+</ul>
+<p>然后通过调用上面的 <code>pcnt_config_t</code> 作为输入参数的函数 <code>pcnt_unit_config()</code> 来完成特定通道的设置。</p>
+<p>要在配置中禁用脉冲或控制输入引脚，请提供 <code>PCNT_PIN_NOT_USED</code> 而不是 GPIO 编号。</p>
+<h3 id="操作计数器"><a href="#操作计数器" class="headerlink" title="操作计数器"></a>操作计数器</h3><p>在使用 <code>pcnt_unit_config()</code> 进行设置后，计数器立即开始运行。可以通过调用 <code>pcnt_get_counter_value()</code> 来检查累积的脉冲计数。</p>
+<p>有几个函数可以控制计数器的操作：<code>pcnt_counter_pause()</code>，<code>pcnt_counter_resume()</code> 和 <code>pcnt_counter_clear()</code></p>
+<p>也可以通过调用 <code>pcnt_set_mode()</code> 使用 <code>pcnt_unit_config()</code> 动态更改先前设置的计数器模式。</p>
+<p>如果需要，可以使用 <code>pcnt_set_pin()</code> “动态”更改脉冲输入引脚和控制输入引脚。要禁用特定输入，请提供功能参数 <code>PCNT_PIN_NOT_USED</code> 而不是GPIO编号。</p>
+<blockquote>
+<p>为了使计数器不会错过任何脉冲，脉冲持续时间应该长于一个APB_CLK周期（12.5 ns）。脉冲在APB_CLK时钟的边沿上采样，如果在边缘之间落下，则可能会丢失。这适用于有或没有文件管理器的计数器操作。</p>
+</blockquote>
+<h3 id="滤波脉冲"><a href="#滤波脉冲" class="headerlink" title="滤波脉冲"></a>滤波脉冲</h3><p>PCNT 单元在每个脉冲和控制输入上都有滤波器，增加了忽略信号中短毛刺的选项。</p>
+<p>通过调用 <code>pcnt_set_filter_value()</code> 在 APB_CLK 时钟周期中提供忽略脉冲的长度。可以使用 <code>pcnt_get_filter_value()</code> 检查当前过滤器设置。APB_CLK 时钟以 80 MHz 运行。</p>
+<p>通过调用 <code>pcnt_filter_enable()</code>/<code>pcnt_filter_disable()</code> 将过滤器置于操作/暂停状态。</p>
+<h3 id="使用中断"><a href="#使用中断" class="headerlink" title="使用中断"></a>使用中断</h3><p>在 <code>pcnt_evt_type_t</code> 中定义的五个计数器状态监视事件能够触发中断。事件发生在脉冲计数器达到特定值：</p>
+<ul>
+<li>最小或最大计数值：在配置中讨论的 <code>pcnt_config_t</code> 中提供的 <code>counter_l_lim</code> 或 <code>counter_h_lim</code></li>
+<li>使用函数 <code>pcnt_set_event_value()</code> 设置阈值 0 或阈值 1 值。</li>
+<li>脉冲计数 = 0</li>
+</ul>
+<p>要注册，启用或禁用中断以服务上述事件，请调用 <code>pcnt_isr_register()</code>，<code>pcnt_intr_enable()</code> 和 <code>pcnt_intr_disable()</code>。要在达到阈值时启用或禁用事件，您还需要调用函数 <code>pcnt_event_enable()</code> 和 <code>pcnt_event_disable()</code>。</p>
+<p>要检查当前设置的阈值，请使用函数 <code>pcnt_get_event_value()</code>。</p>
+<h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><p>带控制信号和事件中断的脉冲计数器示例：<a href="https://github.com/espressif/esp-idf/tree/30545f4/examples/peripherals/pcnt" target="_blank" rel="noopener">peripherals/pcnt</a>.</p>
+<h2 id="API-Reference"><a href="#API-Reference" class="headerlink" title="API Reference"></a>API Reference</h2><h3 id="Header-File"><a href="#Header-File" class="headerlink" title="Header File"></a>Header File</h3><ul>
+<li><a href="https://github.com/espressif/esp-idf/blob/30545f4/components/driver/include/driver/pcnt.h" target="_blank" rel="noopener">driver/include/driver/pcnt.h</a></li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/peripherals/pcnt.html" target="_blank" rel="noopener">Pulse Counter</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（十九）High Resolution Timer</title>
+    <url>/InfiniteYuanBlog/2018/12/24/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B9%9D%EF%BC%89High%20Resolution%20Timer/</url>
+    <content><![CDATA[<h1 id="高分辨率定时器"><a href="#高分辨率定时器" class="headerlink" title="高分辨率定时器"></a>高分辨率定时器</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>虽然 FreeRTOS 提供软件定时器，但这些定时器有一些限制：</p>
+<ul>
+<li>最大分辨率等于 RTOS 滴答周期</li>
+<li>低优先级任务调度定时器回调</li>
+</ul>
+<p>硬件定时器没有这两个限制，但通常使用起来不方便。例如，应用程序组件可能需要在将来的某些时间触发定时器事件，但硬件定时器仅包含一个用于中断生成的“比较”值。这意味着需要在硬件计时器之上构建一些设施来管理待处理事件列表，可以在发生相应的硬件中断时为这些事件调度回调。</p>
+<p><code>esp_timer</code> API 集提供了这样的功能。在内部，<code>esp_timer</code> 使用 32 位硬件定时器（FRC1，“传统”定时器）。<code>esp_timer</code> 提供单次和周期定时器，微秒时间分辨率和 64 位范围。</p>
+<p>从高优先级的 <code>esp_timer</code> 任务调度定时器回调。由于所有回调都是从同一任务调度的，因此建议仅从回调本身执行尽可能少的工作，而是使用队列将事件发布到优先级较低的任务。</p>
+<p>如果优先级高于 <code>esp_timer</code> 的其他任务正在运行，则回调调度将延迟，直到 <code>esp_timer</code> 任务有机会运行。例如，如果正在进行 <code>SPI</code> 闪存操作，则会发生这种情况。</p>
+<p>创建和启动计时器，并调度回调需要一些时间。因此，单触发 <code>esp_timer</code> 的超时值有一个下限。如果调用 <code>esp_timer_start_once()</code> 时超时值小于20us，则仅在大约 20us 后调度回调。</p>
+<p>周期性 <code>esp_timer</code> 还对最小定时器周期施加 50us 限制。周期小于 50us 的定期软件定时器不实用，因为它们会占用大部分 CPU 时间。如果发现需要小周期的定时器，请考虑使用专用硬件外设或 DMA 功能。</p>
+<a id="more"></a>
+
+<h2 id="使用-esp-timer-API"><a href="#使用-esp-timer-API" class="headerlink" title="使用 esp_timer API"></a>使用 <code>esp_timer</code> API</h2><p>单个计时器由 <code>esp_timer_handle_t</code> 类型表示。定时器有与之关联的回调函数。每次计时器过去时，都会从 <code>esp_timer</code> 任务调用此回调函数。</p>
+<ul>
+<li>要创建计时器，请调用 <code>esp_timer_create()</code>。</li>
+<li>要在不再需要时删除计时器，请调用 <code>esp_timer_delete()</code>。</li>
+</ul>
+<p>定时器可以以单次模式或定期模式启动。</p>
+<ul>
+<li>要以单次模式启动计时器，请调用 <code>esp_timer_start_once()</code>，传递应该调用回调的时间间隔。调用回调时，会认为计时器已停止。</li>
+<li>要以周期模式启动定时器，请调用 <code>esp_timer_start_periodic()</code>，传递应调用回调的周期。计时器一直运行，直到调用 <code>esp_timer_stop()</code>。</li>
+</ul>
+<p>请注意，调用 <code>esp_timer_start_once()</code> 或 <code>esp_timer_start_periodic()</code> 时，计时器不能运行。要重新启动正在运行的计时器，请先调用 <code>esp_timer_stop()</code>，然后调用其中一个启动函数。</p>
+<h2 id="获得当前时间"><a href="#获得当前时间" class="headerlink" title="获得当前时间"></a>获得当前时间</h2><p><code>esp_timer</code> 还提供了一个便捷函数来获取自启动以来经过的时间，精度为微秒：<code>esp_timer_get_time()</code>。此函数返回自 <code>esp_timer</code> 初始化以来的微秒数，这通常在调用 <code>app_main</code> 函数之前不久发生。</p>
+<p>与 <code>gettimeofday</code> 函数不同，<code>esp_timer_get_time()</code> 返回的值：</p>
+<ul>
+<li>芯片从深度睡眠中唤醒后，从零开始</li>
+<li>没有应用时区或 DST 调整</li>
+</ul>
+<h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><ul>
+<li><a href="https://github.com/espressif/esp-idf/tree/7b13308/examples/system/esp_timer" target="_blank" rel="noopener">system/esp_timer</a></li>
+</ul>
+<h2 id="API-参考"><a href="#API-参考" class="headerlink" title="API 参考"></a>API 参考</h2><ul>
+<li><a href="https://github.com/espressif/esp-idf/blob/7b13308/components/esp32/include/esp_timer.h" target="_blank" rel="noopener">esp32/include/esp_timer.h</a></li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/system/esp_timer.html" target="_blank" rel="noopener">High Resolution Timer</a></li>
+</ul>
+]]></content>
       <categories>
         <category>ESP32 学习笔记</category>
       </categories>
@@ -669,8 +1470,334 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（十二）MCPWM</title>
-    <url>/InfiniteYuanBlog/2018/01/16/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%8C%EF%BC%89MCPWM/</url>
-    <content><![CDATA[]]></content>
+    <url>/InfiniteYuanBlog/2018/08/13/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%8C%EF%BC%89MCPWM/</url>
+    <content><![CDATA[<h1 id="MCPWM"><a href="#MCPWM" class="headerlink" title="MCPWM"></a>MCPWM</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP32 有两个 MCPWM 单元，可用于控制不同的电机。每个单元有三对 PWM 输出。</p>
+<p><img src="https://img-blog.csdnimg.cn/20181228185337698.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>此外，在文档中，单个单元的输出标记为 PWMxA/PWMxB。</p>
+<a id="more"></a>
+
+<p>MCPWM 单元的更详细框图如下所示。每个 A/B 对可以由定时器 0,1 和 2 的三个定时器中的任何一个定时。相同的定时器可以用于为一对以上的 PWM 输出提供时钟。每个单元还能够收集诸如 <code>SYNC SIGNALS</code> 之类的输入，检测诸如电动机过电流或过电压之类的 <code>FAULT SIGNALS</code>，以及使用 <code>CAPTURE SIGNALS</code> 获得反馈信号例如：转子位置。</p>
+<p><img src="https://img-blog.csdnimg.cn/20181228185639802.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>此 API 的说明首先配置 MCPWM 的定时器和操作子模块，以提供基本的电机控制功能。然后讨论了故障处理程序，信号捕获，载波和中断等更高级的子模块和功能。</p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li>配置输出的基本功能</li>
+<li>操作输出以驱动电机</li>
+<li>调整电机的驱动方式</li>
+<li>捕获外部信号以提供额外的控制</li>
+<li>使用 <code>Fault Handler</code> 检测和管理故障</li>
+<li>如果输出信号通过隔离变压器，则添加更高频率的载波</li>
+<li>中断的配置和处理。</li>
+</ul>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>配置范围取决于电机类型，特别是需要多少输出和输入，以及驱动电机的信号序列。</p>
+<p>在这种情况下，我们将描述一种简单的配置来控制仅使用一些可用 MCPWM 资源的有刷直流电机。示例电路如下所示。它包括一个 H 桥，用于切换施加在电机（M）上的电压的极化，并提供足够的电流来驱动它。</p>
+<p><img src="https://img-blog.csdnimg.cn/20181228190041789.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>配置包括以下步骤：</p>
+<ul>
+<li>选择将用于驱动电机的 MPWM 单元。ESP32 上有两个可用的单元，并在 <code>mcpwm_unit_t</code> 中枚举。</li>
+<li>通过调用 <code>mcpwm_gpio_init()</code> 将两个 GPIO 初始化为选定单元内的输出信号。两个输出信号通常用于命令电机向右或向左旋转。所有可用的信号选项都列在 <code>mcpwm_io_signals_t</code> 中。要一次设置多个引脚，请将函数 <code>mcpwm_set_pin()</code> 与 <code>mcpwm_pin_config_t</code> 一起使用。</li>
+<li>选择计时器。该装置内有三个定时器。计时器列在 <code>mcpwm_timer_t</code> 中。</li>
+<li>在 <code>mcpwm_config_t</code> 结构中设置定时器频率和初始占空比。</li>
+<li>使用上述参数调用 <code>mcpwm_init()</code> 以使配置生效。</li>
+</ul>
+<h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><p>使用 MCPWM 进行电机控制的示例：<a href="https://github.com/espressif/esp-idf/tree/30545f4/examples/peripherals/mcpwm" target="_blank" rel="noopener">peripherals/mcpwm</a>.</p>
+<h2 id="API-Reference"><a href="#API-Reference" class="headerlink" title="API Reference"></a>API Reference</h2><h3 id="Header-File"><a href="#Header-File" class="headerlink" title="Header File"></a>Header File</h3><ul>
+<li><a href="https://github.com/espressif/esp-idf/blob/30545f4/components/driver/include/driver/mcpwm.h" target="_blank" rel="noopener">driver/include/driver/mcpwm.h</a></li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/peripherals/mcpwm.html" target="_blank" rel="noopener">MCPWM</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（十五）Touch Sensor</title>
+    <url>/InfiniteYuanBlog/2018/08/13/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89Touch%20Sensor/</url>
+    <content><![CDATA[<h1 id="Touch-Sensor"><a href="#Touch-Sensor" class="headerlink" title="Touch Sensor"></a>Touch Sensor</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>触摸传感器系统构建在基板上，该基板在保护性平坦表面下承载电极和相关连接。当用户触摸表面时，触发电容变化并产生二进制信号以指示触摸是否有效。</p>
+<p>ESP32 可提供多达 10 个电容式触摸板/GPIO。传感垫可以以不同的组合（例如矩阵，滑块）布置，从而可以检测更大面积或更多点。触摸板感测过程在硬件实现的有限状态机（FSM）的控制下，该有限状态机由软件或专用硬件定时器启动。</p>
+<p><a href="https://espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf" target="_blank" rel="noopener">ESP32 技术参考手册（PDF）</a>中讨论了触摸传感器的设计，操作和控制寄存器。有关此子系统如何工作的更多详细信息，请参阅它。</p>
+<p>有关ESP32的触摸传感器设计和固件开发指南的详细信息，请参阅<a href="https://github.com/espressif/esp-iot-solution/blob/master/documents/touch_pad_solution/touch_sensor_design_en.md" target="_blank" rel="noopener">触摸传感器应用说明</a>。如果您想在各种配置下测试触摸传感器而无需自行构建，请查看<a href="https://github.com/espressif/esp-iot-solution/blob/master/documents/evaluation_boards/esp32_sense_kit_guide_en.md" target="_blank" rel="noopener">ESP32-Sense 开发套件指南</a>。</p>
+<h2 id="功能概述"><a href="#功能概述" class="headerlink" title="功能概述"></a>功能概述</h2><p>API 的描述分为几组功能，以提供以下功能的快速概述：</p>
+<ul>
+<li>触摸板驱动器的初始化</li>
+<li>触摸板 GPIO 引脚的配置</li>
+<li>进行测量</li>
+<li>调整测量参数</li>
+<li>过滤测量值</li>
+<li>触摸检测方法</li>
+<li>设置中断以报告触摸检测</li>
+<li>在中断时从睡眠模式唤醒</li>
+</ul>
+<p>有关特定功能的详细说明，请转到 <a href="#API-Reference">API 参考</a>部分。<a href="#%E5%BA%94%E7%94%A8%E7%A4%BA%E4%BE%8B">应用示例</a>部分介绍了此 API 的实际实现。</p>
+<a id="more"></a>
+
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>触摸板驱动程序应在使用前通过调用函数 <code>touch_pad_init()</code> 进行初始化。此函数在“宏”下的 <a href="#API-Reference">API 参考</a>中设置了几个 <code>.._ DEFAULT</code> 驱动程序参数。它还清除之前触摸过的焊盘信息（如果有）并禁用中断。</p>
+<p>如果不再需要，可以通过调用 <code>touch_pad_deinit()</code> 来禁用驱动程序。</p>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>使用 <code>touch_pad_config()</code> 可以为特定 GPIO 启用触摸传感器功能。</p>
+<p>函数 <code>touch_pad_set_fsm_mode()</code> 用于选择是否由硬件定时器或软件自动启动触摸板测量（由 FSM 操作）。如果选择了软件模式，则使用 <code>touch_pad_sw_start()</code> 启动 FSM。</p>
+<h3 id="触摸状态测量"><a href="#触摸状态测量" class="headerlink" title="触摸状态测量"></a>触摸状态测量</h3><p>以下两个功能可以方便地从传感器读取原始或过滤的测量值：</p>
+<ul>
+<li><code>touch_pad_read()</code></li>
+<li><code>touch_pad_read_filtered()</code></li>
+</ul>
+<p>通过在触摸或释放垫时检查传感器读数的范围，它们可用于表征特定的触摸板设计。然后可以使用该信息来建立触摸阈值。</p>
+<blockquote>
+<p>通过调用下面描述的特定过滤器函数，在使用<code>touch_pad_read_filtered()</code>之前启动并配置过滤器。</p>
+</blockquote>
+<p>要了解如何使用这两种读取功能，请检查 <a href="https://github.com/espressif/esp-idf/tree/30545f4/examples/peripherals/touch_pad_read" target="_blank" rel="noopener">peripherals/touch_pad_read</a>应用示例。</p>
+<h3 id="优化测量"><a href="#优化测量" class="headerlink" title="优化测量"></a>优化测量</h3><p>触摸传感器具有多个可配置参数，以匹配特定触摸板设计的特性。例如，为了感测较小的容量变化，可以缩小触摸板充电/放电的参考电压范围。使用 <code>touch_pad_set_voltage()</code> 函数设置高和低参考电压。除了识别较小容量变化的能力之外，积极的副作用还将是降低低功率应用的功耗。可能的负面影响是测量噪声的增加。如果获得的读数的动态范围仍然令人满意，则可以通过用 <code>touch_pad_set_meas_time()</code> 降低测量时间来进一步降低功耗。</p>
+<p>以下总结了可用的测量参数和相应的“设置”功能：</p>
+<ul>
+<li>触摸板充电/放电参数：<ul>
+<li>电压范围：<code>touch_pad_set_voltage()</code></li>
+<li>速度（斜率）：<code>touch_pad_set_cnt_mode()</code></li>
+</ul>
+</li>
+<li>测量时间：<code>touch_pad_set_meas_time()</code></li>
+</ul>
+<p>电压范围（高/低参考电压），速度（斜率）和测量时间之间的关系如下图所示。</p>
+<p><img src="https://img-blog.csdn.net/2018081321171024?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<p>最后一个图表“输出”表示触摸传感器读数，即在测量时间内收集的脉冲计数。</p>
+<p>所有函数成对提供以“设置”特定参数并“获取”当前参数的值，例如，<code>touch_pad_set_voltage()</code> 和 <code>touch_pad_get_voltage()</code>。</p>
+<h3 id="过滤测量"><a href="#过滤测量" class="headerlink" title="过滤测量"></a>过滤测量</h3><p>如果测量结果有噪音，您可以使用提供的 API 过滤它们。首次使用前应通过调用 <code>touch_pad_filter_start()</code> 启动过滤器。</p>
+<p>滤波器类型是 IIR（无限脉冲响应），它具有可配置的周期，可以通过功能 <code>touch_pad_set_filter_period()</code> 进行设置。</p>
+<p>您可以使用 <code>touch_pad_filter_stop()</code> 停止过滤器。如果不再需要，可以通过调用 <code>touch_pad_filter_delete()</code> 删除过滤器。</p>
+<h3 id="触摸检测"><a href="#触摸检测" class="headerlink" title="触摸检测"></a>触摸检测</h3><p>触摸检测在 ESP32 的硬件中实现，基于用户配置的阈值和 FSM 执行的原始测量。使用 <code>touch_pad_get_status()</code> 函数检查触摸的触摸板和<code>touch_pad_clear_status()</code>以清除触摸状态信息。</p>
+<p>硬件触摸检测也可以连接到中断，这将在下一节中介绍。</p>
+<p>如果测量结果有噪声且容量变化很小，则硬件触摸检测可能不可靠。要解决此问题，请在您自己的应用程序中实施测量过滤并执行触摸检测，而不是使用硬件检测/提供的中断。有关两种触摸检测方法的示例实现，请参阅<a href="https://github.com/espressif/esp-idf/tree/30545f4/examples/peripherals/touch_pad_interrupt" target="_blank" rel="noopener">peripherals / touch_pad_interrupt</a>。</p>
+<h3 id="触摸触发中断"><a href="#触摸触发中断" class="headerlink" title="触摸触发中断"></a>触摸触发中断</h3><p>在触摸检测中启用中断之前，用户应建立触摸检测阈值。当触摸和释放打击垫时，使用上述功能读取和显示传感器测量值。当测量结果有噪声并且相对变化很小时，应用滤波器。根据您的应用和环境条件，测试温度和电源电压变化对测量值的影响。</p>
+<p>一旦建立了检测阈值，就可以在初始化时使用 <code>touch_pad_config()</code> 或在运行时使用 <code>touch_pad_set_thresh()</code> 进行设置。</p>
+<p>在下一步中，配置如何触发中断。可以在低于或高于阈值的情况下触发它们，并使用函数 <code>touch_pad_set_trigger_mode()</code> 进行设置。</p>
+<p>最后使用以下函数配置和管理中断调用：</p>
+<ul>
+<li><code>touch_pad_isr_register()</code>/ <code>touch_pad_isr_deregister()</code></li>
+<li><code>touch_pad_intr_enable()</code>/ <code>touch_pad_intr_disable()</code></li>
+</ul>
+<p>当中断运行时，您可以通过调用 <code>touch_pad_get_status()</code> 并使用 <code>touch_pad_clear_status()</code> 清除焊盘状态来获取特定焊盘触发中断的信息。</p>
+<blockquote>
+<p>触摸检测中断根据用户建立的阈值检查原始/未过滤测量，并在硬件中实现。启用软件过滤API（请参阅过滤度量）不会影响此过程。</p>
+</blockquote>
+<h3 id="从睡眠模式唤醒"><a href="#从睡眠模式唤醒" class="headerlink" title="从睡眠模式唤醒"></a>从睡眠模式唤醒</h3><p>如果使用触摸板中断将芯片从休眠模式唤醒，则用户可以选择应触摸的某些焊盘配置（SET1 或 SET1 和 SET2），以触发中断并导致后续唤醒。为此，请使用 <code>touch_pad_set_trigger_source()</code> 函数。</p>
+<p>可以通过以下方式为每个 ‘SET’ 管理所需的焊盘位模式的配置：</p>
+<ul>
+<li><code>touch_pad_set_group_mask()</code>/<code>touch_pad_get_group_mask()</code></li>
+<li><code>touch_pad_clear_group_mask()</code></li>
+</ul>
+<h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><p>触摸传感器读取示例：<a href="https://github.com/espressif/esp-idf/tree/30545f4/examples/peripherals/touch_pad_read" target="_blank" rel="noopener">peripherals/touch_pad_read</a>.<br>触摸传感器中断示例：<a href="https://github.com/espressif/esp-idf/tree/30545f4/examples/peripherals/touch_pad_interrupt" target="_blank" rel="noopener">peripherals/touch_pad_interrupt</a>.</p>
+<h2 id="API-Reference"><a href="#API-Reference" class="headerlink" title="API Reference"></a>API Reference</h2><h3 id="Header-File"><a href="#Header-File" class="headerlink" title="Header File"></a>Header File</h3><ul>
+<li><a href="https://github.com/espressif/esp-idf/blob/30545f4/components/driver/include/driver/touch_pad.h" target="_blank" rel="noopener">driver/include/driver/touch_pad.h</a></li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/peripherals/touch_pad.html" target="_blank" rel="noopener">Touch Sensor</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（十八）Virtual filesystem</title>
+    <url>/InfiniteYuanBlog/2018/11/15/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%85%AB%EF%BC%89Virtual%20filesystem/</url>
+    <content><![CDATA[<h1 id="Virtual-filesystem-component"><a href="#Virtual-filesystem-component" class="headerlink" title="Virtual filesystem component"></a>Virtual filesystem component</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>虚拟文件系统(VFS)组件为可以对类文件对象执行操作的驱动程序提供统一的接口。这可以是真实的文件系统(FAT，SPIFFS 等)，也可以是有文件类接口的设备驱动程序。</p>
+<p>该组件允许 C 库函数(如 <code>fopen</code> 和<code>fprintf</code> )与 FS 驱动程序一起使用。在高层次，每个 FS 驱动程序与某些路径前缀相关联。当其中一个 C 库函数需要打开文件时，VFS 组件将搜索与该文件路径关联的 FS 驱动程序，并将该调用转发给该驱动程序。VFS 还将给定文件的读取，写入和其他调用转发到同一 FS 驱动程序。</p>
+<p>例如，可以使用 <code>/fat</code> 前缀注册 FAT 文件系统驱动程序，并调用 <code>fopen(“/fat/file.txt”，“w”)</code>。然后，VFS 组件将调用 FAT 驱动程序的 <code>open</code> 函数并将 <code>/file.txt</code> 参数传递给它(以及适当的模式标志)。对返回的 <code>FILE *</code> 流的所有后续 C 库函数调用也将被转发到 FAT 驱动程序。</p>
+<a id="more"></a>
+
+<h2 id="FS注册"><a href="#FS注册" class="headerlink" title="FS注册"></a>FS注册</h2><p>要注册 FS 驱动程序，应用程序需要在 <code>esp_vfs_t</code> 结构的实例中定义，并使用 <code>FS API</code> 的函数指针填充它：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">esp_vfs_t myfs &#x3D; &#123;</span><br><span class="line">    .flags &#x3D; ESP_VFS_FLAG_DEFAULT,</span><br><span class="line">    .write &#x3D; &amp;myfs_write,</span><br><span class="line">    .open &#x3D; &amp;myfs_open,</span><br><span class="line">    .fstat &#x3D; &amp;myfs_fstat,</span><br><span class="line">    .close &#x3D; &amp;myfs_close,</span><br><span class="line">    .read &#x3D; &amp;myfs_read,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">ESP_ERROR_CHECK(esp_vfs_register(&quot;&#x2F;data&quot;, &amp;myfs, NULL));</span><br></pre></td></tr></table></figure>
+<p>根据 FS 驱动程序声明其 API 的方式，应使用 <code>read</code>，<code>write</code> 等，或 <code>read_p</code>，<code>write_p</code> 等。</p>
+<p>情况1：声明 API 函数时没有额外的上下文指针(FS 驱动程序是单例)：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssize_t myfs_write(int fd, const void * data, size_t size);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; In definition of esp_vfs_t:</span><br><span class="line">    .flags &#x3D; ESP_VFS_FLAG_DEFAULT,</span><br><span class="line">    .write &#x3D; &amp;myfs_write,</span><br><span class="line">&#x2F;&#x2F; ... other members initialized</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; When registering FS, context pointer (third argument) is NULL:</span><br><span class="line">ESP_ERROR_CHECK(esp_vfs_register(&quot;&#x2F;data&quot;, &amp;myfs, NULL));</span><br></pre></td></tr></table></figure>
+<p>情况2：使用额外的上下文指针声明 API 函数(FS 驱动程序支持多个实例)：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssize_t myfs_write(myfs_t* fs, int fd, const void * data, size_t size);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; In definition of esp_vfs_t:</span><br><span class="line">    .flags &#x3D; ESP_VFS_FLAG_CONTEXT_PTR,</span><br><span class="line">    .write_p &#x3D; &amp;myfs_write,</span><br><span class="line">&#x2F;&#x2F; ... other members initialized</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; When registering FS, pass the FS context pointer into the third argument</span><br><span class="line">&#x2F;&#x2F; (hypothetical myfs_mount function is used for illustrative purposes)</span><br><span class="line">myfs_t* myfs_inst1 &#x3D; myfs_mount(partition1-&gt;offset, partition1-&gt;size);</span><br><span class="line">ESP_ERROR_CHECK(esp_vfs_register(&quot;&#x2F;data1&quot;, &amp;myfs, myfs_inst1));</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Can register another instance:</span><br><span class="line">myfs_t* myfs_inst2 &#x3D; myfs_mount(partition2-&gt;offset, partition2-&gt;size);</span><br><span class="line">ESP_ERROR_CHECK(esp_vfs_register(&quot;&#x2F;data2&quot;, &amp;myfs, myfs_inst2));</span><br></pre></td></tr></table></figure>
+
+<h2 id="同步输入-输出多路复用"><a href="#同步输入-输出多路复用" class="headerlink" title="同步输入/输出多路复用"></a>同步输入/输出多路复用</h2><p>如果要通过 <code>select()</code> 使用同步输入/输出多路复用，则需要使用 <code>start_select()</code> 和 <code>end_select()</code> 函数注册 VFS，类似于以下示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; In definition of esp_vfs_t:</span><br><span class="line">    .start_select &#x3D; &amp;uart_start_select,</span><br><span class="line">    .end_select &#x3D; &amp;uart_end_select,</span><br><span class="line">&#x2F;&#x2F; ... other members initialized</span><br></pre></td></tr></table></figure>
+<p>调用 <code>start_select()</code> 以设置用于检测属于给定 VFS 的文件描述符的读/写/错误条件的环境。调用 <code>end_select()</code> 来停止/取消初始化/释放由 <code>start_select()</code> 设置的环境。请参阅 <a href="https://github.com/espressif/esp-idf/blob/fb7ba1b/components/vfs/vfs_uart.c" target="_blank" rel="noopener"><code>vfs/vfs_uart.c</code></a> 中 UART 外设的参考实现，尤其是函数 <code>esp_vfs_dev_uart_register()</code>，<code>uart_start_select()</code> 和 <code>uart_end_select()</code>。</p>
+<p>演示使用带有 VFS 文件描述符的 <code>select()</code> 的示例是 <a href="https://github.com/espressif/esp-idf/tree/fb7ba1b/examples/peripherals/uart_select" target="_blank" rel="noopener"><code>peripherals/uart_select</code></a> 和 <a href="https://github.com/espressif/esp-idf/tree/fb7ba1b/examples/system/select" target="_blank" rel="noopener"></a> 示例。</p>
+<p>如果 <code>select()</code> 仅用于套接字文件描述符，那么可以启用 <code>CONFIG_USE_ONLY_LWIP_SELECT</code> 选项，这可以减少代码大小并提高性能。</p>
+<h2 id="路径"><a href="#路径" class="headerlink" title="路径"></a>路径</h2><p>每个注册的 FS 都有一个与之关联的路径前缀。该前缀可以被认为是该分区的 <code>“mount point”</code>(挂载点)。</p>
+<p>如果嵌套安装点，则在打开文件时将使用具有最长匹配路径前缀的安装点。例如，假设以下文件系统在 VFS 中注册：</p>
+<ul>
+<li>FS 1 on /data</li>
+<li>FS 2 on /data/static<br>然后：</li>
+<li>打开名为 <code>/data/log.txt</code> 的文件时将使用 FS 1</li>
+<li>打开名为 <code>/data/static/index.html</code> 的文件时将使用 FS 2</li>
+<li>即使 FS 2 中不存在 <code>/index.html</code>，也不会搜索 FS 1 <code>/static/index.html</code>。</li>
+</ul>
+<p>作为一般规则，挂载点名称必须以路径分隔符(<code>/</code>)开头，并且必须在路径分隔符后包含至少一个字符。但是，也支持空挂载点名称，并且可以在应用程序需要提供“回退”文件系统或完全覆盖VFS功能的情况下使用。如果没有前缀匹配给定的路径，则将使用此类文件系统。</p>
+<p>VFS 不以任何特殊方式处理路径名中的点(.)。VFS 不会将 <code>...</code> 视为对父目录的引用。即在上面的例子中，使用路径 <code>/data/static/../log.txt</code> 不会导致调用 FS 1 来打开 <code>/log.txt</code>。特定 FS 驱动程序(如 FATFS)可能以不同方式处理文件名中的点。</p>
+<p>打开文件时，FS 驱动程序只会获得文件的相对路径。例如：</p>
+<ul>
+<li><code>myfs</code> 驱动程序使用 <code>/data</code> 注册为路径前缀</li>
+<li>和应用程序调用 <code>fopen(“/data/config.json”，...)</code></li>
+<li>然后 VFS 组件将调用 <code>myfs_open(“/config.json”，...)</code>。</li>
+<li><code>myfs</code> 驱动程序将打开 <code>/config.json</code> 文件</li>
+</ul>
+<p>VFS 不会对总文件路径长度施加限制，但会将 FS 路径前缀限制为 <code>ESP_VFS_PATH_MAX</code> 字符。各个 FS 驱动程序可能有自己的文件名长度限制。</p>
+<h2 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h2><p>文件描述符是从 <code>0</code> 到 <code>FD_SETSIZE -1</code> 其中 <code>FD_SETSIZE</code> 在newlib的 <code>sys/types.h</code> 中定义。最大的文件描述符(由 <code>CONFIG_LWIP_MAX_SOCKETS</code> 配置)保留给套接字。VFS 组件包含一个名为 <code>s_fd_table</code> 的查找表，用于将全局文件描述符映射到 <code>s_vfs</code> 数组中注册的 VFS 驱动程序索引。</p>
+<h2 id="标准-IO-流-stdin，stdout，stderr"><a href="#标准-IO-流-stdin，stdout，stderr" class="headerlink" title="标准 IO 流(stdin，stdout，stderr)"></a>标准 IO 流(stdin，stdout，stderr)</h2><p>如果“UART for console output”menuconfig选项未设置为“None”，则 <code>stdin</code>，<code>stdout</code> 和 <code>stderr</code> 配置为读取和写入 UART。可以将 UART0 或 UART1 用于标准 IO。默认情况下，使用 UART0，波特率为 115200，TX 引脚为 GPIO1，RX 引脚为 GPIO3。可以在 menuconfig 中更改这些参数。</p>
+<p>写入 <code>stdout</code> 或 <code>stderr</code> 会将字符发送到 UART 发送 FIFO。从 <code>stdin</code> 读取将从 UART 接收 FIFO 中检索字符。</p>
+<p>默认情况下，VFS 使用简单的函数来读取和写入 UART。写入忙 - 等待直到所有数据都被放入 UART FIFO，并且读取是非阻塞的，只返回 FIFO 中的数据。由于这种非阻塞读取行为，更高级别的 C 库调用，例如 <code>fscanf(“％d \ n”，＆var);</code> 可能没有预期的结果。</p>
+<p>使用 UART 驱动程序的应用程序可能会指示 VFS 使用驱动程序的中断驱动，阻塞读写功能。这可以通过调用 <code>esp_vfs_dev_uart_use_driver</code> 函数来完成。也可以使用 <code>esp_vfs_dev_uart_use_nonblocking</code> 调用恢复到基本的非阻塞函数。</p>
+<p>VFS 还为输入和输出提供可选的换行转换功能。在内部，大多数应用程序发送和接收由 LF(‘n’’)字符终止的行。不同的终端程序可能需要不同的线路终端，例如 CR 或 CRLF。应用程序可以通过 menuconfig 或通过调用 <code>esp_vfs_dev_uart_set_rx_line_endings</code> 和 <code>esp_vfs_dev_uart_set_tx_line_endings</code> 函数单独为输入和输出配置它。</p>
+<h2 id="标准流和-FreeRTOS-任务"><a href="#标准流和-FreeRTOS-任务" class="headerlink" title="标准流和 FreeRTOS 任务"></a>标准流和 FreeRTOS 任务</h2><p><code>stdin</code>，<code>stdout</code> 和 <code>stderr</code> 的 <code>FILE</code> 对象在所有 FreeRTOS 任务之间共享，但指向这些对象的指针存储在每个任务的 <code>struct _reent</code> 中。以下代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">fprintf(stderr，“42\n”);</span><br></pre></td></tr></table></figure>
+<p>实际上被翻译成这个(由预处理器)：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">fprintf(__ getreent() -&gt; _stderr，“42\n”);</span><br></pre></td></tr></table></figure>
+<p>其中 <code>__getreent()</code>函数返回一个指向 <code>struct _reent</code>的每个任务指针 <code>(newlib/include/sys/reent.h＃L370-L417)</code>。此结构在每个任务的 TCB 上分配。初始化任务时，<code>struct _reent</code> 的 <code>_stdin</code>，<code>_stdout</code> 和 <code>_stderr</code> 成员被设置为 <code>_GLOBAL_REENT</code> 的 <code>_stdin</code>，<code>_stdout</code> 和 <code>_stderr</code> 的值(即在 FreeRTOS 启动之前使用的结构)。</p>
+<p>这样的设计会产生以下后果：</p>
+<ul>
+<li>可以为任何给定任务设置 <code>stdin</code>，<code>stdout</code> 和 <code>stderr</code>，而不会影响其他任务，例如通过做 <code>stdin = fopen(“/dev/uart/1”，“r”)</code>。</li>
+<li>使用 fclose 关闭默认 <code>stdin</code>，<code>stdout</code> 或 <code>stderr</code> 将关闭 <code>FILE</code> 流对象 - 这将影响所有其他任务。</li>
+<li>要更改新任务的默认 <code>stdin</code>，<code>stdout</code>，<code>stderr</code> 流，请在创建任务之前修改 <code>_GLOBAL_REENT - &gt; _ stdin(_stdout，_stderr)</code>。</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/storage/vfs.html" target="_blank" rel="noopener">Virtual filesystem</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（十六）Over The Air Updates (OTA)</title>
+    <url>/InfiniteYuanBlog/2018/08/29/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89Over%20The%20Air%20Updates%20(OTA)/</url>
+    <content><![CDATA[<h1 id="Over-The-Air-Updates-OTA"><a href="#Over-The-Air-Updates-OTA" class="headerlink" title="Over The Air Updates (OTA)"></a>Over The Air Updates (OTA)</h1><h2 id="OTA-流程概述"><a href="#OTA-流程概述" class="headerlink" title="OTA 流程概述"></a>OTA 流程概述</h2><p>OTA 更新机制允许设备根据正常固件运行时收到的数据进行更新(例如,通过WiFi或蓝牙).</p>
+<p>OTA 要求至少使用两个 “OTA app slot” 分区(即 <code>ota_0</code> 和 <code>ota_1</code>)和 “OTA Data Partition” 来配置设备的<a href="https://esp-idf.readthedocs.io/en/latest/api-guides/partition-tables.html" target="_blank" rel="noopener">分区表</a>.</p>
+<p>OTA 操作功能将新的应用程序固件映像写入当前未用于启动的 OTA 应用程序位置. 验证映像后,将更新 OTA 数据分区以指定此映像应用于下次启动.</p>
+<a id="more"></a>
+
+<h2 id="OTA-数据分区"><a href="#OTA-数据分区" class="headerlink" title="OTA 数据分区"></a>OTA 数据分区</h2><p>OTA 数据分区 (type <code>data</code>, subtype <code>ota</code>) 必须包含在使用 OTA 功能的任何项目的<a href="https://esp-idf.readthedocs.io/en/latest/api-guides/partition-tables.html" target="_blank" rel="noopener">分区表</a>中.</p>
+<p>对于出厂启动设置,OTA 数据分区不应包含任何数据(所有字节都擦除为 0xFF). 在这种情况下,esp-idf 软件引导加载程序将启动 factory 应用程序(如果它存在于分区表中). 如果分区表中不包含 factory 应用程序,则会启动第一个可用的 OTA 程序(通常为 <code>ota_0</code>).</p>
+<p>在第一次 OTA 更新之后,更新 OTA 数据分区以指定下一个应该引导哪个 OTA 应用程序分区.</p>
+<p>OTA 数据分区的大小为两个闪存扇区(0x2000 字节),以防止在写入时出现电源故障时出现问题. 扇区被独立擦除并用匹配数据写入,如果它们不同意,则使用计数器字段来确定最近写入哪个扇区.</p>
+<h2 id="APP-回滚"><a href="#APP-回滚" class="headerlink" title="APP 回滚"></a>APP 回滚</h2><p>应用程序回滚的主要目的是在更新后使设备保持工作。此功能允许您回滚到以前的工作应用程序，以防新应用程序出现严重错误。启用回滚过程并且 OTA 更新提供应用程序的新版本时，可能会发生以下三种情况之一：</p>
+<ul>
+<li>应用程序正常，<code>esp_ota_mark_app_valid_cancel_rollback()</code> 使用状态 <code>ESP_OTA_IMG_VALID</code> 标记正在运行的应用程序。启动此应用程序没有任何限制。</li>
+<li>应用程序存在严重错误，无法进行进一步的工作，需要回滚到先前的应用程序，<code>esp_ota_mark_app_invalid_rollback_and_reboot()</code> 将正在运行的应用程序标记为 <code>ESP_OTA_IMG_INVALID</code> 并重置。引导加载程序不会选择此应用程序进行引导，并将引导以前工作的应用程序。</li>
+<li>如果设置了 <code>CONFIG_APP_ROLLBACK_ENABLE</code> 选项，并且在不调用任何函数的情况下发生重置，则会发生并回滚。</li>
+</ul>
+<blockquote>
+<p>注意：状态不会写入应用程序的二进制映像，而是将其写入数据分区。该分区包含一个 <code>ota_seq</code> 计数器，该计数器是指向应用程序将从中进行引导的插槽（ota_0，ota_1，…）的指针。</p>
+</blockquote>
+<h2 id="APP-OTA-状态"><a href="#APP-OTA-状态" class="headerlink" title="APP OTA 状态"></a>APP OTA 状态</h2><p>状态控制选择启动应用程序的过程：</p>
+<table>
+<thead>
+<tr>
+<th align="center">States</th>
+<th align="center">Restriction of selecting a boot app in bootloader</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">ESP_OTA_IMG_VALID</td>
+<td align="center">None restriction. Will be selected.</td>
+</tr>
+<tr>
+<td align="center">ESP_OTA_IMG_UNDEFINED</td>
+<td align="center">None restriction. Will be selected.</td>
+</tr>
+<tr>
+<td align="center">ESP_OTA_IMG_INVALID</td>
+<td align="center">Will not be selected.</td>
+</tr>
+<tr>
+<td align="center">ESP_OTA_IMG_ABORTED</td>
+<td align="center">Will not be selected.</td>
+</tr>
+<tr>
+<td align="center">ESP_OTA_IMG_NEW</td>
+<td align="center">If CONFIG_APP_ROLLBACK_ENABLE option is set it will be selected only once. In bootloader the state immediately changes to <code>ESP_OTA_IMG_PENDING_VERIFY</code>.</td>
+</tr>
+<tr>
+<td align="center">ESP_OTA_IMG_PENDING_VERIFY</td>
+<td align="center">If CONFIG_APP_ROLLBACK_ENABLE option is set it will not be selected and the state will change to <code>ESP_OTA_IMG_ABORTED</code>.</td>
+</tr>
+</tbody></table>
+<p>如果未启用 <code>CONFIG_APP_ROLLBACK_ENABLE</code> 选项（默认情况下），则使用以下函数 <code>esp_ota_mark_app_valid_cancel_rollback()</code> 和 <code>esp_ota_mark_app_invalid_rollback_and_reboot()</code> 是可选的，并且不使用 <code>ESP_OTA_IMG_NEW</code> 和 <code>ESP_OTA_IMG_PENDING_VERIFY</code> 状态。</p>
+<p>Kconfig 中的 <code>CONFIG_APP_ROLLBACK_ENABLE</code> 选项允许您跟踪新应用程序的首次引导。在这种情况下，应用程序必须通过调用 <code>esp_ota_mark_app_valid_cancel_rollback()</code> 函数来确认其可操作性，否则应用程序将在重新启动时回滚。它允许您在引导阶段控制应用程序的可操作性。因此，新应用程序只有一次尝试成功启动。</p>
+<h2 id="回滚过程"><a href="#回滚过程" class="headerlink" title="回滚过程"></a>回滚过程</h2><p>启用 <code>CONFIG_APP_ROLLBACK_ENABLE</code> 选项时回滚过程的说明：</p>
+<ul>
+<li>成功下载的新应用程序和 <code>esp_ota_set_boot_partition()</code> 函数使此分区可引导并设置状态 <code>ESP_OTA_IMG_NEW</code>。此状态表示应用程序是新的，应监视其首次引导。</li>
+<li>重启 <code>esp_restart()</code>。</li>
+<li>引导加载程序检查 <code>ESP_OTA_IMG_PENDING_VERIFY</code> 状态（如果已设置），然后将写入 <code>ESP_OTA_IMG_ABORTED</code>。</li>
+<li>引导加载程序选择要引导的新应用程序，以便状态不会设置为 <code>ESP_OTA_IMG_INVALID</code> 或 <code>ESP_OTA_IMG_ABORTED</code>。</li>
+<li>引导加载程序检查所选应用程序的 <code>ESP_OTA_IMG_NEW</code> 状态（如果已设置），然后它将写入 <code>ESP_OTA_IMG_PENDING_VERIFY</code>。此状态意味着应用程序需要确认其可操作性，如果没有发生并且发生重新启动，此状态将被覆盖到 <code>ESP_OTA_IMG_ABORTED</code> （参见上文），此应用程序将无法再启动，即将返回到以前的工作申请。</li>
+<li>一个新的应用程序已经开始，应该进行自我测试。</li>
+<li>如果自检已成功完成，则必须调用函数 <code>esp_ota_mark_app_valid_cancel_rollback()</code>，因为应用程序正在等待可操作性的确认（<code>ESP_OTA_IMG_PENDING_VERIFY</code> 状态）。</li>
+<li>如果自检失败，则调用 <code>esp_ota_mark_app_invalid_rollback_and_reboot()</code> 函数回滚到上一个工作应用程序，同时将无效应用程序设置为 <code>ESP_OTA_IMG_INVALID</code> 状态。</li>
+<li>如果尚未确认应用程序，则状态仍为 <code>ESP_OTA_IMG_PENDING_VERIFY</code>，下次启动时将更改为 <code>ESP_OTA_IMG_ABORTED</code>。这将阻止重新启动此应用程序。将回滚到以前的工作应用程序。</li>
+</ul>
+<h2 id="意外重启"><a href="#意外重启" class="headerlink" title="意外重启"></a>意外重启</h2><p>如果在首次启动新应用程序时发生断电或意外崩溃，它将回滚应用程序。</p>
+<p>建议：尽快执行自检程序，以防止因断电而导致的回滚。</p>
+<p>只能回滚 <code>OTA</code> 分区。工厂分区未回滚。</p>
+<h2 id="启动无效-中止的应用程序"><a href="#启动无效-中止的应用程序" class="headerlink" title="启动无效/中止的应用程序"></a>启动无效/中止的应用程序</h2><p>可以引导先前设置为 <code>ESP_OTA_IMG_INVALID</code> 或 <code>ESP_OTA_IMG_ABORTED</code> 的应用程序：</p>
+<ul>
+<li>获取最后一个无效的应用程序分区 <code>esp_ota_get_last_invalid_partition()</code>。</li>
+<li>将收到的分区传递给 <code>esp_ota_set_boot_partition()</code>，这将更新 <code>otadata</code>。</li>
+<li>重启 <code>esp_restart()</code>。引导加载程序将引导指定的应用程序。</li>
+</ul>
+<p>要确定在启动应用程序期间是否应运行自检，请调用 <code>esp_ota_get_state_partition()</code> 函数。如果结果为 <code>ESP_OTA_IMG_PENDING_VERIFY</code>，则需要进行自检并随后确认可操作性。</p>
+<h2 id="设置状态"><a href="#设置状态" class="headerlink" title="设置状态"></a>设置状态</h2><p>关于状态设置的简要说明：</p>
+<ul>
+<li><code>ESP_OTA_IMG_VALID</code> 状态由 <code>esp_ota_mark_app_valid_cancel_rollback()</code> 函数设置。</li>
+<li>如果未启用 <code>CONFIG_APP_ROLLBACK_ENABLE</code> 选项，则 <code>esp_ota_set_boot_partition()</code> 函数将设置 <code>ESP_OTA_IMG_UNDEFINED</code> 状态。</li>
+<li>如果启用了 <code>CONFIG_APP_ROLLBACK_ENABLE</code> 选项，则 <code>esp_ota_set_boot_partition()</code> 函数将设置 <code>ESP_OTA_IMG_NEW</code> 状态。</li>
+<li><code>ESP_OTA_IMG_INVALID</code> 状态由 <code>esp_ota_mark_app_invalid_rollback_and_reboot()</code> 函数设置。</li>
+<li>如果没有确认应用程序可操作性并且重新启动（如果启用了 <code>CONFIG_APP_ROLLBACK_ENABLE</code> 选项），则设置 <code>ESP_OTA_IMG_ABORTED</code> 状态。</li>
+<li>如果启用了 <code>CONFIG_APP_ROLLBACK_ENABLE</code> 选项并且所选应用具有 <code>ESP_OTA_IMG_NEW</code> 状态，则在引导加载程序中设置 <code>ESP_OTA_IMG_PENDING_VERIFY</code> 状态。</li>
+</ul>
+<h2 id="没有安全启动的安全-OTA-更新"><a href="#没有安全启动的安全-OTA-更新" class="headerlink" title="没有安全启动的安全 OTA 更新"></a>没有安全启动的安全 OTA 更新</h2><p>即使不启用硬件安全引导，也可以执行已签名的 OTA 更新的验证。为此，请参阅<a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/secure-boot.html#signed-app-verify" target="_blank" rel="noopener">没有硬件安全启动的签名应用验证</a></p>
+<h2 id="相关资料"><a href="#相关资料" class="headerlink" title="相关资料"></a>相关资料</h2><ul>
+<li><a href="https://esp-idf.readthedocs.io/en/latest/api-guides/partition-tables.html" target="_blank" rel="noopener">Partition Table documentation</a></li>
+<li><a href="https://esp-idf.readthedocs.io/en/latest/api-reference/storage/spi_flash.html" target="_blank" rel="noopener">Lower-Level SPI Flash/Partition API</a></li>
+<li><a href="https://esp-idf.readthedocs.io/en/latest/api-reference/system/esp_https_ota.html" target="_blank" rel="noopener">ESP HTTPS OTA</a></li>
+</ul>
+<h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><p>OTA 固件更新工作流程的端到端示例: <a href="https://github.com/espressif/esp-idf/tree/51a4b4b/examples/system/ota" target="_blank" rel="noopener">system/ota</a>.</p>
+<h2 id="API-Reference"><a href="#API-Reference" class="headerlink" title="API Reference"></a>API Reference</h2><h3 id="Header-File"><a href="#Header-File" class="headerlink" title="Header File"></a>Header File</h3><ul>
+<li><a href="https://github.com/espressif/esp-idf/blob/51a4b4b/components/app_update/include/esp_ota_ops.h" target="_blank" rel="noopener">app_update/include/esp_ota_ops.h</a></li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/system/ota.html" target="_blank" rel="noopener">Over The Air Updates (OTA)</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（十四）Sigma-delta Modulation</title>
+    <url>/InfiniteYuanBlog/2018/08/13/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89Sigma-delta%20Modulation/</url>
+    <content><![CDATA[<h1 id="Sigma-delta-Modulation"><a href="#Sigma-delta-Modulation" class="headerlink" title="Sigma-delta Modulation"></a>Sigma-delta Modulation</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>ESP32 有一个二阶 sigma-delta 调制模块。此驱动程序可配置 sigma-delta 模块的通道。</p>
+<h2 id="功能概述"><a href="#功能概述" class="headerlink" title="功能概述"></a>功能概述</h2><p>八个独立的 sigma-delta 调制信道用 <code>sigmadelta_channel_t</code> 进行标识。每个通道都能够输出 sigma-delta 调制模块生成的二进制硬件信号。</p>
+<p>应通过在 <code>sigmadelta_config_t</code> 中提供配置参数然后将此配置应用于 <code>sigmadelta_config()</code> 来设置所选通道。</p>
+<p>另一种选择是调用各个函数，逐个配置所有必需参数：</p>
+<ul>
+<li>sigma-delta 调制模块的预分频器 - <code>sigmadelta_set_prescale()</code></li>
+<li>输出信号的占空比 - <code>sigmadelta_set_duty()</code></li>
+<li>输出调制信号的 GPIO 引脚 - <code>sigmadelta_set_pin()</code></li>
+</ul>
+<p><code>sigmadelta_set_duty()</code> 的 <code>duty</code> 参数的范围是 -128 到 127（八位有符号整数）。如果设置了零值，那么输出信号的占空比将为 50％，参见 <code>sigmadelta_set_duty()</code> 的描述。</p>
+<a id="more"></a>
+
+<h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><p>Σ-Δ调制示例：<a href="https://github.com/espressif/esp-idf/tree/30545f4/examples/peripherals/sigmadelta" target="_blank" rel="noopener">peripherals/sigmadelta</a>.</p>
+<h2 id="API-Reference"><a href="#API-Reference" class="headerlink" title="API Reference"></a>API Reference</h2><h3 id="Header-File"><a href="#Header-File" class="headerlink" title="Header File"></a>Header File</h3><ul>
+<li><a href="https://github.com/espressif/esp-idf/blob/30545f4/components/driver/include/driver/sigmadelta.h" target="_blank" rel="noopener">driver/include/driver/sigmadelta.h</a></li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/peripherals/sigmadelta.html" target="_blank" rel="noopener">Sigma-delta Modulation</a></li>
+</ul>
+]]></content>
       <categories>
         <category>ESP32 学习笔记</category>
       </categories>
@@ -3127,6 +4254,58 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
       </tags>
   </entry>
   <entry>
+    <title>ESP32 开发笔记（六）移植开源图形库 LittlevGL</title>
+    <url>/InfiniteYuanBlog/2018/08/08/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89%E7%A7%BB%E6%A4%8D%E5%BC%80%E6%BA%90%E5%9B%BE%E5%BD%A2%E5%BA%93%20LittlevGL/</url>
+    <content><![CDATA[<h1 id="ESP32-移植开源图形库-LittlevGL"><a href="#ESP32-移植开源图形库-LittlevGL" class="headerlink" title="ESP32 移植开源图形库 LittlevGL"></a>ESP32 移植开源图形库 LittlevGL</h1><p>ESP32 移植 LittlevGL 的源码：<a href="https://github.com/InfiniteYuan/esp32-lvgl-gui" target="_blank" rel="noopener">GitHub 源码地址</a><br>欢迎 Star ～</p>
+<h2 id="LittlevGL-介绍"><a href="#LittlevGL-介绍" class="headerlink" title="LittlevGL 介绍"></a>LittlevGL 介绍</h2><blockquote>
+<p>littlevGL is a free and open-source graphics library providing everything you need to create embedded GUI with easy-to-use graphical elements, beautiful visual effects and low memory footprint.<br><a href="https://littlevgl.com/" target="_blank" rel="noopener">LittlevGL 官网链接</a><br><a href="https://littlevgl.com/porting" target="_blank" rel="noopener">LittlevGL 移植教程</a><br><a href="https://littlevgl.com/basics" target="_blank" rel="noopener">LittlevGL 官方文档</a><br><a href="https://github.com/littlevgl/lvgl" target="_blank" rel="noopener">LittlevGL GitHub链接</a></p>
+</blockquote>
+<a id="more"></a>
+
+<h4>关键特性：</h4>
+
+<ul>
+<li>Powerful building blocks buttons, charts, lists, sliders, images etc</li>
+<li>Advanced graphics with animations, anti-aliasing, opacity, smooth scrolling</li>
+<li>Various input devices touch pad, mouse, keyboard, encoder, buttons etc</li>
+<li>Multi language support with UTF-8 decoding</li>
+<li>Fully customizable graphical elements</li>
+<li>Hardware independent to use with any microcontroller or display</li>
+<li>Scalable to operate with few memory (50 kB Flash, 10 kB RAM)</li>
+<li>OS, External memory and GPU supported but not required</li>
+<li>Single frame buffer operation even with advances graphical effects</li>
+<li>Written in C for maximal compatibility</li>
+<li>Simulator to develop on PC without embedded hardware</li>
+<li>Tutorials, examples, themes for rapid development</li>
+<li>Documentation and API references online</li>
+</ul>
+<h2 id="移植过程"><a href="#移植过程" class="headerlink" title="移植过程"></a>移植过程</h2><ol>
+<li>在工程目录下新建一个 components 目录，放入 LittlevGL 源码</li>
+<li>在 components 目录下新建一个 include 目录，放入 lv_conf.h 文件，由 LittlevGL 源码目录中的 lv_conf_templ.h文件而来</li>
+<li>在 components 目录下新建一个  component.mk  文件，将 LittlevGL 相关源码添加到组件的 <code>COMPONENT_SRCDIRS</code>、<code>COMPONENT_ADD_INCLUDEDIRS</code>和<code>COMPONENT_PRIV_INCLUDEDIRS</code>目录变量中</li>
+<li>之后在程序中使用了～，可根据 <a href="https://github.com/littlevgl/lv_examples/blob/master/lv_tutorial/0_porting/lv_tutorial_porting.c" target="_blank" rel="noopener">LittlevGL Tutorial</a> 在自己的主程序中实现</li>
+</ol>
+<h4>大致初始化流程：</h4>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/***********************</span></span><br><span class="line"><span class="comment"> * Initialize LittlevGL</span></span><br><span class="line"><span class="comment"> ***********************/</span></span><br><span class="line">lv_init();</span><br><span class="line"></span><br><span class="line"><span class="comment">/***********************</span></span><br><span class="line"><span class="comment"> * Tick interface</span></span><br><span class="line"><span class="comment"> ***********************/</span></span><br><span class="line"><span class="comment">/* Initialize a Timer for 1 ms period and</span></span><br><span class="line"><span class="comment"> * in its interrupt call</span></span><br><span class="line"><span class="comment"> * lv_tick_inc(1); */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/***********************</span></span><br><span class="line"><span class="comment"> * Display interface</span></span><br><span class="line"><span class="comment"> ***********************/</span></span><br><span class="line"><span class="keyword">lv_disp_drv_t</span> disp_drv;                         <span class="comment">/*Descriptor of a display driver*/</span></span><br><span class="line">lv_disp_drv_init(&amp;disp_drv);                    <span class="comment">/*Basic initialization*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*Set up the functions to access to your display*/</span></span><br><span class="line">disp_drv.disp_flush = ex_disp_flush;            <span class="comment">/*Used in buffered mode (LV_VDB_SIZE != 0  in lv_conf.h)*/</span></span><br><span class="line"></span><br><span class="line">disp_drv.disp_fill = ex_disp_fill;              <span class="comment">/*Used in unbuffered mode (LV_VDB_SIZE == 0  in lv_conf.h)*/</span></span><br><span class="line">disp_drv.disp_map = ex_disp_map;                <span class="comment">/*Used in unbuffered mode (LV_VDB_SIZE == 0  in lv_conf.h)*/</span></span><br><span class="line"><span class="comment">/*Finally register the driver*/</span></span><br><span class="line">lv_disp_drv_register(&amp;disp_drv);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*************************</span></span><br><span class="line"><span class="comment"> * Input device interface</span></span><br><span class="line"><span class="comment"> *************************/</span></span><br><span class="line"><span class="comment">/*Add a touchpad in the example*/</span></span><br><span class="line"><span class="comment">/*touchpad_init();*/</span>                            <span class="comment">/*Initialize your touchpad*/</span></span><br><span class="line"><span class="keyword">lv_indev_drv_t</span> indev_drv;                       <span class="comment">/*Descriptor of an input device driver*/</span></span><br><span class="line">lv_indev_drv_init(&amp;indev_drv);                  <span class="comment">/*Basic initialization*/</span></span><br><span class="line">indev_drv.type = LV_INDEV_TYPE_POINTER;         <span class="comment">/*The touchpad is pointer type device*/</span></span><br><span class="line">indev_drv.<span class="built_in">read</span> = ex_tp_read;                    <span class="comment">/*Library ready your touchpad via this function*/</span></span><br><span class="line">lv_indev_drv_register(&amp;indev_drv);              <span class="comment">/*Finally register the driver*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*************************************</span></span><br><span class="line"><span class="comment"> * Run the task handler of LittlevGL</span></span><br><span class="line"><span class="comment"> *************************************/</span></span><br><span class="line"><span class="comment">/* Periodically call this function.</span></span><br><span class="line"><span class="comment"> * The timing is not critical but should be between 1..10 ms */</span></span><br><span class="line">lv_task_handler();</span><br><span class="line"><span class="comment">/*delay_ms(5)*/</span></span><br></pre></td></tr></table></figure>
+
+<h4>需要实现的函数：</h4>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/***********************</span></span><br><span class="line"><span class="comment"> * Display interface</span></span><br><span class="line"><span class="comment"> ***********************/</span></span><br><span class="line"> <span class="comment">/*Write the internal buffer (VDB) to the display. 'lv_flush_ready()' has to be called when finished*/</span></span><br><span class="line"> <span class="keyword">void</span> (*disp_flush)(<span class="keyword">int32_t</span> x1, <span class="keyword">int32_t</span> y1, <span class="keyword">int32_t</span> x2, <span class="keyword">int32_t</span> y2, <span class="keyword">const</span> <span class="keyword">lv_color_t</span> * color_p);</span><br><span class="line"> <span class="comment">/*Fill an area with a color on the display*/</span></span><br><span class="line"> <span class="keyword">void</span> (*disp_fill)(<span class="keyword">int32_t</span> x1, <span class="keyword">int32_t</span> y1, <span class="keyword">int32_t</span> x2, <span class="keyword">int32_t</span> y2, <span class="keyword">lv_color_t</span> color);</span><br><span class="line"> <span class="comment">/*Write pixel map (e.g. image) to the display*/</span></span><br><span class="line"> <span class="keyword">void</span> (*disp_map)(<span class="keyword">int32_t</span> x1, <span class="keyword">int32_t</span> y1, <span class="keyword">int32_t</span> x2, <span class="keyword">int32_t</span> y2, <span class="keyword">const</span> <span class="keyword">lv_color_t</span> * color_p);</span><br><span class="line"> </span><br><span class="line"><span class="comment">/*************************</span></span><br><span class="line"><span class="comment"> * Input device interface</span></span><br><span class="line"><span class="comment"> *************************/</span></span><br><span class="line"> <span class="keyword">bool</span> (*<span class="built_in">read</span>)(<span class="keyword">lv_indev_data_t</span> *data);        <span class="comment">/*Function pointer to read data. Return 'true' if there is still data to be read (buffered)*/</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>注意：</strong>在实现 <code>disp_flush</code> 函数时，在函数末尾需要调用 LittlevGL 提供的 <code>lv_flush_ready</code> 函数<br>上述的这些函数可以自行实现，函数体保持一致即可</p>
+</blockquote>
+<p>欢迎关注本人 <a href="https://github.com/InfiniteYuan" target="_blank" rel="noopener">GitHub</a> ，更新 ESP32 相关开源库</p>
+]]></content>
+      <categories>
+        <category>ESP32 开发笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ESP32 开发笔记（十一）使用 ESP32 做为 WebServer</title>
     <url>/InfiniteYuanBlog/2019/04/28/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%80%EF%BC%89%E4%BD%BF%E7%94%A8%20ESP32%20%E5%81%9A%E4%B8%BA%20WebServer/</url>
     <content><![CDATA[<h1 id="使用-ESP32-做为-WebServer"><a href="#使用-ESP32-做为-WebServer" class="headerlink" title="使用 ESP32 做为 WebServer"></a>使用 ESP32 做为 WebServer</h1><p>在某些场景，我们可能需要在手机上或者其他移动终端访问 ESP32 的数据，这个时候我们需要在手机上展示 ESP32 设备的相关信息，这个时候可以用 APP 在手机上展示数据，或者在手机浏览器中打开存储在 ESP32 上的网页。或者其他的方式。</p>
@@ -3387,58 +4566,6 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
 <h2 id="二维码识别"><a href="#二维码识别" class="headerlink" title="二维码识别"></a>二维码识别</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">qr_recoginze</span><span class="params">(<span class="keyword">void</span> *parameter)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">camera_config_t</span> *camera_config = (<span class="keyword">camera_config_t</span> *)parameter;</span><br><span class="line">    <span class="comment">// Use VGA Size currently, but quirc can support other frame size.(eg: FRAMESIZE_SVGA,FRAMESIZE_VGA，</span></span><br><span class="line">    <span class="comment">// FRAMESIZE_CIF,FRAMESIZE_QVGA,FRAMESIZE_HQVGA,FRAMESIZE_QCIF,FRAMESIZE_QQVGA2,FRAMESIZE_QQVGA,etc)</span></span><br><span class="line">    <span class="keyword">if</span> (camera_config-&gt;frame_size &gt; FRAMESIZE_VGA) &#123;</span><br><span class="line">        ESP_LOGE(TAG, <span class="string">"Camera Frame Size err %d"</span>, (camera_config-&gt;frame_size));</span><br><span class="line">        vTaskDelete(<span class="literal">NULL</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Save image width and height, avoid allocate memory repeatly.</span></span><br><span class="line">    <span class="keyword">uint16_t</span> old_width = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">uint16_t</span> old_height = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Construct a new QR-code recognizer.</span></span><br><span class="line">    ESP_LOGI(TAG, <span class="string">"Construct a new QR-code recognizer(quirc)."</span>);</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">quirc</span> *<span class="title">qr_recognizer</span> = <span class="title">quirc_new</span>();</span></span><br><span class="line">    <span class="keyword">if</span> (!qr_recognizer) &#123;</span><br><span class="line">        ESP_LOGE(TAG, <span class="string">"Can't create quirc object"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">camera_fb_t</span> *fb = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">uint8_t</span> *<span class="built_in">image</span> = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">int</span> id_count = <span class="number">0</span>;</span><br><span class="line">    UBaseType_t uxHighWaterMark;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 入口处检测一次 */</span></span><br><span class="line">    ESP_LOGI(TAG, <span class="string">"uxHighWaterMark = %d"</span>, uxTaskGetStackHighWaterMark( <span class="literal">NULL</span> ));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        ESP_LOGI(TAG, <span class="string">"uxHighWaterMark = %d"</span>, uxTaskGetStackHighWaterMark( <span class="literal">NULL</span> ));</span><br><span class="line">        <span class="comment">// Capture a frame</span></span><br><span class="line">        fb = esp_camera_fb_get();</span><br><span class="line">        <span class="keyword">if</span> (!fb) &#123;</span><br><span class="line">            ESP_LOGE(TAG, <span class="string">"Camera capture failed"</span>);</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (old_width != fb-&gt;<span class="built_in">width</span> || old_height != fb-&gt;<span class="built_in">height</span>) &#123;</span><br><span class="line">            ESP_LOGD(TAG, <span class="string">"Recognizer size change w h len: %d, %d, %d"</span>, fb-&gt;<span class="built_in">width</span>, fb-&gt;<span class="built_in">height</span>, fb-&gt;len);</span><br><span class="line">            ESP_LOGI(TAG, <span class="string">"Resize the QR-code recognizer."</span>);</span><br><span class="line">            <span class="comment">// Resize the QR-code recognizer.</span></span><br><span class="line">            <span class="keyword">if</span> (quirc_resize(qr_recognizer, fb-&gt;<span class="built_in">width</span>, fb-&gt;<span class="built_in">height</span>) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                ESP_LOGE(TAG, <span class="string">"Resize the QR-code recognizer err."</span>);</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                old_width = fb-&gt;<span class="built_in">width</span>;</span><br><span class="line">                old_height = fb-&gt;<span class="built_in">height</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/** These functions are used to process images for QR-code recognition.</span></span><br><span class="line"><span class="comment">         * quirc_begin() must first be called to obtain access to a buffer into</span></span><br><span class="line"><span class="comment">         * which the input image should be placed. Optionally, the current</span></span><br><span class="line"><span class="comment">         * width and height may be returned.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * After filling the buffer, quirc_end() should be called to process</span></span><br><span class="line"><span class="comment">         * the image for QR-code recognition. The locations and content of each</span></span><br><span class="line"><span class="comment">         * code may be obtained using accessor functions described below.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="built_in">image</span> = quirc_begin(qr_recognizer, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">        <span class="built_in">memcpy</span>(<span class="built_in">image</span>, fb-&gt;buf, fb-&gt;len);</span><br><span class="line">        quirc_end(qr_recognizer);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Return the number of QR-codes identified in the last processed image.</span></span><br><span class="line">        id_count = quirc_count(qr_recognizer);</span><br><span class="line">        <span class="keyword">if</span> (id_count == <span class="number">0</span>) &#123;</span><br><span class="line">            ESP_LOGE(TAG, <span class="string">"Error: not a valid qrcode"</span>);</span><br><span class="line">            esp_camera_fb_return(fb);</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Print information of QR-code</span></span><br><span class="line">        dump_info(qr_recognizer, id_count);</span><br><span class="line">        esp_camera_fb_return(fb);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Destroy QR-Code recognizer (quirc)</span></span><br><span class="line">    quirc_destroy(qr_recognizer);</span><br><span class="line">    ESP_LOGI(TAG, <span class="string">"Deconstruct QR-Code recognizer(quirc)"</span>);</span><br><span class="line">    vTaskDelete(<span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h2 id="示例结果"><a href="#示例结果" class="headerlink" title="示例结果"></a>示例结果</h2><p><img src="https://img-blog.csdnimg.cn/20190315190639946.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="示例结果"></p>
-]]></content>
-      <categories>
-        <category>ESP32 开发笔记</category>
-      </categories>
-      <tags>
-        <tag>ESP32</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ESP32 开发笔记（六）移植开源图形库 LittlevGL</title>
-    <url>/InfiniteYuanBlog/2018/08/08/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89%E7%A7%BB%E6%A4%8D%E5%BC%80%E6%BA%90%E5%9B%BE%E5%BD%A2%E5%BA%93%20LittlevGL/</url>
-    <content><![CDATA[<h1 id="ESP32-移植开源图形库-LittlevGL"><a href="#ESP32-移植开源图形库-LittlevGL" class="headerlink" title="ESP32 移植开源图形库 LittlevGL"></a>ESP32 移植开源图形库 LittlevGL</h1><p>ESP32 移植 LittlevGL 的源码：<a href="https://github.com/InfiniteYuan/esp32-lvgl-gui" target="_blank" rel="noopener">GitHub 源码地址</a><br>欢迎 Star ～</p>
-<h2 id="LittlevGL-介绍"><a href="#LittlevGL-介绍" class="headerlink" title="LittlevGL 介绍"></a>LittlevGL 介绍</h2><blockquote>
-<p>littlevGL is a free and open-source graphics library providing everything you need to create embedded GUI with easy-to-use graphical elements, beautiful visual effects and low memory footprint.<br><a href="https://littlevgl.com/" target="_blank" rel="noopener">LittlevGL 官网链接</a><br><a href="https://littlevgl.com/porting" target="_blank" rel="noopener">LittlevGL 移植教程</a><br><a href="https://littlevgl.com/basics" target="_blank" rel="noopener">LittlevGL 官方文档</a><br><a href="https://github.com/littlevgl/lvgl" target="_blank" rel="noopener">LittlevGL GitHub链接</a></p>
-</blockquote>
-<a id="more"></a>
-
-<h4>关键特性：</h4>
-
-<ul>
-<li>Powerful building blocks buttons, charts, lists, sliders, images etc</li>
-<li>Advanced graphics with animations, anti-aliasing, opacity, smooth scrolling</li>
-<li>Various input devices touch pad, mouse, keyboard, encoder, buttons etc</li>
-<li>Multi language support with UTF-8 decoding</li>
-<li>Fully customizable graphical elements</li>
-<li>Hardware independent to use with any microcontroller or display</li>
-<li>Scalable to operate with few memory (50 kB Flash, 10 kB RAM)</li>
-<li>OS, External memory and GPU supported but not required</li>
-<li>Single frame buffer operation even with advances graphical effects</li>
-<li>Written in C for maximal compatibility</li>
-<li>Simulator to develop on PC without embedded hardware</li>
-<li>Tutorials, examples, themes for rapid development</li>
-<li>Documentation and API references online</li>
-</ul>
-<h2 id="移植过程"><a href="#移植过程" class="headerlink" title="移植过程"></a>移植过程</h2><ol>
-<li>在工程目录下新建一个 components 目录，放入 LittlevGL 源码</li>
-<li>在 components 目录下新建一个 include 目录，放入 lv_conf.h 文件，由 LittlevGL 源码目录中的 lv_conf_templ.h文件而来</li>
-<li>在 components 目录下新建一个  component.mk  文件，将 LittlevGL 相关源码添加到组件的 <code>COMPONENT_SRCDIRS</code>、<code>COMPONENT_ADD_INCLUDEDIRS</code>和<code>COMPONENT_PRIV_INCLUDEDIRS</code>目录变量中</li>
-<li>之后在程序中使用了～，可根据 <a href="https://github.com/littlevgl/lv_examples/blob/master/lv_tutorial/0_porting/lv_tutorial_porting.c" target="_blank" rel="noopener">LittlevGL Tutorial</a> 在自己的主程序中实现</li>
-</ol>
-<h4>大致初始化流程：</h4>
-
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/***********************</span></span><br><span class="line"><span class="comment"> * Initialize LittlevGL</span></span><br><span class="line"><span class="comment"> ***********************/</span></span><br><span class="line">lv_init();</span><br><span class="line"></span><br><span class="line"><span class="comment">/***********************</span></span><br><span class="line"><span class="comment"> * Tick interface</span></span><br><span class="line"><span class="comment"> ***********************/</span></span><br><span class="line"><span class="comment">/* Initialize a Timer for 1 ms period and</span></span><br><span class="line"><span class="comment"> * in its interrupt call</span></span><br><span class="line"><span class="comment"> * lv_tick_inc(1); */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/***********************</span></span><br><span class="line"><span class="comment"> * Display interface</span></span><br><span class="line"><span class="comment"> ***********************/</span></span><br><span class="line"><span class="keyword">lv_disp_drv_t</span> disp_drv;                         <span class="comment">/*Descriptor of a display driver*/</span></span><br><span class="line">lv_disp_drv_init(&amp;disp_drv);                    <span class="comment">/*Basic initialization*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*Set up the functions to access to your display*/</span></span><br><span class="line">disp_drv.disp_flush = ex_disp_flush;            <span class="comment">/*Used in buffered mode (LV_VDB_SIZE != 0  in lv_conf.h)*/</span></span><br><span class="line"></span><br><span class="line">disp_drv.disp_fill = ex_disp_fill;              <span class="comment">/*Used in unbuffered mode (LV_VDB_SIZE == 0  in lv_conf.h)*/</span></span><br><span class="line">disp_drv.disp_map = ex_disp_map;                <span class="comment">/*Used in unbuffered mode (LV_VDB_SIZE == 0  in lv_conf.h)*/</span></span><br><span class="line"><span class="comment">/*Finally register the driver*/</span></span><br><span class="line">lv_disp_drv_register(&amp;disp_drv);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*************************</span></span><br><span class="line"><span class="comment"> * Input device interface</span></span><br><span class="line"><span class="comment"> *************************/</span></span><br><span class="line"><span class="comment">/*Add a touchpad in the example*/</span></span><br><span class="line"><span class="comment">/*touchpad_init();*/</span>                            <span class="comment">/*Initialize your touchpad*/</span></span><br><span class="line"><span class="keyword">lv_indev_drv_t</span> indev_drv;                       <span class="comment">/*Descriptor of an input device driver*/</span></span><br><span class="line">lv_indev_drv_init(&amp;indev_drv);                  <span class="comment">/*Basic initialization*/</span></span><br><span class="line">indev_drv.type = LV_INDEV_TYPE_POINTER;         <span class="comment">/*The touchpad is pointer type device*/</span></span><br><span class="line">indev_drv.<span class="built_in">read</span> = ex_tp_read;                    <span class="comment">/*Library ready your touchpad via this function*/</span></span><br><span class="line">lv_indev_drv_register(&amp;indev_drv);              <span class="comment">/*Finally register the driver*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*************************************</span></span><br><span class="line"><span class="comment"> * Run the task handler of LittlevGL</span></span><br><span class="line"><span class="comment"> *************************************/</span></span><br><span class="line"><span class="comment">/* Periodically call this function.</span></span><br><span class="line"><span class="comment"> * The timing is not critical but should be between 1..10 ms */</span></span><br><span class="line">lv_task_handler();</span><br><span class="line"><span class="comment">/*delay_ms(5)*/</span></span><br></pre></td></tr></table></figure>
-
-<h4>需要实现的函数：</h4>
-
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/***********************</span></span><br><span class="line"><span class="comment"> * Display interface</span></span><br><span class="line"><span class="comment"> ***********************/</span></span><br><span class="line"> <span class="comment">/*Write the internal buffer (VDB) to the display. 'lv_flush_ready()' has to be called when finished*/</span></span><br><span class="line"> <span class="keyword">void</span> (*disp_flush)(<span class="keyword">int32_t</span> x1, <span class="keyword">int32_t</span> y1, <span class="keyword">int32_t</span> x2, <span class="keyword">int32_t</span> y2, <span class="keyword">const</span> <span class="keyword">lv_color_t</span> * color_p);</span><br><span class="line"> <span class="comment">/*Fill an area with a color on the display*/</span></span><br><span class="line"> <span class="keyword">void</span> (*disp_fill)(<span class="keyword">int32_t</span> x1, <span class="keyword">int32_t</span> y1, <span class="keyword">int32_t</span> x2, <span class="keyword">int32_t</span> y2, <span class="keyword">lv_color_t</span> color);</span><br><span class="line"> <span class="comment">/*Write pixel map (e.g. image) to the display*/</span></span><br><span class="line"> <span class="keyword">void</span> (*disp_map)(<span class="keyword">int32_t</span> x1, <span class="keyword">int32_t</span> y1, <span class="keyword">int32_t</span> x2, <span class="keyword">int32_t</span> y2, <span class="keyword">const</span> <span class="keyword">lv_color_t</span> * color_p);</span><br><span class="line"> </span><br><span class="line"><span class="comment">/*************************</span></span><br><span class="line"><span class="comment"> * Input device interface</span></span><br><span class="line"><span class="comment"> *************************/</span></span><br><span class="line"> <span class="keyword">bool</span> (*<span class="built_in">read</span>)(<span class="keyword">lv_indev_data_t</span> *data);        <span class="comment">/*Function pointer to read data. Return 'true' if there is still data to be read (buffered)*/</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p><strong>注意：</strong>在实现 <code>disp_flush</code> 函数时，在函数末尾需要调用 LittlevGL 提供的 <code>lv_flush_ready</code> 函数<br>上述的这些函数可以自行实现，函数体保持一致即可</p>
-</blockquote>
-<p>欢迎关注本人 <a href="https://github.com/InfiniteYuan" target="_blank" rel="noopener">GitHub</a> ，更新 ESP32 相关开源库</p>
 ]]></content>
       <categories>
         <category>ESP32 开发笔记</category>

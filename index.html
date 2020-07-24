@@ -126,7 +126,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/InfiniteYuanBlog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">45</span></a>
+    <a href="/InfiniteYuanBlog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">62</span></a>
 
   </li>
         <li class="menu-item menu-item-tags">
@@ -197,6 +197,232 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2020/07/04/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%E5%8D%81%EF%BC%89%20ESP32%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%EF%BC%8C%E4%B8%8E%20Cortex-M4%20%E6%80%A7%E8%83%BD%E6%AF%94%E8%BE%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
+      <meta itemprop="name" content="InfiniteYuan">
+      <meta itemprop="description" content="Stay Hungry, Stay Funlish">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="InfiniteYuan">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/InfiniteYuanBlog/2020/07/04/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%E5%8D%81%EF%BC%89%20ESP32%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%EF%BC%8C%E4%B8%8E%20Cortex-M4%20%E6%80%A7%E8%83%BD%E6%AF%94%E8%BE%83/" class="post-title-link" itemprop="url">ESP32 学习笔记（三十） ESP32 性能分析，与 Cortex-M4 性能比较</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-04 13:25:59" itemprop="dateCreated datePublished" datetime="2020-07-04T13:25:59+00:00">2020-07-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-24 01:37:05" itemprop="dateModified" datetime="2020-07-24T01:37:05+00:00">2020-07-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">ESP32 学习笔记</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/InfiniteYuanBlog/2020/07/04/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%E5%8D%81%EF%BC%89%20ESP32%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%EF%BC%8C%E4%B8%8E%20Cortex-M4%20%E6%80%A7%E8%83%BD%E6%AF%94%E8%BE%83/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2020/07/04/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%E5%8D%81%EF%BC%89%20ESP32%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%EF%BC%8C%E4%B8%8E%20Cortex-M4%20%E6%80%A7%E8%83%BD%E6%AF%94%E8%BE%83/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>339</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="关于-EEMBC"><a href="#关于-EEMBC" class="headerlink" title="关于 EEMBC"></a>关于 EEMBC</h1><p><a href="https://www.eembc.org/about/" target="_blank" rel="noopener">About EEMBC</a></p>
+<p>EEMBC 为自动驾驶，移动成像，物联网，移动设备和许多其他应用程序中使用的硬件和软件制定性能基准。</p>
+<p>EEMBC 基准测试得分的主要受众是创建依赖嵌入式微控制器和微处理器的系统的公司：从智能手机到太阳能电池板的所有产品。尽管此类制造商通常具有自己的专有基准，但是 EEMBC 提供了一种有吸引力的替代方案，可替代购买硬件，进行设置，然后在候选处理器组上进行所有测量的所有复杂性。 EEMBC 基准套件通过提供统一，严格定义的测量标准，使制造商可以轻松地比较替代解决方案，从而使制造商避免了此繁琐的过程。这不仅使大型制造商受益，而且使开发人员，集成商，</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/InfiniteYuanBlog/2020/07/04/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%E5%8D%81%EF%BC%89%20ESP32%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%EF%BC%8C%E4%B8%8E%20Cortex-M4%20%E6%80%A7%E8%83%BD%E6%AF%94%E8%BE%83/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2020/05/31/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B9%9D%EF%BC%89%20ESP32%20%E4%BD%8E%E5%8A%9F%E8%80%97%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
+      <meta itemprop="name" content="InfiniteYuan">
+      <meta itemprop="description" content="Stay Hungry, Stay Funlish">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="InfiniteYuan">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/InfiniteYuanBlog/2020/05/31/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B9%9D%EF%BC%89%20ESP32%20%E4%BD%8E%E5%8A%9F%E8%80%97%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">ESP32 学习笔记（二十九） ESP32 低功耗模式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-05-31 09:59:38" itemprop="dateCreated datePublished" datetime="2020-05-31T09:59:38+00:00">2020-05-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-24 01:37:05" itemprop="dateModified" datetime="2020-07-24T01:37:05+00:00">2020-07-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">ESP32 学习笔记</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/InfiniteYuanBlog/2020/05/31/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B9%9D%EF%BC%89%20ESP32%20%E4%BD%8E%E5%8A%9F%E8%80%97%E6%A8%A1%E5%BC%8F/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2020/05/31/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B9%9D%EF%BC%89%20ESP32%20%E4%BD%8E%E5%8A%9F%E8%80%97%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="ESP32-低功耗模式"><a href="#ESP32-低功耗模式" class="headerlink" title="ESP32 低功耗模式"></a>ESP32 低功耗模式</h1><h2 id="1-概要"><a href="#1-概要" class="headerlink" title="1 概要"></a>1 概要</h2><p>ESP32 系列芯片提供三种可配置的睡眠模式，针对这些睡眠模式,我们提供了了多种低功耗解决方案，用户可以结合具体需求选择睡眠模式并进行配置。三种睡眠模式如下:</p>
+<ul>
+<li>Modem-sleep 模式：CPU 可运行，时钟可被配置。Wi-Fi/蓝牙基带和射频关闭。</li>
+<li>Light-sleep 模式：CPU 暂停运行，Wi-Fi/蓝牙基带和射频关闭。<strong>RTC 存储器和外设以及 ULP 协处理器运行</strong>。任何唤醒事件(MAC、主机、RTC 定时器或外部中断)都会唤醒芯片。</li>
+<li>Deep-sleep 模式：CPU 和大部分外设都会掉电，Wi-Fi/蓝牙基带和射频关闭，只有 <strong>RTC 存储器和 RTC 外设以及 ULP 协处理器</strong>可以工作。Wi-Fi 和蓝牙连接数据存储在 RTC 中。</li>
+</ul>
+<p>三种模式的区别如下：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/InfiniteYuanBlog/2020/05/31/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B9%9D%EF%BC%89%20ESP32%20%E4%BD%8E%E5%8A%9F%E8%80%97%E6%A8%A1%E5%BC%8F/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2020/05/17/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89%E4%BD%BF%E7%94%A8%20LittlevGL%20%E5%AE%9E%E7%8E%B0%202048%20%E5%B0%8F%E6%B8%B8%E6%88%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -228,7 +454,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-24 01:13:09" itemprop="dateModified" datetime="2020-07-24T01:13:09+00:00">2020-07-24</time>
+                <time title="修改时间：2020-07-24 01:37:05" itemprop="dateModified" datetime="2020-07-24T01:37:05+00:00">2020-07-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -307,6 +533,227 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2020/03/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%85%AB%EF%BC%89%20ESP32%20%E4%B8%B2%E5%8F%A3%E4%B8%8B%E8%BD%BD%E8%BF%87%E7%A8%8B(%E4%BD%BF%E7%94%A8%20esptool)%20[%E8%BD%AC]/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
+      <meta itemprop="name" content="InfiniteYuan">
+      <meta itemprop="description" content="Stay Hungry, Stay Funlish">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="InfiniteYuan">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/InfiniteYuanBlog/2020/03/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%85%AB%EF%BC%89%20ESP32%20%E4%B8%B2%E5%8F%A3%E4%B8%8B%E8%BD%BD%E8%BF%87%E7%A8%8B(%E4%BD%BF%E7%94%A8%20esptool)%20%5B%E8%BD%AC%5D/" class="post-title-link" itemprop="url">ESP32 学习笔记（二十八） ESP32 串口下载过程(使用 esptool) [转]</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-12 15:38:11" itemprop="dateCreated datePublished" datetime="2020-03-12T15:38:11+00:00">2020-03-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-24 01:37:05" itemprop="dateModified" datetime="2020-07-24T01:37:05+00:00">2020-07-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">ESP32 学习笔记</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/InfiniteYuanBlog/2020/03/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%85%AB%EF%BC%89%20ESP32%20%E4%B8%B2%E5%8F%A3%E4%B8%8B%E8%BD%BD%E8%BF%87%E7%A8%8B(%E4%BD%BF%E7%94%A8%20esptool)%20%5B%E8%BD%AC%5D/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2020/03/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%85%AB%EF%BC%89%20ESP32%20%E4%B8%B2%E5%8F%A3%E4%B8%8B%E8%BD%BD%E8%BF%87%E7%A8%8B(%E4%BD%BF%E7%94%A8%20esptool)%20%5B%E8%BD%AC%5D/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="ESP32-串口下载过程-使用-esptool"><a href="#ESP32-串口下载过程-使用-esptool" class="headerlink" title="ESP32 串口下载过程(使用 esptool)"></a>ESP32 串口下载过程(使用 esptool)</h1><p>原文链接：<a href="https://www.esp32.com/viewtopic.php?f=25&amp;t=8161&amp;p=34283#p34283" target="_blank" rel="noopener">https://www.esp32.com/viewtopic.php?f=25&amp;t=8161&amp;p=34283#p34283</a></p>
+<p>通常，我们会通过 python 脚本，从 PC 端，通过串口给 esp32 芯片或者模块下载固件程序。<br>通过 esptool (<a href="https://github.com/espressif/esptool" target="_blank" rel="noopener">https://github.com/espressif/esptool</a>) 脚本，我们可以很方便的实现。</p>
+<p>但有时，我们也希望能通过其他单片机的串口，给 esp32/esp8266 进行固件更新。（前提是外部单片机能够控制esp32 进入串口下载模式)。<br>完整的串口通信协议可以参考这里(<a href="https://github.com/espressif/esptool/w" target="_blank" rel="noopener">https://github.com/espressif/esptool/w</a> … -Protocol)<br>为了方便调试，我们可以通过运行 esptool，来查看上位机与esp32之间的通信过程。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/InfiniteYuanBlog/2020/03/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%85%AB%EF%BC%89%20ESP32%20%E4%B8%B2%E5%8F%A3%E4%B8%8B%E8%BD%BD%E8%BF%87%E7%A8%8B(%E4%BD%BF%E7%94%A8%20esptool)%20%5B%E8%BD%AC%5D/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2020/03/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B8%83%EF%BC%89%20ESP32%20%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%20[%E8%BD%AC]/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
+      <meta itemprop="name" content="InfiniteYuan">
+      <meta itemprop="description" content="Stay Hungry, Stay Funlish">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="InfiniteYuan">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/InfiniteYuanBlog/2020/03/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B8%83%EF%BC%89%20ESP32%20%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%20%5B%E8%BD%AC%5D/" class="post-title-link" itemprop="url">ESP32 学习笔记（二十七） ESP32 的启动过程 [转]</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-12 15:22:04" itemprop="dateCreated datePublished" datetime="2020-03-12T15:22:04+00:00">2020-03-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-24 01:37:05" itemprop="dateModified" datetime="2020-07-24T01:37:05+00:00">2020-07-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">ESP32 学习笔记</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/InfiniteYuanBlog/2020/03/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B8%83%EF%BC%89%20ESP32%20%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%20%5B%E8%BD%AC%5D/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2020/03/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B8%83%EF%BC%89%20ESP32%20%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%20%5B%E8%BD%AC%5D/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="ESP32-的启动过程"><a href="#ESP32-的启动过程" class="headerlink" title="ESP32 的启动过程"></a>ESP32 的启动过程</h1><p>原文来自：<a href="https://www.esp32.com/viewtopic.php?f=25&amp;t=8030&amp;p=33812#p33812" target="_blank" rel="noopener">https://www.esp32.com/viewtopic.php?f=25&amp;t=8030&amp;p=33812#p33812</a></p>
+<h2 id="关于-ROM"><a href="#关于-ROM" class="headerlink" title="[关于 ROM]"></a>[关于 ROM]</h2><p>在 esp32 上电运行后，芯片运行的第一个程序。这段程序是芯片设计与生产的时候，固化在硬件电路中的。所以它是不可修改的(Read Only Memory)。<br>esp32 的 ROM 负责检测芯片的strapping配置，来决定芯片应该处于什么状态。比如，esp32 上电后，ROM 程序会检查 [GPIO0, GPIO2, GPIO4, MTDO, GPIO5]的状态。<br>如果 GPIO0 / GPIO2 同时为低电平，则会进入下载模式，等待串口通信信息。<br>如果GPIO0为高电平，则会进入Flash 运行模式，启动SPI 驱动，并加载Flash中的程序段。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/InfiniteYuanBlog/2020/03/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B8%83%EF%BC%89%20ESP32%20%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%20%5B%E8%BD%AC%5D/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/11/22/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89ESP32%20I2C%20Slave%20%E5%AE%9E%E7%8E%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -338,7 +785,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-24 01:13:09" itemprop="dateModified" datetime="2020-07-24T01:13:09+00:00">2020-07-24</time>
+                <time title="修改时间：2020-07-24 01:37:05" itemprop="dateModified" datetime="2020-07-24T01:37:05+00:00">2020-07-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -448,7 +895,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-24 01:13:09" itemprop="dateModified" datetime="2020-07-24T01:13:09+00:00">2020-07-24</time>
+                <time title="修改时间：2020-07-24 01:37:05" itemprop="dateModified" datetime="2020-07-24T01:37:05+00:00">2020-07-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -550,7 +997,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-24 01:13:09" itemprop="dateModified" datetime="2020-07-24T01:13:09+00:00">2020-07-24</time>
+                <time title="修改时间：2020-07-24 01:37:05" itemprop="dateModified" datetime="2020-07-24T01:37:05+00:00">2020-07-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -665,7 +1112,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-24 01:13:09" itemprop="dateModified" datetime="2020-07-24T01:13:09+00:00">2020-07-24</time>
+                <time title="修改时间：2020-07-24 01:37:05" itemprop="dateModified" datetime="2020-07-24T01:37:05+00:00">2020-07-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -756,7 +1203,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/03/14/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%EF%BC%89%E4%BD%BF%E7%94%A8%20ESP32+Camera%20%E4%BA%8C%E7%BB%B4%E7%A0%81%E8%AF%86%E5%88%AB/">
+    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/04/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%85%AD%EF%BC%89NVS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
@@ -770,7 +1217,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/InfiniteYuanBlog/2019/03/14/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%EF%BC%89%E4%BD%BF%E7%94%A8%20ESP32+Camera%20%E4%BA%8C%E7%BB%B4%E7%A0%81%E8%AF%86%E5%88%AB/" class="post-title-link" itemprop="url">ESP32 开发笔记（十）使用 ESP32+Camera 二维码识别</a>
+            <a href="/InfiniteYuanBlog/2019/04/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%85%AD%EF%BC%89NVS/" class="post-title-link" itemprop="url">ESP32 学习笔记（二十六）NVS</a>
         </h2>
 
         <div class="post-meta">
@@ -780,14 +1227,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-03-14 15:16:37" itemprop="dateCreated datePublished" datetime="2019-03-14T15:16:37+00:00">2019-03-14</time>
+              <time title="创建时间：2019-04-12 20:33:16" itemprop="dateCreated datePublished" datetime="2019-04-12T20:33:16+00:00">2019-04-12</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-24 01:13:09" itemprop="dateModified" datetime="2020-07-24T01:13:09+00:00">2020-07-24</time>
+                <time title="修改时间：2020-07-24 01:37:05" itemprop="dateModified" datetime="2020-07-24T01:37:05+00:00">2020-07-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -795,7 +1242,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">ESP32 开发笔记</span></a>
+                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">ESP32 学习笔记</span></a>
                 </span>
             </span>
 
@@ -808,8 +1255,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/InfiniteYuanBlog/2019/03/14/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%EF%BC%89%E4%BD%BF%E7%94%A8%20ESP32+Camera%20%E4%BA%8C%E7%BB%B4%E7%A0%81%E8%AF%86%E5%88%AB/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2019/03/14/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%EF%BC%89%E4%BD%BF%E7%94%A8%20ESP32+Camera%20%E4%BA%8C%E7%BB%B4%E7%A0%81%E8%AF%86%E5%88%AB/" itemprop="commentCount"></span>
+    <a title="valine" href="/InfiniteYuanBlog/2019/04/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%85%AD%EF%BC%89NVS/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2019/04/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%85%AD%EF%BC%89NVS/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -819,351 +1266,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>4.2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="使用-ESP32-Camera-进行二维码识别"><a href="#使用-ESP32-Camera-进行二维码识别" class="headerlink" title="使用 ESP32 Camera 进行二维码识别"></a>使用 ESP32 Camera 进行二维码识别</h1><ul>
-<li>GitHub: <a href="https://github.com/InfiniteYuan/esp32-camera-qr-recoginize/tree/master/examples/single_chip/qrcode_recoginize" target="_blank" rel="noopener">esp32-camera-qr-recoginize</a></li>
-</ul>
-<h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><ul>
-<li><a href="https://github.com/espressif/esp-who" target="_blank" rel="noopener">ESP-WHO</a></li>
-<li><a href="https://github.com/espressif/esp-idf" target="_blank" rel="noopener">ESP-IDF</a></li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/InfiniteYuanBlog/2019/03/14/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%EF%BC%89%E4%BD%BF%E7%94%A8%20ESP32+Camera%20%E4%BA%8C%E7%BB%B4%E7%A0%81%E8%AF%86%E5%88%AB/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/03/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89ESP-MESH%20%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
-      <meta itemprop="name" content="InfiniteYuan">
-      <meta itemprop="description" content="Stay Hungry, Stay Funlish">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="InfiniteYuan">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/InfiniteYuanBlog/2019/03/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89ESP-MESH%20%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/" class="post-title-link" itemprop="url">ESP32 官方文档（十六）ESP-MESH 编程指南</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-03-02 19:03:45" itemprop="dateCreated datePublished" datetime="2019-03-02T19:03:45+00:00">2019-03-02</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-24 01:13:09" itemprop="dateModified" datetime="2020-07-24T01:13:09+00:00">2020-07-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/" itemprop="url" rel="index"><span itemprop="name">ESP32 官方文档</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/InfiniteYuanBlog/2019/03/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89ESP-MESH%20%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2019/03/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89ESP-MESH%20%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>9.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>9 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="ESP-MESH-编程指南"><a href="#ESP-MESH-编程指南" class="headerlink" title="ESP-MESH 编程指南"></a>ESP-MESH 编程指南</h1><p>这是 ESP-MESH 的编程指南，包括 API 参考和编码示例。本指南分为以下几部分：</p>
-<ul>
-<li>ESP-MESH 编程模型</li>
-<li>编写 ESP-MESH 应用程序</li>
-<li>自组织网络</li>
-<li>应用实例</li>
-<li>API 参考</li>
-</ul>
-<p>有关 ESP-MESH 协议的文档，请参阅 <a href="https://mp.csdn.net/postedit/86743079" target="_blank" rel="noopener">ESP-MESH API 指南</a>。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/InfiniteYuanBlog/2019/03/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89ESP-MESH%20%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/02/01/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89ESP-MESH/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
-      <meta itemprop="name" content="InfiniteYuan">
-      <meta itemprop="description" content="Stay Hungry, Stay Funlish">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="InfiniteYuan">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/InfiniteYuanBlog/2019/02/01/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89ESP-MESH/" class="post-title-link" itemprop="url">ESP32 官方文档（十五）ESP-MESH</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-02-01 17:17:30" itemprop="dateCreated datePublished" datetime="2019-02-01T17:17:30+00:00">2019-02-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-24 01:13:09" itemprop="dateModified" datetime="2020-07-24T01:13:09+00:00">2020-07-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/" itemprop="url" rel="index"><span itemprop="name">ESP32 官方文档</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/InfiniteYuanBlog/2019/02/01/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89ESP-MESH/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2019/02/01/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89ESP-MESH/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>14k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>13 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="ESP-MESH"><a href="#ESP-MESH" class="headerlink" title="ESP-MESH"></a>ESP-MESH</h1><p>本指南提供有关 ESP-MESH 协议的信息。有关 API 使用的更多信息，请参阅 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/network/esp_mesh.html" target="_blank" rel="noopener">MESH API 参考</a>。</p>
-<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP-MESH 是一种基于 Wi-Fi 协议构建的网络协议。ESP-MESH 允许在大的物理区域（室内和室外）上分布的多个设备（以下称为节点）在单个 WLAN（无线局域网）下互连。ESP-MESH 具有自组织和自我修复功能，意味着网络可以自主构建和维护。</p>
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><img src="https://img-blog.csdnimg.cn/20190201111240103.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="传统的 Wi-Fi 网络架构"><br>传统的 Wi-Fi 网络是一点对多点网络，其中称为接入点（AP）的单个中心节点直接连接到所有其他节点（station）。AP 负责仲裁和转发节点之间的传输。一些 AP 还通过路由器中继与外部 IP 网络的传输。传统的 Wi-Fi 网络由于要求每个站必须在一定范围内以直接与 AP 连接而具有有限覆盖区域的缺点。此外，传统的 Wi-Fi 网络易于过载，因为网络中允许的最大站数受到 AP 容量的限制。</p>
-<p><img src="https://img-blog.csdnimg.cn/20190201113539338.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>ESP-MESH 与传统的 Wi-Fi 网络的不同之处在于节点不需要连接到中心节点。相反，允许节点与相邻节点连接。节点相互负责传递彼此的传输。这允许 ESP-MESH 网络具有更大的覆盖区域，因为节点仍然可以实现互连而无需在中心节点的范围内。同样，ESP-MESH 也不易受到过载的影响，因为网络上允许的节点数量不再受单个中心节点的限制。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/InfiniteYuanBlog/2019/02/01/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89ESP-MESH/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/12/17/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B9%9D%EF%BC%89%E4%BD%BF%E7%94%A8%20VS%20Code%20%E5%BF%AB%E9%80%9F%E5%BC%80%E5%8F%91%20ESP32/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
-      <meta itemprop="name" content="InfiniteYuan">
-      <meta itemprop="description" content="Stay Hungry, Stay Funlish">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="InfiniteYuan">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/InfiniteYuanBlog/2018/12/17/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B9%9D%EF%BC%89%E4%BD%BF%E7%94%A8%20VS%20Code%20%E5%BF%AB%E9%80%9F%E5%BC%80%E5%8F%91%20ESP32/" class="post-title-link" itemprop="url">ESP32 开发笔记（九）使用 VS Code 快速开发 ESP32</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-12-17 18:28:16" itemprop="dateCreated datePublished" datetime="2018-12-17T18:28:16+00:00">2018-12-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-24 01:13:09" itemprop="dateModified" datetime="2020-07-24T01:13:09+00:00">2020-07-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">ESP32 开发笔记</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/InfiniteYuanBlog/2018/12/17/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B9%9D%EF%BC%89%E4%BD%BF%E7%94%A8%20VS%20Code%20%E5%BF%AB%E9%80%9F%E5%BC%80%E5%8F%91%20ESP32/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2018/12/17/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B9%9D%EF%BC%89%E4%BD%BF%E7%94%A8%20VS%20Code%20%E5%BF%AB%E9%80%9F%E5%BC%80%E5%8F%91%20ESP32/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.3k</span>
+              <span>1.7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -1182,131 +1285,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="使用-VS-Code-快速开发-ESP32"><a href="#使用-VS-Code-快速开发-ESP32" class="headerlink" title="使用 VS Code 快速开发 ESP32"></a>使用 VS Code 快速开发 ESP32</h1><h2 id="搭建开发环境"><a href="#搭建开发环境" class="headerlink" title="搭建开发环境"></a>搭建开发环境</h2><ul>
-<li>根据<a href="https://blog.csdn.net/qq_27114397/article/details/79078449" target="_blank" rel="noopener">官方文档</a>进行 <code>esp-idf</code> 开发环境搭建</li>
-<li>安装 <a href="https://code.visualstudio.com/Download" target="_blank" rel="noopener">VS Code</a> </li>
-</ul>
-<h2 id="在-VS-Code-中进行开发"><a href="#在-VS-Code-中进行开发" class="headerlink" title="在 VS Code 中进行开发"></a>在 VS Code 中进行开发</h2><ul>
-<li>将 <code>esp-idf</code> 中的模板工程 <a href="https://github.com/espressif/esp-idf/tree/master/examples/get-started/hello_world" target="_blank" rel="noopener">hello_world</a> 在 VS Code 中打开</li>
-<li>在 VS Code 中开发项目</li>
-</ul>
+          <h1 id="NVS-Non-volatile-storage"><a href="#NVS-Non-volatile-storage" class="headerlink" title="NVS - Non-volatile storage"></a>NVS - Non-volatile storage</h1><p>非易失性存储（NVS）库主要用于在闪存中存储键值对。本节介绍 NVS 使用的一些概念。</p>
+<h2 id="底层存储"><a href="#底层存储" class="headerlink" title="底层存储"></a>底层存储</h2><p>目前，NVS 通过 <code>spi_flash_{read|write|erase}</code>  API 使用主闪存的一部分。该库使用具有 data 类型和 nvs 子类型的所有分区。应用程序可以通过 <code>nvs_open</code> API 选择使用带有标签 nvs 的分区或通过 <code>nvs_open_from_part</code> API 使用指定名称的任意分区。</p>
+<blockquote>
+<p>如果 NVS 分区被截断（例如，更改分区表布局时），则应擦除其内容。ESP-IDF 构建系统提供 <code>make erase_flash</code> 以擦除闪存芯片的所有内容。</p>
+</blockquote>
+<blockquote>
+<p>NVS 最适合存储许多小值，而不是 “string” 和 “blob” 类型的大值。如果需要存储大的 blob 或字符串，请考虑使用在损耗均衡库之上的 FAT 文件系统提供的功能。</p>
+</blockquote>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/InfiniteYuanBlog/2018/12/17/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B9%9D%EF%BC%89%E4%BD%BF%E7%94%A8%20VS%20Code%20%E5%BF%AB%E9%80%9F%E5%BC%80%E5%8F%91%20ESP32/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/12/09/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89RF%20%E6%A0%A1%E5%87%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
-      <meta itemprop="name" content="InfiniteYuan">
-      <meta itemprop="description" content="Stay Hungry, Stay Funlish">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="InfiniteYuan">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/InfiniteYuanBlog/2018/12/09/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89RF%20%E6%A0%A1%E5%87%86/" class="post-title-link" itemprop="url">ESP32 官方文档（十四）RF 校准</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-12-09 23:45:16" itemprop="dateCreated datePublished" datetime="2018-12-09T23:45:16+00:00">2018-12-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-24 01:13:09" itemprop="dateModified" datetime="2020-07-24T01:13:09+00:00">2020-07-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/" itemprop="url" rel="index"><span itemprop="name">ESP32 官方文档</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/InfiniteYuanBlog/2018/12/09/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89RF%20%E6%A0%A1%E5%87%86/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2018/12/09/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89RF%20%E6%A0%A1%E5%87%86/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>942</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="RF-校准"><a href="#RF-校准" class="headerlink" title="RF 校准"></a>RF 校准</h1><p>ESP32 在 RF 初始化期间支持三种 RF 校准方法：</p>
-<ol>
-<li>部分校准</li>
-<li>完全校准</li>
-<li>没有校准</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/InfiniteYuanBlog/2018/12/09/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89RF%20%E6%A0%A1%E5%87%86/#more" rel="contents">
+              <a class="btn" href="/InfiniteYuanBlog/2019/04/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%85%AD%EF%BC%89NVS/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1329,7 +1318,7 @@
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/InfiniteYuanBlog/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/InfiniteYuanBlog/page/5/">5</a><a class="extend next" rel="next" href="/InfiniteYuanBlog/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/InfiniteYuanBlog/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/InfiniteYuanBlog/page/7/">7</a><a class="extend next" rel="next" href="/InfiniteYuanBlog/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1397,7 +1386,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/InfiniteYuanBlog/archives/">
         
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">62</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1452,13 +1441,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">155k</span>
+    <span title="站点总字数">201k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">2:21</span>
+    <span title="站点阅读时长">3:02</span>
 
 </div>
 

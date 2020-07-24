@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/InfiniteYuanBlog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/InfiniteYuanBlog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/InfiniteYuanBlog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/InfiniteYuanBlog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/css/main.css">
+
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/InfiniteYuanBlog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/InfiniteYuanBlog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"infiniteyuan.github.io","root":"/InfiniteYuanBlog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Over The Air Updates (OTA)OTA 流程概述OTA 更新机制允许设备根据正常固件运行时收到的数据进行更新(例如,通过WiFi或蓝牙). OTA 要求至少使用两个 “OTA app slot” 分区(即 ota_0 和 ota_1)和 “OTA Data Partition” 来配置设备的分区表. OTA 操作功能将新的应用程序固件映像写入当前未用于启动的 OTA 应用程序位">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ESP32 学习笔记（十六）Over The Air Updates (OTA)">
+<meta property="og:url" content="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/08/29/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89Over%20The%20Air%20Updates%20(OTA)/index.html">
+<meta property="og:site_name" content="InfiniteYuan">
+<meta property="og:description" content="Over The Air Updates (OTA)OTA 流程概述OTA 更新机制允许设备根据正常固件运行时收到的数据进行更新(例如,通过WiFi或蓝牙). OTA 要求至少使用两个 “OTA app slot” 分区(即 ota_0 和 ota_1)和 “OTA Data Partition” 来配置设备的分区表. OTA 操作功能将新的应用程序固件映像写入当前未用于启动的 OTA 应用程序位">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-08-29T00:59:26.000Z">
+<meta property="article:modified_time" content="2020-07-24T01:37:05.791Z">
+<meta property="article:author" content="InfiniteYuan">
+<meta property="article:tag" content="ESP32">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/08/29/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89Over%20The%20Air%20Updates%20(OTA)/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ESP32 学习笔记（十六）Over The Air Updates (OTA) | InfiniteYuan</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/InfiniteYuanBlog/atom.xml" title="InfiniteYuan" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+      <div class="site-meta-headline">
+        <a>
+          <img class="custom-logo-image" src="/InfiniteYuanBlog/images/InfiniteYuanLogo.jpg" alt="InfiniteYuan">
+        </a>
+      </div>
+
+    <a href="/InfiniteYuanBlog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">InfiniteYuan</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/InfiniteYuanBlog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/InfiniteYuanBlog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">62</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/InfiniteYuanBlog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/InfiniteYuanBlog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">4</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/infiniteyuan" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/08/29/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89Over%20The%20Air%20Updates%20(OTA)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
+      <meta itemprop="name" content="InfiniteYuan">
+      <meta itemprop="description" content="Stay Hungry, Stay Funlish">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="InfiniteYuan">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ESP32 学习笔记（十六）Over The Air Updates (OTA)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-08-29 00:59:26" itemprop="dateCreated datePublished" datetime="2018-08-29T00:59:26+00:00">2018-08-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-24 01:37:05" itemprop="dateModified" datetime="2020-07-24T01:37:05+00:00">2020-07-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">ESP32 学习笔记</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/InfiniteYuanBlog/2018/08/29/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89Over%20The%20Air%20Updates%20(OTA)/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2018/08/29/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89Over%20The%20Air%20Updates%20(OTA)/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Over-The-Air-Updates-OTA"><a href="#Over-The-Air-Updates-OTA" class="headerlink" title="Over The Air Updates (OTA)"></a>Over The Air Updates (OTA)</h1><h2 id="OTA-流程概述"><a href="#OTA-流程概述" class="headerlink" title="OTA 流程概述"></a>OTA 流程概述</h2><p>OTA 更新机制允许设备根据正常固件运行时收到的数据进行更新(例如,通过WiFi或蓝牙).</p>
+<p>OTA 要求至少使用两个 “OTA app slot” 分区(即 <code>ota_0</code> 和 <code>ota_1</code>)和 “OTA Data Partition” 来配置设备的<a href="https://esp-idf.readthedocs.io/en/latest/api-guides/partition-tables.html" target="_blank" rel="noopener">分区表</a>.</p>
+<p>OTA 操作功能将新的应用程序固件映像写入当前未用于启动的 OTA 应用程序位置. 验证映像后,将更新 OTA 数据分区以指定此映像应用于下次启动.</p>
+<a id="more"></a>
+
+<h2 id="OTA-数据分区"><a href="#OTA-数据分区" class="headerlink" title="OTA 数据分区"></a>OTA 数据分区</h2><p>OTA 数据分区 (type <code>data</code>, subtype <code>ota</code>) 必须包含在使用 OTA 功能的任何项目的<a href="https://esp-idf.readthedocs.io/en/latest/api-guides/partition-tables.html" target="_blank" rel="noopener">分区表</a>中.</p>
+<p>对于出厂启动设置,OTA 数据分区不应包含任何数据(所有字节都擦除为 0xFF). 在这种情况下,esp-idf 软件引导加载程序将启动 factory 应用程序(如果它存在于分区表中). 如果分区表中不包含 factory 应用程序,则会启动第一个可用的 OTA 程序(通常为 <code>ota_0</code>).</p>
+<p>在第一次 OTA 更新之后,更新 OTA 数据分区以指定下一个应该引导哪个 OTA 应用程序分区.</p>
+<p>OTA 数据分区的大小为两个闪存扇区(0x2000 字节),以防止在写入时出现电源故障时出现问题. 扇区被独立擦除并用匹配数据写入,如果它们不同意,则使用计数器字段来确定最近写入哪个扇区.</p>
+<h2 id="APP-回滚"><a href="#APP-回滚" class="headerlink" title="APP 回滚"></a>APP 回滚</h2><p>应用程序回滚的主要目的是在更新后使设备保持工作。此功能允许您回滚到以前的工作应用程序，以防新应用程序出现严重错误。启用回滚过程并且 OTA 更新提供应用程序的新版本时，可能会发生以下三种情况之一：</p>
+<ul>
+<li>应用程序正常，<code>esp_ota_mark_app_valid_cancel_rollback()</code> 使用状态 <code>ESP_OTA_IMG_VALID</code> 标记正在运行的应用程序。启动此应用程序没有任何限制。</li>
+<li>应用程序存在严重错误，无法进行进一步的工作，需要回滚到先前的应用程序，<code>esp_ota_mark_app_invalid_rollback_and_reboot()</code> 将正在运行的应用程序标记为 <code>ESP_OTA_IMG_INVALID</code> 并重置。引导加载程序不会选择此应用程序进行引导，并将引导以前工作的应用程序。</li>
+<li>如果设置了 <code>CONFIG_APP_ROLLBACK_ENABLE</code> 选项，并且在不调用任何函数的情况下发生重置，则会发生并回滚。</li>
+</ul>
+<blockquote>
+<p>注意：状态不会写入应用程序的二进制映像，而是将其写入数据分区。该分区包含一个 <code>ota_seq</code> 计数器，该计数器是指向应用程序将从中进行引导的插槽（ota_0，ota_1，…）的指针。</p>
+</blockquote>
+<h2 id="APP-OTA-状态"><a href="#APP-OTA-状态" class="headerlink" title="APP OTA 状态"></a>APP OTA 状态</h2><p>状态控制选择启动应用程序的过程：</p>
+<table>
+<thead>
+<tr>
+<th align="center">States</th>
+<th align="center">Restriction of selecting a boot app in bootloader</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">ESP_OTA_IMG_VALID</td>
+<td align="center">None restriction. Will be selected.</td>
+</tr>
+<tr>
+<td align="center">ESP_OTA_IMG_UNDEFINED</td>
+<td align="center">None restriction. Will be selected.</td>
+</tr>
+<tr>
+<td align="center">ESP_OTA_IMG_INVALID</td>
+<td align="center">Will not be selected.</td>
+</tr>
+<tr>
+<td align="center">ESP_OTA_IMG_ABORTED</td>
+<td align="center">Will not be selected.</td>
+</tr>
+<tr>
+<td align="center">ESP_OTA_IMG_NEW</td>
+<td align="center">If CONFIG_APP_ROLLBACK_ENABLE option is set it will be selected only once. In bootloader the state immediately changes to <code>ESP_OTA_IMG_PENDING_VERIFY</code>.</td>
+</tr>
+<tr>
+<td align="center">ESP_OTA_IMG_PENDING_VERIFY</td>
+<td align="center">If CONFIG_APP_ROLLBACK_ENABLE option is set it will not be selected and the state will change to <code>ESP_OTA_IMG_ABORTED</code>.</td>
+</tr>
+</tbody></table>
+<p>如果未启用 <code>CONFIG_APP_ROLLBACK_ENABLE</code> 选项（默认情况下），则使用以下函数 <code>esp_ota_mark_app_valid_cancel_rollback()</code> 和 <code>esp_ota_mark_app_invalid_rollback_and_reboot()</code> 是可选的，并且不使用 <code>ESP_OTA_IMG_NEW</code> 和 <code>ESP_OTA_IMG_PENDING_VERIFY</code> 状态。</p>
+<p>Kconfig 中的 <code>CONFIG_APP_ROLLBACK_ENABLE</code> 选项允许您跟踪新应用程序的首次引导。在这种情况下，应用程序必须通过调用 <code>esp_ota_mark_app_valid_cancel_rollback()</code> 函数来确认其可操作性，否则应用程序将在重新启动时回滚。它允许您在引导阶段控制应用程序的可操作性。因此，新应用程序只有一次尝试成功启动。</p>
+<h2 id="回滚过程"><a href="#回滚过程" class="headerlink" title="回滚过程"></a>回滚过程</h2><p>启用 <code>CONFIG_APP_ROLLBACK_ENABLE</code> 选项时回滚过程的说明：</p>
+<ul>
+<li>成功下载的新应用程序和 <code>esp_ota_set_boot_partition()</code> 函数使此分区可引导并设置状态 <code>ESP_OTA_IMG_NEW</code>。此状态表示应用程序是新的，应监视其首次引导。</li>
+<li>重启 <code>esp_restart()</code>。</li>
+<li>引导加载程序检查 <code>ESP_OTA_IMG_PENDING_VERIFY</code> 状态（如果已设置），然后将写入 <code>ESP_OTA_IMG_ABORTED</code>。</li>
+<li>引导加载程序选择要引导的新应用程序，以便状态不会设置为 <code>ESP_OTA_IMG_INVALID</code> 或 <code>ESP_OTA_IMG_ABORTED</code>。</li>
+<li>引导加载程序检查所选应用程序的 <code>ESP_OTA_IMG_NEW</code> 状态（如果已设置），然后它将写入 <code>ESP_OTA_IMG_PENDING_VERIFY</code>。此状态意味着应用程序需要确认其可操作性，如果没有发生并且发生重新启动，此状态将被覆盖到 <code>ESP_OTA_IMG_ABORTED</code> （参见上文），此应用程序将无法再启动，即将返回到以前的工作申请。</li>
+<li>一个新的应用程序已经开始，应该进行自我测试。</li>
+<li>如果自检已成功完成，则必须调用函数 <code>esp_ota_mark_app_valid_cancel_rollback()</code>，因为应用程序正在等待可操作性的确认（<code>ESP_OTA_IMG_PENDING_VERIFY</code> 状态）。</li>
+<li>如果自检失败，则调用 <code>esp_ota_mark_app_invalid_rollback_and_reboot()</code> 函数回滚到上一个工作应用程序，同时将无效应用程序设置为 <code>ESP_OTA_IMG_INVALID</code> 状态。</li>
+<li>如果尚未确认应用程序，则状态仍为 <code>ESP_OTA_IMG_PENDING_VERIFY</code>，下次启动时将更改为 <code>ESP_OTA_IMG_ABORTED</code>。这将阻止重新启动此应用程序。将回滚到以前的工作应用程序。</li>
+</ul>
+<h2 id="意外重启"><a href="#意外重启" class="headerlink" title="意外重启"></a>意外重启</h2><p>如果在首次启动新应用程序时发生断电或意外崩溃，它将回滚应用程序。</p>
+<p>建议：尽快执行自检程序，以防止因断电而导致的回滚。</p>
+<p>只能回滚 <code>OTA</code> 分区。工厂分区未回滚。</p>
+<h2 id="启动无效-中止的应用程序"><a href="#启动无效-中止的应用程序" class="headerlink" title="启动无效/中止的应用程序"></a>启动无效/中止的应用程序</h2><p>可以引导先前设置为 <code>ESP_OTA_IMG_INVALID</code> 或 <code>ESP_OTA_IMG_ABORTED</code> 的应用程序：</p>
+<ul>
+<li>获取最后一个无效的应用程序分区 <code>esp_ota_get_last_invalid_partition()</code>。</li>
+<li>将收到的分区传递给 <code>esp_ota_set_boot_partition()</code>，这将更新 <code>otadata</code>。</li>
+<li>重启 <code>esp_restart()</code>。引导加载程序将引导指定的应用程序。</li>
+</ul>
+<p>要确定在启动应用程序期间是否应运行自检，请调用 <code>esp_ota_get_state_partition()</code> 函数。如果结果为 <code>ESP_OTA_IMG_PENDING_VERIFY</code>，则需要进行自检并随后确认可操作性。</p>
+<h2 id="设置状态"><a href="#设置状态" class="headerlink" title="设置状态"></a>设置状态</h2><p>关于状态设置的简要说明：</p>
+<ul>
+<li><code>ESP_OTA_IMG_VALID</code> 状态由 <code>esp_ota_mark_app_valid_cancel_rollback()</code> 函数设置。</li>
+<li>如果未启用 <code>CONFIG_APP_ROLLBACK_ENABLE</code> 选项，则 <code>esp_ota_set_boot_partition()</code> 函数将设置 <code>ESP_OTA_IMG_UNDEFINED</code> 状态。</li>
+<li>如果启用了 <code>CONFIG_APP_ROLLBACK_ENABLE</code> 选项，则 <code>esp_ota_set_boot_partition()</code> 函数将设置 <code>ESP_OTA_IMG_NEW</code> 状态。</li>
+<li><code>ESP_OTA_IMG_INVALID</code> 状态由 <code>esp_ota_mark_app_invalid_rollback_and_reboot()</code> 函数设置。</li>
+<li>如果没有确认应用程序可操作性并且重新启动（如果启用了 <code>CONFIG_APP_ROLLBACK_ENABLE</code> 选项），则设置 <code>ESP_OTA_IMG_ABORTED</code> 状态。</li>
+<li>如果启用了 <code>CONFIG_APP_ROLLBACK_ENABLE</code> 选项并且所选应用具有 <code>ESP_OTA_IMG_NEW</code> 状态，则在引导加载程序中设置 <code>ESP_OTA_IMG_PENDING_VERIFY</code> 状态。</li>
+</ul>
+<h2 id="没有安全启动的安全-OTA-更新"><a href="#没有安全启动的安全-OTA-更新" class="headerlink" title="没有安全启动的安全 OTA 更新"></a>没有安全启动的安全 OTA 更新</h2><p>即使不启用硬件安全引导，也可以执行已签名的 OTA 更新的验证。为此，请参阅<a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/secure-boot.html#signed-app-verify" target="_blank" rel="noopener">没有硬件安全启动的签名应用验证</a></p>
+<h2 id="相关资料"><a href="#相关资料" class="headerlink" title="相关资料"></a>相关资料</h2><ul>
+<li><a href="https://esp-idf.readthedocs.io/en/latest/api-guides/partition-tables.html" target="_blank" rel="noopener">Partition Table documentation</a></li>
+<li><a href="https://esp-idf.readthedocs.io/en/latest/api-reference/storage/spi_flash.html" target="_blank" rel="noopener">Lower-Level SPI Flash/Partition API</a></li>
+<li><a href="https://esp-idf.readthedocs.io/en/latest/api-reference/system/esp_https_ota.html" target="_blank" rel="noopener">ESP HTTPS OTA</a></li>
+</ul>
+<h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><p>OTA 固件更新工作流程的端到端示例: <a href="https://github.com/espressif/esp-idf/tree/51a4b4b/examples/system/ota" target="_blank" rel="noopener">system/ota</a>.</p>
+<h2 id="API-Reference"><a href="#API-Reference" class="headerlink" title="API Reference"></a>API Reference</h2><h3 id="Header-File"><a href="#Header-File" class="headerlink" title="Header File"></a>Header File</h3><ul>
+<li><a href="https://github.com/espressif/esp-idf/blob/51a4b4b/components/app_update/include/esp_ota_ops.h" target="_blank" rel="noopener">app_update/include/esp_ota_ops.h</a></li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/system/ota.html" target="_blank" rel="noopener">Over The Air Updates (OTA)</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/01/16/ESP32 学习笔记/ESP32 学习笔记（一）开发环境搭建/" rel="bookmark">ESP32 学习笔记（一）开发环境搭建</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/12/ESP32 学习笔记/ESP32 学习笔记（七）I2S - Inter—IC Sound/" rel="bookmark">ESP32 学习笔记（七）I2S - Inter—IC Sound</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2020/07/04/ESP32 学习笔记/ESP32 学习笔记（三十） ESP32 性能分析，与 Cortex-M4 性能比较/" rel="bookmark">ESP32 学习笔记（三十） ESP32 性能分析，与 Cortex-M4 性能比较</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/11/ESP32 学习笔记/ESP32 学习笔记（三）UART - Universal Asynchronous Receiver Transmitter/" rel="bookmark">ESP32 学习笔记（三）UART - Universal Asynchronous Receiver/Transmitter</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/13/ESP32 学习笔记/ESP32 学习笔记（九）SPI - SPI Slave/" rel="bookmark">ESP32 学习笔记（九）SPI - SPI Slave</a></div>
+    </li>
+  </ul>
+
+        <div class="reward-container">
+  <div>如果这篇文章对你有帮助，那么不妨？</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/InfiniteYuanBlog/tags/ESP32/" rel="tag"><i class="fa fa-tag"></i> ESP32</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2018/08/13/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89Touch%20Sensor/" rel="prev" title="ESP32 学习笔记（十五）Touch Sensor">
+      <i class="fa fa-chevron-left"></i> ESP32 学习笔记（十五）Touch Sensor
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2018/08/29/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%B8%89%EF%BC%89%E5%88%86%E5%8C%BA%E8%A1%A8/" rel="next" title="ESP32 官方文档（三）分区表">
+      ESP32 官方文档（三）分区表 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Over-The-Air-Updates-OTA"><span class="nav-number">1.</span> <span class="nav-text">Over The Air Updates (OTA)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#OTA-流程概述"><span class="nav-number">1.1.</span> <span class="nav-text">OTA 流程概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OTA-数据分区"><span class="nav-number">1.2.</span> <span class="nav-text">OTA 数据分区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#APP-回滚"><span class="nav-number">1.3.</span> <span class="nav-text">APP 回滚</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#APP-OTA-状态"><span class="nav-number">1.4.</span> <span class="nav-text">APP OTA 状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回滚过程"><span class="nav-number">1.5.</span> <span class="nav-text">回滚过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#意外重启"><span class="nav-number">1.6.</span> <span class="nav-text">意外重启</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动无效-中止的应用程序"><span class="nav-number">1.7.</span> <span class="nav-text">启动无效&#x2F;中止的应用程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置状态"><span class="nav-number">1.8.</span> <span class="nav-text">设置状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#没有安全启动的安全-OTA-更新"><span class="nav-number">1.9.</span> <span class="nav-text">没有安全启动的安全 OTA 更新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关资料"><span class="nav-number">1.10.</span> <span class="nav-text">相关资料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用示例"><span class="nav-number">1.11.</span> <span class="nav-text">应用示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API-Reference"><span class="nav-number">1.12.</span> <span class="nav-text">API Reference</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Header-File"><span class="nav-number">1.12.1.</span> <span class="nav-text">Header File</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.13.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="InfiniteYuan"
+      src="/InfiniteYuanBlog/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">InfiniteYuan</p>
+  <div class="site-description" itemprop="description">Stay Hungry, Stay Funlish</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/InfiniteYuanBlog/archives/">
+        
+          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/InfiniteYuanBlog/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/InfiniteYuanBlog/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/infiniteyuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;infiniteyuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">InfiniteYuan</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">201k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">3:02</span>
+
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        站点访客数:<span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        站点阅读量:<span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/InfiniteYuanBlog/lib/anime.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/InfiniteYuanBlog/js/utils.js"></script>
+
+<script src="/InfiniteYuanBlog/js/motion.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/schemes/muse.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/next-boot.js"></script>
+
+<script src="/InfiniteYuanBlog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/InfiniteYuanBlog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '2spSMheFYziIJlzCVs7fvHeG-gzGzoHsz',
+      appKey     : 'aj8lFtI7EyFfrWCx902T0szo',
+      placeholder: "ヾﾉ≧∀≦)o来啊，快活啊!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

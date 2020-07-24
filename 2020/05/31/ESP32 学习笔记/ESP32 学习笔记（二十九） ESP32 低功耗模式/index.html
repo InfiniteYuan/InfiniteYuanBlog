@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/InfiniteYuanBlog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/InfiniteYuanBlog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/InfiniteYuanBlog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/InfiniteYuanBlog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/css/main.css">
+
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/InfiniteYuanBlog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/InfiniteYuanBlog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"infiniteyuan.github.io","root":"/InfiniteYuanBlog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="ESP32 低功耗模式1 概要ESP32 系列芯片提供三种可配置的睡眠模式，针对这些睡眠模式,我们提供了了多种低功耗解决方案，用户可以结合具体需求选择睡眠模式并进行配置。三种睡眠模式如下:  Modem-sleep 模式：CPU 可运行，时钟可被配置。Wi-Fi&#x2F;蓝牙基带和射频关闭。 Light-sleep 模式：CPU 暂停运行，Wi-Fi&#x2F;蓝牙基带和射频关闭。RTC 存储器和外设以及 ULP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ESP32 学习笔记（二十九） ESP32 低功耗模式">
+<meta property="og:url" content="https://infiniteyuan.github.io/InfiniteYuanBlog/2020/05/31/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B9%9D%EF%BC%89%20ESP32%20%E4%BD%8E%E5%8A%9F%E8%80%97%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="InfiniteYuan">
+<meta property="og:description" content="ESP32 低功耗模式1 概要ESP32 系列芯片提供三种可配置的睡眠模式，针对这些睡眠模式,我们提供了了多种低功耗解决方案，用户可以结合具体需求选择睡眠模式并进行配置。三种睡眠模式如下:  Modem-sleep 模式：CPU 可运行，时钟可被配置。Wi-Fi&#x2F;蓝牙基带和射频关闭。 Light-sleep 模式：CPU 暂停运行，Wi-Fi&#x2F;蓝牙基带和射频关闭。RTC 存储器和外设以及 ULP">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020061714483194.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200617144640674.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200617144756531.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="article:published_time" content="2020-05-31T09:59:38.000Z">
+<meta property="article:modified_time" content="2020-07-24T01:37:05.791Z">
+<meta property="article:author" content="InfiniteYuan">
+<meta property="article:tag" content="ESP32">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/2020061714483194.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70#pic_center">
+
+<link rel="canonical" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2020/05/31/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B9%9D%EF%BC%89%20ESP32%20%E4%BD%8E%E5%8A%9F%E8%80%97%E6%A8%A1%E5%BC%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ESP32 学习笔记（二十九） ESP32 低功耗模式 | InfiniteYuan</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/InfiniteYuanBlog/atom.xml" title="InfiniteYuan" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+      <div class="site-meta-headline">
+        <a>
+          <img class="custom-logo-image" src="/InfiniteYuanBlog/images/InfiniteYuanLogo.jpg" alt="InfiniteYuan">
+        </a>
+      </div>
+
+    <a href="/InfiniteYuanBlog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">InfiniteYuan</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/InfiniteYuanBlog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/InfiniteYuanBlog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">62</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/InfiniteYuanBlog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/InfiniteYuanBlog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">4</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/infiniteyuan" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2020/05/31/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B9%9D%EF%BC%89%20ESP32%20%E4%BD%8E%E5%8A%9F%E8%80%97%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
+      <meta itemprop="name" content="InfiniteYuan">
+      <meta itemprop="description" content="Stay Hungry, Stay Funlish">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="InfiniteYuan">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ESP32 学习笔记（二十九） ESP32 低功耗模式
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-05-31 09:59:38" itemprop="dateCreated datePublished" datetime="2020-05-31T09:59:38+00:00">2020-05-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-24 01:37:05" itemprop="dateModified" datetime="2020-07-24T01:37:05+00:00">2020-07-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">ESP32 学习笔记</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/InfiniteYuanBlog/2020/05/31/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B9%9D%EF%BC%89%20ESP32%20%E4%BD%8E%E5%8A%9F%E8%80%97%E6%A8%A1%E5%BC%8F/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2020/05/31/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B9%9D%EF%BC%89%20ESP32%20%E4%BD%8E%E5%8A%9F%E8%80%97%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="ESP32-低功耗模式"><a href="#ESP32-低功耗模式" class="headerlink" title="ESP32 低功耗模式"></a>ESP32 低功耗模式</h1><h2 id="1-概要"><a href="#1-概要" class="headerlink" title="1 概要"></a>1 概要</h2><p>ESP32 系列芯片提供三种可配置的睡眠模式，针对这些睡眠模式,我们提供了了多种低功耗解决方案，用户可以结合具体需求选择睡眠模式并进行配置。三种睡眠模式如下:</p>
+<ul>
+<li>Modem-sleep 模式：CPU 可运行，时钟可被配置。Wi-Fi/蓝牙基带和射频关闭。</li>
+<li>Light-sleep 模式：CPU 暂停运行，Wi-Fi/蓝牙基带和射频关闭。<strong>RTC 存储器和外设以及 ULP 协处理器运行</strong>。任何唤醒事件(MAC、主机、RTC 定时器或外部中断)都会唤醒芯片。</li>
+<li>Deep-sleep 模式：CPU 和大部分外设都会掉电，Wi-Fi/蓝牙基带和射频关闭，只有 <strong>RTC 存储器和 RTC 外设以及 ULP 协处理器</strong>可以工作。Wi-Fi 和蓝牙连接数据存储在 RTC 中。</li>
+</ul>
+<p>三种模式的区别如下：</p>
+<a id="more"></a>
+
+<p><img src="https://img-blog.csdnimg.cn/2020061714483194.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70#pic_center" alt="三种模式的区别"></p>
+<hr>
+<h2 id="2-Modem-sleep-模式"><a href="#2-Modem-sleep-模式" class="headerlink" title="2 Modem-sleep 模式"></a>2 Modem-sleep 模式</h2><p>目前 ESP32 的 Modem-sleep 仅工作在 Station 模式下,连接路由器后生效。Station 会周期性在工作状态和睡眠状态两者之间切换。<br>ESP32 通过 Wi-Fi 的 DTIM Beacon 机制与路由器保持连接。在 Modem-sleep 模式下，系统可以自动被唤醒，无需配置唤醒源。</p>
+<blockquote>
+<p>一般路由器的 DTIM Beacon 间隔为 100 ms ~ 1,000 ms。</p>
+</blockquote>
+<blockquote>
+<p>DTIM (Delivery Traffic Indication Message): 使用无线路由器时无线发送数据包的频率。</p>
+</blockquote>
+<p>在 Modem-sleep 模式下，ESP32 会在两次 DTIM Beacon 间隔时间内，关闭 Wi-Fi 模块电路，达到省电效果，在下次 Beacon 到来前自动唤醒。睡眠时间由路由器的 DTIM Beacon 时间决定。Modem-sleep 模式可以保持与路由器的 Wi-Fi 连接，并通过路由器接收来自手机或者服务器的交互信息。</p>
+<h3 id="2-1-API-说明"><a href="#2-1-API-说明" class="headerlink" title="2.1 API 说明"></a>2.1 API 说明</h3><p>通过以下接口配置 Modem-sleep 模式，<code>type</code> 可选参数：</p>
+<ul>
+<li><code>WIFI_PS_NONE</code>: 不使用 Modem-sleep 模式</li>
+<li><code>WIFI_PS_MIN_MODEM</code>: ESP32 接收 Beacon 的间隔与路由器的 DTIM 间隔相同，即 1 个路由器间隔</li>
+<li><code>WIFI_PS_MAX_MODEM</code>: ESP32 接收 Beacon 的间隔可由程序进行配置，间隔周期 <code>wifi_sta_config_t</code> 结构体中 <code>listen_interval</code> 值决定，单位为 路由器的 Beacon 间隔，默认值为 3（即 3 个路由器 Beacon 间隔）</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">enum</span> &#123;</span><br><span class="line">    WIFI_PS_NONE,        <span class="comment">/**&lt; No power save */</span></span><br><span class="line">    WIFI_PS_MIN_MODEM,   <span class="comment">/**&lt; Minimum modem power saving. In this mode, station wakes up to receive beacon every DTIM period */</span></span><br><span class="line">    WIFI_PS_MAX_MODEM,   <span class="comment">/**&lt; Maximum modem power saving. In this mode, interval to receive beacons is determined by the listen_interval parameter in wifi_sta_config_t */</span></span><br><span class="line">&#125; <span class="keyword">wifi_ps_type_t</span>;</span><br><span class="line"><span class="function"><span class="keyword">esp_err_t</span> <span class="title">esp_wifi_set_ps</span><span class="params">(<span class="keyword">wifi_ps_type_t</span> type)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><code>type</code> 参数为 <code>WIFI_PS_MAX_MODEM</code> ，ESP32 接收 Beacon 的间隔 <code>listen_interval</code> 配置方法：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LISTEN_INTERVAL 3</span></span><br><span class="line"><span class="keyword">wifi_config_t</span> wifi_config = &#123;</span><br><span class="line">    .sta = &#123;</span><br><span class="line">        .ssid = <span class="string">"SSID"</span>,</span><br><span class="line">        .password = <span class="string">"Password"</span>,</span><br><span class="line">        .listen_interval = LISTEN_INTERVAL,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));</span><br><span class="line">ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_STA, &amp;wifi_config));</span><br><span class="line">ESP_ERROR_CHECK(esp_wifi_start());</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-应用"><a href="#2-2-应用" class="headerlink" title="2.2 应用"></a>2.2 应用</h3><p>Modem-sleep 一般用于 CPU 持续处于工作状态并需要保持 Wi-Fi 连接的应用场景，例如，使用 ESP32 本地语音唤醒功能，CPU 需要持续采集和处理音频数据。</p>
+<hr>
+<h2 id="3-Light-sleep-模式"><a href="#3-Light-sleep-模式" class="headerlink" title="3 Light-sleep 模式"></a>3 Light-sleep 模式</h2><p>Light-sleep 的工作模式与 Modem-sleep 相似，不同的是，除了关闭 Wi-Fi 模块电路以外，在 Light-sleep 模式下，还会关闭时钟并暂停内部 CPU，比 Modem-sleep 功耗更低。有两种方式使 CPU 进入 Light-sleep 模式：</p>
+<ul>
+<li>强制 Light-sleep： 通过调用 API 强制 CPU 进入 Light-sleep 模式，强制进入 Light-sleep 模式后，<strong>不能通过路由器接收</strong>来自手机或者服务器的交互信息</li>
+<li>自动 Light-sleep： 配置为自动休眠方式后，会在 CPU 处于空闲的状态下自动进入 Light-sleep 模式，<strong>能通过路由器接收</strong>来自手机或者服务器的交互信息</li>
+</ul>
+<h3 id="3-1-强制-Light-sleep"><a href="#3-1-强制-Light-sleep" class="headerlink" title="3.1 强制 Light-sleep"></a>3.1 强制 Light-sleep</h3><p>参考示例: <a href="https://github.com/espressif/esp-idf/tree/release/v3.2/examples/system/light_sleep" target="_blank" rel="noopener">light_sleep</a></p>
+<p>开发者可以使系统强制进入 Light-sleep 模式，即调用强制 Light-sleep 接口，强制关闭 Wi-Fi 模块电路并暂停内部 CPU。强制休眠后，能通过定时器、 GPIO（RTC IO 和 Digital IO）和 UART 唤醒。从 Light-sleep 唤醒后，会从进入休眠的位置继续执行程序。强制进入 Light-sleep 模式后，可以保持与路由器的 Wi-Fi 连接，但不能通过路由器接收来自手机或者服务器的交互信息。</p>
+<blockquote>
+<p>注意：</p>
+</blockquote>
+<blockquote>
+<ol>
+<li>强制 Light-sleep 接口调用后，并不会立即休眠，而是等到系统空闲后才进入休眠，</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="2">
+<li>强制进入 Light-sleep 模式后，不能接收 IP 网络发送的网络数据。</li>
+</ol>
+</blockquote>
+<h4 id="3-1-1-API-说明"><a href="#3-1-1-API-说明" class="headerlink" title="3.1.1 API 说明"></a>3.1.1 API 说明</h4><ol>
+<li>配置唤醒源后，可使用 <code>esp_light_sleep_start()</code>  函数进入 Light-sleep 模式。在没有配置唤醒源的情况下也可以进入轻度睡眠状态，在这种情况下，芯片将无限期地处于 Light-sleep 模式，直到外部复位。</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Enter sleep mode */</span></span><br><span class="line">esp_light_sleep_start();</span><br><span class="line"><span class="comment">/* Execution continues here after wakeup */</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-1-2-应用"><a href="#3-1-2-应用" class="headerlink" title="3.1.2 应用"></a>3.1.2 应用</h4><p>强制 Light-sleep 模式可用于需要保持与路由器的连接，不需要实时响应路由器发来的数据的场景。</p>
+<h3 id="3-2-自动-Light-sleep"><a href="#3-2-自动-Light-sleep" class="headerlink" title="3.2 自动 Light-sleep"></a>3.2 自动 Light-sleep</h3><p>参考示例: <a href="https://github.com/espressif/esp-idf/tree/release/v3.2/examples/wifi/power_save" target="_blank" rel="noopener">power_save</a></p>
+<p>开发者可配置系统在空闲时自动进入 Light-sleep 模式，并能在需要 CPU 工作时自动唤醒，无需配置唤醒源。在配置为自动 Light-sleep 后，可以保持与路由器的 Wi-Fi 连接，并通过路由器接收来自手机或者服务器的交互信息，对用户体验没有影响。<br>通常自动 Light-sleep 会与 Modem-sleep 模式 以及电源管理功能共同使用，电源管理功能允许系统根据 CPU 负载动态调节 CPU 频率以降低功耗。</p>
+<blockquote>
+<p>若系统应用中有小于 DTIM Beacon 间隔时间的循环定时,系统将不能进入 Light-sleep 模式。</p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20200617144640674.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70#pic_center" alt="此处输入图片的描述"></p>
+<h4 id="3-2-1-API-说明"><a href="#3-2-1-API-说明" class="headerlink" title="3.2.1 API 说明"></a>3.2.1 API 说明</h4><ol>
+<li>通过 <code>esp_err_t esp_pm_configure(const void* vconfig)</code> 接口配置电源管理功能，参数 <code>light_sleep_enable</code> 为 true 时使能自动休眠功能。</li>
+</ol>
+<blockquote>
+<p>使能 自动 Light-sleep 功能，需要使能 <a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/kconfig.html#config-freertos-use-tickless-idle" target="_blank" rel="noopener">CONFIG_FREERTOS_USE_TICKLESS_IDLE</a> 和 <a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/kconfig.html#config-pm-enable" target="_blank" rel="noopener">CONFIG_PM_ENABLE</a></p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">if</span> CONFIG_PM_ENABLE</span></span><br><span class="line">    <span class="comment">// Configure dynamic frequency scaling:</span></span><br><span class="line">    <span class="comment">// maximum and minimum frequencies are set in sdkconfig,</span></span><br><span class="line">    <span class="comment">// automatic light sleep is enabled if tickless idle support is enabled.</span></span><br><span class="line">    <span class="keyword">esp_pm_config_esp32_t</span> pm_config = &#123;</span><br><span class="line">            .max_freq_mhz = CONFIG_EXAMPLE_MAX_CPU_FREQ_MHZ,</span><br><span class="line">            .min_freq_mhz = CONFIG_EXAMPLE_MIN_CPU_FREQ_MHZ,</span><br><span class="line">#<span class="keyword">if</span> CONFIG_FREERTOS_USE_TICKLESS_IDLE</span><br><span class="line">            .light_sleep_enable = <span class="literal">true</span></span><br><span class="line">#endif</span><br><span class="line">    &#125;;</span><br><span class="line">    ESP_ERROR_CHECK( esp_pm_configure(&amp;pm_config) );</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// CONFIG_PM_ENABLE</span></span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-2-2-应用"><a href="#3-2-2-应用" class="headerlink" title="3.2.2 应用"></a>3.2.2 应用</h4><p>自动 Light-sleep 模式可用于需要保持与路由器的连接，可以实时响应路由器发来的数据的场景。并且在未接收到命令时，CPU 可以处于空闲状态。比如 Wi-Fi 开关的应用，大部分时间 CPU 都是空闲的，直到收到控制命令，CPU 才需要进行 GPIO 的操作。</p>
+<hr>
+<h2 id="3-3-Deep-sleep-模式"><a href="#3-3-Deep-sleep-模式" class="headerlink" title="3.3 Deep-sleep 模式"></a>3.3 Deep-sleep 模式</h2><p>参考示例: <a href="https://github.com/espressif/esp-idf/tree/release/v3.2/examples/system/deep_sleep" target="_blank" rel="noopener">deep_sleep</a></p>
+<p>相对于其他两种模式，系统无法自动进入 Deep-sleep，需要由用户调用接口函数 <code>esp_deep_sleep_start()</code> 进入 Deep-sleep 模式。在该模式下，芯片会断开所有 Wi-Fi 连接与数据连接，进入 Deep-sleep 模式，只有 <strong>RTC 存储器和 RTC 外设以及 ULP 协处理器</strong>可以工作。从 Deep-sleep 唤醒后，CPU 将软件复位重启。</p>
+<h3 id="3-3-1-API-说明"><a href="#3-3-1-API-说明" class="headerlink" title="3.3.1 API 说明"></a>3.3.1 API 说明</h3><ol>
+<li>配置唤醒源后，可使用 <code>esp_deep_sleep_start()</code> 函数进入 Deep-sleep 模式。在没有配置唤醒源的情况下也可以进入 Deep-sleep 状态，在这种情况下，芯片将无限期地处于 Deep-sleep 模式，直到外部复位。</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Enter deep sleep */</span></span><br><span class="line">esp_deep_sleep_start();</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-2-应用"><a href="#3-3-2-应用" class="headerlink" title="3.3.2 应用"></a>3.3.2 应用</h3><p>Deep-sleep 可以用于低功耗的传感器应用,或者大部分时间都不需要进行数据传输的情况。设备可以每隔一段时间从 Deep-sleep 状态醒来测量数据并上传,之后继续进入 Deep-sleep。也可以将多个数据存储于 RTC memory(RTC memory 在 Deep-sleep 模式下仍然可以保存数据),然后一次发送出去。</p>
+<hr>
+<h2 id="4-唤醒方式"><a href="#4-唤醒方式" class="headerlink" title="4 唤醒方式"></a>4 唤醒方式</h2><p>针对 <strong>强制 Lighe-sleep</strong> 和 <strong>Deep-sleep</strong> 需要配置唤醒源的情况，有以下唤醒方式可以选择：</p>
+<blockquote>
+<p>部分唤醒方式仅支持 Light-sleep</p>
+</blockquote>
+<h3 id="4-1-GPIO"><a href="#4-1-GPIO" class="headerlink" title="4.1 GPIO"></a>4.1 GPIO</h3><ol>
+<li><p>External wakeup (ext0)</p>
+<p>RTC IO 模块包含当其中 <strong>一个 RTC IO</strong> 的电平为唤醒电平（可配置为逻辑高或低）触发唤醒的逻辑。</p>
+<p>RTC IO 是 RTC 外设电源域的一部分，因此如果使能该唤醒源，RTC 外设将在睡眠期间保持上电状态。在 ESP32 的修订版 0 和 1 中，此唤醒源与 ULP 和触摸唤醒源不兼容。</p>
+<p>由于在此模式下启用了 RTC IO 模块，因此也可以使用内部上拉或下拉电阻。</p>
+<p><code>esp_sleep_enable_ext0_wakeup()</code> 函数可用于启用此唤醒源。</p>
+</li>
+<li><p>External wakeup (ext1)</p>
+<p>RTC 控制器包含使用 <strong>多个 RTC IO</strong> 触发唤醒的逻辑。两个逻辑功能之一可用于触发唤醒：</p>
+<ul>
+<li>如果任何一个所选 IO 为高电平，则唤醒（<code>ESP_EXT1_WAKEUP_ANY_HIGH</code>）</li>
+<li>如果所有选定的 IO 都为低电平，则唤醒（<code>ESP_EXT1_WAKEUP_ALL_LOW</code>）</li>
+</ul>
+<p>该唤醒源由 RTC 控制器实现。因此，RTC 外设和 RTC 存储器可以在此模式下断电。</p>
+<p>但是，如果 RTC 外设断电，内部上拉和下拉电阻将被禁用。要使用内部上拉或下拉电阻，请在睡眠期间请求 RTC 外设电源域保持上电。</p>
+<p><code>esp_sleep_enable_ext1_wakeup()</code> 函数可用于启用此唤醒源。</p>
+</li>
+<li><p>Touch pad wakeup</p>
+<p>RTC IO 模块包含触摸传感器中断时触发唤醒的逻辑。您需要在芯片开始睡眠之前配置触摸传感器中断。</p>
+<p>当 RTC 外设未被强制上电时，ESP32 的修订版 0 和 1 仅支持此唤醒模式。</p>
+<p><code>esp_sleep_enable_touchpad_wakeup()</code> 函数可用于启用此唤醒源。</p>
+</li>
+<li><p>GPIO wakeup <strong>(light sleep only)</strong></p>
+<p>除了上面描述的 EXT0 和 EXT1 唤醒源之外，在 Light-sleep 模式下还有一种从外部输入唤醒的方法。通过该唤醒源，每个引脚可以使用 <code>gpio_wakeup_enable()</code> 函数单独配置为高电平或低电平唤醒。与 EXT0 和 EXT1 唤醒源（只能与 RTC IO 一起使用）不同，此唤醒源可用于任何 IO（RTC 或数字）。</p>
+<p><code>esp_sleep_enable_gpio_wakeup()</code> 函数可用于启用此唤醒源。</p>
+</li>
+</ol>
+<h3 id="4-2-ULP-协处理器唤醒"><a href="#4-2-ULP-协处理器唤醒" class="headerlink" title="4.2 ULP 协处理器唤醒"></a>4.2 ULP 协处理器唤醒</h3><p>参考示例: <a href="https://github.com/espressif/esp-idf/tree/release/v3.2/examples/system/ulp" target="_blank" rel="noopener">system/ulp</a></p>
+<p>ULP 协处理器可以在芯片处于睡眠模式时运行，并且可以用于轮询传感器，监视 ADC 或触摸传感器值，并在检测到特定事件时唤醒芯片。ULP 协处理器是 RTC 外设电源域的一部分，它运行存储在 RTC 慢速存储器中的程序。如果请求此唤醒模式，RTC 慢速存储器将在睡眠期间启动。在 ULP 协处理器开始运行程序之前，RTC 外设将自动上电; 程序停止运行后，RTC 外设将再次自动关闭。</p>
+<p>当 RTC 外设未被强制上电时，ESP32 的修订版 0 和 1 仅支持此唤醒模式。</p>
+<p><code>esp_sleep_enable_ulp_wakeup()</code> 函数可用于启用此唤醒源。</p>
+<h3 id="4-3-Timer"><a href="#4-3-Timer" class="headerlink" title="4.3 Timer"></a>4.3 Timer</h3><p>RTC 控制器具有内置定时器，可用于在预定义的时间后唤醒芯片。时间以微秒精度指定，但实际分辨率取决于为 RTC SLOW_CLK 选择的时钟源。</p>
+<p>此唤醒模式不需要在睡眠期间打开 RTC 外设或 RTC 存储器。</p>
+<p><code>esp_sleep_enable_timer_wakeup()</code> 函数可用于启用此唤醒源。</p>
+<h3 id="4-4-UART-wakeup-light-sleep-only"><a href="#4-4-UART-wakeup-light-sleep-only" class="headerlink" title="4.4 UART wakeup (light sleep only)"></a>4.4 UART wakeup (light sleep only)</h3><p>仅支持  Light-sleep 模式。当 ESP32 从外部设备接收 UART 输入时，通常需要在输入数据可用时唤醒芯片。UART 外设包含一项功能，当看到 RX 引脚上的一定数量的上升沿时，可以将芯片从 Light-sleep 状态唤醒。可以使用 <code>uart_set_wakeup_threshold()</code> 函数设置此上升沿数。请注意，唤醒后 UART 不会接收触发唤醒的字符（及其前面的任何字符）。这意味着外部设备通常需要在发送数据之前向 ESP32 发送额外字符以触发唤醒。</p>
+<p><code>esp_sleep_enable_uart_wakeup()</code> 函数可用于启用此唤醒源。</p>
+<h2 id="5-GPIO-Hold-功能"><a href="#5-GPIO-Hold-功能" class="headerlink" title="5 GPIO Hold 功能"></a>5 GPIO Hold 功能</h2><p>每个 IO pad(包括 RTC pad)都有单独的 hold 功能，由 RTC 寄存器控制。pad 的 hold 功能被置上后，pad 在置上 hold 那一刻的状态被强制保持，无论内部信号如何变化，修改 IO_MUX 配置或者 GPIO 配置，都不会改变 pad 的状态。应用如果希望在看门狗超时触发内核复位和系统复位时或者 Deep-sleep 时 pad 的状态不被改变，就需要提前把 hold 置上。</p>
+<blockquote>
+<p>在 Deep-sleep 模式下使用 Hold 功能，可能会增加功耗。并且如果使用内部上拉或下拉电阻，需要在睡眠期间使 RTC 外设电源域保持上电。</p>
+</blockquote>
+<blockquote>
+<p>在睡眠模式下，部分引脚的电源域可能关掉了，所以无法 Hold 功能无法生效，这时需要确认能否打开电源域。例如：GPIO16、17 会在 light sleep 下关闭电源域 VDD_SDIO，所以无法 Hold，这时需要在 esp_light_sleep_start() 中修改代码打开电源域。</p>
+</blockquote>
+<p>针对 RTC IO，可对<strong>单个 RTC Pad 使能 Hold 功能</strong>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rtc_gpio_init(<span class="number">27</span>);</span><br><span class="line">rtc_gpio_set_direction(<span class="number">27</span>, RTC_GPIO_MODE_OUTPUT_ONLY);</span><br><span class="line">rtc_gpio_set_level(<span class="number">27</span>, <span class="number">1</span>);</span><br><span class="line">rtc_gpio_pullup_en(<span class="number">27</span>);</span><br><span class="line">rtc_gpio_hold_en(<span class="number">27</span>);</span><br></pre></td></tr></table></figure>
+
+<p>针对 数字 IO，会对<strong>所有 数字 IO 使能 Hold 功能</strong>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">gpio_pad_select_gpio(<span class="number">26</span>);</span><br><span class="line">gpio_set_direction(<span class="number">26</span>, GPIO_MODE_OUTPUT);</span><br><span class="line">gpio_set_level(<span class="number">26</span>, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">gpio_hold_en(<span class="number">26</span>);</span><br><span class="line"><span class="comment">/*When the chip is in Deep-sleep mode, all digital gpio will hold the state before sleep, and when the chip is woken up, the status of digital gpio will not be held.*/</span></span><br><span class="line">gpio_deep_sleep_hold_en();</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-常见问题"><a href="#6-常见问题" class="headerlink" title="6 常见问题"></a>6 常见问题</h2><ol>
+<li><p>进入 Deep-sleep 后，功耗较高</p>
+<p> 有这些原因可能会导致功耗较高：</p>
+<ul>
+<li><code>esp_sleep_enable_ext0_wakeup()</code> 需要打开 RTC 外设，产生额外的 100mA 左右的电流消耗，调用 <code>esp_sleep_enable_ext1_wakeup()</code> 则不需要打开 RTC 外设，即不会产生额外的电流。</li>
+<li>在 IDF 3.1.1 前的版本可能存在使用 wifi 并关闭后进入睡眠模式，功耗比未使用 wifi 后进入睡眠模式高 1mA 左右。这种情况下，需要在进入睡眠模式前调用 <code>adc_power_off()</code> 关闭 ADC 以解决这个问题。</li>
+<li>使用 Hold 功能保持一个固定电平，可能会增加功耗 1mA 左右，这种情况也是由于打开 RTC 外设导致。</li>
+<li>某些 GPIO 漏电，一些 ESP32 IO 具有内部上拉或下拉，默认情况下启用。如果外部电路在 Deep-sleep 模式下驱动此引脚，则由于流过这些上拉和下拉的电流，电流消耗可能会增加。要隔离引脚，防止额外的电流消耗，请调用 <code>rtc_gpio_isolate()</code> 函数。例如：ESP32-WROVER 模组上，外部上拉 GPIO12。GPIO12 在 ESP32 芯片中也有内部下拉。这意味着在 Deep-sleep 中，一些电流将流过这些外部和内部电阻，从而增加电流消耗。</li>
+<li>某些 IO 芯片内外电压不匹配，可能会增加电流消耗。如果存在电压不匹配的情况，需要在进入睡眠模式前配置 IO 为 Disable 模式，并使能 Hold 功能。</li>
+</ul>
+</li>
+<li><p>使能 自动 Light-sleep 后，功耗较高</p>
+<ul>
+<li>存在任务持续运行占用 CPU 资源，导致 CPU 负载过大无法休眠。若是这种情况，请检测是否存在 任务 持续运行，并优化当前应用程序流程使 CPU 能周期性空闲进入 Light-sleep 模式。</li>
+<li>若系统应用中有小于 DTIM Beacon 间隔时间的循环定时，系统将不能进入 Light-sleep 模式。</li>
+<li>若未使用最新 IDF 3.2 版本，可能会因为某些外设使用（例如：I2C、I2S），导致无法自动进入 Light-sleep 模式。若是这个问题，请更新到最新的 IDF 3.2 版本。</li>
+<li>若系统不需要 FreeRTOS 时钟配置为 1000 Hz，可将 FreeRTOS 时钟降低为 100 Hz，可显著降低功耗。</li>
+</ul>
+</li>
+<li><p>自动 Light-sleep 调试方法</p>
+<ul>
+<li>在 menuconfig 中使能 <a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/kconfig.html#config-pm-profiling" target="_blank" rel="noopener">CONFIG_PM_PROFILING</a> ，如果使能，<code>esp_pm_*</code> 函数将跟踪每个电源管理锁的保留时间，<code>esp_pm_dump_locks</code> 函数将打印此信息。 此功能可用于分析哪些锁阻止芯片进入低功耗状态，并查看芯片在每种省电模式下花费的时间，并应在应用程序中保持禁用状态。</li>
+<li>在 menuconfig 中使能 <a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/kconfig.html#config-pm-trace" target="_blank" rel="noopener">CONFIG_PM_TRACE</a>，如果使能，某些 GPIO 将用于发出 RTOS 滴答，频率切换，进入/退出空闲状态等事件的信号。有关 GPIO 列表，请参阅 <code>pm_trace.c</code> 文件。 此功能旨在用于分析/调试电源管理实现的行为时使用，并应在应用程序中保持禁用状态。</li>
+</ul>
+</li>
+</ol>
+<h2 id="7-不同功耗模式下的功耗"><a href="#7-不同功耗模式下的功耗" class="headerlink" title="7 不同功耗模式下的功耗"></a>7 不同功耗模式下的功耗</h2><p><img src="https://img-blog.csdnimg.cn/20200617144756531.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70#pic_center" alt="不同功耗模式下的功耗"></p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/01/16/ESP32 学习笔记/ESP32 学习笔记（一）开发环境搭建/" rel="bookmark">ESP32 学习笔记（一）开发环境搭建</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/12/ESP32 学习笔记/ESP32 学习笔记（七）I2S - Inter—IC Sound/" rel="bookmark">ESP32 学习笔记（七）I2S - Inter—IC Sound</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2020/07/04/ESP32 学习笔记/ESP32 学习笔记（三十） ESP32 性能分析，与 Cortex-M4 性能比较/" rel="bookmark">ESP32 学习笔记（三十） ESP32 性能分析，与 Cortex-M4 性能比较</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/11/ESP32 学习笔记/ESP32 学习笔记（三）UART - Universal Asynchronous Receiver Transmitter/" rel="bookmark">ESP32 学习笔记（三）UART - Universal Asynchronous Receiver/Transmitter</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/13/ESP32 学习笔记/ESP32 学习笔记（九）SPI - SPI Slave/" rel="bookmark">ESP32 学习笔记（九）SPI - SPI Slave</a></div>
+    </li>
+  </ul>
+
+        <div class="reward-container">
+  <div>如果这篇文章对你有帮助，那么不妨？</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/InfiniteYuanBlog/tags/ESP32/" rel="tag"><i class="fa fa-tag"></i> ESP32</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2020/05/17/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89%E4%BD%BF%E7%94%A8%20LittlevGL%20%E5%AE%9E%E7%8E%B0%202048%20%E5%B0%8F%E6%B8%B8%E6%88%8F/" rel="prev" title="ESP32 开发笔记（十五）使用 LittlevGL 实现 2048 小游戏">
+      <i class="fa fa-chevron-left"></i> ESP32 开发笔记（十五）使用 LittlevGL 实现 2048 小游戏
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2020/07/04/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%E5%8D%81%EF%BC%89%20ESP32%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%EF%BC%8C%E4%B8%8E%20Cortex-M4%20%E6%80%A7%E8%83%BD%E6%AF%94%E8%BE%83/" rel="next" title="ESP32 学习笔记（三十） ESP32 性能分析，与 Cortex-M4 性能比较">
+      ESP32 学习笔记（三十） ESP32 性能分析，与 Cortex-M4 性能比较 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ESP32-低功耗模式"><span class="nav-number">1.</span> <span class="nav-text">ESP32 低功耗模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-概要"><span class="nav-number">1.1.</span> <span class="nav-text">1 概要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Modem-sleep-模式"><span class="nav-number">1.2.</span> <span class="nav-text">2 Modem-sleep 模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-API-说明"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 API 说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-应用"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Light-sleep-模式"><span class="nav-number">1.3.</span> <span class="nav-text">3 Light-sleep 模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-强制-Light-sleep"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 强制 Light-sleep</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-1-API-说明"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">3.1.1 API 说明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-2-应用"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">3.1.2 应用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-自动-Light-sleep"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 自动 Light-sleep</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-API-说明"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">3.2.1 API 说明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-应用"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">3.2.2 应用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Deep-sleep-模式"><span class="nav-number">1.4.</span> <span class="nav-text">3.3 Deep-sleep 模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-1-API-说明"><span class="nav-number">1.4.1.</span> <span class="nav-text">3.3.1 API 说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-2-应用"><span class="nav-number">1.4.2.</span> <span class="nav-text">3.3.2 应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-唤醒方式"><span class="nav-number">1.5.</span> <span class="nav-text">4 唤醒方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-GPIO"><span class="nav-number">1.5.1.</span> <span class="nav-text">4.1 GPIO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-ULP-协处理器唤醒"><span class="nav-number">1.5.2.</span> <span class="nav-text">4.2 ULP 协处理器唤醒</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-Timer"><span class="nav-number">1.5.3.</span> <span class="nav-text">4.3 Timer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-UART-wakeup-light-sleep-only"><span class="nav-number">1.5.4.</span> <span class="nav-text">4.4 UART wakeup (light sleep only)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-GPIO-Hold-功能"><span class="nav-number">1.6.</span> <span class="nav-text">5 GPIO Hold 功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-常见问题"><span class="nav-number">1.7.</span> <span class="nav-text">6 常见问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-不同功耗模式下的功耗"><span class="nav-number">1.8.</span> <span class="nav-text">7 不同功耗模式下的功耗</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="InfiniteYuan"
+      src="/InfiniteYuanBlog/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">InfiniteYuan</p>
+  <div class="site-description" itemprop="description">Stay Hungry, Stay Funlish</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/InfiniteYuanBlog/archives/">
+        
+          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/InfiniteYuanBlog/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/InfiniteYuanBlog/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/infiniteyuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;infiniteyuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">InfiniteYuan</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">201k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">3:02</span>
+
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        站点访客数:<span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        站点阅读量:<span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/InfiniteYuanBlog/lib/anime.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/InfiniteYuanBlog/js/utils.js"></script>
+
+<script src="/InfiniteYuanBlog/js/motion.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/schemes/muse.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/next-boot.js"></script>
+
+<script src="/InfiniteYuanBlog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/InfiniteYuanBlog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '2spSMheFYziIJlzCVs7fvHeG-gzGzoHsz',
+      appKey     : 'aj8lFtI7EyFfrWCx902T0szo',
+      placeholder: "ヾﾉ≧∀≦)o来啊，快活啊!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
