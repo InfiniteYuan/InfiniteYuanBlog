@@ -40,6 +40,210 @@
       </tags>
   </entry>
   <entry>
+    <title>ESP32 学习笔记（七）I2S - Inter—IC Sound</title>
+    <url>/InfiniteYuanBlog/2018/08/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89I2S%20-%20Inter%E2%80%94IC%20Sound/</url>
+    <content><![CDATA[<h1 id="I2S"><a href="#I2S" class="headerlink" title="I2S"></a>I2S</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP32 包含两个 I2S 外设. 这些外设可配置为通过 I2S 驱动程序输入和输出样本数据.</p>
+<p>I2S 标准总线定义了三种信号:时钟信号 BCK、声道选择信号 WS 和串行数据信号 SD.一个基本的 I2S 数据总线有一个主机和一个从机.主机和从机的角色在通信过程中保持不变.ESP32 的 I2S 模块包含独立的发送和接收声道,能够保证优良的通信性能.</p>
+<p>I2S 外设支持 DMA,这意味着它可以传输使用样本数据流,而无需 CPU 读取或写入每个样本.</p>
+<p>I2S 输出也可以直接路由到数字/模拟转换器输出通道(GPIO 25 和 GPIO 26),直接产生模拟输出,而不是通过外部 I2S 编解码器.</p>
+<a id="more"></a>
+
+<blockquote>
+<p>对于高精度时钟应用,APLL 时钟源可与.use_apll = true 一起使用,ESP32 将自动计算 APLL 参数.</p>
+</blockquote>
+<clear>
+>如果 use_apll = true 且 fixed_mclk> 0,则 I2S 的主时钟输出固定且等于 fixed_mclk 值. 音频时钟速率(LRCK)始终为 MCLK 除数,`0<MCLK / LRCK / channels / bits_per_sample <64`
+
+<p><img src="https://img-blog.csdn.net/20180812222632469?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<center>图 1 I2S 系统框图</center>
+
+<p>图 1 是 ESP32 I2S 模块的结构框图,图中 “n”  对应为 0 或 1,即 I2S0 或 I2S1.每个 I2S 模块包含一个独立的发送单元(Tx) 和一个独立的接收单元(Rx).发送和接收单元各自有一组三线接口,分别为时钟线 BCK,声道选择线 WS 和串行数据线 SD.其中,发送单元的串行数据线固定为输出,接收单元的串行数据线固定为接收.发送单元和接收单元的时钟线和声道选择线均可配置为主机发送和从机接收.在 LCD 模式下,串行数据线扩展为并行数据总线.I2S 模块发送和接收单元各有一块宽 32 bit、深 64 bit 的 FIFO.此外,只有 I2S0 支持接收/发送 PDM 信号并且支持片上 DAC/ADC 模块.</p>
+<p>图 1 右侧为 I2S 模块的信号总线.Rx 和 Tx 模块的信号命名规则为: I2SnA_B_C.其中 “n” 为模块名,表示 I2S0 或 I2S1；”A” 表示 I2S 模块的数据总线信号的方向,”I” 表示输入,”O” 表示输出；”B” 表示信号功能；”C” 表示该信号的方向,”in” 表示该信号输入I2S 模块,”out” 表示该信号自 I2S 模块输出.各信号总线的具体描述见表 1.除 I2Sn_CLK 信号外,其他信号均需要经过 GPIO 交换矩阵和 IO_MUX 映射到芯片的管脚.I2Sn_CLK 信号需要经过 IO_MUX 映射到芯片管脚.</p>
+<p><img src="https://img-blog.csdn.net/20180812223349366?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="I2S 信号总线描述"></p>
+<center>表 1 I2S 信号总线描述</center>
+
+<h2 id="主要特性"><a href="#主要特性" class="headerlink" title="主要特性"></a>主要特性</h2><p>I2S 模式</p>
+<ul>
+<li>可配置高精度输出时钟；</li>
+<li>支持全双工和半双工收发数据；</li>
+<li>支持多种音频标准；</li>
+<li>内嵌 A 律压缩/解压缩模块；</li>
+<li>可配置时钟；</li>
+<li>支持 PDM 信号输入输出；</li>
+<li>收发数据模式可配置.</li>
+</ul>
+<p>LCD 模式</p>
+<ul>
+<li>支持外接 LCD；</li>
+<li>支持外接 Camera；</li>
+<li>支持多种 LCD 模式；</li>
+<li>支持连接片上 DAC/ADC 模式.</li>
+</ul>
+<p>I2S 中断</p>
+<ul>
+<li>I2S 接口中断；</li>
+<li>I2S DMA 接口中断.</li>
+</ul>
+<h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><p>esp-idf 中提供了完整的 I2S 示例:<a href="https://github.com/espressif/esp-idf/tree/30545f4/examples/peripherals/i2s" target="_blank" rel="noopener">peripherals/i2s</a>.</p>
+<p>I2S 配置的简短示例:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"driver/i2s.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"freertos/queue.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">int</span> i2s_num = <span class="number">0</span>; <span class="comment">// i2s port number</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">i2s_config_t</span> i2s_config = &#123;</span><br><span class="line">     .mode = I2S_MODE_MASTER | I2S_MODE_TX,</span><br><span class="line">     .sample_rate = <span class="number">44100</span>,</span><br><span class="line">     .bits_per_sample = <span class="number">16</span>,</span><br><span class="line">     .channel_format = I2S_CHANNEL_FMT_RIGHT_LEFT,</span><br><span class="line">     .communication_format = I2S_COMM_FORMAT_I2S | I2S_COMM_FORMAT_I2S_MSB,</span><br><span class="line">     .intr_alloc_flags = <span class="number">0</span>, <span class="comment">// default interrupt priority</span></span><br><span class="line">     .dma_buf_count = <span class="number">8</span>,</span><br><span class="line">     .dma_buf_len = <span class="number">64</span>,</span><br><span class="line">     .use_apll = <span class="literal">false</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">i2s_pin_config_t</span> pin_config = &#123;</span><br><span class="line">    .bck_io_num = <span class="number">26</span>,</span><br><span class="line">    .ws_io_num = <span class="number">25</span>,</span><br><span class="line">    .data_out_num = <span class="number">22</span>,</span><br><span class="line">    .data_in_num = I2S_PIN_NO_CHANGE</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">    i2s_driver_install(i2s_num, &amp;i2s_config, <span class="number">0</span>, <span class="literal">NULL</span>);   <span class="comment">//install and start i2s driver</span></span><br><span class="line"></span><br><span class="line">    i2s_set_pin(i2s_num, &amp;pin_config);</span><br><span class="line"></span><br><span class="line">    i2s_set_sample_rates(i2s_num, <span class="number">22050</span>); <span class="comment">//set sample rates</span></span><br><span class="line"></span><br><span class="line">    i2s_driver_uninstall(i2s_num); <span class="comment">//stop &amp; destroy i2s driver</span></span><br></pre></td></tr></table></figure>
+
+<p>配置 I2S 以使用内部 DAC 进行模拟输出的简短示例:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"driver/i2s.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"freertos/queue.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">int</span> i2s_num = <span class="number">0</span>; <span class="comment">// i2s port number</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">i2s_config_t</span> i2s_config = &#123;</span><br><span class="line">     .mode = I2S_MODE_MASTER | I2S_MODE_TX | I2S_MODE_DAC_BUILT_IN,</span><br><span class="line">     .sample_rate = <span class="number">44100</span>,</span><br><span class="line">     .bits_per_sample = <span class="number">16</span>, <span class="comment">/* the DAC module will only take the 8bits from MSB */</span></span><br><span class="line">     .channel_format = I2S_CHANNEL_FMT_RIGHT_LEFT,</span><br><span class="line">     .communication_format = I2S_COMM_FORMAT_I2S_MSB,</span><br><span class="line">     .intr_alloc_flags = <span class="number">0</span>, <span class="comment">// default interrupt priority</span></span><br><span class="line">     .dma_buf_count = <span class="number">8</span>,</span><br><span class="line">     .dma_buf_len = <span class="number">64</span>,</span><br><span class="line">     .use_apll = <span class="literal">false</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">    i2s_driver_install(i2s_num, &amp;i2s_config, <span class="number">0</span>, <span class="literal">NULL</span>);   <span class="comment">//install and start i2s driver</span></span><br><span class="line"></span><br><span class="line">    i2s_set_pin(i2s_num, <span class="literal">NULL</span>); <span class="comment">//for internal DAC, this will enable both of the internal channels</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//You can call i2s_set_dac_mode to set built-in DAC output mode.</span></span><br><span class="line">    <span class="comment">//i2s_set_dac_mode(I2S_DAC_CHANNEL_BOTH_EN);</span></span><br><span class="line"></span><br><span class="line">    i2s_set_sample_rates(i2s_num, <span class="number">22050</span>); <span class="comment">//set sample rates</span></span><br><span class="line"></span><br><span class="line">    i2s_driver_uninstall(i2s_num); <span class="comment">//stop &amp; destroy i2s driver</span></span><br></pre></td></tr></table></figure>
+<h2 id="API-Reference"><a href="#API-Reference" class="headerlink" title="API Reference"></a>API Reference</h2><h3 id="Header-File"><a href="#Header-File" class="headerlink" title="Header File"></a>Header File</h3><ul>
+<li><a href="https://github.com/espressif/esp-idf/blob/30545f4/components/driver/include/driver/i2s.h" target="_blank" rel="noopener">driver/include/driver/i2s.h</a></li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/peripherals/i2s.html" target="_blank" rel="noopener">I2S</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（三）UART - Universal Asynchronous Receiver/Transmitter</title>
+    <url>/InfiniteYuanBlog/2018/08/11/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89UART%20-%20Universal%20Asynchronous%20Receiver%20Transmitter/</url>
+    <content><![CDATA[<h1 id="UART-Universal-Asynchronous-Receiver-Transmitter"><a href="#UART-Universal-Asynchronous-Receiver-Transmitter" class="headerlink" title="UART - Universal Asynchronous Receiver/Transmitter"></a>UART - Universal Asynchronous Receiver/Transmitter</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>嵌入式应用通常要求一个简单的并且占用系统资源少的方法来传输数据.通用异步收发传输器(UART) 即可以满足这些要求,它能够灵活地与外部设备进行全双工数据交换.ESP32 芯片中有 3 个UART 控制器可供使用,并且兼容不同的 UART 设备.另外,UART 还可以用作红外数据交换(IrDA) 或 RS-485 调制解调器.</p>
+<p>3 个 UART 控制器有一组功能相同的寄存器.本文以 UARTn 指代 3 个 UART 控制器,n 为0、1、2.</p>
+<h2 id="主要特性"><a href="#主要特性" class="headerlink" title="主要特性"></a>主要特性</h2><ul>
+<li>可编程收发波特率</li>
+<li>3 个 UART 的发送 FIFO 以及接收 FIFO 共享1024 x 8-bit RAM</li>
+<li>全双工异步通信</li>
+<li>支持输入信号波特率自检功能</li>
+<li>支持 5/6/7/8 位数据长度</li>
+<li>支持 1/1.5/2/3/4 个停止位</li>
+<li>支持奇偶校验位</li>
+<li>支持 RS485 协议</li>
+<li>支持 IrDA 协议</li>
+<li>支持 DMA 高速数据通信</li>
+<li>支持 UART 唤醒模式</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="功能描述"><a href="#功能描述" class="headerlink" title="功能描述"></a>功能描述</h2><p>UART 是一种以字符为导向的通用数据链,可以实现设备间的通信.异步传输的意思是不需要在发送数据上添加时钟信息.这也要求发送端和接收端的速率、停止位、奇偶校验位等都要相同,通信才能成功.</p>
+<p>一个典型的 UART 帧开始于一个起始位,紧接着是有效数据,然后是奇偶校验位(可有可无),最后是停止位.ESP32 上的 UART 控制器支持多种字符长度和停止位.另外,控制器还支持软硬件流控和 DMA,可以实现无缝高速的数据传输.开发者可以使用多个 UART 端口,同时又能保证很少的软件开销.<br><img src="https://img-blog.csdn.net/2018081119230686?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="UART 基本架构图"></p>
+<center>图1 UART 基本架构图</center>
+
+<p>UART 有两个时钟源:80-MHz APB_CLK 以及参考时钟 REF_TICK (详情请参考章节复位和时钟).可以通过配置 UART_TICK_REF_ALWAYS_ON 来选择时钟源.时钟中的分频器用于对时钟源进行分频,然后产生时钟信号来驱动 UART 模块.ART_CLKDIV_REG 将分频系数分成两个部分:UART_CLKDIV 用于配置整数部分,UART_CLKDIV_FRAG 用于配置小数部分.</p>
+<p>UART 控制器可以分为两个功能块:发送块和接收块.</p>
+<p>发送块包含一个发送 FIFO 用于缓存待发送的数据.软件可以通过 APB 总线写 Tx_FIFO,也可以通过 DMA 将数据搬入 Tx_FIFO.Tx_FIFO_Ctrl 用于控制 Tx_FIFO 的读写过程,当 Tx_FIFO 非空时,Tx_FSM 通过 Tx_FIFO_Ctrl读取数据,并将数据按照配置的帧格式转化成比特流.比特流输出信号 txd_out 可以通过配置 UART_TXD_INV 寄存器实现取反功能.</p>
+<p>接收块包含一个接收 FIFO 用于缓存待处理的数据.输入比特流 rxd_in 可以输入到 UART 控制器.可以通过 UART_RXD_INV 寄存器实现取反.Baudrate_Detect 通过检测最小比特流输入信号的脉宽来测量输入信号的波特率.Start_Detect 用于检测数据的 START 位,当检测到 START 位之后,RX_FSM 通过 Rx_FIFO_Ctrl 将帧解析后的数据存入 Rx_FIFO 中.</p>
+<p>软件可以通过 APB 总线读取 Rx_FIFO 中的数据.为了提高数据传输效率,可以使用 DMA 方式进行数据发送或接收.</p>
+<p>HW_Flow_Ctrl 通过标准 UART RTS 和 CTS(rtsn_out 和 ctsn_in)流控信号来控制 rxd_in 和 txd_out 的数据流.SW_Flow_Ctrl 通过在发送数据流中插入特殊字符以及在接收数据流中检测特殊字符来进行数据流的控制.当 UART 处于 Light-sleep(详情请参考章节低功耗管理)状态时,Wakeup_Ctrl 开始计算 rxd_in 的脉冲个数,当脉冲个数大于 UART_ACTIVE_THRESHOLD 时产生 wake_up 信号给 RTC 模块,由 RTC 来唤醒 UART 控制器.<br><img src="https://img-blog.csdn.net/20180811193508599?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="UART 共享RAM 图"></p>
+<center>UART 共享 RAM 图</center>
+
+<h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><p>配置 UART 设置并使用 UART1 接口安装 UART 驱动程序进行读/写:<a href="https://github.com/espressif/esp-idf/tree/f9a4496/examples/peripherals/uart_echo" target="_blank" rel="noopener">peripherals/uart_echo</a>.</p>
+<p>演示如何报告各种通信事件以及如何使用模式检测中断:<a href="https://github.com/espressif/esp-idf/tree/f9a4496/examples/peripherals/uart_events" target="_blank" rel="noopener">peripherals/uart_events</a>.</p>
+<p>在两个独立的 FreeRTOS 任务中使用相同的 UART 进行发送和接收:<a href="https://github.com/espressif/esp-idf/tree/f9a4496/examples/peripherals/uart_async_rxtxtasks" target="_blank" rel="noopener">peripherals/uart_async_rxtxtasks</a>.</p>
+<p>对 UART 文件描述符使用同步 I/O 多路复用:<a href="https://github.com/espressif/esp-idf/tree/f9a4496/examples/peripherals/uart_select" target="_blank" rel="noopener">peripherals/uart_select</a>.</p>
+<p>设置 UART 驱动程序以半双工模式通过 RS485 接口进行通信:<a href="https://github.com/espressif/esp-idf/tree/f9a4496/examples/peripherals/uart_echo_rs485" target="_blank" rel="noopener">peripherals/uart_echo_rs485</a>. 此示例类似于 uart_echo,但通过连接到 ESP32 引脚的 RS485 接口芯片提供通信.</p>
+<h2 id="API-Reference"><a href="#API-Reference" class="headerlink" title="API Reference"></a>API Reference</h2><h3 id="Header-File"><a href="#Header-File" class="headerlink" title="Header File"></a>Header File</h3><ul>
+<li><a href="https://github.com/espressif/esp-idf/blob/f9a4496/components/driver/include/driver/uart.h" target="_blank" rel="noopener">driver/include/driver/uart.h</a></li>
+</ul>
+<h2 id="API-使用"><a href="#API-使用" class="headerlink" title="API 使用"></a>API 使用</h2><p>以下概述描述了用于在 ESP32 和某些其他 UART 设备之间建立通信的功能和数据类型. 概述反映了编程 ESP32 的UART驱动程序时的典型工作流程,并分为以下几个部分:</p>
+<ol>
+<li>设置通信参数 - 波特率,数据位,停止位等</li>
+<li>设置通信引脚 - 连接另一个 UART 的引脚</li>
+<li>驱动程序安装 - 为 UART 驱动程序分配 ESP32 的资源</li>
+<li>运行 UART 通信 - 发送/接收数据</li>
+<li>使用中断 - 触发特定通信事件的中断</li>
+<li>删除驱动程序 - 如果不再需要 UART 通信,则释放 ESP32 的资源</li>
+</ol>
+<p>使 UART 能开始工作是完成前面的四个步骤,后两个步骤是可选的.</p>
+<p>驱动程序由<code>uart_port_t</code>标识,它对应于一个组 UART 控制器. 这种识别存在于以下所有函数调用中.</p>
+<h3 id="设置通信参数"><a href="#设置通信参数" class="headerlink" title="设置通信参数"></a>设置通信参数</h3><p>有两种方法可以设置 UART 的通信参数. 一种是通过调用<code>uart_param_config()</code>在<code>uart_config_t</code>结构中提供配置参数来一次性完成.</p>
+<p>另一种方法是通过调用函数单独配置特定参数:</p>
+<ul>
+<li>波特率 - <code>uart_set_baudrate()</code></li>
+<li>传输的位数 - <code>uart_set_word_length()</code>指定<code>uart_word_length_t</code>的值</li>
+<li>奇偶校验控制 - <code>uart_set_parity()</code>指定<code>uart_parity_t</code> 的值</li>
+<li>停止位数目 - <code>uart_set_stop_bits()</code>指定<code>uart_stop_bits_t</code>的值</li>
+<li>硬件流控制模式 - <code>uart_set_hw_flow_ctrl()</code>指定<code>uart_hw_flowcontrol_t</code> 的值</li>
+<li>通信模式 - <code>uart_set_mode()</code>指定<code>uart_mode_t</code>的值</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> uart_num = UART_NUM_2;</span><br><span class="line"><span class="keyword">uart_config_t</span> uart_config = &#123;</span><br><span class="line">    .baud_rate = <span class="number">115200</span>,</span><br><span class="line">    .data_bits = UART_DATA_8_BITS,</span><br><span class="line">    .parity = UART_PARITY_DISABLE,</span><br><span class="line">    .stop_bits = UART_STOP_BITS_1,</span><br><span class="line">    .flow_ctrl = UART_HW_FLOWCTRL_CTS_RTS,</span><br><span class="line">    .rx_flow_ctrl_thresh = <span class="number">122</span>,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// Configure UART parameters</span></span><br><span class="line">ESP_ERROR_CHECK(uart_param_config(uart_num, &amp;uart_config));</span><br></pre></td></tr></table></figure>
+
+<h3 id="设置通信引脚"><a href="#设置通信引脚" class="headerlink" title="设置通信引脚"></a>设置通信引脚</h3><p>通过调用函数 <code>uart_set_pin()</code>我们可以输入宏<code>UART_PIN_NO_CHANGE</code>而不是 GPIO 引脚编号,并且不会更改当前分配的引脚. 如果不使用某个引脚,则应输入相同的宏.</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Set UART pins(TX: IO16 (UART2 default), RX: IO17 (UART2 default), RTS: IO18, CTS: IO19)</span></span><br><span class="line">ESP_ERROR_CHECK(uart_set_pin(UART_NUM_2, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE, <span class="number">18</span>, <span class="number">19</span>));</span><br></pre></td></tr></table></figure>
+
+<h3 id="驱动程序安装"><a href="#驱动程序安装" class="headerlink" title="驱动程序安装"></a>驱动程序安装</h3><p>完成驱动程序配置后,我们可以通过调用 <code>uart_driver_install()</code>来安装 UART 驱动. 并分配给 UART 所需的若干资源. 资源的类型/大小被指定为函数参数并需要考虑:</p>
+<ul>
+<li>发送缓冲区的大小</li>
+<li>接收缓冲区的大小</li>
+<li>事件队列句柄和大小</li>
+<li>用于分配中断的标志</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Setup UART buffered IO with event queue</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> uart_buffer_size = (<span class="number">1024</span> * <span class="number">2</span>);</span><br><span class="line">QueueHandle_t uart_queue;</span><br><span class="line"><span class="comment">// Install UART driver using an event queue here</span></span><br><span class="line">ESP_ERROR_CHECK(uart_driver_install(UART_NUM_2, uart_buffer_size, \</span><br><span class="line">                                        uart_buffer_size, <span class="number">10</span>, &amp;uart_queue, <span class="number">0</span>));</span><br></pre></td></tr></table></figure>
+
+<p>如果上述所有步骤均已完成,我们就可以连接其他 UART 设备并开始通信.</p>
+<h3 id="运行-UART-通信"><a href="#运行-UART-通信" class="headerlink" title="运行 UART 通信"></a>运行 UART 通信</h3><p>串行通信的过程受 UART 硬件 FSM 的控制. 要发送的数据应放入 Tx FIFO 缓冲区, FSM 将序列化并发送出去. 完成类似的过程,但是以相反的顺序,接收数据. 传入的串行流由 FSM 处理并移至 Rx FIFO 缓冲区. 因此, API 的通信功能的任务仅限于向/从相应缓冲区写入和读取数据. 这反映在一些函数名称中,例如:<code>uart_write_bytes()</code>用于传输数据,或<code>uart_read_bytes()</code>用于读取传入数据.</p>
+<h3 id="使用中断"><a href="#使用中断" class="headerlink" title="使用中断"></a>使用中断</h3><p>报告了 UART 的特定状态或检测到的错误有 19 个中断. ESP32 技术参考手册(PDF)中介绍了可用中断的完整列表. 要启用特定中断,请调用<code>uart_enable_intr_mask()</code>,以禁用调用<code>uart_disable_intr_mask()</code>. 所有中断的掩码都以<code>UART_INTR_MASK</code>的形式提供. 使用<code>uart_isr_register()</code>完成向服务中断注册处理程序,使用<code>uart_isr_free()</code>释放处理程序. 要在调用处理程序后清除中断状态位,请使用<code>uart_clear_intr_status()</code>.</p>
+<h3 id="删除驱动程序"><a href="#删除驱动程序" class="headerlink" title="删除驱动程序"></a>删除驱动程序</h3><p>如果与<code>uart_driver_install()</code>建立通信一段特定时间,然后不需要,则可以通过调用<code>uart_driver_delete()</code>来删除驱动程序以释放分配的资源.</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/peripherals/uart.html" target="_blank" rel="noopener">UART</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（九）SPI - SPI Slave</title>
+    <url>/InfiniteYuanBlog/2018/08/13/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B9%9D%EF%BC%89SPI%20-%20SPI%20Slave/</url>
+    <content><![CDATA[<h1 id="SPI-Slave"><a href="#SPI-Slave" class="headerlink" title="SPI Slave"></a>SPI Slave</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP32 有四个 SPI 外设,称为 SPI0,SPI1,HSPI 和 VSPI. SPI0 是专用于 flash 缓存, ESP32 将连接的 SPI flash 设备映射到存储器. SPI1 和 SPI0 使用相同的硬件线,SPI1 用于写入 flash 芯片. HSPI 和 VSPI 可以任意使用，并使用 spi_slave 驱动程序用作 SPI 从设备，由连接的 SPI 主设备驱动。</p>
+<h3 id="spi-slave-驱动"><a href="#spi-slave-驱动" class="headerlink" title="spi_slave 驱动"></a>spi_slave 驱动</h3><p><code>spi_slave</code> 驱动程序允许将 HSPI 和/或 VSPI 外设用作全双工 SPI 从设备。它可以使用 DMA 来发送/接收任意长度的事务。</p>
+<a id="more"></a>
+
+<h3 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h3><p>spi_slave 驱动程序使用以下术语：</p>
+<ul>
+<li>主机：ESP32 内部的 SPI 外设启动 SPI 传输。HSPI 或 VSPI 之一。</li>
+<li>总线：SPI 总线，与连接到一个主机的所有 SPI 设备共用。通常，总线由 miso，mosi，sclk 和可选的 quadwp 和 quadhd 信号组成。SPI 从设备并联连接到这些信号。每个 SPI 从设备也连接到一个 CS 信号。<ul>
+<li>miso - 也称为 q，这是从 ESP32 到 SPI 主设备的串行流输出</li>
+<li>mosi - 也称为 d，这是从 SPI 主设备到 ESP32 的串行流输出</li>
+<li>sclk - 时钟信号。每个数据位在该信号的正或负边沿输出</li>
+<li>cs - 芯片选择。有效芯片选择描述与从属设备之间的单个事务。</li>
+</ul>
+</li>
+<li>事务：一个 CS 活动的实例，来自和/或发送到主设备的一次数据传输，以及 CS 再次变为非活动状态。事务具有原子性，因为它们永远不会被另一个事务中断。</li>
+</ul>
+<h2 id="SPI-transactions"><a href="#SPI-transactions" class="headerlink" title="SPI transactions"></a>SPI transactions</h2><p>全双工 SPI 事务从主机拉低 CS 开始。发生这种情况后，主机开始在 CLK 线上发出时钟脉冲：每个时钟脉冲使一个数据位在 MOSI 线上从主机移位到从机，反之亦然在 MISO 线上。在传输结束时，主机再次使 CS 成为高电平。</p>
+<h2 id="使用-spi-slave-驱动"><a href="#使用-spi-slave-驱动" class="headerlink" title="使用 spi_slave 驱动"></a>使用 spi_slave 驱动</h2><ul>
+<li>通过调用 <code>spi_slave_initialize</code> 将 SPI 外设初始化为从设备。确保在 <code>bus_config</code> 结构中设置正确的 IO 引脚。注意将不需要的信号设置为 -1。如果事务将大于 32 字节，则必须给出 DMA 通道（1或2），否则 <code>dma_chan</code> 参数可能为 0。</li>
+<li>要设置事务，请使用您需要的任何事务参数填充一个或多个 <code>spi_transaction_t</code> 结构。通过调用 <code>spi_slave_queue_trans</code> 将所有事务添加到队列中，之后使用 <code>spi_slave_get_trans_result</code> 查询结果，或者通过将它们交给 <code>spi_slave_transmit</code> 来处理所有请求。后两个函数将阻塞，直到主设备启动并完成一个事务，使队列中的数据被发送和接收。</li>
+<li>可选：要卸载 SPI 从设备驱动程序，请调用 <code>spi_slave_free</code>。</li>
+</ul>
+<h2 id="传输数据和主-从机长度不匹配"><a href="#传输数据和主-从机长度不匹配" class="headerlink" title="传输数据和主/从机长度不匹配"></a>传输数据和主/从机长度不匹配</h2><p>通常，要发送到设备或从设备接收的数据将从事务结构的 <code>rx_buffer</code> 和 <code>tx_buffer</code> 成员指向的一块存储器中读取或写入。SPI 驱动程序可能决定使用 DMA 进行传输，因此应使用 <code>pvPortMallocCaps(size，MALLOC_CAP_DMA)</code> 在具有 DMA 功能的内存中分配这些缓冲区。</p>
+<p>写入缓冲区的数据量受事务结构的 <code>length</code> 成员的限制：驱动程序永远不会读取/写入比指定的长度更多的数据。长度不能定义 SPI 事务的实际长度;这是由主机驱动时钟和 CS 线路决定的。在传输事务结束后，可以从 <code>spi_slave_transaction_t</code> 结构的 <code>trans_len</code> 成员读取传输的实际长度。在传输长度大于缓冲区长度的情况下，仅发送和接收传输的开始，并且将 <code>trans_len</code> 设置为长度而不是实际长度。如果需要 <code>trans_len</code>，建议设置长度超过预期的最大长度。如果传输长度短于缓冲区长度，则只交换缓冲区长度的数据。</p>
+<blockquote>
+<p>警告：由于 ESP32 的设计特性，如果主机发送的字节数或从设备驱动中传输队列的长度（以字节为单位）不大于8且可分为4，则 SPI 硬件可以无法将最后一到七个字节写到接收缓冲区。</p>
+</blockquote>
+<h2 id="限制、已知问题"><a href="#限制、已知问题" class="headerlink" title="限制、已知问题"></a>限制、已知问题</h2><ul>
+<li>如果 DMA 被使能，则接收缓冲区应该是字对齐的，即从 32 位的边界开始，并且长度为 4 个字节的倍数。否则 DMA 可能会错误地写入或跳出边界。驱动程序将检查此情况。</li>
+</ul>
+<p>此外，master 应写入长度为 4 个字节的倍数。超过该数据的数据将被丢弃。</p>
+<h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><p>主/从机通信：<a href="https://github.com/espressif/esp-idf/tree/30545f4/examples/peripherals/spi_slave" target="_blank" rel="noopener">peripherals/spi_slave</a>.</p>
+<h2 id="API-Reference"><a href="#API-Reference" class="headerlink" title="API Reference"></a>API Reference</h2><h3 id="Header-File"><a href="#Header-File" class="headerlink" title="Header File"></a>Header File</h3><ul>
+<li><a href="https://github.com/espressif/esp-idf/blob/30545f4/components/driver/include/driver/spi_slave.h" target="_blank" rel="noopener">driver/include/driver/spi_slave.h</a></li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/peripherals/spi_slave.html" target="_blank" rel="noopener">SPI Slave driver</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ESP32 学习笔记（二）GPIO &amp; RTC GPIO</title>
     <url>/InfiniteYuanBlog/2018/08/08/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89GPIO%20&amp;%20RTC%20GPIO/</url>
     <content><![CDATA[<h1 id="GPIO-amp-RTC-GPIO"><a href="#GPIO-amp-RTC-GPIO" class="headerlink" title="GPIO &amp; RTC GPIO"></a>GPIO &amp; RTC GPIO</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP32 芯片具有 40 个物理 GPIO pads (焊盘).某些 GPIO pad 既不能使用,在芯片封装上也没有相应的引脚(请参阅技术参考手册).所以只有 34 个物理 GPIO pads 可供使用.每个 pad 都可用作一个通用 IO,或连接一个内部的外设信号.IO_MUX、RTC IO_MUX 和 GPIO 交换矩阵用于将信号从外设传输至 GPIO pad.这些模块共同组成了芯片的 IO 控制.</p>
@@ -111,6 +315,509 @@
 </ul>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
 <li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/peripherals/gpio.html" target="_blank" rel="noopener">GPIO &amp; RTC GPIO</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（五）DAC - Digital To Analog Converter</title>
+    <url>/InfiniteYuanBlog/2018/08/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89DAC%20-%20Digital%20To%20Analog%20Converter/</url>
+    <content><![CDATA[<h1 id="DAC-Digital-To-Analog-Converter"><a href="#DAC-Digital-To-Analog-Converter" class="headerlink" title="DAC - Digital To Analog Converter"></a>DAC - Digital To Analog Converter</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP32 有两个 8 位 DAC (数模转换器)通道，连接到 GPIO25 (通道 1)和 GPIO26(通道 2)。</p>
+<p>DAC 驱动器允许将这些通道设置为任意电压。</p>
+<p>当使用“内置 DAC模式”时，DAC 通道也可以通过 I2S 驱动器使用 DMA 写入采样数据进行驱动。</p>
+<p>有关其他模拟输出选项，请参阅 <a href="https://esp-idf.readthedocs.io/en/latest/api-reference/peripherals/sigmadelta.html" target="_blank" rel="noopener">Sigma-Delta 调制模块</a>和 <a href="https://esp-idf.readthedocs.io/en/latest/api-reference/peripherals/ledc.html" target="_blank" rel="noopener">LED 控制模块</a>。这两个模块都产生高频 PWM 输出，可以进行硬件低通滤波，以产生较低频率的模拟输出。</p>
+<a id="more"></a>
+
+<h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><p>将 DAC 通道 1(GPIO 25)电压设置为 VDD_A 电压(VDD * 200/255)的约 0.78。对于 VDD_A 3.3V，这是 2.59V：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;driver/dac.h&gt;</span></span></span><br><span class="line">...</span><br><span class="line">    dac_output_enable(DAC_CHANNEL_1);</span><br><span class="line">    dac_output_voltage(DAC_CHANNEL_1, <span class="number">200</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="API-Reference"><a href="#API-Reference" class="headerlink" title="API Reference"></a>API Reference</h2><h3 id="Header-File"><a href="#Header-File" class="headerlink" title="Header File"></a>Header File</h3><ul>
+<li><a href="https://github.com/espressif/esp-idf/blob/30545f4/components/driver/include/driver/dac.h" target="_blank" rel="noopener">driver/include/driver/dac.h</a></li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/peripherals/dac.html" target="_blank" rel="noopener">DAC</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（八）SPI - SPI Master</title>
+    <url>/InfiniteYuanBlog/2018/08/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AB%EF%BC%89SPI%20-%20SPI%20Master/</url>
+    <content><![CDATA[<h1 id="SPI-Master"><a href="#SPI-Master" class="headerlink" title="SPI Master"></a>SPI Master</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP32 有四个 SPI 外设,称为 SPI0,SPI1,HSPI 和 VSPI. SPI0 是专用于 flash 缓存, ESP32 将连接的 SPI flash 设备映射到存储器. SPI1 和 SPI0 使用相同的硬件线,SPI1 用于写入 flash 芯片. HSPI 和 VSPI 可以任意使用. SPI1,HSPI 和 VSPI 都有三条片选线,作为 SPI 主机允许它们最多驱动三个 SPI 设备.</p>
+<h3 id="spi-master-驱动"><a href="#spi-master-驱动" class="headerlink" title="spi_master 驱动"></a>spi_master 驱动</h3><p>即使在多线程环境中,spi_master 驱动程序也可以轻松与 SPI 从设备进行通信. 它完全透明地处理 DMA 传输以读取和写入数据,并自动处理同一主机上不同 SPI 从站之间的多路复用.</p>
+<a id="more"></a>
+
+<h3 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h3><p>spi_master 驱动程序使用以下术语:</p>
+<ul>
+<li>主机:ESP32 内部的 SPI 外设启动 SPI 传输. SPI,HSPI 或 VSPI 之一. (目前,驱动程序实际上只支持 HSPI 或 VSPI;它将在未来的某个地方支持所有 3个外设.)</li>
+<li>总线:SPI总线,与连接到一个主机的所有 SPI 设备共用.通常,总线由 miso,mosi,sclk 和可选的 quadwp 和 quadhd 信号组成. SPI 从设备并联连接到这些信号.<ul>
+<li>miso - 也称为 q,这是将串行流输入到 ESP32中</li>
+<li>mosi - 也称为 d,这是来自 ESP32 的串行流的输出</li>
+<li>sclk - 时钟信号.每个数据位在该信号的正或负边沿输出或输出</li>
+<li>quadwp - 写保护信号.仅用于 4 位(qio/qout)事务.</li>
+<li>quadhd - 保持信号.仅用于 4 位(qio/qout)事务.</li>
+</ul>
+</li>
+<li>设备:SPI 从设备.每个 SPI 从设备都有自己的片选(CS)线,当发生到/从 SPI 从设备的传输时,该线被激活.</li>
+<li>事务:一个 CS 活动的实例,来自和/或发生的设备的数据传输,以及 CS 再次变为非活动状态.事务是原子的,因为它们永远不会被另一个事务中断.</li>
+</ul>
+<h2 id="SPI-transactions"><a href="#SPI-transactions" class="headerlink" title="SPI transactions"></a>SPI transactions</h2><p>SPI 总线上的事务由五个阶段组成,其中任何阶段都可以跳过:</p>
+<ul>
+<li>命令阶段. 在此阶段,命令(0-16 位)被输出.</li>
+<li>地址阶段. 在此阶段,地址(0-64 位)被输出.</li>
+<li>写阶段. 主设备将数据发送到从设备.</li>
+<li>虚拟阶段. 该阶段是可配置的,用于满足时序要求.</li>
+<li>阅读阶段. 从站将数据发送给主站.</li>
+</ul>
+<p>在全双工模式下,读写阶段被组合,SPI 主机同时读写数据.<strong>总事务长度</strong>由 <code>command_bits + address_bits + trans_conf.length</code> 决定,而 <code>trans_conf.rx_length</code> <strong>仅确定</strong>接收到缓冲区的数据长度.</p>
+<p>在半双工模式下,主机具有独立的写和读阶段.写入阶段和读取阶段的<strong>长度分别</strong>由 <code>trans_conf.length</code> 和 <code>trans_conf.rx_length</code> 决定.</p>
+<p>命令和地址阶段是可选的,因为不是每个 SPI 设备都需要发送命令和/或地址.这反映在设备配置中:当 <code>command_bits</code> 或 <code>address_bits</code> 字段设置为零时,不执行命令或地址阶段.</p>
+<p>读写阶段的情况类似:并非每个事务都需要写入数据以及要读取的数据.当 <code>rx_buffer</code> 为 NULL(并且未设置 <code>SPI_USE_RXDATA</code>)时,将跳过读取阶段.当 <code>tx_buffer</code> 为 NULL(并且未设置 <code>SPI_USE_TXDATA</code>)时,将跳过写入阶段.</p>
+<h3 id="Interrupt-transactions"><a href="#Interrupt-transactions" class="headerlink" title="Interrupt transactions"></a>Interrupt transactions</h3><p>中断事务将阻塞事务例程，直到事务完成为止，从而使CPU可以运行其他任务。</p>
+<p>当事务在传输中时，中断事务使用中断驱动的逻辑。程序将被阻塞，允许 CPU 在等待事务完成时运行其他任务。</p>
+<p>中断事务可以排队到设备中，驱动程序会自动在 ISR 中逐个发送它们。任务可以将多个事务加入到队列中，并且能在事务完成之前执行其他操作。</p>
+<h3 id="Polling-transactions"><a href="#Polling-transactions" class="headerlink" title="Polling transactions"></a>Polling transactions</h3><p>轮询事务不依赖于中断，程序将持续轮询 SPI 外设的状态位，直到事务完成。</p>
+<p>执行中断事务的所有任务可能会被队列阻塞，此时他们需要等待 ISR 在事务完成之前运行两次。轮询事务节省了在队列处理和上下文切换上花费的时间，从而导致较小的事务间隔。缺点是当这些事务在传输中时 CPU 正忙不能运行其他任务。</p>
+<p>当事务完成时，<code>spi_device_polling_end</code> 例程至少花费 1us 开销来解除阻塞其他任务。强烈建议在 <code>spi_device_acquire_bus</code> 和 <code>spi_device_release_bus</code> 中包含一系列轮询事务以避免开销。</p>
+<h2 id="Command-and-address-phases"><a href="#Command-and-address-phases" class="headerlink" title="Command and address phases"></a>Command and address phases</h2><p>在命令和地址阶段，<code>spi_transaction_t</code> 结构中的 <code>cmd</code> 和 <code>addr</code> 字段将发送到总线，而不会同时读取任何内容。命令和地址阶段的默认长度在 <code>spi_device_interface_config_t</code> 和 <code>spi_bus_add_device</code> 中设置。当 <code>spi_transaction_t</code> 中未设置标志 <code>SPI_TRANS_VARIABLE_CMD</code> 和 <code>SPI_TRANS_VARIABLE_ADDR</code> 时，驱动程序会自动将这些阶段的长度分别设置为初始化设备时设置的默认值。</p>
+<p>如果命令和地址阶段的长度需要更改，则声明一个 <code>spi_transaction_ext_t</code> 描述符，在 <code>base</code> 成员的 <code>flag</code> 中设置标志 <code>SPI_TRANS_VARIABLE_CMD</code> 或/和 <code>SPI_TRANS_VARIABLE_ADDR</code>，并像往常一样配置 <code>base</code> 的其余部分。然后每个阶段的长度将是 <code>spi_transaction_ext_t</code> 中设置的 <code>command_bits</code> 和 <code>address_bits</code>。</p>
+<h2 id="Write-and-read-phases"><a href="#Write-and-read-phases" class="headerlink" title="Write and read phases"></a>Write and read phases</h2><p>通常，要写入到设备或从设备读取的数据将从事务结构的 <code>rx_buffer</code> 和 <code>tx_buffer</code> 成员指向的一块存储器中读取或写入。为传输启用 DMA 时，强烈建议使用这些缓冲区以满足以下要求：</p>
+<ul>
+<li>使用 <code>pvPortMallocCaps(size，MALLOC_CAP_DMA)</code> 在支持 <code>DMA</code> 的内存中分配;</li>
+<li>32 位对齐（从边界开始，长度为 4 个字节的倍数）。</li>
+</ul>
+<p>如果不满足这些要求，由于临时缓冲区的分配和 <code>memcpy</code>，事务效率将受到影响。</p>
+<blockquote>
+<p>使用 DMA 时，不支持有读和写两个阶段的半双工事务。有关详细信息和解决方法，请参阅已知问题。</p>
+</blockquote>
+<h2 id="Bus-acquiring"><a href="#Bus-acquiring" class="headerlink" title="Bus acquiring"></a>Bus acquiring</h2><p>有时您可能希望不断地连续发送spi事务，以使其尽可能快。您可以使用 <code>spi_device_acquire_bus</code> 和 <code>spi_device_release_bus</code> 来实现这一点。获取总线后，与其他设备（无论是轮询还是中断）的事务处于待处理状态，直到总线被释放。</p>
+<h2 id="使用-spi-master-驱动"><a href="#使用-spi-master-驱动" class="headerlink" title="使用 spi_master 驱动"></a>使用 spi_master 驱动</h2><ul>
+<li>通过调用 <code>spi_bus_initialize</code> 初始化 SPI 总线. 确保在 <code>bus_config</code> 结构中设置正确的 IO 引脚. 注意将不需要的信号设置为 -1.</li>
+<li>通过调用 <code>spi_bus_add_device</code> 告诉驱动程序连接到总线的 SPI 从设备. 确保在 <code>dev_config</code> 结构中配置设备具有的任何时序要求. 您现在应该拥有该设备的句柄,以便在发送事务时使用.</li>
+<li>要与设备交互,请使用您需要的任何事务参数填充一个或多个 <code>spi_transaction_t</code> 结构. 然后以轮询方式或中断方式发送它们：<ul>
+<li>中断方式：通过调用 <code>spi_device_queue_trans</code> 将事务添加到队列中,之后使用 <code>spi_device_get_trans_result</code> 查询结果,或者通过将它们提供给 <code>spi_device_transmit</code> 来处理所有请求.</li>
+<li>轮询方式：调用 <code>spi_device_polling_transmit</code> 发送轮询事务。或者，如果要在它们之间插入内容，可以通过 <code>spi_device_polling_start</code> 和 <code>spi_device_polling_end</code> 发送轮询事务。</li>
+</ul>
+</li>
+<li>可选：要对设备执行事务，请在事务之前调用 <code>spi_device_acquire_bus</code>，并在事务之后调用 <code>spi_device_release_bus</code>。</li>
+<li>可选：要卸载设备的驱动程序,请以设备句柄作为参数调用 <code>spi_bus_remove_device</code></li>
+<li>可选：要删除总线的驱动程序,请确保没有连接更多驱动程序并调用 <code>spi_bus_free</code>.</li>
+</ul>
+<h3 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h3><ol>
+<li><p>少量数据的事务：</p>
+<p> 有时，数据量非常小，因此不足以为其分配单独的缓冲区。如果要传输的数据是 32 位或更少，则可以将其存储在事务结构本身中。对于传输的数据，请使用 <code>tx_data</code> 成员并在传输上设置 <code>SPI_USE_TXDATA</code> 标志。对于接收的数据，使用 <code>rx_data</code> 并设置 <code>SPI_USE_RXDATA</code>。在这两种情况下，请勿触摸 <code>tx_buffer</code> 或 <code>rx_buffer</code> 成员，因为它们使用与 <code>tx_data</code> 和 <code>rx_data</code> 相同的内存位置。</p>
+</li>
+<li><p>除了 <code>uint8_t</code> 之外的整数事务</p>
+<p> SPI 外设逐字节地读写存储器。默认情况下，SPI 工作在 MSB 优先模式，每个字节从 MSB 发送或接收到 LSB。但是，如果要发送长度不是 8 位倍数的数据，则会发送未使用的位。</p>
+<p> 例如：你写 <code>uint8_t data = 0x15（00010101B）</code>，并设置长度只有 5 位，发送的数据是 00010B 而不是预期的 10101B。</p>
+<p> 此外，ESP32 是一个小端芯片，其最低字节存储在 <code>uint16_t</code> 和 <code>uint32_t</code> 变量的起始地址。因此，如果 <code>uint16_t</code> 存储在存储器中，则首先发送第 7 位，然后将第 6 位发送到 0，然后将第 15 位发送到第 8 位。</p>
+<p> 要发送 <code>uint8_t</code> 数组以外的数据，提供宏 <code>SPI_SWAP_DATA_TX</code> 以将数据转移到 <code>MSB</code> 并将 <code>MSB</code> 交换到最低地址;而 <code>SPI_SWAP_DATA_RX</code> 可用于将接收到的数据从 MSB 交换到正确的位置。</p>
+</li>
+</ol>
+<h2 id="GPIO-matrix-and-IOMUX"><a href="#GPIO-matrix-and-IOMUX" class="headerlink" title="GPIO matrix and IOMUX"></a>GPIO matrix and IOMUX</h2><p>ESP32 中的大多数外设信号可以直接连接到特定的 GPIO,称为 IOMUX 引脚. 当外设信号路由到 IOMUX 引脚以外的引脚时,ESP32 使用较不直接的 GPIO matrix 进行连接.</p>
+<p>如果驱动器配置了所有 SPI 信号设置为其特定的 IOMUX 引脚(或未连接),它将绕过 GPIO matrix. 如果任何 SPI 信号配置到 IOMUx 引脚以外的引脚,驱动器将自动通过 GPIO matrix 路由所有信号. GPIO matrix对 80MHz 的所有信号进行采样,并在 GPIO 和外设之间发送.</p>
+<p>当使用 GPIO matrix 时,由于 MISO 信号的输入延迟增加,因此超过 40MHz 的信号不能传播并且 MISO 的建立时间更容易被违反. GPIO Matrix 的最大时钟频率为 40MHz 或更低,而使用所有 IOMUX 引脚允许 80MHz.</p>
+<blockquote>
+<p>有关输入延迟对最大时钟频率影响的更多详细信息,请参阅下面的<a href="https://esp-idf.readthedocs.io/en/latest/api-reference/peripherals/spi_master.html#timing-considerations" target="_blank" rel="noopener">时序注意事项</a>.</p>
+</blockquote>
+<p>SPI 控制器的 IOMUX 引脚如下:<br>|Pin Name|HSPI(GPIO Number)|VSPI(GPIO Number)|<br>|————-|:————-:|:————-:|<br>|CS0*|15|5|<br>|SCLK|14|18|<br>|MISO|12|19|<br>|MOSI|13|23|<br>|QUADWP|2|22|<br>|QUADHD|4|21|</p>
+<blockquote>
+<p>只有连接到总线的第一个设备才能使用 CS0 引脚.</p>
+</blockquote>
+<h2 id="已知的问题"><a href="#已知的问题" class="headerlink" title="已知的问题"></a>已知的问题</h2><ol>
+<li><p>当存在写入和读取阶段时，半双工模式与 DMA 不兼容。</p>
+<p> 如果需要此类交易，则必须使用其中一种替代解决方案：</p>
+<ol>
+<li><p>改为使用全双工模式。</p>
+</li>
+<li><p>通过在总线初始化函数中将最后一个参数设置为 0 来禁用 DMA，如下所示：<code>ret = spi_bus_initialize(VSPI_HOST，＆buscfg，0);</code> 这可能会禁止您发送和接收超过 64 个字节的数据。</p>
+</li>
+<li><p>尝试使用命令和地址字段来替换写入阶段。</p>
+</li>
+</ol>
+</li>
+<li><p>全双工模式与虚拟位解决方案不兼容，因此频率有限。</p>
+</li>
+<li><p><code>cs_ena_pretrans</code> 与全双工模式下的命令，地址阶段不兼容。</p>
+</li>
+</ol>
+<h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><h2 id="API-Reference-SPI-Common"><a href="#API-Reference-SPI-Common" class="headerlink" title="API Reference - SPI Common"></a>API Reference - SPI Common</h2><p>在 WROVER-Kits 的 320x240 LCD 上显示图形:<a href="https://github.com/espressif/esp-idf/tree/30545f4/examples/peripherals/spi_master" target="_blank" rel="noopener">peripherals/spi_master</a>.</p>
+<h3 id="Header-File"><a href="#Header-File" class="headerlink" title="Header File"></a>Header File</h3><ul>
+<li><a href="https://github.com/espressif/esp-idf/blob/30545f4/components/driver/include/driver/spi_common.h" target="_blank" rel="noopener">driver/include/driver/spi_common.h</a></li>
+</ul>
+<h2 id="API-Reference-SPI-Master"><a href="#API-Reference-SPI-Master" class="headerlink" title="API Reference - SPI Master"></a>API Reference - SPI Master</h2><h3 id="Header-File-1"><a href="#Header-File-1" class="headerlink" title="Header File"></a>Header File</h3><ul>
+<li><a href="https://github.com/espressif/esp-idf/blob/30545f4/components/driver/include/driver/spi_master.h" target="_blank" rel="noopener">driver/include/driver/spi_master.h</a></li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/peripherals/spi_master.html" target="_blank" rel="noopener">SPI Master driver</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（六）I2C - Inter-Integrated Circuit</title>
+    <url>/InfiniteYuanBlog/2018/08/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89I2C%20-%20Inter-Integrated%20Circuit/</url>
+    <content><![CDATA[<h1 id="I2C"><a href="#I2C" class="headerlink" title="I2C"></a>I2C</h1><p>I2C (内部集成电路)总线可用于与连接到与 ESP32 相同的总线的多个外部设备进行通信。ESP32 板上有两个 I2C 控制器，每个控制器可以设置为主模式或从模式。</p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>以下部分将指导您完成配置和操作 I2C 驱动程序的基本步骤：</p>
+<ol>
+<li><a href="#配置驱动程序">配置驱动程序</a> - 选择驱动程序的参数，如主模式或从模式，设置特定的 GPIO 引脚作为 SDA 和 SCL，设置时钟速度等。</li>
+<li><a href="#安装驱动程序">安装驱动程序</a> - 在主站或从站模式下激活驱动程序，以便在 ESP32 上运行两个 I2C 控制器其中一个。</li>
+<li><a href="#进行通讯">进行通讯</a>：<ul>
+<li>主机模式 - 作为主机运行通信</li>
+<li>从机模式 - 从机响应来自主机的消息</li>
+</ul>
+</li>
+<li><a href="#中断处理">中断处理</a> - 配置和 I2C 中断服务。</li>
+<li><a href="#超出默认值">超出默认值</a> - 调整 I2C 通信的时序，引脚配置和其他参数。</li>
+<li><a href="#错误处理">错误处理</a> - 如何识别和处理驱动程序配置和通信错误。</li>
+<li><a href="#删除驱动程序">删除驱动程序</a> - 在通信结束时释放 I2C 驱动程序所使用的资源。</li>
+</ol>
+<p>I2C 驱动程序标识是从 <code>i2c_port_t</code> 中选择的两个端口号之一。在驱动程序配置期间通过 <code>i2c_mode_t</code> 选择 “master” 或 “slave” 指定端口的操作模式。</p>
+<a id="more"></a>
+
+<h2 id="配置驱动程序"><a href="#配置驱动程序" class="headerlink" title="配置驱动程序"></a>配置驱动程序</h2><p>建立 I2C 通信的第一步是配置驱动程序。这是通过设置 <code>i2c_config_t</code> 结构中包含的几个参数来完成的：</p>
+<ul>
+<li>I2C 操作模式 - 从 <code>i2c_opmode_t</code> 中选择 slave 或 master</li>
+<li>通讯引脚配置：<ul>
+<li>分配给 SDA 和 SCL 信号的 GPIO 引脚编号</li>
+<li>是否为各个引脚启用 ESP32 的内部上拉</li>
+</ul>
+</li>
+<li>I2C 时钟速度，如果此配置涉及主模</li>
+<li>如果此配置涉及从属模式：<ul>
+<li>是否应启用 10 位地址模式</li>
+<li>从机地址</li>
+</ul>
+</li>
+</ul>
+<p>然后，要初始化给定 I2C 端口的配置，请使用端口号和 <code>i2c_config_t</code> 结构作为函数调用参数调用函数 <code>i2c_param_config()</code>。</p>
+<p>在此阶段，<code>i2c_param_config()</code> 还将“其他 I2C 配置参数”设置为常用的默认值。要检查值是什么以及如何更改它们，请参阅<a href="#超出默认值">超出默认值</a>。</p>
+<h2 id="安装驱动程序"><a href="#安装驱动程序" class="headerlink" title="安装驱动程序"></a>安装驱动程序</h2><p>初始化配置后，下一步是通过调用 <code>i2c_driver_install()</code> 来安装 I2C 驱动程序。此函数调用需要以下参数：</p>
+<ul>
+<li>端口号，可用的两个端口之一，从 <code>i2c_port_t</code> 中选择</li>
+<li>从 <code>i2c_opmode_t</code> 中选择的操作模式，从机或主机</li>
+<li>将分配用于在从机模式下发送和接收数据的缓冲区的大小</li>
+<li>用于分配中断的标志</li>
+</ul>
+<h2 id="进行通讯"><a href="#进行通讯" class="headerlink" title="进行通讯"></a>进行通讯</h2><p>安装 I2C 驱动程序后，ESP32 即可与其他 I2C 设备通信。通信编程取决于所选 I2C 端口是以主机模式还是从机模式工作。</p>
+<h3 id="主机模式"><a href="#主机模式" class="headerlink" title="主机模式"></a>主机模式</h3><p>ESP32 工作在主机模式的 I2C 端口负责与从 I2C 设备建立通信，并发送命令以触发从机设备工作，如进行测量和发回结果。</p>
+<p>为了组织这个过程，驱动程序提供了一个称为 “command link” 的容器，该容器应填充一系列命令，然后传递给 I2C 控制器执行。</p>
+<h4 id="主机-Write"><a href="#主机-Write" class="headerlink" title="主机 Write"></a>主机 Write</h4><p>构建 I2C 主设备向从设备发送 n 个字节的命令链接的示例如下所示：<br><img src="https://img-blog.csdn.net/20180812211151469?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="I2C command link - master write example"></p>
+<p>下面介绍如何设置“主写入”的命令链接以及内部的内容：</p>
+<ol>
+<li>第一步是使用 <code>i2c_cmd_link_create()</code> 创建命令链接。然后命令链接填充一系列要发送给从站的数据：<ul>
+<li>起始位 -  <code>i2c_master_start()</code></li>
+<li>单字节从机地址 - <code>i2c_master_write_byte()</code>。该地址作为此函数调用的参数提供。</li>
+<li>一个或多个字节的数据作为 <code>i2c_master_write()</code> 的参数。</li>
+<li>停止位 -  <code>i2c_master_stop()</code></li>
+</ul>
+</li>
+</ol>
+<p><code>i2c_master_write_byte()</code> 和 <code>i2c_master_write()</code> 命令都有另外的参数来定义 slave 是否应该确认接收的数据。<br> 2. 通过调用 <code>i2c_master_cmd_begin()</code> 来触发 I2C 控制器执行命令链接。<br> 3. 最后一步，完成命令发送后，通过调用 <code>i2c_cmd_link_delete()</code> 释放命令链接使用的资源。</p>
+<h4 id="主机-Read"><a href="#主机-Read" class="headerlink" title="主机 Read"></a>主机 Read</h4><p>和主机类似的步骤序列，用于从从机读取数据。<br><img src="https://img-blog.csdn.net/20180812214852217?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="I2C command link - master read example"></p>
+<p>在读取数据时，不是 “i2c_master_read …”，而是使用 <code>i2c_master_read_byte()</code> 和/或 <code>i2c_master_read()</code> 填充命令链接。此外，最后一次读取配置为不提供主机的确认。</p>
+<p>发送从机地址后，请参见上图中的步骤 3，主机可以写入或从从机读取数据。主设备实际执行的操作信息隐藏在从设备地址的最低位。</p>
+<p>因此，命令链接指示从机主机将写入数据包含地址，如 <code>(ESP_SLAVE_ADDR &lt;&lt; 1)| I2C_MASTER_WRITE</code>，如下所示：</p>
+<h3 id="从机模式"><a href="#从机模式" class="headerlink" title="从机模式"></a>从机模式</h3><p>API 提供了从属设备读取和写入数据的功能 - * <code>i2c_slave_read_buffer()</code> 和 <code>i2c_slave_write_buffer()</code>。<a href="https://github.com/espressif/esp-idf/tree/30545f4/examples/peripherals/i2c" target="_blank" rel="noopener">peripherals/i2c</a>中提供了使用这些功能的示例。</p>
+<h2 id="中断处理"><a href="#中断处理" class="headerlink" title="中断处理"></a>中断处理</h2><p>调用函数 <code>i2c_isr_register()</code> 注册中断处理程序，调用 <code>i2c_isr_free()</code> 删除处理程序。<a href="https://espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf" target="_blank" rel="noopener">ESP32技术参考手册(PDF)</a>中提供了 I2C 控制器触发的中断描述。</p>
+<h2 id="超出默认值"><a href="#超出默认值" class="headerlink" title="超出默认值"></a>超出默认值</h2><p>在驱动程序配置期间(调用 <code>i2c_param_config()</code> 时，请参阅<a href="https://esp-idf.readthedocs.io/en/latest/api-reference/peripherals/i2c.html#i2c-api-configure-driver" target="_blank" rel="noopener">配置驱动程序</a>)，有一些 I2C 通信参数设置为某些默认的常用值。某些参数也已在 I2C 控制器的寄存器中配置。通过调用专用函数，可以将这些参数更改为用户定义的值：</p>
+<ul>
+<li><p>SCL 脉冲周期为高和低 - <code>i2c_set_period()</code></p>
+</li>
+<li><p>在产生启动/停止信号期间使用的 SCL 和 SDA 信号时序 - <code>i2c_set_start_timing()</code>/ <code>i2c_set_stop_timing()</code></p>
+</li>
+<li><p>从器件采样时以及通过主器件发送时 SCL 和 SDA 信号之间的时序关系 - <code>i2c_set_data_timing()</code></p>
+</li>
+<li><p>I2C 超时 - <code>i2c_set_timeout()</code></p>
+<blockquote>
+<p>定时值在 APB 时钟周期中定义。APB 的频率在 <code>I2C_APB_CLK_FREQ</code> 中指定。</p>
+</blockquote>
+</li>
+<li><p>首先发送/接收 LSB 或 MSB -<code>i2c_set_data_mode()</code> 可在 <code>i2c_trans_mode_t</code> 中定义的模式中选择</p>
+</li>
+</ul>
+<p>上述每个函数都有一个<code>_get_</code>对应项来检查当前设置的值。</p>
+<p>要在驱动程序配置期间查看参数设置的默认值，请参阅文件<a href="https://github.com/espressif/esp-idf/blob/30545f4/components/driver/i2c.c" target="_blank" rel="noopener">driver / i2c.c</a>查找定义了<code>_DEFAULT</code>后缀。</p>
+<p>通过功能<code>i2c_set_pin()</code>，还可以选择不同的 SDA 和 SCL 引脚并改变上拉配置，改变已经输入的 <code>i2c_param_config()</code>。</p>
+<blockquote>
+<p>ESP32 的内部上拉电阻范围为几十 kOhm，因此在大多数情况下，它们本身不足以用作 I2C 上拉电阻。我们建议添加外部上拉电阻，其值如 I2C 标准中所述。</p>
+</blockquote>
+<h2 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h2><p>大多数驱动程序的函数在成功完成时返回 <code>ESP_OK</code>，或者在失败时返回特定的错误代码。始终检查返回的值并实现错误处理是一种好习惯。例如，驱动程序也打印出志消息。检查输入配置的正确性，其中包含错误说明。有关详细信息，请参阅文件<a href="https://github.com/espressif/esp-idf/blob/30545f4/components/driver/i2c.c" target="_blank" rel="noopener">driver / i2c.c</a>查找定义 <code>_ERR_STR后</code> 缀。</p>
+<p>使用专用中断来捕获通信故障。例如，当 I2C 花费太长时间来接收数据时，会触发 <code>I2C_TIME_OUT_INT</code> 中断。有关相关信息，请参阅<a href="https://esp-idf.readthedocs.io/en/latest/api-reference/peripherals/i2c.html#i2c-api-interrupt-handling" target="_blank" rel="noopener">中断处理</a>。</p>
+<p>要在通信失败时重置内部硬件缓冲区，可以使用<code>i2c_reset_tx_fifo()</code>和<code>i2c_reset_rx_fifo()</code>。</p>
+<h2 id="删除驱动程序"><a href="#删除驱动程序" class="headerlink" title="删除驱动程序"></a>删除驱动程序</h2><p>如果使用 <code>i2c_driver_install()</code> 建立 I2C 通信一段时间之后不再需要 I2C 通信，则可以通过调用 <code>i2c_driver_delete()</code> 来移除驱动程序以释放分配的资源。</p>
+<h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><p>I2C 主机和从机示例：<a href="https://github.com/espressif/esp-idf/tree/30545f4/examples/peripherals/i2c" target="_blank" rel="noopener">peripherals/i2c</a>.</p>
+<h2 id="API-Reference"><a href="#API-Reference" class="headerlink" title="API Reference"></a>API Reference</h2><h3 id="Header-File"><a href="#Header-File" class="headerlink" title="Header File"></a>Header File</h3><ul>
+<li><a href="https://github.com/espressif/esp-idf/blob/30545f4/components/driver/include/driver/i2c.h" target="_blank" rel="noopener">driver/include/driver/i2c.h</a></li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/peripherals/i2c.html" target="_blank" rel="noopener">I2C</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（十一）LED Control</title>
+    <url>/InfiniteYuanBlog/2018/08/13/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%80%EF%BC%89LED%20Control/</url>
+    <content><![CDATA[<h1 id="LED-Control"><a href="#LED-Control" class="headerlink" title="LED Control"></a>LED Control</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>LED 控制(LEDC)模块主要用于控制 LED 的强度，尽管它也可用于生成 PWM 信号以用于其他目的。它有16个通道可以产生独立的波形，可以用来驱动例如: RGB LED设备。</p>
+<p>所有 LEDC 通道中有一半提供高速操作模式。该模式提供硬件实现，自动和无干扰的 PWM 占空比改变。另一半通道在低速模式下运行，其中变化的时刻取决于应用软件。每组通道也能够使用不同的时钟源，但 API 中未实现此功能。</p>
+<p>PWM 控制器还能够逐渐自动增加或减少占空比，允许在没有任何处理器干扰的情况下衰减。</p>
+<a id="more"></a>
+
+<h2 id="功能概述"><a href="#功能概述" class="headerlink" title="功能概述"></a>功能概述</h2><p>让 LEDC 在高速或低速模式下在特定通道上工作分三步完成：</p>
+<ul>
+<li>配置定时器以确定 PWM 信号的频率和数字(占空比范围分辨率)。</li>
+<li>通过将通道与定时器和 GPIO 相关联来配置通道，以输出 PWM 信号。</li>
+<li>更改 PWM 信号，驱动输出以改变 LED 的强度。这可以在软件的完全控制下或在硬件衰落功能的帮助下完成。</li>
+</ul>
+<p>在可选步骤中，还可以在淡入淡出端设置中断。<br><img src="https://img-blog.csdn.net/20180813204054898?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<h3 id="配置定时器"><a href="#配置定时器" class="headerlink" title="配置定时器"></a>配置定时器</h3><p>通过调用函数 <code>ledc_timer_config()</code> 来完成定时器的设置。应为此函数提供包含以下配置设置的数据结构 <code>ledc_timer_config_t</code>：</p>
+<ul>
+<li>定时器号 <code>ledc_timer_t</code> 和速度模式 <code>ledc_mode_t</code>。</li>
+<li>PWM 信号的频率和 PWM 占空比值的分辨率会发生变化。</li>
+</ul>
+<p>频率和占空比分辨率是相互依赖的。PWM 频率越高，可提供更低的占空比分辨率，反之亦然。如果您计划将此 API 用于其他改变 LED 强度的目的，这种关系可能会变得很重要。有关更多详细信息，请查看<a href="#支持的频率范围和占空比分辨率">支持的频率范围和占空比分辨率</a>。</p>
+<h3 id="配置通道"><a href="#配置通道" class="headerlink" title="配置通道"></a>配置通道</h3><p>设置定时器后，下一步是配置所选通道( <code>ledc_channel_t</code> 中的一个)。这是通过调用函数 <code>ledc_channel_config()</code> 来完成的。</p>
+<p>以类似的方式，与定时器配置类似，应为通道设置功能提供特定结构 <code>ledc_channel_config_t</code>，其中包含通道的配置参数。</p>
+<p>此时，通道应开始工作，并开始生成由定时器设置和所选 GPIO 上的占空比确定的频率 PWM 信号，如 <code>ledc_channel_config_t</code> 中所配置。可以通过调用函数 <code>ledc_stop()</code> 随时暂停通道操作/信号生成。</p>
+<h3 id="改变-PWM-信号"><a href="#改变-PWM-信号" class="headerlink" title="改变 PWM 信号"></a>改变 PWM 信号</h3><p>一旦通道工作并产生恒定占空比和频率的PWM信号，有几种方法可以改变这个信号。在驱动LED时，我们主要改变了改变光强度的占空比。请参阅下面的两部分，了解如何通过软件或硬件衰减来更改占空比。如果需要，我们也可以更改信号的频率，这将在<a href="#更改PWM频率">更改PWM频率</a>部分中介绍。</p>
+<h4 id="通过软件更改PWM占空比"><a href="#通过软件更改PWM占空比" class="headerlink" title="通过软件更改PWM占空比"></a>通过软件更改PWM占空比</h4><p>通过首先调用专用函数 <code>ledc_set_duty()</code> 然后调用 <code>ledc_update_duty()</code> 来使更改生效来完成占空比的设置。要检查当前设置的值，有一个相应的 <code>_get_</code> 函数 <code>ledc_get_duty()</code>。</p>
+<p>设置占空比和其他一些通道参数的另一种方法是调用上一节中讨论的 <code>ledc_channel_config()</code>。</p>
+<p>输入函数的占空比值的范围取决于所选的 <code>duty_resolution</code>，并且应该从 0 到 (2 ** duty_resolution) - 1。例如，如果选择的占空比分辨率为 10，则占空比范围为 0 到 1023。这提供了分辨率为~0.1％。</p>
+<h4 id="通过硬件衰落改变PWM占空比"><a href="#通过硬件衰落改变PWM占空比" class="headerlink" title="通过硬件衰落改变PWM占空比"></a>通过硬件衰落改变PWM占空比</h4><p>LEDC 硬件提供了从一个占空值逐渐淡入另一个值的方法。要使用此功能，首先使用 <code>ledc_fade_func_install()</code> 启用淡入淡出。然后通过调用一个可用的淡入淡出函数来配置它：</p>
+<ul>
+<li><code>ledc_set_fade_with_time()</code></li>
+<li><code>ledc_set_fade_with_step()</code></li>
+<li><code>ledc_set_fade()</code></li>
+</ul>
+<p>最后用 <code>ledc_fade_start()</code> 开始淡出。</p>
+<p>如果不再需要，可以使用 <code>ledc_fade_func_uninstall()</code> 禁用衰落和相关中断。</p>
+<h4 id="更改PWM频率"><a href="#更改PWM频率" class="headerlink" title="更改PWM频率"></a>更改PWM频率</h4><p>LEDC API 提供了几种“动态”改变 PWM 频率的方法。</p>
+<ul>
+<li>其中一个选项是调用 <code>ledc_set_freq()</code>。有一个相应的函数 <code>ledc_get_freq()</code> 来检查当前设置的频率。</li>
+<li>另一种改变频率和占空比分辨率的方法是调用 <code>ledc_bind_channel_timer()</code> 将其他定时器绑定到通道。</li>
+<li>最后，可以通过调用 <code>ledc_channel_config()</code> 来更改通道的计时器。</li>
+</ul>
+<h4 id="更多控制PWM"><a href="#更多控制PWM" class="headerlink" title="更多控制PWM"></a>更多控制PWM</h4><p>有几个低级定时器特定功能，可用于提供更改 PWM 设置的其他方法：</p>
+<ul>
+<li><code>ledc_timer_set()</code></li>
+<li><code>ledc_timer_rst()</code></li>
+<li><code>ledc_timer_pause()</code></li>
+<li><code>ledc_timer_resume()</code></li>
+</ul>
+<p>前两个函数被 <code>ledc_channel_config()</code> 称为“幕后”，以便在配置后提供“干净”的计时器启动。</p>
+<h3 id="使用中断"><a href="#使用中断" class="headerlink" title="使用中断"></a>使用中断</h3><p>配置 LEDC 通道时，在 <code>ledc_channel_config_t</code> 中选择的参数之一是 <code>ledc_intr_type_t</code>，并允许在淡入淡出完成时启用中断。</p>
+<p>通过调用 <code>ledc_isr_register()</code> 来注册处理此中断的处理程序。</p>
+<h2 id="LEDC高低速模式"><a href="#LEDC高低速模式" class="headerlink" title="LEDC高低速模式"></a>LEDC高低速模式</h2><p>LED PWM 控制器中共有 8 个定时器和 16 个通道，其中一半专用于高速模式，另一半专用于低速模式。选择低速或高速“有能力”定时器或通道是通过适用的函数调用中存在的参数 <code>ledc_mode_t</code> 来完成的。</p>
+<p>高速模式的优点是支持 h/w，定时器设置无故障切换。这意味着如果修改了定时器设置，则在定时器的下一个溢出中断后将自动应用更改。相反，在更新低速定时器时，应特别由软件触发设置更改。LEDC API 正在“幕后”进行，例如，当调用 <code>ledc_timer_config()</code> 或 <code>ledc_timer_set()</code> 时。</p>
+<p>有关速度模式的更多详细信息，请参阅 ESP32 技术参考手册(PDF)。请注意，本手册中提到的对 <code>SLOW_CLOCK</code> 的支持未在LEDC API 中实现。</p>
+<h2 id="支持的频率和占空比分辨率范围"><a href="#支持的频率和占空比分辨率范围" class="headerlink" title="支持的频率和占空比分辨率范围"></a>支持的频率和占空比分辨率范围</h2><p>LED PWM 控制器主要用于驱动 LED，并提供宽泛的 PWM 占空比设置。例如，对于 5 kHz 的 PWM 频率，最大占空比分辨率为 13 位。这意味着占空比可以设置在 0 到 100％ 之间，分辨率为~0.012％(13 ** 2 = 8192 LED 强度的离散电平)。</p>
+<p>LEDC 可以用于以更高的频率提供信号以对其他设备进行计时，例如，数码相机模块。在这种情况下，最大可用频率为 40 MHz，占空比分辨率为 1 位。这意味着频率固定在 50％，无法调整。</p>
+<p>API 用于在尝试设置超出 LEDC 硬件范围的频率和占空比分辨率时报告错误。例如，尝试将频率设置为 20 MHz 且占空比分辨率为 3 位将导致串行监视器上报告以下错误：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">E (196) ledc: requested frequency and duty resolution can not be achieved, try reducing freq_hz or duty_resolution. div_param&#x3D;128</span><br></pre></td></tr></table></figure>
+
+<p>在这种情况下，应降低占空比分辨率或频率。例如，将占空比分辨率设置为 2 将解决该问题，并提供以 25％ 步长设置占空比的可能性，即 25％，50％或75％。</p>
+<p>LEDC API 还将捕获并报告尝试配置低于支持的最小值的频率/任务分辨率组合，例如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">E (196) ledc: requested frequency and duty resolution can not be achieved, try increasing freq_hz or duty_resolution. div_param&#x3D;128000000</span><br></pre></td></tr></table></figure>
+
+<p>通常使用 <code>ledc_timer_bit_t</code> 来设置占空比分辨率。该枚举涵盖 10 到 15 位的范围。如果需要较小的占空比分辨率(低于 10 至 1)，请直接输入等效数值。</p>
+<h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><p>LEDC 改变占空比和衰落控制示例：<a href="https://github.com/espressif/esp-idf/tree/30545f4/examples/peripherals/ledc" target="_blank" rel="noopener">peripherals/ledc</a>.</p>
+<h2 id="API-Reference"><a href="#API-Reference" class="headerlink" title="API Reference"></a>API Reference</h2><h3 id="Header-File"><a href="#Header-File" class="headerlink" title="Header File"></a>Header File</h3><ul>
+<li><a href="https://github.com/espressif/esp-idf/blob/30545f4/components/driver/include/driver/ledc.h" target="_blank" rel="noopener">driver/include/driver/ledc.h</a></li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/peripherals/ledc.html" target="_blank" rel="noopener">LED Control</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（十三）Pulse Counter</title>
+    <url>/InfiniteYuanBlog/2018/01/16/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89Pulse%20Counter/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（十二）MCPWM</title>
+    <url>/InfiniteYuanBlog/2018/01/16/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%8C%EF%BC%89MCPWM/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（十）Timer</title>
+    <url>/InfiniteYuanBlog/2018/08/13/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%EF%BC%89Timer/</url>
+    <content><![CDATA[<h1 id="Timer"><a href="#Timer" class="headerlink" title="Timer"></a>Timer</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>ESP32 芯片包含两个硬件定时器组。每组有两个通用硬件定时器。它们都是基于 16 位预分频器和 64 位自动重载功能的向上/向下计数器的 64 位通用定时器。</p>
+<h2 id="功能概述"><a href="#功能概述" class="headerlink" title="功能概述"></a>功能概述</h2><p>以下各节介绍了配置操作定时器的典型步骤：</p>
+<ul>
+<li><a href="#定时器初始化">定时器初始化</a> - 应设置哪些参数以使定时器工作以及根据设置提供的具体功能。</li>
+<li><a href="#定时器控制">定时器控制</a> - 如何读取定时器的值，暂停/启动定时器，以及如何操作。</li>
+<li><a href="#警报">警报</a> - 设置和使用警报。</li>
+<li><a href="#中断">中断</a> - 如何启用和使用中断。</li>
+</ul>
+<a id="more"></a>
+
+<h3 id="定时器初始化"><a href="#定时器初始化" class="headerlink" title="定时器初始化"></a>定时器初始化</h3><p>使用 <code>timer_group_t</code> 标识 ESP32 的两个定时器组。使用 <code>timer_idx_t</code> 标识组中的各个定时器。每个定时器组都有两个定时器，总共提供四个定时器。</p>
+<p>在启动定时器之前，应该通过调用 <code>timer_init()</code> 来初始化定时器。应该为此函数提供结构 <code>timer_config_t</code>，以定义定时器应如何工作。特别是以下定时器参数的设置：</p>
+<ul>
+<li><strong>分频器</strong>：定时器的计数器“滴答作响”的速度有多快。这取决于分频器的设置，它将用作输入的 80 MHz APB_CLK 时钟的除数。</li>
+<li><strong>模式</strong>：<code>counter_dir</code> 决定了计数器递增或递减，通过从 <code>timer_count_dir_t</code> 中选择一个值来设置 <code>counter_dir</code> 。</li>
+<li><strong>计数器启用</strong>：如果计数器已启用，则在调用 <code>timer_init()</code> 后它将立即开始递增/递减。通过从 <code>timer_start_t</code> 中选择一个值，使用 <code>counter_en</code> 设置此操作。</li>
+<li><strong>报警启用</strong>：由 <code>alarm_en</code> 的设置决定。</li>
+<li><strong>自动重新加载</strong>：计数器是否应在定时器的警报上自动重新加载特定的初始值，或者继续递增或递减。</li>
+<li><strong>中断类型</strong>：定时器报警是否触发中断。设置 <code>timer_intr_mode_t</code> 中定义的值。</li>
+</ul>
+<p>要获取定时器设置的当前值，请使用函数 <code>timer_get_config()</code>。</p>
+<h3 id="定时器控制"><a href="#定时器控制" class="headerlink" title="定时器控制"></a>定时器控制</h3><p>一旦配置并启用了定时器，它就已经“滴答作响”了。要检查它的当前值，请调用 <code>timer_get_counter_value()</code> 或 <code>timer_get_counter_time_sec()</code>。要将定时器设置为特定的起始值，请调用 <code>timer_set_counter_value()</code>。</p>
+<p>可以通过调用 <code>timer_pause()</code> 随时暂停定时器。要再次启动它，请调用 <code>timer_start()</code>。</p>
+<p>要更改定时器的运行方式，可以再次调用 <code>Timer_init()</code>，如 <a href="#定时器初始化">Timer Initialization</a> 部分所述。另一种选择是使用专用功能来更改个别设置：</p>
+<ul>
+<li><strong>分频器值</strong> - <code>timer_set_divider()</code>。注意：更改分频器时应暂停定时器以避免不可预测的结果。如果定时器已在运行，<code>timer_set_divider()</code> 将首先暂停定时器，更改分频器，最后再次启动定时器。</li>
+<li><strong>模式</strong>(计数器是递增还是递减) - <code>timer_set_counter_mode()</code></li>
+<li><strong>报警时自动重载计数器</strong> - <code>timer_set_auto_reload()</code></li>
+</ul>
+<h3 id="警报"><a href="#警报" class="headerlink" title="警报"></a>警报</h3><p>要设置警报，请调用函数 <code>timer_set_alarm_value()</code>，然后使用 <code>timer_set_alarm()</code> 启用它。当调用 <code>timer_init()</code> 时，也可以在定时器初始化阶段启用警报。</p>
+<p>启用警报并且定时器达到警报值后，根据配置，可能会发生以下两种操作：</p>
+<ul>
+<li>如果先前已配置，将触发中断。请参见中断如何配置中断一节。</li>
+<li>启用 <code>auto_reload</code> 后，将重新加载定时器的计数器以从特定的初始值开始计数。应使用 <code>timer_set_counter_value()</code> 预先设置要启动的值。</li>
+</ul>
+<blockquote>
+<ul>
+<li>如果设置了警报值并且定时器已经超过该值，则将立即触发警报。</li>
+<li>触发后，警报将自动禁用，需要重新启动以再次触发。</li>
+</ul>
+</blockquote>
+<p>要检查已设置的警报值，请调用 <code>timer_get_alarm_value()</code>。</p>
+<h3 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h3><p>为特定定时器组和定时器注册中断处理程序是通过调用 <code>timer_isr_register()</code> 来完成的。</p>
+<p>要为定时器组启用中断，请调用 <code>timer_group_intr_enable()</code>。要为特定定时器执行此操作，请调用 <code>timer_enable_intr()</code>。使用相应的函数 <code>timer_group_intr_disable()</code> 和 <code>timer_disable_intr()</code> 来禁用中断。</p>
+<p>在 ISR 中处理中断时，需要明确清除中断。为此，请设置定义在 <a href="https://github.com/espressif/esp-idf/blob/30545f4/components/soc/esp32/include/soc/timer_group_struct.h" target="_blank" rel="noopener">soc/esp32/include/soc/timer_group_struct.h</a>里的 <code>TIMERGN.int_clr_timers.tM</code> 结构，其中 N 是定时器组号 [0,1]，M 是定时器号 [0,1]。例如，要清除定时器组 0 中定时器 1 的中断，请调用以下命令：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">TIMERG0.int_clr_timers.t1 = <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>请参阅下面的应用示例如何使用中断。</p>
+<h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><p>64 位硬件定时器示例：<a href="https://github.com/espressif/esp-idf/tree/30545f4/examples/peripherals/timer_group" target="_blank" rel="noopener">peripherals/timer_group</a>.</p>
+<h2 id="API-Reference"><a href="#API-Reference" class="headerlink" title="API Reference"></a>API Reference</h2><h3 id="Header-File"><a href="#Header-File" class="headerlink" title="Header File"></a>Header File</h3><ul>
+<li><a href="https://github.com/espressif/esp-idf/blob/30545f4/components/driver/include/driver/timer.h" target="_blank" rel="noopener">driver/include/driver/timer.h</a></li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/peripherals/timer.html" target="_blank" rel="noopener">Timer</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ESP32 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 学习笔记（四）ADC - Analog to Digital Converter</title>
+    <url>/InfiniteYuanBlog/2018/08/11/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%9B%9B%EF%BC%89ADC%20-%20Analog%20to%20Digital%20Converter/</url>
+    <content><![CDATA[<h1 id="ADC-Analog-to-Digital-Converter"><a href="#ADC-Analog-to-Digital-Converter" class="headerlink" title="ADC - Analog to Digital Converter"></a>ADC - Analog to Digital Converter</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP32 集成了 2 个 12 位逐次逼近模数转换器 (SARADC),由 5 个专用转换器控制器管理.支持 18 个通道(模拟使能引脚)的测量. ADC 还可测量 vdd33 等内部信号.其中一些引脚可用于设计 1 个可编程增益放大器,用于测量微弱模拟信号.SAR ADC 使用的 5 个控制器均为专用控制器,其中 2 个支持高性能多通道扫描、2 个经过优化可支持 Deep-sleep 模式下的低功耗运行,另外 1 个专门用于 PWDET/ PKDET (功率检测和峰值监测).</p>
+<a id="more"></a>
+
+<p><img src="https://img-blog.csdn.net/20180824172548878?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="图 1: SAR ADC 的概况"></p>
+<center>图 1: SAR ADC 的概况</center>
+
+<p>ADC 驱动程序 API 支持 ADC1(8 个通道,连接到 GPIO 32-39)和 ADC2(10 个通道,连接到 GPIO 0,2,4,12-15和 25-27). 但是,使用 ADC2 的应用程序存在一些限制:</p>
+<ol>
+<li>仅当 Wi-Fi 驱动程序未启动时,应用程序才能使用 ADC2,因为具有更高优先级的 Wi-Fi 驱动程序也使用 ADC.</li>
+<li>某些 ADC2 引脚用作捆扎引脚(GPIO 0,2,15),因此无法自由使用. 例如,官方开发套件:</li>
+</ol>
+<ul>
+<li><a href="https://esp-idf.readthedocs.io/en/latest/hw-reference/modules-and-boards.html#esp-modules-and-boards-esp32-devkitc" target="_blank" rel="noopener">ESP32 Core Board V2 / ESP32 DevKitC</a>:由于外部自动编程电路,无法使用 GPIO 0.</li>
+<li><a href="https://esp-idf.readthedocs.io/en/latest/hw-reference/modules-and-boards.html#esp-modules-and-boards-esp-wrover-kit-v3" target="_blank" rel="noopener">ESP-WROVER-KIT V3</a>:由于外部连接用于不同目的,因此无法使用 GPIO 0,2,4 和 15.</li>
+</ul>
+<h2 id="主要特性"><a href="#主要特性" class="headerlink" title="主要特性"></a>主要特性</h2><ul>
+<li>采用 2 个 SAR ADC,可支持同时采样与转换</li>
+<li>采用 5 个专用 ADC 控制器,可支持不同应用场景(比如,高性能、低功耗,或功率检测和峰值检测)</li>
+<li>支持 18 个模拟输入管脚</li>
+<li>1 个内部电压 vdd33 通道、2 个 pa_pkdet 通道(部分控制器支持)</li>
+<li>可配置 12 位、11 位、10 位、9 位多种分辨率</li>
+<li>支持 DMA(1 个控制器支持)</li>
+<li>支持多通道扫描模式(2 个控制器支持)</li>
+<li>支持 Deep-sleep 模式运行(1 个控制器支持)</li>
+<li>支持 ULP 协处理器控制(2 个控制器支持)</li>
+</ul>
+<h2 id="功能概述"><a href="#功能概述" class="headerlink" title="功能概述"></a>功能概述</h2><p><img src="https://img-blog.csdn.net/20180824181445719?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="图 2: SAR ADC 的功能概况"></p>
+<center>图 2: SAR ADC 的功能概况</center>
+
+<p><img src="https://img-blog.csdn.net/20180824181614793?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="表 1: SAR ADC 的信号输入"></p>
+<center>表 1: SAR ADC 的信号输入</center>
+ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG ADC1 CTRL、 DIG ADC2 CTRL,
+及 PWDET CTRL。各控制器的场景支持情况见表 2
+
+<p><img src="https://img-blog.csdn.net/20180824184037450?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="表 2: ESP32 的 SAR ADC 控制器"></p>
+<center>表 2: ESP32 的 SAR ADC 控制器</center>
+
+<h2 id="配置和读取-ADC"><a href="#配置和读取-ADC" class="headerlink" title="配置和读取 ADC"></a>配置和读取 ADC</h2><p>在读取之前应配置 ADC.</p>
+<ul>
+<li>对于 ADC1,通过调用函数 <code>adc1_config_width()</code> 和 <code>adc1_config_channel_atten()</code> 来配置所需的精度和衰减.</li>
+<li>对于 ADC2,通过 <code>adc2_config_channel_atten()</code> 配置衰减. 每次读取时都会配置 ADC2 的读取宽度.</li>
+</ul>
+<p>每个通道完成衰减配置,请参见 <code>adc1_channel_t</code> 和 <code>adc2_channel_t</code>,设置为上述功能的参数.</p>
+<p>然后可以使用 <code>adc1_get_raw()</code> 和 <code>adc2_get_raw()</code> 读取 ADC 转换结果. 应将 ADC2 的读取宽度设置为 <code>adc2_get_raw()</code> 的参数,而不是配置函数中的参数.</p>
+<blockquote>
+<p>由于 ADC2 与具有更高优先级的 WIFI 模块共享,因此在 <code>esp_wifi_start()</code> 和 <code>esp_wifi_stop()</code> 之间,<code>adc2_get_raw()</code> 的读取操作将失败. 使用返回代码查看读数是否成功.</p>
+</blockquote>
+<p>也可以通过调用专用功能 <code>hall_sensor_read()</code>通过 ADC1 读取内部霍尔效应传感器. 请注意,即使霍尔传感器在 ESP32 内部,读取它也使用 ADC1 的通道 0 和 3(GPIO 36 和 39). 请勿将其他任何东西连接到这些引脚,也不要更改其配置. 否则可能会影响来自 sesnor 的低值信号的测量.</p>
+<p>此 API 提供了配置 ADC1 以便从 ULP 读取的便捷方法. 为此,请调用函数 <code>adc1_ulp_enable()</code>,然后如上所述设置精度和衰减.</p>
+<p>还有另一个特定功能 <code>adc2_vref_to_gpio()</code> 用于将内部参考电压路由到 GPIO 引脚. 它可以方便地校准 ADC 读数,这将在最小化噪声部分中讨论.</p>
+<h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><p>读取 ADC1 通道 0(GPIO 36)上的电压:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;driver/adc.h&gt;</span></span></span><br><span class="line">...</span><br><span class="line">    adc1_config_width(ADC_WIDTH_BIT_12);</span><br><span class="line">    adc1_config_channel_atten(ADC1_CHANNEL_0,ADC_ATTEN_DB_0);</span><br><span class="line">    <span class="keyword">int</span> val = adc1_get_raw(ADC1_CHANNEL_0);</span><br></pre></td></tr></table></figure>
+<p>上例中的输入电压为 0 至 1.1V (衰减为 0 dB). 可以通过设置更高的衰减来扩展输入范围,请查看 <code>adc_atten_t</code>. esp-idf 中提供了使用 ADC 驱动程序的示例,包括校准(如下所述):<a href="https://github.com/espressif/esp-idf/tree/f9a4496/examples/peripherals/adc" target="_blank" rel="noopener">peripherals/adc</a></p>
+<p>读取 ADC2 通道 7 (GPIO 27)的电压:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;driver/adc.h&gt;</span></span></span><br><span class="line">...</span><br><span class="line">    <span class="keyword">int</span> read_raw;</span><br><span class="line">    adc2_config_channel_atten( ADC2_CHANNEL_7, ADC_ATTEN_0db );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">esp_err_t</span> r = adc2_get_raw( ADC2_CHANNEL_7, ADC_WIDTH_12Bit, &amp;read_raw);</span><br><span class="line">    <span class="keyword">if</span> ( r == ESP_OK ) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, read_raw );</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( r == ESP_ERR_TIMEOUT ) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"ADC2 used by Wi-Fi.\n"</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>由于与 Wi-Fi 冲突,读数可能会失败,应该检查. esp-idf 中提供了使用 ADC2 驱动程序读取 DAC 输出的示例:<a href="https://github.com/espressif/esp-idf/tree/30545f4/examples/peripherals/adc2" target="_blank" rel="noopener">peripherals/adc2</a></p>
+<p>读取内部霍尔效应传感器:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;driver/adc.h&gt;</span></span></span><br><span class="line">...</span><br><span class="line">    adc1_config_width(ADC_WIDTH_BIT_12);</span><br><span class="line">    <span class="keyword">int</span> val = hall_sensor_read();</span><br></pre></td></tr></table></figure>
+<p>在这两个示例中读取的值是 12 位宽(范围 0-4095).</p>
+<h2 id="API-Reference"><a href="#API-Reference" class="headerlink" title="API Reference"></a>API Reference</h2><p>该参考包括三个组成部分:</p>
+<ul>
+<li><a href="https://esp-idf.readthedocs.io/en/latest/api-reference/peripherals/adc.html#adc-api-reference-adc-driver" target="_blank" rel="noopener">ADC driver</a></li>
+<li><a href="https://esp-idf.readthedocs.io/en/latest/api-reference/peripherals/adc.html#adc-api-reference-adc-calibration" target="_blank" rel="noopener">ADC Calibration</a></li>
+<li><a href="https://esp-idf.readthedocs.io/en/latest/api-reference/peripherals/adc.html#adc-api-reference-gpio-lookup-macros" target="_blank" rel="noopener">GPIO Lookup Macros</a></li>
+</ul>
+<h3 id="Header-File"><a href="#Header-File" class="headerlink" title="Header File"></a>Header File</h3><ul>
+<li><a href="https://github.com/espressif/esp-idf/blob/f9a4496/components/driver/include/driver/adc.h" target="_blank" rel="noopener">driver/include/driver/adc.h</a></li>
+<li><a href="esp_adc_cal/include/esp_adc_cal.h">esp_adc_cal/include/esp_adc_cal.h</a></li>
+<li><a href="https://github.com/espressif/esp-idf/blob/f9a4496/components/soc/esp32/include/soc/adc_channel.h" target="_blank" rel="noopener">soc/esp32/include/soc/adc_channel.h</a></li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/peripherals/adc.html" target="_blank" rel="noopener">ADC</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -2420,58 +3127,6 @@
       </tags>
   </entry>
   <entry>
-    <title>ESP32 开发笔记（六）移植开源图形库 LittlevGL</title>
-    <url>/InfiniteYuanBlog/2018/08/08/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89%E7%A7%BB%E6%A4%8D%E5%BC%80%E6%BA%90%E5%9B%BE%E5%BD%A2%E5%BA%93%20LittlevGL/</url>
-    <content><![CDATA[<h1 id="ESP32-移植开源图形库-LittlevGL"><a href="#ESP32-移植开源图形库-LittlevGL" class="headerlink" title="ESP32 移植开源图形库 LittlevGL"></a>ESP32 移植开源图形库 LittlevGL</h1><p>ESP32 移植 LittlevGL 的源码：<a href="https://github.com/InfiniteYuan/esp32-lvgl-gui" target="_blank" rel="noopener">GitHub 源码地址</a><br>欢迎 Star ～</p>
-<h2 id="LittlevGL-介绍"><a href="#LittlevGL-介绍" class="headerlink" title="LittlevGL 介绍"></a>LittlevGL 介绍</h2><blockquote>
-<p>littlevGL is a free and open-source graphics library providing everything you need to create embedded GUI with easy-to-use graphical elements, beautiful visual effects and low memory footprint.<br><a href="https://littlevgl.com/" target="_blank" rel="noopener">LittlevGL 官网链接</a><br><a href="https://littlevgl.com/porting" target="_blank" rel="noopener">LittlevGL 移植教程</a><br><a href="https://littlevgl.com/basics" target="_blank" rel="noopener">LittlevGL 官方文档</a><br><a href="https://github.com/littlevgl/lvgl" target="_blank" rel="noopener">LittlevGL GitHub链接</a></p>
-</blockquote>
-<a id="more"></a>
-
-<h4>关键特性：</h4>
-
-<ul>
-<li>Powerful building blocks buttons, charts, lists, sliders, images etc</li>
-<li>Advanced graphics with animations, anti-aliasing, opacity, smooth scrolling</li>
-<li>Various input devices touch pad, mouse, keyboard, encoder, buttons etc</li>
-<li>Multi language support with UTF-8 decoding</li>
-<li>Fully customizable graphical elements</li>
-<li>Hardware independent to use with any microcontroller or display</li>
-<li>Scalable to operate with few memory (50 kB Flash, 10 kB RAM)</li>
-<li>OS, External memory and GPU supported but not required</li>
-<li>Single frame buffer operation even with advances graphical effects</li>
-<li>Written in C for maximal compatibility</li>
-<li>Simulator to develop on PC without embedded hardware</li>
-<li>Tutorials, examples, themes for rapid development</li>
-<li>Documentation and API references online</li>
-</ul>
-<h2 id="移植过程"><a href="#移植过程" class="headerlink" title="移植过程"></a>移植过程</h2><ol>
-<li>在工程目录下新建一个 components 目录，放入 LittlevGL 源码</li>
-<li>在 components 目录下新建一个 include 目录，放入 lv_conf.h 文件，由 LittlevGL 源码目录中的 lv_conf_templ.h文件而来</li>
-<li>在 components 目录下新建一个  component.mk  文件，将 LittlevGL 相关源码添加到组件的 <code>COMPONENT_SRCDIRS</code>、<code>COMPONENT_ADD_INCLUDEDIRS</code>和<code>COMPONENT_PRIV_INCLUDEDIRS</code>目录变量中</li>
-<li>之后在程序中使用了～，可根据 <a href="https://github.com/littlevgl/lv_examples/blob/master/lv_tutorial/0_porting/lv_tutorial_porting.c" target="_blank" rel="noopener">LittlevGL Tutorial</a> 在自己的主程序中实现</li>
-</ol>
-<h4>大致初始化流程：</h4>
-
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/***********************</span></span><br><span class="line"><span class="comment"> * Initialize LittlevGL</span></span><br><span class="line"><span class="comment"> ***********************/</span></span><br><span class="line">lv_init();</span><br><span class="line"></span><br><span class="line"><span class="comment">/***********************</span></span><br><span class="line"><span class="comment"> * Tick interface</span></span><br><span class="line"><span class="comment"> ***********************/</span></span><br><span class="line"><span class="comment">/* Initialize a Timer for 1 ms period and</span></span><br><span class="line"><span class="comment"> * in its interrupt call</span></span><br><span class="line"><span class="comment"> * lv_tick_inc(1); */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/***********************</span></span><br><span class="line"><span class="comment"> * Display interface</span></span><br><span class="line"><span class="comment"> ***********************/</span></span><br><span class="line"><span class="keyword">lv_disp_drv_t</span> disp_drv;                         <span class="comment">/*Descriptor of a display driver*/</span></span><br><span class="line">lv_disp_drv_init(&amp;disp_drv);                    <span class="comment">/*Basic initialization*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*Set up the functions to access to your display*/</span></span><br><span class="line">disp_drv.disp_flush = ex_disp_flush;            <span class="comment">/*Used in buffered mode (LV_VDB_SIZE != 0  in lv_conf.h)*/</span></span><br><span class="line"></span><br><span class="line">disp_drv.disp_fill = ex_disp_fill;              <span class="comment">/*Used in unbuffered mode (LV_VDB_SIZE == 0  in lv_conf.h)*/</span></span><br><span class="line">disp_drv.disp_map = ex_disp_map;                <span class="comment">/*Used in unbuffered mode (LV_VDB_SIZE == 0  in lv_conf.h)*/</span></span><br><span class="line"><span class="comment">/*Finally register the driver*/</span></span><br><span class="line">lv_disp_drv_register(&amp;disp_drv);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*************************</span></span><br><span class="line"><span class="comment"> * Input device interface</span></span><br><span class="line"><span class="comment"> *************************/</span></span><br><span class="line"><span class="comment">/*Add a touchpad in the example*/</span></span><br><span class="line"><span class="comment">/*touchpad_init();*/</span>                            <span class="comment">/*Initialize your touchpad*/</span></span><br><span class="line"><span class="keyword">lv_indev_drv_t</span> indev_drv;                       <span class="comment">/*Descriptor of an input device driver*/</span></span><br><span class="line">lv_indev_drv_init(&amp;indev_drv);                  <span class="comment">/*Basic initialization*/</span></span><br><span class="line">indev_drv.type = LV_INDEV_TYPE_POINTER;         <span class="comment">/*The touchpad is pointer type device*/</span></span><br><span class="line">indev_drv.<span class="built_in">read</span> = ex_tp_read;                    <span class="comment">/*Library ready your touchpad via this function*/</span></span><br><span class="line">lv_indev_drv_register(&amp;indev_drv);              <span class="comment">/*Finally register the driver*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*************************************</span></span><br><span class="line"><span class="comment"> * Run the task handler of LittlevGL</span></span><br><span class="line"><span class="comment"> *************************************/</span></span><br><span class="line"><span class="comment">/* Periodically call this function.</span></span><br><span class="line"><span class="comment"> * The timing is not critical but should be between 1..10 ms */</span></span><br><span class="line">lv_task_handler();</span><br><span class="line"><span class="comment">/*delay_ms(5)*/</span></span><br></pre></td></tr></table></figure>
-
-<h4>需要实现的函数：</h4>
-
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/***********************</span></span><br><span class="line"><span class="comment"> * Display interface</span></span><br><span class="line"><span class="comment"> ***********************/</span></span><br><span class="line"> <span class="comment">/*Write the internal buffer (VDB) to the display. 'lv_flush_ready()' has to be called when finished*/</span></span><br><span class="line"> <span class="keyword">void</span> (*disp_flush)(<span class="keyword">int32_t</span> x1, <span class="keyword">int32_t</span> y1, <span class="keyword">int32_t</span> x2, <span class="keyword">int32_t</span> y2, <span class="keyword">const</span> <span class="keyword">lv_color_t</span> * color_p);</span><br><span class="line"> <span class="comment">/*Fill an area with a color on the display*/</span></span><br><span class="line"> <span class="keyword">void</span> (*disp_fill)(<span class="keyword">int32_t</span> x1, <span class="keyword">int32_t</span> y1, <span class="keyword">int32_t</span> x2, <span class="keyword">int32_t</span> y2, <span class="keyword">lv_color_t</span> color);</span><br><span class="line"> <span class="comment">/*Write pixel map (e.g. image) to the display*/</span></span><br><span class="line"> <span class="keyword">void</span> (*disp_map)(<span class="keyword">int32_t</span> x1, <span class="keyword">int32_t</span> y1, <span class="keyword">int32_t</span> x2, <span class="keyword">int32_t</span> y2, <span class="keyword">const</span> <span class="keyword">lv_color_t</span> * color_p);</span><br><span class="line"> </span><br><span class="line"><span class="comment">/*************************</span></span><br><span class="line"><span class="comment"> * Input device interface</span></span><br><span class="line"><span class="comment"> *************************/</span></span><br><span class="line"> <span class="keyword">bool</span> (*<span class="built_in">read</span>)(<span class="keyword">lv_indev_data_t</span> *data);        <span class="comment">/*Function pointer to read data. Return 'true' if there is still data to be read (buffered)*/</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p><strong>注意：</strong>在实现 <code>disp_flush</code> 函数时，在函数末尾需要调用 LittlevGL 提供的 <code>lv_flush_ready</code> 函数<br>上述的这些函数可以自行实现，函数体保持一致即可</p>
-</blockquote>
-<p>欢迎关注本人 <a href="https://github.com/InfiniteYuan" target="_blank" rel="noopener">GitHub</a> ，更新 ESP32 相关开源库</p>
-]]></content>
-      <categories>
-        <category>ESP32 开发笔记</category>
-      </categories>
-      <tags>
-        <tag>ESP32</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ESP32 开发笔记（十一）使用 ESP32 做为 WebServer</title>
     <url>/InfiniteYuanBlog/2019/04/28/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%80%EF%BC%89%E4%BD%BF%E7%94%A8%20ESP32%20%E5%81%9A%E4%B8%BA%20WebServer/</url>
     <content><![CDATA[<h1 id="使用-ESP32-做为-WebServer"><a href="#使用-ESP32-做为-WebServer" class="headerlink" title="使用 ESP32 做为 WebServer"></a>使用 ESP32 做为 WebServer</h1><p>在某些场景，我们可能需要在手机上或者其他移动终端访问 ESP32 的数据，这个时候我们需要在手机上展示 ESP32 设备的相关信息，这个时候可以用 APP 在手机上展示数据，或者在手机浏览器中打开存储在 ESP32 上的网页。或者其他的方式。</p>
@@ -2732,6 +3387,58 @@
 <h2 id="二维码识别"><a href="#二维码识别" class="headerlink" title="二维码识别"></a>二维码识别</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">qr_recoginze</span><span class="params">(<span class="keyword">void</span> *parameter)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">camera_config_t</span> *camera_config = (<span class="keyword">camera_config_t</span> *)parameter;</span><br><span class="line">    <span class="comment">// Use VGA Size currently, but quirc can support other frame size.(eg: FRAMESIZE_SVGA,FRAMESIZE_VGA，</span></span><br><span class="line">    <span class="comment">// FRAMESIZE_CIF,FRAMESIZE_QVGA,FRAMESIZE_HQVGA,FRAMESIZE_QCIF,FRAMESIZE_QQVGA2,FRAMESIZE_QQVGA,etc)</span></span><br><span class="line">    <span class="keyword">if</span> (camera_config-&gt;frame_size &gt; FRAMESIZE_VGA) &#123;</span><br><span class="line">        ESP_LOGE(TAG, <span class="string">"Camera Frame Size err %d"</span>, (camera_config-&gt;frame_size));</span><br><span class="line">        vTaskDelete(<span class="literal">NULL</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Save image width and height, avoid allocate memory repeatly.</span></span><br><span class="line">    <span class="keyword">uint16_t</span> old_width = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">uint16_t</span> old_height = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Construct a new QR-code recognizer.</span></span><br><span class="line">    ESP_LOGI(TAG, <span class="string">"Construct a new QR-code recognizer(quirc)."</span>);</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">quirc</span> *<span class="title">qr_recognizer</span> = <span class="title">quirc_new</span>();</span></span><br><span class="line">    <span class="keyword">if</span> (!qr_recognizer) &#123;</span><br><span class="line">        ESP_LOGE(TAG, <span class="string">"Can't create quirc object"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">camera_fb_t</span> *fb = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">uint8_t</span> *<span class="built_in">image</span> = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">int</span> id_count = <span class="number">0</span>;</span><br><span class="line">    UBaseType_t uxHighWaterMark;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 入口处检测一次 */</span></span><br><span class="line">    ESP_LOGI(TAG, <span class="string">"uxHighWaterMark = %d"</span>, uxTaskGetStackHighWaterMark( <span class="literal">NULL</span> ));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        ESP_LOGI(TAG, <span class="string">"uxHighWaterMark = %d"</span>, uxTaskGetStackHighWaterMark( <span class="literal">NULL</span> ));</span><br><span class="line">        <span class="comment">// Capture a frame</span></span><br><span class="line">        fb = esp_camera_fb_get();</span><br><span class="line">        <span class="keyword">if</span> (!fb) &#123;</span><br><span class="line">            ESP_LOGE(TAG, <span class="string">"Camera capture failed"</span>);</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (old_width != fb-&gt;<span class="built_in">width</span> || old_height != fb-&gt;<span class="built_in">height</span>) &#123;</span><br><span class="line">            ESP_LOGD(TAG, <span class="string">"Recognizer size change w h len: %d, %d, %d"</span>, fb-&gt;<span class="built_in">width</span>, fb-&gt;<span class="built_in">height</span>, fb-&gt;len);</span><br><span class="line">            ESP_LOGI(TAG, <span class="string">"Resize the QR-code recognizer."</span>);</span><br><span class="line">            <span class="comment">// Resize the QR-code recognizer.</span></span><br><span class="line">            <span class="keyword">if</span> (quirc_resize(qr_recognizer, fb-&gt;<span class="built_in">width</span>, fb-&gt;<span class="built_in">height</span>) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                ESP_LOGE(TAG, <span class="string">"Resize the QR-code recognizer err."</span>);</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                old_width = fb-&gt;<span class="built_in">width</span>;</span><br><span class="line">                old_height = fb-&gt;<span class="built_in">height</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/** These functions are used to process images for QR-code recognition.</span></span><br><span class="line"><span class="comment">         * quirc_begin() must first be called to obtain access to a buffer into</span></span><br><span class="line"><span class="comment">         * which the input image should be placed. Optionally, the current</span></span><br><span class="line"><span class="comment">         * width and height may be returned.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * After filling the buffer, quirc_end() should be called to process</span></span><br><span class="line"><span class="comment">         * the image for QR-code recognition. The locations and content of each</span></span><br><span class="line"><span class="comment">         * code may be obtained using accessor functions described below.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="built_in">image</span> = quirc_begin(qr_recognizer, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">        <span class="built_in">memcpy</span>(<span class="built_in">image</span>, fb-&gt;buf, fb-&gt;len);</span><br><span class="line">        quirc_end(qr_recognizer);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Return the number of QR-codes identified in the last processed image.</span></span><br><span class="line">        id_count = quirc_count(qr_recognizer);</span><br><span class="line">        <span class="keyword">if</span> (id_count == <span class="number">0</span>) &#123;</span><br><span class="line">            ESP_LOGE(TAG, <span class="string">"Error: not a valid qrcode"</span>);</span><br><span class="line">            esp_camera_fb_return(fb);</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Print information of QR-code</span></span><br><span class="line">        dump_info(qr_recognizer, id_count);</span><br><span class="line">        esp_camera_fb_return(fb);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Destroy QR-Code recognizer (quirc)</span></span><br><span class="line">    quirc_destroy(qr_recognizer);</span><br><span class="line">    ESP_LOGI(TAG, <span class="string">"Deconstruct QR-Code recognizer(quirc)"</span>);</span><br><span class="line">    vTaskDelete(<span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h2 id="示例结果"><a href="#示例结果" class="headerlink" title="示例结果"></a>示例结果</h2><p><img src="https://img-blog.csdnimg.cn/20190315190639946.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="示例结果"></p>
+]]></content>
+      <categories>
+        <category>ESP32 开发笔记</category>
+      </categories>
+      <tags>
+        <tag>ESP32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ESP32 开发笔记（六）移植开源图形库 LittlevGL</title>
+    <url>/InfiniteYuanBlog/2018/08/08/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89%E7%A7%BB%E6%A4%8D%E5%BC%80%E6%BA%90%E5%9B%BE%E5%BD%A2%E5%BA%93%20LittlevGL/</url>
+    <content><![CDATA[<h1 id="ESP32-移植开源图形库-LittlevGL"><a href="#ESP32-移植开源图形库-LittlevGL" class="headerlink" title="ESP32 移植开源图形库 LittlevGL"></a>ESP32 移植开源图形库 LittlevGL</h1><p>ESP32 移植 LittlevGL 的源码：<a href="https://github.com/InfiniteYuan/esp32-lvgl-gui" target="_blank" rel="noopener">GitHub 源码地址</a><br>欢迎 Star ～</p>
+<h2 id="LittlevGL-介绍"><a href="#LittlevGL-介绍" class="headerlink" title="LittlevGL 介绍"></a>LittlevGL 介绍</h2><blockquote>
+<p>littlevGL is a free and open-source graphics library providing everything you need to create embedded GUI with easy-to-use graphical elements, beautiful visual effects and low memory footprint.<br><a href="https://littlevgl.com/" target="_blank" rel="noopener">LittlevGL 官网链接</a><br><a href="https://littlevgl.com/porting" target="_blank" rel="noopener">LittlevGL 移植教程</a><br><a href="https://littlevgl.com/basics" target="_blank" rel="noopener">LittlevGL 官方文档</a><br><a href="https://github.com/littlevgl/lvgl" target="_blank" rel="noopener">LittlevGL GitHub链接</a></p>
+</blockquote>
+<a id="more"></a>
+
+<h4>关键特性：</h4>
+
+<ul>
+<li>Powerful building blocks buttons, charts, lists, sliders, images etc</li>
+<li>Advanced graphics with animations, anti-aliasing, opacity, smooth scrolling</li>
+<li>Various input devices touch pad, mouse, keyboard, encoder, buttons etc</li>
+<li>Multi language support with UTF-8 decoding</li>
+<li>Fully customizable graphical elements</li>
+<li>Hardware independent to use with any microcontroller or display</li>
+<li>Scalable to operate with few memory (50 kB Flash, 10 kB RAM)</li>
+<li>OS, External memory and GPU supported but not required</li>
+<li>Single frame buffer operation even with advances graphical effects</li>
+<li>Written in C for maximal compatibility</li>
+<li>Simulator to develop on PC without embedded hardware</li>
+<li>Tutorials, examples, themes for rapid development</li>
+<li>Documentation and API references online</li>
+</ul>
+<h2 id="移植过程"><a href="#移植过程" class="headerlink" title="移植过程"></a>移植过程</h2><ol>
+<li>在工程目录下新建一个 components 目录，放入 LittlevGL 源码</li>
+<li>在 components 目录下新建一个 include 目录，放入 lv_conf.h 文件，由 LittlevGL 源码目录中的 lv_conf_templ.h文件而来</li>
+<li>在 components 目录下新建一个  component.mk  文件，将 LittlevGL 相关源码添加到组件的 <code>COMPONENT_SRCDIRS</code>、<code>COMPONENT_ADD_INCLUDEDIRS</code>和<code>COMPONENT_PRIV_INCLUDEDIRS</code>目录变量中</li>
+<li>之后在程序中使用了～，可根据 <a href="https://github.com/littlevgl/lv_examples/blob/master/lv_tutorial/0_porting/lv_tutorial_porting.c" target="_blank" rel="noopener">LittlevGL Tutorial</a> 在自己的主程序中实现</li>
+</ol>
+<h4>大致初始化流程：</h4>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/***********************</span></span><br><span class="line"><span class="comment"> * Initialize LittlevGL</span></span><br><span class="line"><span class="comment"> ***********************/</span></span><br><span class="line">lv_init();</span><br><span class="line"></span><br><span class="line"><span class="comment">/***********************</span></span><br><span class="line"><span class="comment"> * Tick interface</span></span><br><span class="line"><span class="comment"> ***********************/</span></span><br><span class="line"><span class="comment">/* Initialize a Timer for 1 ms period and</span></span><br><span class="line"><span class="comment"> * in its interrupt call</span></span><br><span class="line"><span class="comment"> * lv_tick_inc(1); */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/***********************</span></span><br><span class="line"><span class="comment"> * Display interface</span></span><br><span class="line"><span class="comment"> ***********************/</span></span><br><span class="line"><span class="keyword">lv_disp_drv_t</span> disp_drv;                         <span class="comment">/*Descriptor of a display driver*/</span></span><br><span class="line">lv_disp_drv_init(&amp;disp_drv);                    <span class="comment">/*Basic initialization*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*Set up the functions to access to your display*/</span></span><br><span class="line">disp_drv.disp_flush = ex_disp_flush;            <span class="comment">/*Used in buffered mode (LV_VDB_SIZE != 0  in lv_conf.h)*/</span></span><br><span class="line"></span><br><span class="line">disp_drv.disp_fill = ex_disp_fill;              <span class="comment">/*Used in unbuffered mode (LV_VDB_SIZE == 0  in lv_conf.h)*/</span></span><br><span class="line">disp_drv.disp_map = ex_disp_map;                <span class="comment">/*Used in unbuffered mode (LV_VDB_SIZE == 0  in lv_conf.h)*/</span></span><br><span class="line"><span class="comment">/*Finally register the driver*/</span></span><br><span class="line">lv_disp_drv_register(&amp;disp_drv);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*************************</span></span><br><span class="line"><span class="comment"> * Input device interface</span></span><br><span class="line"><span class="comment"> *************************/</span></span><br><span class="line"><span class="comment">/*Add a touchpad in the example*/</span></span><br><span class="line"><span class="comment">/*touchpad_init();*/</span>                            <span class="comment">/*Initialize your touchpad*/</span></span><br><span class="line"><span class="keyword">lv_indev_drv_t</span> indev_drv;                       <span class="comment">/*Descriptor of an input device driver*/</span></span><br><span class="line">lv_indev_drv_init(&amp;indev_drv);                  <span class="comment">/*Basic initialization*/</span></span><br><span class="line">indev_drv.type = LV_INDEV_TYPE_POINTER;         <span class="comment">/*The touchpad is pointer type device*/</span></span><br><span class="line">indev_drv.<span class="built_in">read</span> = ex_tp_read;                    <span class="comment">/*Library ready your touchpad via this function*/</span></span><br><span class="line">lv_indev_drv_register(&amp;indev_drv);              <span class="comment">/*Finally register the driver*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*************************************</span></span><br><span class="line"><span class="comment"> * Run the task handler of LittlevGL</span></span><br><span class="line"><span class="comment"> *************************************/</span></span><br><span class="line"><span class="comment">/* Periodically call this function.</span></span><br><span class="line"><span class="comment"> * The timing is not critical but should be between 1..10 ms */</span></span><br><span class="line">lv_task_handler();</span><br><span class="line"><span class="comment">/*delay_ms(5)*/</span></span><br></pre></td></tr></table></figure>
+
+<h4>需要实现的函数：</h4>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/***********************</span></span><br><span class="line"><span class="comment"> * Display interface</span></span><br><span class="line"><span class="comment"> ***********************/</span></span><br><span class="line"> <span class="comment">/*Write the internal buffer (VDB) to the display. 'lv_flush_ready()' has to be called when finished*/</span></span><br><span class="line"> <span class="keyword">void</span> (*disp_flush)(<span class="keyword">int32_t</span> x1, <span class="keyword">int32_t</span> y1, <span class="keyword">int32_t</span> x2, <span class="keyword">int32_t</span> y2, <span class="keyword">const</span> <span class="keyword">lv_color_t</span> * color_p);</span><br><span class="line"> <span class="comment">/*Fill an area with a color on the display*/</span></span><br><span class="line"> <span class="keyword">void</span> (*disp_fill)(<span class="keyword">int32_t</span> x1, <span class="keyword">int32_t</span> y1, <span class="keyword">int32_t</span> x2, <span class="keyword">int32_t</span> y2, <span class="keyword">lv_color_t</span> color);</span><br><span class="line"> <span class="comment">/*Write pixel map (e.g. image) to the display*/</span></span><br><span class="line"> <span class="keyword">void</span> (*disp_map)(<span class="keyword">int32_t</span> x1, <span class="keyword">int32_t</span> y1, <span class="keyword">int32_t</span> x2, <span class="keyword">int32_t</span> y2, <span class="keyword">const</span> <span class="keyword">lv_color_t</span> * color_p);</span><br><span class="line"> </span><br><span class="line"><span class="comment">/*************************</span></span><br><span class="line"><span class="comment"> * Input device interface</span></span><br><span class="line"><span class="comment"> *************************/</span></span><br><span class="line"> <span class="keyword">bool</span> (*<span class="built_in">read</span>)(<span class="keyword">lv_indev_data_t</span> *data);        <span class="comment">/*Function pointer to read data. Return 'true' if there is still data to be read (buffered)*/</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>注意：</strong>在实现 <code>disp_flush</code> 函数时，在函数末尾需要调用 LittlevGL 提供的 <code>lv_flush_ready</code> 函数<br>上述的这些函数可以自行实现，函数体保持一致即可</p>
+</blockquote>
+<p>欢迎关注本人 <a href="https://github.com/InfiniteYuan" target="_blank" rel="noopener">GitHub</a> ，更新 ESP32 相关开源库</p>
 ]]></content>
       <categories>
         <category>ESP32 开发笔记</category>

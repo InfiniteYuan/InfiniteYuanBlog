@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/InfiniteYuanBlog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/InfiniteYuanBlog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/InfiniteYuanBlog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/InfiniteYuanBlog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/css/main.css">
+
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/InfiniteYuanBlog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/InfiniteYuanBlog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"infiniteyuan.github.io","root":"/InfiniteYuanBlog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="I2CI2C (内部集成电路)总线可用于与连接到与 ESP32 相同的总线的多个外部设备进行通信。ESP32 板上有两个 I2C 控制器，每个控制器可以设置为主模式或从模式。 概述以下部分将指导您完成配置和操作 I2C 驱动程序的基本步骤：  配置驱动程序 - 选择驱动程序的参数，如主模式或从模式，设置特定的 GPIO 引脚作为 SDA 和 SCL，设置时钟速度等。 安装驱动程序 - 在主站或从站">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ESP32 学习笔记（六）I2C - Inter-Integrated Circuit">
+<meta property="og:url" content="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/08/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89I2C%20-%20Inter-Integrated%20Circuit/index.html">
+<meta property="og:site_name" content="InfiniteYuan">
+<meta property="og:description" content="I2CI2C (内部集成电路)总线可用于与连接到与 ESP32 相同的总线的多个外部设备进行通信。ESP32 板上有两个 I2C 控制器，每个控制器可以设置为主模式或从模式。 概述以下部分将指导您完成配置和操作 I2C 驱动程序的基本步骤：  配置驱动程序 - 选择驱动程序的参数，如主模式或从模式，设置特定的 GPIO 引脚作为 SDA 和 SCL，设置时钟速度等。 安装驱动程序 - 在主站或从站">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdn.net/20180812211151469?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://img-blog.csdn.net/20180812214852217?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="article:published_time" content="2018-08-12T20:07:28.000Z">
+<meta property="article:modified_time" content="2020-07-24T01:13:09.280Z">
+<meta property="article:author" content="InfiniteYuan">
+<meta property="article:tag" content="ESP32">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20180812211151469?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+
+<link rel="canonical" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/08/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89I2C%20-%20Inter-Integrated%20Circuit/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ESP32 学习笔记（六）I2C - Inter-Integrated Circuit | InfiniteYuan</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/InfiniteYuanBlog/atom.xml" title="InfiniteYuan" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+      <div class="site-meta-headline">
+        <a>
+          <img class="custom-logo-image" src="/InfiniteYuanBlog/images/InfiniteYuanLogo.jpg" alt="InfiniteYuan">
+        </a>
+      </div>
+
+    <a href="/InfiniteYuanBlog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">InfiniteYuan</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/InfiniteYuanBlog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/InfiniteYuanBlog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">45</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/InfiniteYuanBlog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/InfiniteYuanBlog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">4</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/infiniteyuan" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/08/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89I2C%20-%20Inter-Integrated%20Circuit/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
+      <meta itemprop="name" content="InfiniteYuan">
+      <meta itemprop="description" content="Stay Hungry, Stay Funlish">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="InfiniteYuan">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ESP32 学习笔记（六）I2C - Inter-Integrated Circuit
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-08-12 20:07:28" itemprop="dateCreated datePublished" datetime="2018-08-12T20:07:28+00:00">2018-08-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-24 01:13:09" itemprop="dateModified" datetime="2020-07-24T01:13:09+00:00">2020-07-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">ESP32 学习笔记</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/InfiniteYuanBlog/2018/08/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89I2C%20-%20Inter-Integrated%20Circuit/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2018/08/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89I2C%20-%20Inter-Integrated%20Circuit/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="I2C"><a href="#I2C" class="headerlink" title="I2C"></a>I2C</h1><p>I2C (内部集成电路)总线可用于与连接到与 ESP32 相同的总线的多个外部设备进行通信。ESP32 板上有两个 I2C 控制器，每个控制器可以设置为主模式或从模式。</p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>以下部分将指导您完成配置和操作 I2C 驱动程序的基本步骤：</p>
+<ol>
+<li><a href="#配置驱动程序">配置驱动程序</a> - 选择驱动程序的参数，如主模式或从模式，设置特定的 GPIO 引脚作为 SDA 和 SCL，设置时钟速度等。</li>
+<li><a href="#安装驱动程序">安装驱动程序</a> - 在主站或从站模式下激活驱动程序，以便在 ESP32 上运行两个 I2C 控制器其中一个。</li>
+<li><a href="#进行通讯">进行通讯</a>：<ul>
+<li>主机模式 - 作为主机运行通信</li>
+<li>从机模式 - 从机响应来自主机的消息</li>
+</ul>
+</li>
+<li><a href="#中断处理">中断处理</a> - 配置和 I2C 中断服务。</li>
+<li><a href="#超出默认值">超出默认值</a> - 调整 I2C 通信的时序，引脚配置和其他参数。</li>
+<li><a href="#错误处理">错误处理</a> - 如何识别和处理驱动程序配置和通信错误。</li>
+<li><a href="#删除驱动程序">删除驱动程序</a> - 在通信结束时释放 I2C 驱动程序所使用的资源。</li>
+</ol>
+<p>I2C 驱动程序标识是从 <code>i2c_port_t</code> 中选择的两个端口号之一。在驱动程序配置期间通过 <code>i2c_mode_t</code> 选择 “master” 或 “slave” 指定端口的操作模式。</p>
+<a id="more"></a>
+
+<h2 id="配置驱动程序"><a href="#配置驱动程序" class="headerlink" title="配置驱动程序"></a>配置驱动程序</h2><p>建立 I2C 通信的第一步是配置驱动程序。这是通过设置 <code>i2c_config_t</code> 结构中包含的几个参数来完成的：</p>
+<ul>
+<li>I2C 操作模式 - 从 <code>i2c_opmode_t</code> 中选择 slave 或 master</li>
+<li>通讯引脚配置：<ul>
+<li>分配给 SDA 和 SCL 信号的 GPIO 引脚编号</li>
+<li>是否为各个引脚启用 ESP32 的内部上拉</li>
+</ul>
+</li>
+<li>I2C 时钟速度，如果此配置涉及主模</li>
+<li>如果此配置涉及从属模式：<ul>
+<li>是否应启用 10 位地址模式</li>
+<li>从机地址</li>
+</ul>
+</li>
+</ul>
+<p>然后，要初始化给定 I2C 端口的配置，请使用端口号和 <code>i2c_config_t</code> 结构作为函数调用参数调用函数 <code>i2c_param_config()</code>。</p>
+<p>在此阶段，<code>i2c_param_config()</code> 还将“其他 I2C 配置参数”设置为常用的默认值。要检查值是什么以及如何更改它们，请参阅<a href="#超出默认值">超出默认值</a>。</p>
+<h2 id="安装驱动程序"><a href="#安装驱动程序" class="headerlink" title="安装驱动程序"></a>安装驱动程序</h2><p>初始化配置后，下一步是通过调用 <code>i2c_driver_install()</code> 来安装 I2C 驱动程序。此函数调用需要以下参数：</p>
+<ul>
+<li>端口号，可用的两个端口之一，从 <code>i2c_port_t</code> 中选择</li>
+<li>从 <code>i2c_opmode_t</code> 中选择的操作模式，从机或主机</li>
+<li>将分配用于在从机模式下发送和接收数据的缓冲区的大小</li>
+<li>用于分配中断的标志</li>
+</ul>
+<h2 id="进行通讯"><a href="#进行通讯" class="headerlink" title="进行通讯"></a>进行通讯</h2><p>安装 I2C 驱动程序后，ESP32 即可与其他 I2C 设备通信。通信编程取决于所选 I2C 端口是以主机模式还是从机模式工作。</p>
+<h3 id="主机模式"><a href="#主机模式" class="headerlink" title="主机模式"></a>主机模式</h3><p>ESP32 工作在主机模式的 I2C 端口负责与从 I2C 设备建立通信，并发送命令以触发从机设备工作，如进行测量和发回结果。</p>
+<p>为了组织这个过程，驱动程序提供了一个称为 “command link” 的容器，该容器应填充一系列命令，然后传递给 I2C 控制器执行。</p>
+<h4 id="主机-Write"><a href="#主机-Write" class="headerlink" title="主机 Write"></a>主机 Write</h4><p>构建 I2C 主设备向从设备发送 n 个字节的命令链接的示例如下所示：<br><img src="https://img-blog.csdn.net/20180812211151469?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="I2C command link - master write example"></p>
+<p>下面介绍如何设置“主写入”的命令链接以及内部的内容：</p>
+<ol>
+<li>第一步是使用 <code>i2c_cmd_link_create()</code> 创建命令链接。然后命令链接填充一系列要发送给从站的数据：<ul>
+<li>起始位 -  <code>i2c_master_start()</code></li>
+<li>单字节从机地址 - <code>i2c_master_write_byte()</code>。该地址作为此函数调用的参数提供。</li>
+<li>一个或多个字节的数据作为 <code>i2c_master_write()</code> 的参数。</li>
+<li>停止位 -  <code>i2c_master_stop()</code></li>
+</ul>
+</li>
+</ol>
+<p><code>i2c_master_write_byte()</code> 和 <code>i2c_master_write()</code> 命令都有另外的参数来定义 slave 是否应该确认接收的数据。<br> 2. 通过调用 <code>i2c_master_cmd_begin()</code> 来触发 I2C 控制器执行命令链接。<br> 3. 最后一步，完成命令发送后，通过调用 <code>i2c_cmd_link_delete()</code> 释放命令链接使用的资源。</p>
+<h4 id="主机-Read"><a href="#主机-Read" class="headerlink" title="主机 Read"></a>主机 Read</h4><p>和主机类似的步骤序列，用于从从机读取数据。<br><img src="https://img-blog.csdn.net/20180812214852217?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="I2C command link - master read example"></p>
+<p>在读取数据时，不是 “i2c_master_read …”，而是使用 <code>i2c_master_read_byte()</code> 和/或 <code>i2c_master_read()</code> 填充命令链接。此外，最后一次读取配置为不提供主机的确认。</p>
+<p>发送从机地址后，请参见上图中的步骤 3，主机可以写入或从从机读取数据。主设备实际执行的操作信息隐藏在从设备地址的最低位。</p>
+<p>因此，命令链接指示从机主机将写入数据包含地址，如 <code>(ESP_SLAVE_ADDR &lt;&lt; 1)| I2C_MASTER_WRITE</code>，如下所示：</p>
+<h3 id="从机模式"><a href="#从机模式" class="headerlink" title="从机模式"></a>从机模式</h3><p>API 提供了从属设备读取和写入数据的功能 - * <code>i2c_slave_read_buffer()</code> 和 <code>i2c_slave_write_buffer()</code>。<a href="https://github.com/espressif/esp-idf/tree/30545f4/examples/peripherals/i2c" target="_blank" rel="noopener">peripherals/i2c</a>中提供了使用这些功能的示例。</p>
+<h2 id="中断处理"><a href="#中断处理" class="headerlink" title="中断处理"></a>中断处理</h2><p>调用函数 <code>i2c_isr_register()</code> 注册中断处理程序，调用 <code>i2c_isr_free()</code> 删除处理程序。<a href="https://espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf" target="_blank" rel="noopener">ESP32技术参考手册(PDF)</a>中提供了 I2C 控制器触发的中断描述。</p>
+<h2 id="超出默认值"><a href="#超出默认值" class="headerlink" title="超出默认值"></a>超出默认值</h2><p>在驱动程序配置期间(调用 <code>i2c_param_config()</code> 时，请参阅<a href="https://esp-idf.readthedocs.io/en/latest/api-reference/peripherals/i2c.html#i2c-api-configure-driver" target="_blank" rel="noopener">配置驱动程序</a>)，有一些 I2C 通信参数设置为某些默认的常用值。某些参数也已在 I2C 控制器的寄存器中配置。通过调用专用函数，可以将这些参数更改为用户定义的值：</p>
+<ul>
+<li><p>SCL 脉冲周期为高和低 - <code>i2c_set_period()</code></p>
+</li>
+<li><p>在产生启动/停止信号期间使用的 SCL 和 SDA 信号时序 - <code>i2c_set_start_timing()</code>/ <code>i2c_set_stop_timing()</code></p>
+</li>
+<li><p>从器件采样时以及通过主器件发送时 SCL 和 SDA 信号之间的时序关系 - <code>i2c_set_data_timing()</code></p>
+</li>
+<li><p>I2C 超时 - <code>i2c_set_timeout()</code></p>
+<blockquote>
+<p>定时值在 APB 时钟周期中定义。APB 的频率在 <code>I2C_APB_CLK_FREQ</code> 中指定。</p>
+</blockquote>
+</li>
+<li><p>首先发送/接收 LSB 或 MSB -<code>i2c_set_data_mode()</code> 可在 <code>i2c_trans_mode_t</code> 中定义的模式中选择</p>
+</li>
+</ul>
+<p>上述每个函数都有一个<code>_get_</code>对应项来检查当前设置的值。</p>
+<p>要在驱动程序配置期间查看参数设置的默认值，请参阅文件<a href="https://github.com/espressif/esp-idf/blob/30545f4/components/driver/i2c.c" target="_blank" rel="noopener">driver / i2c.c</a>查找定义了<code>_DEFAULT</code>后缀。</p>
+<p>通过功能<code>i2c_set_pin()</code>，还可以选择不同的 SDA 和 SCL 引脚并改变上拉配置，改变已经输入的 <code>i2c_param_config()</code>。</p>
+<blockquote>
+<p>ESP32 的内部上拉电阻范围为几十 kOhm，因此在大多数情况下，它们本身不足以用作 I2C 上拉电阻。我们建议添加外部上拉电阻，其值如 I2C 标准中所述。</p>
+</blockquote>
+<h2 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h2><p>大多数驱动程序的函数在成功完成时返回 <code>ESP_OK</code>，或者在失败时返回特定的错误代码。始终检查返回的值并实现错误处理是一种好习惯。例如，驱动程序也打印出志消息。检查输入配置的正确性，其中包含错误说明。有关详细信息，请参阅文件<a href="https://github.com/espressif/esp-idf/blob/30545f4/components/driver/i2c.c" target="_blank" rel="noopener">driver / i2c.c</a>查找定义 <code>_ERR_STR后</code> 缀。</p>
+<p>使用专用中断来捕获通信故障。例如，当 I2C 花费太长时间来接收数据时，会触发 <code>I2C_TIME_OUT_INT</code> 中断。有关相关信息，请参阅<a href="https://esp-idf.readthedocs.io/en/latest/api-reference/peripherals/i2c.html#i2c-api-interrupt-handling" target="_blank" rel="noopener">中断处理</a>。</p>
+<p>要在通信失败时重置内部硬件缓冲区，可以使用<code>i2c_reset_tx_fifo()</code>和<code>i2c_reset_rx_fifo()</code>。</p>
+<h2 id="删除驱动程序"><a href="#删除驱动程序" class="headerlink" title="删除驱动程序"></a>删除驱动程序</h2><p>如果使用 <code>i2c_driver_install()</code> 建立 I2C 通信一段时间之后不再需要 I2C 通信，则可以通过调用 <code>i2c_driver_delete()</code> 来移除驱动程序以释放分配的资源。</p>
+<h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><p>I2C 主机和从机示例：<a href="https://github.com/espressif/esp-idf/tree/30545f4/examples/peripherals/i2c" target="_blank" rel="noopener">peripherals/i2c</a>.</p>
+<h2 id="API-Reference"><a href="#API-Reference" class="headerlink" title="API Reference"></a>API Reference</h2><h3 id="Header-File"><a href="#Header-File" class="headerlink" title="Header File"></a>Header File</h3><ul>
+<li><a href="https://github.com/espressif/esp-idf/blob/30545f4/components/driver/include/driver/i2c.h" target="_blank" rel="noopener">driver/include/driver/i2c.h</a></li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/peripherals/i2c.html" target="_blank" rel="noopener">I2C</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/01/16/ESP32 学习笔记/ESP32 学习笔记（一）开发环境搭建/" rel="bookmark">ESP32 学习笔记（一）开发环境搭建</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/12/ESP32 学习笔记/ESP32 学习笔记（七）I2S - Inter—IC Sound/" rel="bookmark">ESP32 学习笔记（七）I2S - Inter—IC Sound</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/11/ESP32 学习笔记/ESP32 学习笔记（三）UART - Universal Asynchronous Receiver Transmitter/" rel="bookmark">ESP32 学习笔记（三）UART - Universal Asynchronous Receiver/Transmitter</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/13/ESP32 学习笔记/ESP32 学习笔记（九）SPI - SPI Slave/" rel="bookmark">ESP32 学习笔记（九）SPI - SPI Slave</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/08/ESP32 学习笔记/ESP32 学习笔记（二）GPIO & RTC GPIO/" rel="bookmark">ESP32 学习笔记（二）GPIO & RTC GPIO</a></div>
+    </li>
+  </ul>
+
+        <div class="reward-container">
+  <div>如果这篇文章对你有帮助，那么不妨？</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/InfiniteYuanBlog/tags/ESP32/" rel="tag"><i class="fa fa-tag"></i> ESP32</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2018/08/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89DAC%20-%20Digital%20To%20Analog%20Converter/" rel="prev" title="ESP32 学习笔记（五）DAC - Digital To Analog Converter">
+      <i class="fa fa-chevron-left"></i> ESP32 学习笔记（五）DAC - Digital To Analog Converter
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2018/08/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89I2S%20-%20Inter%E2%80%94IC%20Sound/" rel="next" title="ESP32 学习笔记（七）I2S - Inter—IC Sound">
+      ESP32 学习笔记（七）I2S - Inter—IC Sound <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#I2C"><span class="nav-number">1.</span> <span class="nav-text">I2C</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置驱动程序"><span class="nav-number">1.2.</span> <span class="nav-text">配置驱动程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装驱动程序"><span class="nav-number">1.3.</span> <span class="nav-text">安装驱动程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进行通讯"><span class="nav-number">1.4.</span> <span class="nav-text">进行通讯</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#主机模式"><span class="nav-number">1.4.1.</span> <span class="nav-text">主机模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#主机-Write"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">主机 Write</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#主机-Read"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">主机 Read</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从机模式"><span class="nav-number">1.4.2.</span> <span class="nav-text">从机模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中断处理"><span class="nav-number">1.5.</span> <span class="nav-text">中断处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#超出默认值"><span class="nav-number">1.6.</span> <span class="nav-text">超出默认值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#错误处理"><span class="nav-number">1.7.</span> <span class="nav-text">错误处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除驱动程序"><span class="nav-number">1.8.</span> <span class="nav-text">删除驱动程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用示例"><span class="nav-number">1.9.</span> <span class="nav-text">应用示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API-Reference"><span class="nav-number">1.10.</span> <span class="nav-text">API Reference</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Header-File"><span class="nav-number">1.10.1.</span> <span class="nav-text">Header File</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.11.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="InfiniteYuan"
+      src="/InfiniteYuanBlog/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">InfiniteYuan</p>
+  <div class="site-description" itemprop="description">Stay Hungry, Stay Funlish</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/InfiniteYuanBlog/archives/">
+        
+          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/InfiniteYuanBlog/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/InfiniteYuanBlog/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/infiniteyuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;infiniteyuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">InfiniteYuan</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">155k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">2:21</span>
+
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        站点访客数:<span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        站点阅读量:<span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/InfiniteYuanBlog/lib/anime.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/InfiniteYuanBlog/js/utils.js"></script>
+
+<script src="/InfiniteYuanBlog/js/motion.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/schemes/muse.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/next-boot.js"></script>
+
+<script src="/InfiniteYuanBlog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/InfiniteYuanBlog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '2spSMheFYziIJlzCVs7fvHeG-gzGzoHsz',
+      appKey     : 'aj8lFtI7EyFfrWCx902T0szo',
+      placeholder: "ヾﾉ≧∀≦)o来啊，快活啊!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/InfiniteYuanBlog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/InfiniteYuanBlog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/InfiniteYuanBlog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/InfiniteYuanBlog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/css/main.css">
+
+
+<link rel="stylesheet" href="/InfiniteYuanBlog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/InfiniteYuanBlog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/InfiniteYuanBlog/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"infiniteyuan.github.io","root":"/InfiniteYuanBlog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="UART - Universal Asynchronous Receiver&#x2F;Transmitter概述嵌入式应用通常要求一个简单的并且占用系统资源少的方法来传输数据.通用异步收发传输器(UART) 即可以满足这些要求,它能够灵活地与外部设备进行全双工数据交换.ESP32 芯片中有 3 个UART 控制器可供使用,并且兼容不同的 UART 设备.另外,UART 还可以用作红外数据交换(IrDA)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ESP32 学习笔记（三）UART - Universal Asynchronous Receiver&#x2F;Transmitter">
+<meta property="og:url" content="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/08/11/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89UART%20-%20Universal%20Asynchronous%20Receiver%20Transmitter/index.html">
+<meta property="og:site_name" content="InfiniteYuan">
+<meta property="og:description" content="UART - Universal Asynchronous Receiver&#x2F;Transmitter概述嵌入式应用通常要求一个简单的并且占用系统资源少的方法来传输数据.通用异步收发传输器(UART) 即可以满足这些要求,它能够灵活地与外部设备进行全双工数据交换.ESP32 芯片中有 3 个UART 控制器可供使用,并且兼容不同的 UART 设备.另外,UART 还可以用作红外数据交换(IrDA)">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdn.net/2018081119230686?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://img-blog.csdn.net/20180811193508599?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="article:published_time" content="2018-08-11T15:41:29.000Z">
+<meta property="article:modified_time" content="2020-07-24T01:13:09.280Z">
+<meta property="article:author" content="InfiniteYuan">
+<meta property="article:tag" content="ESP32">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdn.net/2018081119230686?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+
+<link rel="canonical" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/08/11/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89UART%20-%20Universal%20Asynchronous%20Receiver%20Transmitter/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ESP32 学习笔记（三）UART - Universal Asynchronous Receiver/Transmitter | InfiniteYuan</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/InfiniteYuanBlog/atom.xml" title="InfiniteYuan" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+      <div class="site-meta-headline">
+        <a>
+          <img class="custom-logo-image" src="/InfiniteYuanBlog/images/InfiniteYuanLogo.jpg" alt="InfiniteYuan">
+        </a>
+      </div>
+
+    <a href="/InfiniteYuanBlog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">InfiniteYuan</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/InfiniteYuanBlog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/InfiniteYuanBlog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">45</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/InfiniteYuanBlog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/InfiniteYuanBlog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">4</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/infiniteyuan" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/08/11/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89UART%20-%20Universal%20Asynchronous%20Receiver%20Transmitter/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/InfiniteYuanBlog/images/avatar.gif">
+      <meta itemprop="name" content="InfiniteYuan">
+      <meta itemprop="description" content="Stay Hungry, Stay Funlish">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="InfiniteYuan">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ESP32 学习笔记（三）UART - Universal Asynchronous Receiver/Transmitter
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-08-11 15:41:29" itemprop="dateCreated datePublished" datetime="2018-08-11T15:41:29+00:00">2018-08-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-24 01:13:09" itemprop="dateModified" datetime="2020-07-24T01:13:09+00:00">2020-07-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">ESP32 学习笔记</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/InfiniteYuanBlog/2018/08/11/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89UART%20-%20Universal%20Asynchronous%20Receiver%20Transmitter/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2018/08/11/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89UART%20-%20Universal%20Asynchronous%20Receiver%20Transmitter/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="UART-Universal-Asynchronous-Receiver-Transmitter"><a href="#UART-Universal-Asynchronous-Receiver-Transmitter" class="headerlink" title="UART - Universal Asynchronous Receiver/Transmitter"></a>UART - Universal Asynchronous Receiver/Transmitter</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>嵌入式应用通常要求一个简单的并且占用系统资源少的方法来传输数据.通用异步收发传输器(UART) 即可以满足这些要求,它能够灵活地与外部设备进行全双工数据交换.ESP32 芯片中有 3 个UART 控制器可供使用,并且兼容不同的 UART 设备.另外,UART 还可以用作红外数据交换(IrDA) 或 RS-485 调制解调器.</p>
+<p>3 个 UART 控制器有一组功能相同的寄存器.本文以 UARTn 指代 3 个 UART 控制器,n 为0、1、2.</p>
+<h2 id="主要特性"><a href="#主要特性" class="headerlink" title="主要特性"></a>主要特性</h2><ul>
+<li>可编程收发波特率</li>
+<li>3 个 UART 的发送 FIFO 以及接收 FIFO 共享1024 x 8-bit RAM</li>
+<li>全双工异步通信</li>
+<li>支持输入信号波特率自检功能</li>
+<li>支持 5/6/7/8 位数据长度</li>
+<li>支持 1/1.5/2/3/4 个停止位</li>
+<li>支持奇偶校验位</li>
+<li>支持 RS485 协议</li>
+<li>支持 IrDA 协议</li>
+<li>支持 DMA 高速数据通信</li>
+<li>支持 UART 唤醒模式</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="功能描述"><a href="#功能描述" class="headerlink" title="功能描述"></a>功能描述</h2><p>UART 是一种以字符为导向的通用数据链,可以实现设备间的通信.异步传输的意思是不需要在发送数据上添加时钟信息.这也要求发送端和接收端的速率、停止位、奇偶校验位等都要相同,通信才能成功.</p>
+<p>一个典型的 UART 帧开始于一个起始位,紧接着是有效数据,然后是奇偶校验位(可有可无),最后是停止位.ESP32 上的 UART 控制器支持多种字符长度和停止位.另外,控制器还支持软硬件流控和 DMA,可以实现无缝高速的数据传输.开发者可以使用多个 UART 端口,同时又能保证很少的软件开销.<br><img src="https://img-blog.csdn.net/2018081119230686?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="UART 基本架构图"></p>
+<center>图1 UART 基本架构图</center>
+
+<p>UART 有两个时钟源:80-MHz APB_CLK 以及参考时钟 REF_TICK (详情请参考章节复位和时钟).可以通过配置 UART_TICK_REF_ALWAYS_ON 来选择时钟源.时钟中的分频器用于对时钟源进行分频,然后产生时钟信号来驱动 UART 模块.ART_CLKDIV_REG 将分频系数分成两个部分:UART_CLKDIV 用于配置整数部分,UART_CLKDIV_FRAG 用于配置小数部分.</p>
+<p>UART 控制器可以分为两个功能块:发送块和接收块.</p>
+<p>发送块包含一个发送 FIFO 用于缓存待发送的数据.软件可以通过 APB 总线写 Tx_FIFO,也可以通过 DMA 将数据搬入 Tx_FIFO.Tx_FIFO_Ctrl 用于控制 Tx_FIFO 的读写过程,当 Tx_FIFO 非空时,Tx_FSM 通过 Tx_FIFO_Ctrl读取数据,并将数据按照配置的帧格式转化成比特流.比特流输出信号 txd_out 可以通过配置 UART_TXD_INV 寄存器实现取反功能.</p>
+<p>接收块包含一个接收 FIFO 用于缓存待处理的数据.输入比特流 rxd_in 可以输入到 UART 控制器.可以通过 UART_RXD_INV 寄存器实现取反.Baudrate_Detect 通过检测最小比特流输入信号的脉宽来测量输入信号的波特率.Start_Detect 用于检测数据的 START 位,当检测到 START 位之后,RX_FSM 通过 Rx_FIFO_Ctrl 将帧解析后的数据存入 Rx_FIFO 中.</p>
+<p>软件可以通过 APB 总线读取 Rx_FIFO 中的数据.为了提高数据传输效率,可以使用 DMA 方式进行数据发送或接收.</p>
+<p>HW_Flow_Ctrl 通过标准 UART RTS 和 CTS(rtsn_out 和 ctsn_in)流控信号来控制 rxd_in 和 txd_out 的数据流.SW_Flow_Ctrl 通过在发送数据流中插入特殊字符以及在接收数据流中检测特殊字符来进行数据流的控制.当 UART 处于 Light-sleep(详情请参考章节低功耗管理)状态时,Wakeup_Ctrl 开始计算 rxd_in 的脉冲个数,当脉冲个数大于 UART_ACTIVE_THRESHOLD 时产生 wake_up 信号给 RTC 模块,由 RTC 来唤醒 UART 控制器.<br><img src="https://img-blog.csdn.net/20180811193508599?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="UART 共享RAM 图"></p>
+<center>UART 共享 RAM 图</center>
+
+<h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><p>配置 UART 设置并使用 UART1 接口安装 UART 驱动程序进行读/写:<a href="https://github.com/espressif/esp-idf/tree/f9a4496/examples/peripherals/uart_echo" target="_blank" rel="noopener">peripherals/uart_echo</a>.</p>
+<p>演示如何报告各种通信事件以及如何使用模式检测中断:<a href="https://github.com/espressif/esp-idf/tree/f9a4496/examples/peripherals/uart_events" target="_blank" rel="noopener">peripherals/uart_events</a>.</p>
+<p>在两个独立的 FreeRTOS 任务中使用相同的 UART 进行发送和接收:<a href="https://github.com/espressif/esp-idf/tree/f9a4496/examples/peripherals/uart_async_rxtxtasks" target="_blank" rel="noopener">peripherals/uart_async_rxtxtasks</a>.</p>
+<p>对 UART 文件描述符使用同步 I/O 多路复用:<a href="https://github.com/espressif/esp-idf/tree/f9a4496/examples/peripherals/uart_select" target="_blank" rel="noopener">peripherals/uart_select</a>.</p>
+<p>设置 UART 驱动程序以半双工模式通过 RS485 接口进行通信:<a href="https://github.com/espressif/esp-idf/tree/f9a4496/examples/peripherals/uart_echo_rs485" target="_blank" rel="noopener">peripherals/uart_echo_rs485</a>. 此示例类似于 uart_echo,但通过连接到 ESP32 引脚的 RS485 接口芯片提供通信.</p>
+<h2 id="API-Reference"><a href="#API-Reference" class="headerlink" title="API Reference"></a>API Reference</h2><h3 id="Header-File"><a href="#Header-File" class="headerlink" title="Header File"></a>Header File</h3><ul>
+<li><a href="https://github.com/espressif/esp-idf/blob/f9a4496/components/driver/include/driver/uart.h" target="_blank" rel="noopener">driver/include/driver/uart.h</a></li>
+</ul>
+<h2 id="API-使用"><a href="#API-使用" class="headerlink" title="API 使用"></a>API 使用</h2><p>以下概述描述了用于在 ESP32 和某些其他 UART 设备之间建立通信的功能和数据类型. 概述反映了编程 ESP32 的UART驱动程序时的典型工作流程,并分为以下几个部分:</p>
+<ol>
+<li>设置通信参数 - 波特率,数据位,停止位等</li>
+<li>设置通信引脚 - 连接另一个 UART 的引脚</li>
+<li>驱动程序安装 - 为 UART 驱动程序分配 ESP32 的资源</li>
+<li>运行 UART 通信 - 发送/接收数据</li>
+<li>使用中断 - 触发特定通信事件的中断</li>
+<li>删除驱动程序 - 如果不再需要 UART 通信,则释放 ESP32 的资源</li>
+</ol>
+<p>使 UART 能开始工作是完成前面的四个步骤,后两个步骤是可选的.</p>
+<p>驱动程序由<code>uart_port_t</code>标识,它对应于一个组 UART 控制器. 这种识别存在于以下所有函数调用中.</p>
+<h3 id="设置通信参数"><a href="#设置通信参数" class="headerlink" title="设置通信参数"></a>设置通信参数</h3><p>有两种方法可以设置 UART 的通信参数. 一种是通过调用<code>uart_param_config()</code>在<code>uart_config_t</code>结构中提供配置参数来一次性完成.</p>
+<p>另一种方法是通过调用函数单独配置特定参数:</p>
+<ul>
+<li>波特率 - <code>uart_set_baudrate()</code></li>
+<li>传输的位数 - <code>uart_set_word_length()</code>指定<code>uart_word_length_t</code>的值</li>
+<li>奇偶校验控制 - <code>uart_set_parity()</code>指定<code>uart_parity_t</code> 的值</li>
+<li>停止位数目 - <code>uart_set_stop_bits()</code>指定<code>uart_stop_bits_t</code>的值</li>
+<li>硬件流控制模式 - <code>uart_set_hw_flow_ctrl()</code>指定<code>uart_hw_flowcontrol_t</code> 的值</li>
+<li>通信模式 - <code>uart_set_mode()</code>指定<code>uart_mode_t</code>的值</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> uart_num = UART_NUM_2;</span><br><span class="line"><span class="keyword">uart_config_t</span> uart_config = &#123;</span><br><span class="line">    .baud_rate = <span class="number">115200</span>,</span><br><span class="line">    .data_bits = UART_DATA_8_BITS,</span><br><span class="line">    .parity = UART_PARITY_DISABLE,</span><br><span class="line">    .stop_bits = UART_STOP_BITS_1,</span><br><span class="line">    .flow_ctrl = UART_HW_FLOWCTRL_CTS_RTS,</span><br><span class="line">    .rx_flow_ctrl_thresh = <span class="number">122</span>,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// Configure UART parameters</span></span><br><span class="line">ESP_ERROR_CHECK(uart_param_config(uart_num, &amp;uart_config));</span><br></pre></td></tr></table></figure>
+
+<h3 id="设置通信引脚"><a href="#设置通信引脚" class="headerlink" title="设置通信引脚"></a>设置通信引脚</h3><p>通过调用函数 <code>uart_set_pin()</code>我们可以输入宏<code>UART_PIN_NO_CHANGE</code>而不是 GPIO 引脚编号,并且不会更改当前分配的引脚. 如果不使用某个引脚,则应输入相同的宏.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Set UART pins(TX: IO16 (UART2 default), RX: IO17 (UART2 default), RTS: IO18, CTS: IO19)</span></span><br><span class="line">ESP_ERROR_CHECK(uart_set_pin(UART_NUM_2, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE, <span class="number">18</span>, <span class="number">19</span>));</span><br></pre></td></tr></table></figure>
+
+<h3 id="驱动程序安装"><a href="#驱动程序安装" class="headerlink" title="驱动程序安装"></a>驱动程序安装</h3><p>完成驱动程序配置后,我们可以通过调用 <code>uart_driver_install()</code>来安装 UART 驱动. 并分配给 UART 所需的若干资源. 资源的类型/大小被指定为函数参数并需要考虑:</p>
+<ul>
+<li>发送缓冲区的大小</li>
+<li>接收缓冲区的大小</li>
+<li>事件队列句柄和大小</li>
+<li>用于分配中断的标志</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Setup UART buffered IO with event queue</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> uart_buffer_size = (<span class="number">1024</span> * <span class="number">2</span>);</span><br><span class="line">QueueHandle_t uart_queue;</span><br><span class="line"><span class="comment">// Install UART driver using an event queue here</span></span><br><span class="line">ESP_ERROR_CHECK(uart_driver_install(UART_NUM_2, uart_buffer_size, \</span><br><span class="line">                                        uart_buffer_size, <span class="number">10</span>, &amp;uart_queue, <span class="number">0</span>));</span><br></pre></td></tr></table></figure>
+
+<p>如果上述所有步骤均已完成,我们就可以连接其他 UART 设备并开始通信.</p>
+<h3 id="运行-UART-通信"><a href="#运行-UART-通信" class="headerlink" title="运行 UART 通信"></a>运行 UART 通信</h3><p>串行通信的过程受 UART 硬件 FSM 的控制. 要发送的数据应放入 Tx FIFO 缓冲区, FSM 将序列化并发送出去. 完成类似的过程,但是以相反的顺序,接收数据. 传入的串行流由 FSM 处理并移至 Rx FIFO 缓冲区. 因此, API 的通信功能的任务仅限于向/从相应缓冲区写入和读取数据. 这反映在一些函数名称中,例如:<code>uart_write_bytes()</code>用于传输数据,或<code>uart_read_bytes()</code>用于读取传入数据.</p>
+<h3 id="使用中断"><a href="#使用中断" class="headerlink" title="使用中断"></a>使用中断</h3><p>报告了 UART 的特定状态或检测到的错误有 19 个中断. ESP32 技术参考手册(PDF)中介绍了可用中断的完整列表. 要启用特定中断,请调用<code>uart_enable_intr_mask()</code>,以禁用调用<code>uart_disable_intr_mask()</code>. 所有中断的掩码都以<code>UART_INTR_MASK</code>的形式提供. 使用<code>uart_isr_register()</code>完成向服务中断注册处理程序,使用<code>uart_isr_free()</code>释放处理程序. 要在调用处理程序后清除中断状态位,请使用<code>uart_clear_intr_status()</code>.</p>
+<h3 id="删除驱动程序"><a href="#删除驱动程序" class="headerlink" title="删除驱动程序"></a>删除驱动程序</h3><p>如果与<code>uart_driver_install()</code>建立通信一段特定时间,然后不需要,则可以通过调用<code>uart_driver_delete()</code>来删除驱动程序以释放分配的资源.</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/v3.2/api-reference/peripherals/uart.html" target="_blank" rel="noopener">UART</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/01/16/ESP32 学习笔记/ESP32 学习笔记（一）开发环境搭建/" rel="bookmark">ESP32 学习笔记（一）开发环境搭建</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/12/ESP32 学习笔记/ESP32 学习笔记（七）I2S - Inter—IC Sound/" rel="bookmark">ESP32 学习笔记（七）I2S - Inter—IC Sound</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/13/ESP32 学习笔记/ESP32 学习笔记（九）SPI - SPI Slave/" rel="bookmark">ESP32 学习笔记（九）SPI - SPI Slave</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/08/ESP32 学习笔记/ESP32 学习笔记（二）GPIO & RTC GPIO/" rel="bookmark">ESP32 学习笔记（二）GPIO & RTC GPIO</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/12/ESP32 学习笔记/ESP32 学习笔记（五）DAC - Digital To Analog Converter/" rel="bookmark">ESP32 学习笔记（五）DAC - Digital To Analog Converter</a></div>
+    </li>
+  </ul>
+
+        <div class="reward-container">
+  <div>如果这篇文章对你有帮助，那么不妨？</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/InfiniteYuanBlog/tags/ESP32/" rel="tag"><i class="fa fa-tag"></i> ESP32</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2018/08/09/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89LittlevGL%20PC%20Simulator%20%E9%85%8D%E7%BD%AE/" rel="prev" title="ESP32 开发笔记（七）LittlevGL PC Simulator 配置">
+      <i class="fa fa-chevron-left"></i> ESP32 开发笔记（七）LittlevGL PC Simulator 配置
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/InfiniteYuanBlog/2018/08/11/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%9B%9B%EF%BC%89ADC%20-%20Analog%20to%20Digital%20Converter/" rel="next" title="ESP32 学习笔记（四）ADC - Analog to Digital Converter">
+      ESP32 学习笔记（四）ADC - Analog to Digital Converter <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UART-Universal-Asynchronous-Receiver-Transmitter"><span class="nav-number">1.</span> <span class="nav-text">UART - Universal Asynchronous Receiver&#x2F;Transmitter</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主要特性"><span class="nav-number">1.2.</span> <span class="nav-text">主要特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#功能描述"><span class="nav-number">1.3.</span> <span class="nav-text">功能描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用示例"><span class="nav-number">1.4.</span> <span class="nav-text">应用示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API-Reference"><span class="nav-number">1.5.</span> <span class="nav-text">API Reference</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Header-File"><span class="nav-number">1.5.1.</span> <span class="nav-text">Header File</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API-使用"><span class="nav-number">1.6.</span> <span class="nav-text">API 使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#设置通信参数"><span class="nav-number">1.6.1.</span> <span class="nav-text">设置通信参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置通信引脚"><span class="nav-number">1.6.2.</span> <span class="nav-text">设置通信引脚</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#驱动程序安装"><span class="nav-number">1.6.3.</span> <span class="nav-text">驱动程序安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行-UART-通信"><span class="nav-number">1.6.4.</span> <span class="nav-text">运行 UART 通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用中断"><span class="nav-number">1.6.5.</span> <span class="nav-text">使用中断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除驱动程序"><span class="nav-number">1.6.6.</span> <span class="nav-text">删除驱动程序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.7.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="InfiniteYuan"
+      src="/InfiniteYuanBlog/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">InfiniteYuan</p>
+  <div class="site-description" itemprop="description">Stay Hungry, Stay Funlish</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/InfiniteYuanBlog/archives/">
+        
+          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/InfiniteYuanBlog/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/InfiniteYuanBlog/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/infiniteyuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;infiniteyuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">InfiniteYuan</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">155k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">2:21</span>
+
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        站点访客数:<span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        站点阅读量:<span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/InfiniteYuanBlog/lib/anime.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/InfiniteYuanBlog/js/utils.js"></script>
+
+<script src="/InfiniteYuanBlog/js/motion.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/schemes/muse.js"></script>
+
+
+<script src="/InfiniteYuanBlog/js/next-boot.js"></script>
+
+<script src="/InfiniteYuanBlog/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/InfiniteYuanBlog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '2spSMheFYziIJlzCVs7fvHeG-gzGzoHsz',
+      appKey     : 'aj8lFtI7EyFfrWCx902T0szo',
+      placeholder: "ヾﾉ≧∀≦)o来啊，快活啊!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
