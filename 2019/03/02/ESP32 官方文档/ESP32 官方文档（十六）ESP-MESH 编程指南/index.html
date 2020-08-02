@@ -19,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"infiniteyuan.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"blog.infiniteyuan.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="ESP-MESH 编程指南这是 ESP-MESH 的编程指南，包括 API 参考和编码示例。本指南分为以下几部分：  ESP-MESH 编程模型 编写 ESP-MESH 应用程序 自组织网络 应用实例 API 参考  有关 ESP-MESH 协议的文档，请参阅 ESP-MESH API 指南。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ESP32 官方文档（十六）ESP-MESH 编程指南">
-<meta property="og:url" content="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/03/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89ESP-MESH%20%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:url" content="https://blog.infiniteyuan.com/2019/03/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89ESP-MESH%20%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/index.html">
 <meta property="og:site_name" content="InfiniteYuan">
 <meta property="og:description" content="ESP-MESH 编程指南这是 ESP-MESH 的编程指南，包括 API 参考和编码示例。本指南分为以下几部分：  ESP-MESH 编程模型 编写 ESP-MESH 应用程序 自组织网络 应用实例 API 参考  有关 ESP-MESH 协议的文档，请参阅 ESP-MESH API 指南。">
 <meta property="og:locale" content="zh_CN">
@@ -33,13 +33,13 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190302162721734.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190302173636709.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
 <meta property="article:published_time" content="2019-03-02T19:03:45.000Z">
-<meta property="article:modified_time" content="2020-08-02T06:33:31.457Z">
+<meta property="article:modified_time" content="2020-08-02T06:36:34.035Z">
 <meta property="article:author" content="InfiniteYuan">
 <meta property="article:tag" content="ESP32">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://img-blog.csdnimg.cn/2019030215595528.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70">
 
-<link rel="canonical" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/03/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89ESP-MESH%20%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/">
+<link rel="canonical" href="https://blog.infiniteyuan.com/2019/03/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89ESP-MESH%20%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/">
 
 
 <script id="page-configurations">
@@ -205,7 +205,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2019/03/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89ESP-MESH%20%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/">
+    <link itemprop="mainEntityOfPage" href="https://blog.infiniteyuan.com/2019/03/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89ESP-MESH%20%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/InfiniteYuanBlog/images/InfiniteYuanLogo.jpg">
@@ -235,7 +235,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-02 06:33:31" itemprop="dateModified" datetime="2020-08-02T06:33:31+00:00">2020-08-02</time>
+                <time title="修改时间：2020-08-02 06:36:34" itemprop="dateModified" datetime="2020-08-02T06:36:34+00:00">2020-08-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
