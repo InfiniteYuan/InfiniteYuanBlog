@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>Hexo Blog</title>
-    <url>/InfiniteYuanBlog/2012/07/22/hexo_blog_log/</url>
+    <url>/2012/07/22/hexo_blog_log/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
 
@@ -28,7 +28,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（一）开发环境搭建</title>
-    <url>/InfiniteYuanBlog/2018/01/16/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</url>
+    <url>/2018/01/16/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<h1 id="ESP32-开发环境搭建"><a href="#ESP32-开发环境搭建" class="headerlink" title="ESP32 开发环境搭建"></a>ESP32 开发环境搭建</h1><p>ESP32 整体的开发资料相对比较多,官方网站在 github 上提供了详细的开发环境搭建步骤:<a href="https://esp-idf.readthedocs.io/en/latest/index.html#" target="_blank" rel="noopener">ESP-IDF Programming Guide</a></p>
 <a id="more"></a>
 ]]></content>
@@ -41,7 +41,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（七）I2S - Inter—IC Sound</title>
-    <url>/InfiniteYuanBlog/2018/08/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89I2S%20-%20Inter%E2%80%94IC%20Sound/</url>
+    <url>/2018/08/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89I2S%20-%20Inter%E2%80%94IC%20Sound/</url>
     <content><![CDATA[<h1 id="I2S"><a href="#I2S" class="headerlink" title="I2S"></a>I2S</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP32 包含两个 I2S 外设. 这些外设可配置为通过 I2S 驱动程序输入和输出样本数据.</p>
 <p>I2S 标准总线定义了三种信号:时钟信号 BCK、声道选择信号 WS 和串行数据信号 SD.一个基本的 I2S 数据总线有一个主机和一个从机.主机和从机的角色在通信过程中保持不变.ESP32 的 I2S 模块包含独立的发送和接收声道,能够保证优良的通信性能.</p>
 <p>I2S 外设支持 DMA,这意味着它可以传输使用样本数据流,而无需 CPU 读取或写入每个样本.</p>
@@ -106,7 +106,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（三十） ESP32 性能分析，与 Cortex-M4 性能比较</title>
-    <url>/InfiniteYuanBlog/2020/07/04/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%E5%8D%81%EF%BC%89%20ESP32%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%EF%BC%8C%E4%B8%8E%20Cortex-M4%20%E6%80%A7%E8%83%BD%E6%AF%94%E8%BE%83/</url>
+    <url>/2020/07/04/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%E5%8D%81%EF%BC%89%20ESP32%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%EF%BC%8C%E4%B8%8E%20Cortex-M4%20%E6%80%A7%E8%83%BD%E6%AF%94%E8%BE%83/</url>
     <content><![CDATA[<h1 id="关于-EEMBC"><a href="#关于-EEMBC" class="headerlink" title="关于 EEMBC"></a>关于 EEMBC</h1><p><a href="https://www.eembc.org/about/" target="_blank" rel="noopener">About EEMBC</a></p>
 <p>EEMBC 为自动驾驶，移动成像，物联网，移动设备和许多其他应用程序中使用的硬件和软件制定性能基准。</p>
 <p>EEMBC 基准测试得分的主要受众是创建依赖嵌入式微控制器和微处理器的系统的公司：从智能手机到太阳能电池板的所有产品。尽管此类制造商通常具有自己的专有基准，但是 EEMBC 提供了一种有吸引力的替代方案，可替代购买硬件，进行设置，然后在候选处理器组上进行所有测量的所有复杂性。 EEMBC 基准套件通过提供统一，严格定义的测量标准，使制造商可以轻松地比较替代解决方案，从而使制造商避免了此繁琐的过程。这不仅使大型制造商受益，而且使开发人员，集成商，</p>
@@ -123,7 +123,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（三）UART - Universal Asynchronous Receiver/Transmitter</title>
-    <url>/InfiniteYuanBlog/2018/08/11/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89UART%20-%20Universal%20Asynchronous%20Receiver%20Transmitter/</url>
+    <url>/2018/08/11/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89UART%20-%20Universal%20Asynchronous%20Receiver%20Transmitter/</url>
     <content><![CDATA[<h1 id="UART-Universal-Asynchronous-Receiver-Transmitter"><a href="#UART-Universal-Asynchronous-Receiver-Transmitter" class="headerlink" title="UART - Universal Asynchronous Receiver/Transmitter"></a>UART - Universal Asynchronous Receiver/Transmitter</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>嵌入式应用通常要求一个简单的并且占用系统资源少的方法来传输数据.通用异步收发传输器(UART) 即可以满足这些要求,它能够灵活地与外部设备进行全双工数据交换.ESP32 芯片中有 3 个UART 控制器可供使用,并且兼容不同的 UART 设备.另外,UART 还可以用作红外数据交换(IrDA) 或 RS-485 调制解调器.</p>
 <p>3 个 UART 控制器有一组功能相同的寄存器.本文以 UARTn 指代 3 个 UART 控制器,n 为0、1、2.</p>
 <h2 id="主要特性"><a href="#主要特性" class="headerlink" title="主要特性"></a>主要特性</h2><ul>
@@ -213,7 +213,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（九）SPI - SPI Slave</title>
-    <url>/InfiniteYuanBlog/2018/08/13/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B9%9D%EF%BC%89SPI%20-%20SPI%20Slave/</url>
+    <url>/2018/08/13/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B9%9D%EF%BC%89SPI%20-%20SPI%20Slave/</url>
     <content><![CDATA[<h1 id="SPI-Slave"><a href="#SPI-Slave" class="headerlink" title="SPI Slave"></a>SPI Slave</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP32 有四个 SPI 外设,称为 SPI0,SPI1,HSPI 和 VSPI. SPI0 是专用于 flash 缓存, ESP32 将连接的 SPI flash 设备映射到存储器. SPI1 和 SPI0 使用相同的硬件线,SPI1 用于写入 flash 芯片. HSPI 和 VSPI 可以任意使用，并使用 spi_slave 驱动程序用作 SPI 从设备，由连接的 SPI 主设备驱动。</p>
 <h3 id="spi-slave-驱动"><a href="#spi-slave-驱动" class="headerlink" title="spi_slave 驱动"></a>spi_slave 驱动</h3><p><code>spi_slave</code> 驱动程序允许将 HSPI 和/或 VSPI 外设用作全双工 SPI 从设备。它可以使用 DMA 来发送/接收任意长度的事务。</p>
 <a id="more"></a>
@@ -262,7 +262,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（二十一）电源管理</title>
-    <url>/InfiniteYuanBlog/2019/03/11/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B8%80%EF%BC%89%E7%94%B5%E6%BA%90%E7%AE%A1%E7%90%86/</url>
+    <url>/2019/03/11/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B8%80%EF%BC%89%E7%94%B5%E6%BA%90%E7%AE%A1%E7%90%86/</url>
     <content><![CDATA[<h1 id="电源管理"><a href="#电源管理" class="headerlink" title="电源管理"></a>电源管理</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP-IDF 中包含的电源管理算法可以根据应用组件的要求调整 APB 频率，CPU 频率，并使芯片进入 light sleep 模式，以尽可能低的功耗运行应用程序。</p>
 <p>应用程序组件可以通过创建和获取电源管理锁来表达其要求。</p>
 <p>例如，由 APB 提供时钟的外围设备的驱动器可以在使用外围设备的时间内请求将 APB 频率设置为80MHz。另一个例子是，当有任务准备好运行时，RTOS 将请求 CPU 以最高配置频率运行。又一个例子是需要启用中断的外围驱动器。这样的驱动程序可以请求禁用 light sleep。</p>
@@ -365,7 +365,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（二十七） ESP32 的启动过程 [转]</title>
-    <url>/InfiniteYuanBlog/2020/03/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B8%83%EF%BC%89%20ESP32%20%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%20%5B%E8%BD%AC%5D/</url>
+    <url>/2020/03/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B8%83%EF%BC%89%20ESP32%20%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%20%5B%E8%BD%AC%5D/</url>
     <content><![CDATA[<h1 id="ESP32-的启动过程"><a href="#ESP32-的启动过程" class="headerlink" title="ESP32 的启动过程"></a>ESP32 的启动过程</h1><p>原文来自：<a href="https://www.esp32.com/viewtopic.php?f=25&amp;t=8030&amp;p=33812#p33812" target="_blank" rel="noopener">https://www.esp32.com/viewtopic.php?f=25&amp;t=8030&amp;p=33812#p33812</a></p>
 <h2 id="关于-ROM"><a href="#关于-ROM" class="headerlink" title="[关于 ROM]"></a>[关于 ROM]</h2><p>在 esp32 上电运行后，芯片运行的第一个程序。这段程序是芯片设计与生产的时候，固化在硬件电路中的。所以它是不可修改的(Read Only Memory)。<br>esp32 的 ROM 负责检测芯片的strapping配置，来决定芯片应该处于什么状态。比如，esp32 上电后，ROM 程序会检查 [GPIO0, GPIO2, GPIO4, MTDO, GPIO5]的状态。<br>如果 GPIO0 / GPIO2 同时为低电平，则会进入下载模式，等待串口通信信息。<br>如果GPIO0为高电平，则会进入Flash 运行模式，启动SPI 驱动，并加载Flash中的程序段。</p>
 <a id="more"></a>
@@ -389,7 +389,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（二十三）看门狗</title>
-    <url>/InfiniteYuanBlog/2019/03/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B8%89%EF%BC%89%E7%9C%8B%E9%97%A8%E7%8B%97/</url>
+    <url>/2019/03/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B8%89%EF%BC%89%E7%9C%8B%E9%97%A8%E7%8B%97/</url>
     <content><![CDATA[<h1 id="看门狗"><a href="#看门狗" class="headerlink" title="看门狗"></a>看门狗</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP-IDF 支持两种类型的看门狗：中断看门狗定时器和任务看门狗定时器（TWDT）。中断看门狗定时器和 TWDT 都可以使用 make menuconfig 启用，但 TWDT 也可以在运行时启用。中断看门狗负责检测 FreeRTOS 任务切换长时间被阻止的情况。TWDT 负责检测运行的任务在长时间没有让出 CPU 的情况。</p>
 <h2 id="中断看门狗"><a href="#中断看门狗" class="headerlink" title="中断看门狗"></a>中断看门狗</h2><p>中断看门狗可确保 FreeRTOS 任务切换中断长时间不被阻止。这种情况很不好，因为没有其他任务能获得 CPU 运行时间，包括可能重要的任务，如 WiFi 任务和空闲任务。阻塞的任务切换中断可能发生当一个程序运行到无限循环并且中断被禁用或挂起中断。</p>
 <p>中断监视程序的默认操作是调用 panic 处理程序。将会把寄存器转储以便于使用 OpenOCD 或 gdbstub找到，在禁用中断的情况下会阻塞哪些代码。根据 panic 处理程序的配置，它还可以盲目地重置 CPU，这在生产环境中可能是首选。</p>
@@ -415,7 +415,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（二十九） ESP32 低功耗模式</title>
-    <url>/InfiniteYuanBlog/2020/05/31/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B9%9D%EF%BC%89%20ESP32%20%E4%BD%8E%E5%8A%9F%E8%80%97%E6%A8%A1%E5%BC%8F/</url>
+    <url>/2020/05/31/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B9%9D%EF%BC%89%20ESP32%20%E4%BD%8E%E5%8A%9F%E8%80%97%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<h1 id="ESP32-低功耗模式"><a href="#ESP32-低功耗模式" class="headerlink" title="ESP32 低功耗模式"></a>ESP32 低功耗模式</h1><h2 id="1-概要"><a href="#1-概要" class="headerlink" title="1 概要"></a>1 概要</h2><p>ESP32 系列芯片提供三种可配置的睡眠模式，针对这些睡眠模式,我们提供了了多种低功耗解决方案，用户可以结合具体需求选择睡眠模式并进行配置。三种睡眠模式如下:</p>
 <ul>
 <li>Modem-sleep 模式：CPU 可运行，时钟可被配置。Wi-Fi/蓝牙基带和射频关闭。</li>
@@ -591,7 +591,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（二十二）睡眠模式</title>
-    <url>/InfiniteYuanBlog/2019/03/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%BA%8C%EF%BC%89%E7%9D%A1%E7%9C%A0%E6%A8%A1%E5%BC%8F/</url>
+    <url>/2019/03/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%BA%8C%EF%BC%89%E7%9D%A1%E7%9C%A0%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<h1 id="睡眠模式"><a href="#睡眠模式" class="headerlink" title="睡眠模式"></a>睡眠模式</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP32 有轻度睡眠(light sleep)和深度睡眠(deep sleep)两种省电模式。</p>
 <p>在轻度睡眠模式下，数字外设，大多数 RAM 和 CPU 都是时钟门控的，电源电压会降低。从轻度睡眠退出后，外围设备和 CPU 恢复运行，其内部状态将得以保留。</p>
 <p>在深度睡眠模式下，CPU，大多数 RAM 以及从 APB_CLK 提供时钟的所有数字外设都将断电。芯片中仍然可以通电的唯一部分是：RTC 控制器，RTC 外设（包括 ULP 协处理器）和 RTC 存储器（慢速和快速）。</p>
@@ -664,7 +664,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（二十五）脉冲计数器</title>
-    <url>/InfiniteYuanBlog/2019/03/26/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%BA%94%EF%BC%89%E8%84%89%E5%86%B2%E8%AE%A1%E6%95%B0%E5%99%A8/</url>
+    <url>/2019/03/26/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E4%BA%94%EF%BC%89%E8%84%89%E5%86%B2%E8%AE%A1%E6%95%B0%E5%99%A8/</url>
     <content><![CDATA[<h1 id="脉冲计数器"><a href="#脉冲计数器" class="headerlink" title="脉冲计数器"></a>脉冲计数器</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>PCNT（脉冲计数器）模块用于计算输入信号的上升沿和/或下降沿的数量。每个脉冲计数器单元都有一个 16 位有符号计数器寄存器和两个通道，可配置为递增或递减计数器。每个通道都有一个接收待检测信号边沿的信号输入，以及一个可用于启用或禁用信号输入的控制输入。输入具有可选滤波器，可用于丢弃信号中不需要的毛刺。</p>
 <h2 id="功能概述"><a href="#功能概述" class="headerlink" title="功能概述"></a>功能概述</h2><p>此 API 的功能描述分为四个部分：</p>
 <ul>
@@ -717,7 +717,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（二十八） ESP32 串口下载过程(使用 esptool) [转]</title>
-    <url>/InfiniteYuanBlog/2020/03/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%85%AB%EF%BC%89%20ESP32%20%E4%B8%B2%E5%8F%A3%E4%B8%8B%E8%BD%BD%E8%BF%87%E7%A8%8B(%E4%BD%BF%E7%94%A8%20esptool)%20%5B%E8%BD%AC%5D/</url>
+    <url>/2020/03/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%85%AB%EF%BC%89%20ESP32%20%E4%B8%B2%E5%8F%A3%E4%B8%8B%E8%BD%BD%E8%BF%87%E7%A8%8B(%E4%BD%BF%E7%94%A8%20esptool)%20%5B%E8%BD%AC%5D/</url>
     <content><![CDATA[<h1 id="ESP32-串口下载过程-使用-esptool"><a href="#ESP32-串口下载过程-使用-esptool" class="headerlink" title="ESP32 串口下载过程(使用 esptool)"></a>ESP32 串口下载过程(使用 esptool)</h1><p>原文链接：<a href="https://www.esp32.com/viewtopic.php?f=25&amp;t=8161&amp;p=34283#p34283" target="_blank" rel="noopener">https://www.esp32.com/viewtopic.php?f=25&amp;t=8161&amp;p=34283#p34283</a></p>
 <p>通常，我们会通过 python 脚本，从 PC 端，通过串口给 esp32 芯片或者模块下载固件程序。<br>通过 esptool (<a href="https://github.com/espressif/esptool" target="_blank" rel="noopener">https://github.com/espressif/esptool</a>) 脚本，我们可以很方便的实现。</p>
 <p>但有时，我们也希望能通过其他单片机的串口，给 esp32/esp8266 进行固件更新。（前提是外部单片机能够控制esp32 进入串口下载模式)。<br>完整的串口通信协议可以参考这里(<a href="https://github.com/espressif/esptool/w" target="_blank" rel="noopener">https://github.com/espressif/esptool/w</a> … -Protocol)<br>为了方便调试，我们可以通过运行 esptool，来查看上位机与esp32之间的通信过程。</p>
@@ -745,7 +745,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（二十六）NVS</title>
-    <url>/InfiniteYuanBlog/2019/04/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%85%AD%EF%BC%89NVS/</url>
+    <url>/2019/04/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%85%AD%EF%BC%89NVS/</url>
     <content><![CDATA[<h1 id="NVS-Non-volatile-storage"><a href="#NVS-Non-volatile-storage" class="headerlink" title="NVS - Non-volatile storage"></a>NVS - Non-volatile storage</h1><p>非易失性存储（NVS）库主要用于在闪存中存储键值对。本节介绍 NVS 使用的一些概念。</p>
 <h2 id="底层存储"><a href="#底层存储" class="headerlink" title="底层存储"></a>底层存储</h2><p>目前，NVS 通过 <code>spi_flash_{read|write|erase}</code>  API 使用主闪存的一部分。该库使用具有 data 类型和 nvs 子类型的所有分区。应用程序可以通过 <code>nvs_open</code> API 选择使用带有标签 nvs 的分区或通过 <code>nvs_open_from_part</code> API 使用指定名称的任意分区。</p>
 <blockquote>
@@ -798,7 +798,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（二十四）SPIFFS 文件系统</title>
-    <url>/InfiniteYuanBlog/2019/03/23/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%9B%9B%EF%BC%89SPIFFS%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</url>
+    <url>/2019/03/23/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%E5%9B%9B%EF%BC%89SPIFFS%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</url>
     <content><![CDATA[<h1 id="SPIFFS-文件系统"><a href="#SPIFFS-文件系统" class="headerlink" title="SPIFFS 文件系统"></a>SPIFFS 文件系统</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>SPIFFS 是一个文件系统，用于嵌入式目标上的 SPI NOR 闪存设备。它支持磨损均衡，文件系统一致性检查等。</p>
 <h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><ul>
 <li>目前，spiffs 不支持目录。它产生扁平结构。如果 SPIFFS 安装在 /spiffs 下创建一个带有路径 /spiffs/tmp/myfile.txt 的文件，则会在 SPIFFS 中创建一个名为 /tmp/myfile.txt 的文件，而不是在目录 /spiffs/tmp 下创建一个名为的 myfile.txt。</li>
@@ -868,7 +868,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（二十）RTC 和低功耗管理</title>
-    <url>/InfiniteYuanBlog/2019/03/04/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%EF%BC%89RTC%20%E5%92%8C%E4%BD%8E%E5%8A%9F%E8%80%97%E7%AE%A1%E7%90%86/</url>
+    <url>/2019/03/04/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%E5%8D%81%EF%BC%89RTC%20%E5%92%8C%E4%BD%8E%E5%8A%9F%E8%80%97%E7%AE%A1%E7%90%86/</url>
     <content><![CDATA[<h1 id="RTC-和低功耗管理"><a href="#RTC-和低功耗管理" class="headerlink" title="RTC 和低功耗管理"></a>RTC 和低功耗管理</h1><p>ESP32 采用了先进的电源管理技术，可以在不同的功耗模式之间切换。</p>
 <h2 id="1-功耗模式"><a href="#1-功耗模式" class="headerlink" title="1 功耗模式"></a>1 功耗模式</h2><ul>
 <li>Active 模式:芯片射频处于工作状态。芯片可以接收、发射和侦听信号。</li>
@@ -902,7 +902,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（二）GPIO &amp; RTC GPIO</title>
-    <url>/InfiniteYuanBlog/2018/08/08/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89GPIO%20&amp;%20RTC%20GPIO/</url>
+    <url>/2018/08/08/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89GPIO%20&amp;%20RTC%20GPIO/</url>
     <content><![CDATA[<h1 id="GPIO-amp-RTC-GPIO"><a href="#GPIO-amp-RTC-GPIO" class="headerlink" title="GPIO &amp; RTC GPIO"></a>GPIO &amp; RTC GPIO</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP32 芯片具有 40 个物理 GPIO pads (焊盘).某些 GPIO pad 既不能使用,在芯片封装上也没有相应的引脚(请参阅技术参考手册).所以只有 34 个物理 GPIO pads 可供使用.每个 pad 都可用作一个通用 IO,或连接一个内部的外设信号.IO_MUX、RTC IO_MUX 和 GPIO 交换矩阵用于将信号从外设传输至 GPIO pad.这些模块共同组成了芯片的 IO 控制.</p>
 <p>注意:</p>
 <ul>
@@ -983,7 +983,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（五）DAC - Digital To Analog Converter</title>
-    <url>/InfiniteYuanBlog/2018/08/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89DAC%20-%20Digital%20To%20Analog%20Converter/</url>
+    <url>/2018/08/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89DAC%20-%20Digital%20To%20Analog%20Converter/</url>
     <content><![CDATA[<h1 id="DAC-Digital-To-Analog-Converter"><a href="#DAC-Digital-To-Analog-Converter" class="headerlink" title="DAC - Digital To Analog Converter"></a>DAC - Digital To Analog Converter</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP32 有两个 8 位 DAC (数模转换器)通道，连接到 GPIO25 (通道 1)和 GPIO26(通道 2)。</p>
 <p>DAC 驱动器允许将这些通道设置为任意电压。</p>
 <p>当使用“内置 DAC模式”时，DAC 通道也可以通过 I2S 驱动器使用 DMA 写入采样数据进行驱动。</p>
@@ -1009,7 +1009,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（八）SPI - SPI Master</title>
-    <url>/InfiniteYuanBlog/2018/08/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AB%EF%BC%89SPI%20-%20SPI%20Master/</url>
+    <url>/2018/08/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AB%EF%BC%89SPI%20-%20SPI%20Master/</url>
     <content><![CDATA[<h1 id="SPI-Master"><a href="#SPI-Master" class="headerlink" title="SPI Master"></a>SPI Master</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP32 有四个 SPI 外设,称为 SPI0,SPI1,HSPI 和 VSPI. SPI0 是专用于 flash 缓存, ESP32 将连接的 SPI flash 设备映射到存储器. SPI1 和 SPI0 使用相同的硬件线,SPI1 用于写入 flash 芯片. HSPI 和 VSPI 可以任意使用. SPI1,HSPI 和 VSPI 都有三条片选线,作为 SPI 主机允许它们最多驱动三个 SPI 设备.</p>
 <h3 id="spi-master-驱动"><a href="#spi-master-驱动" class="headerlink" title="spi_master 驱动"></a>spi_master 驱动</h3><p>即使在多线程环境中,spi_master 驱动程序也可以轻松与 SPI 从设备进行通信. 它完全透明地处理 DMA 传输以读取和写入数据,并自动处理同一主机上不同 SPI 从站之间的多路复用.</p>
 <a id="more"></a>
@@ -1128,7 +1128,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（六）I2C - Inter-Integrated Circuit</title>
-    <url>/InfiniteYuanBlog/2018/08/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89I2C%20-%20Inter-Integrated%20Circuit/</url>
+    <url>/2018/08/12/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89I2C%20-%20Inter-Integrated%20Circuit/</url>
     <content><![CDATA[<h1 id="I2C"><a href="#I2C" class="headerlink" title="I2C"></a>I2C</h1><p>I2C (内部集成电路)总线可用于与连接到与 ESP32 相同的总线的多个外部设备进行通信。ESP32 板上有两个 I2C 控制器，每个控制器可以设置为主模式或从模式。</p>
 <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>以下部分将指导您完成配置和操作 I2C 驱动程序的基本步骤：</p>
 <ol>
@@ -1235,7 +1235,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（十一）LED Control</title>
-    <url>/InfiniteYuanBlog/2018/08/13/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%80%EF%BC%89LED%20Control/</url>
+    <url>/2018/08/13/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%80%EF%BC%89LED%20Control/</url>
     <content><![CDATA[<h1 id="LED-Control"><a href="#LED-Control" class="headerlink" title="LED Control"></a>LED Control</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>LED 控制(LEDC)模块主要用于控制 LED 的强度，尽管它也可用于生成 PWM 信号以用于其他目的。它有16个通道可以产生独立的波形，可以用来驱动例如: RGB LED设备。</p>
 <p>所有 LEDC 通道中有一半提供高速操作模式。该模式提供硬件实现，自动和无干扰的 PWM 占空比改变。另一半通道在低速模式下运行，其中变化的时刻取决于应用软件。每组通道也能够使用不同的时钟源，但 API 中未实现此功能。</p>
 <p>PWM 控制器还能够逐渐自动增加或减少占空比，允许在没有任何处理器干扰的情况下衰减。</p>
@@ -1315,7 +1315,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（十七）SDMMC Host Driver</title>
-    <url>/InfiniteYuanBlog/2018/11/15/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%83%EF%BC%89SDMMC%20Host%20Driver/</url>
+    <url>/2018/11/15/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%83%EF%BC%89SDMMC%20Host%20Driver/</url>
     <content><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>在 ESP32 上，SDMMC 主机外设有两个插槽：</p>
 <ul>
 <li>插槽 0(<code>SDMMC_HOST_SLOT_0</code>)是一个 8 位插槽。它使用 <code>PIN MUX</code> 中的 <code>HS1_ *</code> 信号。</li>
@@ -1364,7 +1364,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（十三）Pulse Counter</title>
-    <url>/InfiniteYuanBlog/2018/08/13/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89Pulse%20Counter/</url>
+    <url>/2018/08/13/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89Pulse%20Counter/</url>
     <content><![CDATA[<h1 id="Pulse-Counter"><a href="#Pulse-Counter" class="headerlink" title="Pulse Counter"></a>Pulse Counter</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>PCNT（脉冲计数器）模块用于计算输入信号的上升沿和/或下降沿的数量。每个脉冲计数器单元都有一个 16 位有符号计数器寄存器和两个通道，可配置为递增或递减计数器。每个通道都有一个接收待检测信号边沿的信号输入，以及一个可用于启用或禁用信号输入的控制输入。输入具有可选滤波器，可用于丢弃信号中不需要的毛刺。</p>
 <h2 id="功能概述"><a href="#功能概述" class="headerlink" title="功能概述"></a>功能概述</h2><p>此API的功能描述分为四个部分：</p>
 <ul>
@@ -1420,7 +1420,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（十九）High Resolution Timer</title>
-    <url>/InfiniteYuanBlog/2018/12/24/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B9%9D%EF%BC%89High%20Resolution%20Timer/</url>
+    <url>/2018/12/24/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B9%9D%EF%BC%89High%20Resolution%20Timer/</url>
     <content><![CDATA[<h1 id="高分辨率定时器"><a href="#高分辨率定时器" class="headerlink" title="高分辨率定时器"></a>高分辨率定时器</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>虽然 FreeRTOS 提供软件定时器，但这些定时器有一些限制：</p>
 <ul>
 <li>最大分辨率等于 RTOS 滴答周期</li>
@@ -1470,7 +1470,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（十二）MCPWM</title>
-    <url>/InfiniteYuanBlog/2018/08/13/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%8C%EF%BC%89MCPWM/</url>
+    <url>/2018/08/13/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%8C%EF%BC%89MCPWM/</url>
     <content><![CDATA[<h1 id="MCPWM"><a href="#MCPWM" class="headerlink" title="MCPWM"></a>MCPWM</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP32 有两个 MCPWM 单元，可用于控制不同的电机。每个单元有三对 PWM 输出。</p>
 <p><img src="https://img-blog.csdnimg.cn/20181228185337698.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>此外，在文档中，单个单元的输出标记为 PWMxA/PWMxB。</p>
 <a id="more"></a>
@@ -1513,7 +1513,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（十五）Touch Sensor</title>
-    <url>/InfiniteYuanBlog/2018/08/13/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89Touch%20Sensor/</url>
+    <url>/2018/08/13/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89Touch%20Sensor/</url>
     <content><![CDATA[<h1 id="Touch-Sensor"><a href="#Touch-Sensor" class="headerlink" title="Touch Sensor"></a>Touch Sensor</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>触摸传感器系统构建在基板上，该基板在保护性平坦表面下承载电极和相关连接。当用户触摸表面时，触发电容变化并产生二进制信号以指示触摸是否有效。</p>
 <p>ESP32 可提供多达 10 个电容式触摸板/GPIO。传感垫可以以不同的组合（例如矩阵，滑块）布置，从而可以检测更大面积或更多点。触摸板感测过程在硬件实现的有限状态机（FSM）的控制下，该有限状态机由软件或专用硬件定时器启动。</p>
 <p><a href="https://espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf" target="_blank" rel="noopener">ESP32 技术参考手册（PDF）</a>中讨论了触摸传感器的设计，操作和控制寄存器。有关此子系统如何工作的更多详细信息，请参阅它。</p>
@@ -1601,7 +1601,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（十八）Virtual filesystem</title>
-    <url>/InfiniteYuanBlog/2018/11/15/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%85%AB%EF%BC%89Virtual%20filesystem/</url>
+    <url>/2018/11/15/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%85%AB%EF%BC%89Virtual%20filesystem/</url>
     <content><![CDATA[<h1 id="Virtual-filesystem-component"><a href="#Virtual-filesystem-component" class="headerlink" title="Virtual filesystem component"></a>Virtual filesystem component</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>虚拟文件系统(VFS)组件为可以对类文件对象执行操作的驱动程序提供统一的接口。这可以是真实的文件系统(FAT，SPIFFS 等)，也可以是有文件类接口的设备驱动程序。</p>
 <p>该组件允许 C 库函数(如 <code>fopen</code> 和<code>fprintf</code> )与 FS 驱动程序一起使用。在高层次，每个 FS 驱动程序与某些路径前缀相关联。当其中一个 C 库函数需要打开文件时，VFS 组件将搜索与该文件路径关联的 FS 驱动程序，并将该调用转发给该驱动程序。VFS 还将给定文件的读取，写入和其他调用转发到同一 FS 驱动程序。</p>
 <p>例如，可以使用 <code>/fat</code> 前缀注册 FAT 文件系统驱动程序，并调用 <code>fopen(“/fat/file.txt”，“w”)</code>。然后，VFS 组件将调用 FAT 驱动程序的 <code>open</code> 函数并将 <code>/file.txt</code> 参数传递给它(以及适当的模式标志)。对返回的 <code>FILE *</code> 流的所有后续 C 库函数调用也将被转发到 FAT 驱动程序。</p>
@@ -1669,7 +1669,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（十六）Over The Air Updates (OTA)</title>
-    <url>/InfiniteYuanBlog/2018/08/29/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89Over%20The%20Air%20Updates%20(OTA)/</url>
+    <url>/2018/08/29/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89Over%20The%20Air%20Updates%20(OTA)/</url>
     <content><![CDATA[<h1 id="Over-The-Air-Updates-OTA"><a href="#Over-The-Air-Updates-OTA" class="headerlink" title="Over The Air Updates (OTA)"></a>Over The Air Updates (OTA)</h1><h2 id="OTA-流程概述"><a href="#OTA-流程概述" class="headerlink" title="OTA 流程概述"></a>OTA 流程概述</h2><p>OTA 更新机制允许设备根据正常固件运行时收到的数据进行更新(例如,通过WiFi或蓝牙).</p>
 <p>OTA 要求至少使用两个 “OTA app slot” 分区(即 <code>ota_0</code> 和 <code>ota_1</code>)和 “OTA Data Partition” 来配置设备的<a href="https://esp-idf.readthedocs.io/en/latest/api-guides/partition-tables.html" target="_blank" rel="noopener">分区表</a>.</p>
 <p>OTA 操作功能将新的应用程序固件映像写入当前未用于启动的 OTA 应用程序位置. 验证映像后,将更新 OTA 数据分区以指定此映像应用于下次启动.</p>
@@ -1777,7 +1777,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（十四）Sigma-delta Modulation</title>
-    <url>/InfiniteYuanBlog/2018/08/13/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89Sigma-delta%20Modulation/</url>
+    <url>/2018/08/13/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89Sigma-delta%20Modulation/</url>
     <content><![CDATA[<h1 id="Sigma-delta-Modulation"><a href="#Sigma-delta-Modulation" class="headerlink" title="Sigma-delta Modulation"></a>Sigma-delta Modulation</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>ESP32 有一个二阶 sigma-delta 调制模块。此驱动程序可配置 sigma-delta 模块的通道。</p>
 <h2 id="功能概述"><a href="#功能概述" class="headerlink" title="功能概述"></a>功能概述</h2><p>八个独立的 sigma-delta 调制信道用 <code>sigmadelta_channel_t</code> 进行标识。每个通道都能够输出 sigma-delta 调制模块生成的二进制硬件信号。</p>
 <p>应通过在 <code>sigmadelta_config_t</code> 中提供配置参数然后将此配置应用于 <code>sigmadelta_config()</code> 来设置所选通道。</p>
@@ -1807,7 +1807,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（十）Timer</title>
-    <url>/InfiniteYuanBlog/2018/08/13/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%EF%BC%89Timer/</url>
+    <url>/2018/08/13/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%EF%BC%89Timer/</url>
     <content><![CDATA[<h1 id="Timer"><a href="#Timer" class="headerlink" title="Timer"></a>Timer</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>ESP32 芯片包含两个硬件定时器组。每组有两个通用硬件定时器。它们都是基于 16 位预分频器和 64 位自动重载功能的向上/向下计数器的 64 位通用定时器。</p>
 <h2 id="功能概述"><a href="#功能概述" class="headerlink" title="功能概述"></a>功能概述</h2><p>以下各节介绍了配置操作定时器的典型步骤：</p>
 <ul>
@@ -1872,7 +1872,7 @@
   </entry>
   <entry>
     <title>ESP32 学习笔记（四）ADC - Analog to Digital Converter</title>
-    <url>/InfiniteYuanBlog/2018/08/11/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%9B%9B%EF%BC%89ADC%20-%20Analog%20to%20Digital%20Converter/</url>
+    <url>/2018/08/11/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%9B%9B%EF%BC%89ADC%20-%20Analog%20to%20Digital%20Converter/</url>
     <content><![CDATA[<h1 id="ADC-Analog-to-Digital-Converter"><a href="#ADC-Analog-to-Digital-Converter" class="headerlink" title="ADC - Analog to Digital Converter"></a>ADC - Analog to Digital Converter</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP32 集成了 2 个 12 位逐次逼近模数转换器 (SARADC),由 5 个专用转换器控制器管理.支持 18 个通道(模拟使能引脚)的测量. ADC 还可测量 vdd33 等内部信号.其中一些引脚可用于设计 1 个可编程增益放大器,用于测量微弱模拟信号.SAR ADC 使用的 5 个控制器均为专用控制器,其中 2 个支持高性能多通道扫描、2 个经过优化可支持 Deep-sleep 模式下的低功耗运行,另外 1 个专门用于 PWDET/ PKDET (功率检测和峰值监测).</p>
 <a id="more"></a>
 
@@ -1956,7 +1956,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 官方文档（一）关于 ESP-IDF 编程的一些说明</title>
-    <url>/InfiniteYuanBlog/2018/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%B8%80%EF%BC%89%E5%85%B3%E4%BA%8E%20ESP-IDF%20%E7%BC%96%E7%A8%8B%E7%9A%84%E4%B8%80%E4%BA%9B%E8%AF%B4%E6%98%8E/</url>
+    <url>/2018/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%B8%80%EF%BC%89%E5%85%B3%E4%BA%8E%20ESP-IDF%20%E7%BC%96%E7%A8%8B%E7%9A%84%E4%B8%80%E4%BA%9B%E8%AF%B4%E6%98%8E/</url>
     <content><![CDATA[<h1 id="关于-ESP-IDF-编程的一些说明"><a href="#关于-ESP-IDF-编程的一些说明" class="headerlink" title="关于 ESP-IDF 编程的一些说明"></a>关于 ESP-IDF 编程的一些说明</h1><h2 id="应用启动流程"><a href="#应用启动流程" class="headerlink" title="应用启动流程"></a>应用启动流程</h2><p>本文档说明了在调用 ESP-IDF 应用程序的 <code>app_main</code> 函数之前发生的一些步骤.</p>
 <p>启动过程如下：<br> <strong>1. 位于 ROM 中的第一阶段引导程序将第二阶段引导程序映像从 flash 0x1000 地址加载到 RAM( IRAM 和 DRAM ).<br> 2. 第二阶段引导程序从 flash 中加载分区表和主应用程序映像.主应用程序包含 RAM 段和通过 flash cache 映射的只读段.<br> 3. 主应用程序映像执行.此时,可以启动第二个 CPU 和 RTOS 调度器.</strong><br>以下各节将详细介绍此过程.</p>
 <a id="more"></a>
@@ -2029,7 +2029,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 官方文档（七）ESP32 Core Dump</title>
-    <url>/InfiniteYuanBlog/2018/09/01/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%B8%83%EF%BC%89ESP32%20Core%20Dump/</url>
+    <url>/2018/09/01/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%B8%83%EF%BC%89ESP32%20Core%20Dump/</url>
     <content><![CDATA[<h1 id="ESP32-Core-Dump"><a href="#ESP32-Core-Dump" class="headerlink" title="ESP32 Core Dump"></a>ESP32 Core Dump</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP-IDF 支持在不可恢复的软件错误上生成 Core Dump。这个技术可以对软件发生故障时的软件状态进行事后分析。在系统崩溃进入 Panic 状态时，根据配置打印一些信息并停止或重新启动。用户可以选择生成 Core Dump，以便稍后在 PC 上分析故障原因。Core Dump 包含软件发生故障时系统中所有任务的快照。快照包括任务控制块(TCB)和堆栈。因此。有可能找出什么任务，在什么指令(代码行)和该任务的什么调用堆栈导致崩溃。ESP-IDF 提供特殊脚本 <code>espcoredump.py</code>，以帮助用户检索和分析 Core Dump。此工具提供两个用于 Core Dump 分析的命令:</p>
 <ul>
 <li><code>info_corefile</code> - 打印崩溃的任务的寄存器，调用堆栈，系统中可用任务的列表，内存区域和存储在 Core Dump (TCB 和堆栈)中的内存内容。</li>
@@ -2095,7 +2095,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 官方文档（三）分区表</title>
-    <url>/InfiniteYuanBlog/2018/08/29/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%B8%89%EF%BC%89%E5%88%86%E5%8C%BA%E8%A1%A8/</url>
+    <url>/2018/08/29/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%B8%89%EF%BC%89%E5%88%86%E5%8C%BA%E8%A1%A8/</url>
     <content><![CDATA[<h1 id="分区表"><a href="#分区表" class="headerlink" title="分区表"></a>分区表</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>单个 ESP32 的 flash 可以包含多个应用程序,以及许多不同类型的数据(校准数据,文件系统,参数存储等). 因此,分区表被下载到 flash 中的 0x8000 地址(默认偏移量).</p>
 <p>分区表长度为 0xC00 字节(最多 95 个分区表条目). 在表数据之后附加 MD5 校验和. 如果分区表由于安全引导而签名,则签名将附加在分区表之后.</p>
 <p>分区表中的每个条目都有一个 <code>name</code> (label),<code>type</code>(app,data 或其他),<code>subtype</code>以及加载分区的 flash 中的 <code>offset</code> (偏移量).</p>
@@ -2198,7 +2198,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 官方文档（九）ESP-IDF FreeRTOS SMP Changes</title>
-    <url>/InfiniteYuanBlog/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%B9%9D%EF%BC%89ESP-IDF%20FreeRTOS%20SMP%20Changes/</url>
+    <url>/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%B9%9D%EF%BC%89ESP-IDF%20FreeRTOS%20SMP%20Changes/</url>
     <content><![CDATA[<h1 id="ESP-IDF-FreeRTOS-SMP-Changes"><a href="#ESP-IDF-FreeRTOS-SMP-Changes" class="headerlink" title="ESP-IDF FreeRTOS SMP Changes"></a>ESP-IDF FreeRTOS SMP Changes</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>vanilla FreeRTOS 是设计运行在单核上. 但 ESP32 是双核的,包含 Protocol CPU (称为 <strong>CPU 0</strong> 或<strong>PRO_CPU</strong>)和 Application CPU (称为 <strong>CPU 1</strong> 或 <strong>APP_CPU</strong>). 这两个核实际上是相同的,并且共享相同的内存. 这允许任务在两个核之间交替运行.</p>
 <p>ESP-IDF FreeRTOS 是 vanilla FreeRTOS 的修改版本,支持对称多处理 (SMP). ESP-IDF FreeRTOS 基于 FreeRTOS v8.2.0 的 Xtensa 端口. 本指南概述了 vanilla FreeRTOS 和 ESP-IDF FreeRTOS 之间的主要区别. 可以通过 <a href="http://www.freertos.org/a00106.html" target="_blank" rel="noopener">http://www.freertos.org/a00106.html</a> 找到 vanilla FreeRTOS 的 API 参考.</p>
 <p>有关 ESP-IDF FreeRTOS 独有功能的信息,请参阅 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/system/freertos_additions.html" target="_blank" rel="noopener">ESP-IDF FreeRTOS 附加功能</a>.</p>
@@ -2315,7 +2315,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 官方文档（二）构建系统</title>
-    <url>/InfiniteYuanBlog/2018/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%BA%8C%EF%BC%89%E6%9E%84%E5%BB%BA%E7%B3%BB%E7%BB%9F/</url>
+    <url>/2018/07/22/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%BA%8C%EF%BC%89%E6%9E%84%E5%BB%BA%E7%B3%BB%E7%BB%9F/</url>
     <content><![CDATA[<h1 id="构建系统"><a href="#构建系统" class="headerlink" title="构建系统"></a>构建系统</h1><p>本文档解释了 Espressif 物联网开发框架构建系统和“组件”的概念.</p>
 <p>如果您想知道如何组织新的 <code>ESP-IDF</code> 项目,请阅读本文档.</p>
 <p>我们建议使用 <a href="https://github.com/espressif/esp-idf-template" target="_blank" rel="noopener">esp-idf-template</a> 项目作为项目的起点.</p>
@@ -2568,7 +2568,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 官方文档（五）严重错误</title>
-    <url>/InfiniteYuanBlog/2018/09/01/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%BA%94%EF%BC%89%E4%B8%A5%E9%87%8D%E9%94%99%E8%AF%AF/</url>
+    <url>/2018/09/01/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E4%BA%94%EF%BC%89%E4%B8%A5%E9%87%8D%E9%94%99%E8%AF%AF/</url>
     <content><![CDATA[<h1 id="严重错误"><a href="#严重错误" class="headerlink" title="严重错误"></a>严重错误</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在某些情况下,程序的执行,没有按照定义的方式持续执行.在 ESP-IDF 中,这些情况包括:</p>
 <ul>
 <li>CPU 异常:Illegal Instruction, Load/Store Alignment Error, Load/Store Prohibited error, Double Exception.(非法指令,加载/存储对齐错误,加载/存储禁止错误,双重异常)</li>
@@ -2680,7 +2680,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 官方文档（八）Flash 加密</title>
-    <url>/InfiniteYuanBlog/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%85%AB%EF%BC%89Flash%20%E5%8A%A0%E5%AF%86/</url>
+    <url>/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%85%AB%EF%BC%89Flash%20%E5%8A%A0%E5%AF%86/</url>
     <content><![CDATA[<h1 id="Flash-加密"><a href="#Flash-加密" class="headerlink" title="Flash 加密"></a>Flash 加密</h1><p>Flash 加密功能用于加密 ESP32 连接的 SPI  Flash 的内容。启用 Flash 加密后，通过物理方式读取 SPI Flash 的内容不足以恢复大多数 Flash 内容。</p>
 <p>Flash 加密与安全启动功能是分离的，您可以使用 Flash 加密而无需启用<a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/secure-boot.html" target="_blank" rel="noopener">安全启动</a>。但是，我们建议将这两种功能一起用于安全的环境。在没有安全启动的情况下，需要执行其他配置以确保 Flash 加密的有效性。有关更多详细信息，请参阅<a href="https://docs.espressif.com/projects/esp-idf/en/latest/security/flash-encryption.html#flash-encryption-without-secure-boot" target="_blank" rel="noopener">使用无安全启动的 Flash 加密</a>.</p>
 <blockquote>
@@ -2938,7 +2938,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 官方文档（六）深度睡眠唤醒存根</title>
-    <url>/InfiniteYuanBlog/2018/09/01/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%85%AD%EF%BC%89%E6%B7%B1%E5%BA%A6%E7%9D%A1%E7%9C%A0%E5%94%A4%E9%86%92%E5%AD%98%E6%A0%B9/</url>
+    <url>/2018/09/01/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%85%AD%EF%BC%89%E6%B7%B1%E5%BA%A6%E7%9D%A1%E7%9C%A0%E5%94%A4%E9%86%92%E5%AD%98%E6%A0%B9/</url>
     <content><![CDATA[<h1 id="深度睡眠唤醒存根"><a href="#深度睡眠唤醒存根" class="headerlink" title="深度睡眠唤醒存根"></a>深度睡眠唤醒存根</h1><p>ESP32 支持在深度睡眠时运行“深度睡眠唤醒存根”。芯片唤醒后立即运行此功能 - 在任何正常初始化，引导加载程序或 ESP-IDF 代码运行之前。唤醒存根运行后，SoC 可以返回休眠状态或继续正常启动 ESP-IDF。</p>
 <p>深度睡眠唤醒存根代码被加载到“RTC 快速存储器”中，它使用的任何数据也必须加载到 RTC 存储器中。RTC 存储区域在深度睡眠期间保持其内容。</p>
 <a id="more"></a>
@@ -2989,7 +2989,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 官方文档（十一）高级中断</title>
-    <url>/InfiniteYuanBlog/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%B8%80%EF%BC%89%E9%AB%98%E7%BA%A7%E4%B8%AD%E6%96%AD/</url>
+    <url>/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%B8%80%EF%BC%89%E9%AB%98%E7%BA%A7%E4%B8%AD%E6%96%AD/</url>
     <content><![CDATA[<h1 id="高级中断"><a href="#高级中断" class="headerlink" title="高级中断"></a>高级中断</h1><p>Xtensa 架构支持 32 个中断,分为 8 个级别,以及各种异常. 在 ESP32 上,中断复用器允许使用<a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/system/intr_alloc.html" target="_blank" rel="noopener">中断分配器</a>将大多数中断源路由到这些中断. 通常,中断将以 C 语言写入,但 ESP-IDF 也允许在汇编中写入高级中断,从而允许非常低的中断延迟.</p>
 <a id="more"></a>
 
@@ -3065,7 +3065,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 官方文档（十三）外部 RAM</title>
-    <url>/InfiniteYuanBlog/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89%E5%A4%96%E9%83%A8%20RAM/</url>
+    <url>/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89%E5%A4%96%E9%83%A8%20RAM/</url>
     <content><![CDATA[<h1 id="外部-RAM"><a href="#外部-RAM" class="headerlink" title="外部 RAM"></a>外部 RAM</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>ESP32 有几百 KiB 的内部 RAM，与 ESP32 的其余部分位于同一个芯片上。 出于某些目的，这是不够的，因此ESP32还能够使用高达 4MB 的外部 SPI RAM 存储器作为存储器。 外部存储器包含在存储器映射中，并且在某些限制内，可以与内部数据 RAM 相同的方式使用。</p>
 <a id="more"></a>
 
@@ -3117,7 +3117,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 官方文档（十二）Bootloader (引导加载程序)</title>
-    <url>/InfiniteYuanBlog/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%BA%8C%EF%BC%89Bootloader%20(%E5%BC%95%E5%AF%BC%E5%8A%A0%E8%BD%BD%E7%A8%8B%E5%BA%8F)/</url>
+    <url>/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%BA%8C%EF%BC%89Bootloader%20(%E5%BC%95%E5%AF%BC%E5%8A%A0%E8%BD%BD%E7%A8%8B%E5%BA%8F)/</url>
     <content><![CDATA[<h1 id="Bootloader"><a href="#Bootloader" class="headerlink" title="Bootloader"></a>Bootloader</h1><p>引导加载程序执行以下功能：</p>
 <ol>
 <li>内部模块的最初初始配置;</li>
@@ -3156,7 +3156,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 官方文档（十五）ESP-MESH</title>
-    <url>/InfiniteYuanBlog/2019/02/01/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89ESP-MESH/</url>
+    <url>/2019/02/01/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89ESP-MESH/</url>
     <content><![CDATA[<h1 id="ESP-MESH"><a href="#ESP-MESH" class="headerlink" title="ESP-MESH"></a>ESP-MESH</h1><p>本指南提供有关 ESP-MESH 协议的信息。有关 API 使用的更多信息，请参阅 <a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/network/esp_mesh.html" target="_blank" rel="noopener">MESH API 参考</a>。</p>
 <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ESP-MESH 是一种基于 Wi-Fi 协议构建的网络协议。ESP-MESH 允许在大的物理区域（室内和室外）上分布的多个设备（以下称为节点）在单个 WLAN（无线局域网）下互连。ESP-MESH 具有自组织和自我修复功能，意味着网络可以自主构建和维护。</p>
 <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><img src="https://img-blog.csdnimg.cn/20190201111240103.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="传统的 Wi-Fi 网络架构"><br>传统的 Wi-Fi 网络是一点对多点网络，其中称为接入点（AP）的单个中心节点直接连接到所有其他节点（station）。AP 负责仲裁和转发节点之间的传输。一些 AP 还通过路由器中继与外部 IP 网络的传输。传统的 Wi-Fi 网络由于要求每个站必须在一定范围内以直接与 AP 连接而具有有限覆盖区域的缺点。此外，传统的 Wi-Fi 网络易于过载，因为网络中允许的最大站数受到 AP 容量的限制。</p>
@@ -3493,7 +3493,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 官方文档（十六）ESP-MESH 编程指南</title>
-    <url>/InfiniteYuanBlog/2019/03/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89ESP-MESH%20%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/</url>
+    <url>/2019/03/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%85%AD%EF%BC%89ESP-MESH%20%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/</url>
     <content><![CDATA[<h1 id="ESP-MESH-编程指南"><a href="#ESP-MESH-编程指南" class="headerlink" title="ESP-MESH 编程指南"></a>ESP-MESH 编程指南</h1><p>这是 ESP-MESH 的编程指南，包括 API 参考和编码示例。本指南分为以下几部分：</p>
 <ul>
 <li>ESP-MESH 编程模型</li>
@@ -3694,7 +3694,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 官方文档（十四）RF 校准</title>
-    <url>/InfiniteYuanBlog/2018/12/09/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89RF%20%E6%A0%A1%E5%87%86/</url>
+    <url>/2018/12/09/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89RF%20%E6%A0%A1%E5%87%86/</url>
     <content><![CDATA[<h1 id="RF-校准"><a href="#RF-校准" class="headerlink" title="RF 校准"></a>RF 校准</h1><p>ESP32 在 RF 初始化期间支持三种 RF 校准方法：</p>
 <ol>
 <li>部分校准</li>
@@ -3736,7 +3736,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 官方文档（十）线程局部存储</title>
-    <url>/InfiniteYuanBlog/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%EF%BC%89%E7%BA%BF%E7%A8%8B%E5%B1%80%E9%83%A8%E5%AD%98%E5%82%A8/</url>
+    <url>/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%EF%BC%89%E7%BA%BF%E7%A8%8B%E5%B1%80%E9%83%A8%E5%AD%98%E5%82%A8/</url>
     <content><![CDATA[<h1 id="线程局部存储"><a href="#线程局部存储" class="headerlink" title="线程局部存储"></a>线程局部存储</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>线程局部存储 (TLS) 是一种机制,通过该机制分配变量,使每个现存线程有一个变量实例. ESP-IDF 提供了三种利用这些变量的方法:</p>
 <p><a href="#freertos-%E5%8E%9F%E7%94%9F-api">FreeRTOS 原生 API</a>: ESP-IDF FreeRTOS 原生 API.<br><a href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B-api">多线程 API</a>:ESP-IDF 的多线程 API.<br><a href="#c11-%E6%A0%87%E5%87%86">C11 标准</a>:C11 标准引入了特殊关键字来将变量声明为线程局部.</p>
 <a id="more"></a>
@@ -3770,7 +3770,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 官方文档（四）错误处理</title>
-    <url>/InfiniteYuanBlog/2018/09/01/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%9B%9B%EF%BC%89%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/</url>
+    <url>/2018/09/01/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%9B%9B%EF%BC%89%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/</url>
     <content><![CDATA[<h1 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>识别和处理运行时错误对于开发健壮的应用程序非常重要. ESP-IDF 中可能存在多种运行时错误:</p>
 <ul>
 <li>可恢复的错误:<ul>
@@ -3840,7 +3840,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 开发笔记（一）ESP32  移植开源图形库 uGFX</title>
-    <url>/InfiniteYuanBlog/2018/01/10/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89ESP32%20%20%E7%A7%BB%E6%A4%8D%E5%BC%80%E6%BA%90%E5%9B%BE%E5%BD%A2%E5%BA%93%20uGFX/</url>
+    <url>/2018/01/10/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89ESP32%20%20%E7%A7%BB%E6%A4%8D%E5%BC%80%E6%BA%90%E5%9B%BE%E5%BD%A2%E5%BA%93%20uGFX/</url>
     <content><![CDATA[<h1 id="ESP32-移植开源图形库-ugfx"><a href="#ESP32-移植开源图形库-ugfx" class="headerlink" title="ESP32 移植开源图形库 ugfx"></a>ESP32 移植开源图形库 ugfx</h1><p>ESP32 移植 uGFX 的源码：<a href="https://github.com/InfiniteYuan/esp32-ugfx-gui" target="_blank" rel="noopener">GitHub 源码地址</a><br>欢迎 Star ～</p>
 <h2 id="源码工程分析"><a href="#源码工程分析" class="headerlink" title="源码工程分析"></a>源码工程分析</h2><ol>
 <li>/3rdparty 这里面包含第三方相关的功能代码</li>
@@ -3884,7 +3884,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 开发笔记（七）LittlevGL PC Simulator 配置</title>
-    <url>/InfiniteYuanBlog/2018/08/09/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89LittlevGL%20PC%20Simulator%20%E9%85%8D%E7%BD%AE/</url>
+    <url>/2018/08/09/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89LittlevGL%20PC%20Simulator%20%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<h1 id="LittlevGL-PC-Simulator-配置"><a href="#LittlevGL-PC-Simulator-配置" class="headerlink" title="LittlevGL PC Simulator 配置"></a>LittlevGL PC Simulator 配置</h1><p>视频教程：<a href="http://tuinghe.com/videos/how-to-run-littlev-graphics-library-in-pc-simulator-linux-q5n615u5m54674n4s5d6w5.html" target="_blank" rel="noopener">How to Run Littlev Graphics Library in PC Simulator (Linux)</a></p>
 <h2 id="PC-simulator"><a href="#PC-simulator" class="headerlink" title="PC simulator"></a>PC simulator</h2><p>You can try out the Littlev Graphics Library using only your PC without any development board. Write a code, run it on the PC and see the result on the monitor. It is cross-platform: Windows, Linux and OSX is also supported!</p>
 <ul>
@@ -3949,7 +3949,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 开发笔记（三）ESP32  连接 AWS IOT</title>
-    <url>/InfiniteYuanBlog/2018/01/12/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89ESP32%20%20%E8%BF%9E%E6%8E%A5%20AWS%20IOT/</url>
+    <url>/2018/01/12/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89ESP32%20%20%E8%BF%9E%E6%8E%A5%20AWS%20IOT/</url>
     <content><![CDATA[<h1 id="ESP32-AWS-IOT-发布-订阅-示例"><a href="#ESP32-AWS-IOT-发布-订阅-示例" class="headerlink" title="ESP32 AWS IOT 发布/订阅 示例"></a>ESP32 AWS IOT 发布/订阅 示例</h1><p>首先提供源码吧：<a href="https://github.com/InfiniteYuan/esp32-aws-iot" target="_blank" rel="noopener">GitHub源码地址</a><br>这是一个适用于 ESP-IDF 中<a href="https://github.com/aws/aws-iot-device-sdk-embedded-C" target="_blank" rel="noopener">AWS IoT C SDK</a> 的 “subscribe_publish”示例。</p>
 <a id="more"></a>
 
@@ -4018,7 +4018,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 开发笔记（九）使用 VS Code 快速开发 ESP32</title>
-    <url>/InfiniteYuanBlog/2018/12/17/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B9%9D%EF%BC%89%E4%BD%BF%E7%94%A8%20VS%20Code%20%E5%BF%AB%E9%80%9F%E5%BC%80%E5%8F%91%20ESP32/</url>
+    <url>/2018/12/17/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B9%9D%EF%BC%89%E4%BD%BF%E7%94%A8%20VS%20Code%20%E5%BF%AB%E9%80%9F%E5%BC%80%E5%8F%91%20ESP32/</url>
     <content><![CDATA[<h1 id="使用-VS-Code-快速开发-ESP32"><a href="#使用-VS-Code-快速开发-ESP32" class="headerlink" title="使用 VS Code 快速开发 ESP32"></a>使用 VS Code 快速开发 ESP32</h1><h2 id="搭建开发环境"><a href="#搭建开发环境" class="headerlink" title="搭建开发环境"></a>搭建开发环境</h2><ul>
 <li>根据<a href="https://blog.csdn.net/qq_27114397/article/details/79078449" target="_blank" rel="noopener">官方文档</a>进行 <code>esp-idf</code> 开发环境搭建</li>
 <li>安装 <a href="https://code.visualstudio.com/Download" target="_blank" rel="noopener">VS Code</a> </li>
@@ -4102,7 +4102,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 开发笔记（二）OLED ssd1306 apds9960 手势控制</title>
-    <url>/InfiniteYuanBlog/2018/01/12/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89OLED%20ssd1306%20apds9960%20%E6%89%8B%E5%8A%BF%E6%8E%A7%E5%88%B6/</url>
+    <url>/2018/01/12/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89OLED%20ssd1306%20apds9960%20%E6%89%8B%E5%8A%BF%E6%8E%A7%E5%88%B6/</url>
     <content><![CDATA[<h1 id="ESP32-OLED-Demo"><a href="#ESP32-OLED-Demo" class="headerlink" title="ESP32 OLED Demo"></a>ESP32 OLED Demo</h1><p>源码地址：<a href="https://github.com/InfiniteYuan/esp32_oled_gestrue" target="_blank" rel="noopener">GitHub 源码地址</a></p>
 <h2 id="实现功能"><a href="#实现功能" class="headerlink" title="实现功能"></a>实现功能</h2><p>ESP32 OLED demo 实现了以下功能：</p>
 <ul>
@@ -4213,7 +4213,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 开发笔记（五）XPT2046 触摸</title>
-    <url>/InfiniteYuanBlog/2018/01/16/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89XPT2046%20%E8%A7%A6%E6%91%B8/</url>
+    <url>/2018/01/16/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89XPT2046%20%E8%A7%A6%E6%91%B8/</url>
     <content><![CDATA[<h1 id="ESP32-Touch-TFT"><a href="#ESP32-Touch-TFT" class="headerlink" title="ESP32 Touch TFT"></a>ESP32 Touch TFT</h1><p>GitHub地址：<a href="https://github.com/InfiniteYuan/esp32-touchTFT" target="_blank" rel="noopener">工程源码</a><br>该工程时使用了 lcd、xpt2046、esp32 实现了触摸屏基础功能</p>
 <a id="more"></a>
 
@@ -4228,7 +4228,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 开发笔记（八）ESP32 MP3 播放器</title>
-    <url>/InfiniteYuanBlog/2018/11/20/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AB%EF%BC%89ESP32%20MP3%20%E6%92%AD%E6%94%BE%E5%99%A8/</url>
+    <url>/2018/11/20/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AB%EF%BC%89ESP32%20MP3%20%E6%92%AD%E6%94%BE%E5%99%A8/</url>
     <content><![CDATA[<h1 id="ESP32-MP3-播放器"><a href="#ESP32-MP3-播放器" class="headerlink" title="ESP32 MP3 播放器"></a>ESP32 MP3 播放器</h1><p>源码地址：<a href="https://github.com/InfiniteYuan/esp32-MP3" target="_blank" rel="noopener">GitHub</a></p>
 <h2 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h2><p>开发框架：<a href="https://github.com/espressif/esp-idf" target="_blank" rel="noopener">ESP-IDF</a>、<a href="https://github.com/espressif/esp-adf" target="_blank" rel="noopener">ESP-ADF</a><br>Embedded GUI: <a href="https://github.com/littlevgl/lvgl" target="_blank" rel="noopener">LittlevGL</a></p>
 <a id="more"></a>
@@ -4255,7 +4255,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 开发笔记（六）移植开源图形库 LittlevGL</title>
-    <url>/InfiniteYuanBlog/2018/08/08/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89%E7%A7%BB%E6%A4%8D%E5%BC%80%E6%BA%90%E5%9B%BE%E5%BD%A2%E5%BA%93%20LittlevGL/</url>
+    <url>/2018/08/08/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89%E7%A7%BB%E6%A4%8D%E5%BC%80%E6%BA%90%E5%9B%BE%E5%BD%A2%E5%BA%93%20LittlevGL/</url>
     <content><![CDATA[<h1 id="ESP32-移植开源图形库-LittlevGL"><a href="#ESP32-移植开源图形库-LittlevGL" class="headerlink" title="ESP32 移植开源图形库 LittlevGL"></a>ESP32 移植开源图形库 LittlevGL</h1><p>ESP32 移植 LittlevGL 的源码：<a href="https://github.com/InfiniteYuan/esp32-lvgl-gui" target="_blank" rel="noopener">GitHub 源码地址</a><br>欢迎 Star ～</p>
 <h2 id="LittlevGL-介绍"><a href="#LittlevGL-介绍" class="headerlink" title="LittlevGL 介绍"></a>LittlevGL 介绍</h2><blockquote>
 <p>littlevGL is a free and open-source graphics library providing everything you need to create embedded GUI with easy-to-use graphical elements, beautiful visual effects and low memory footprint.<br><a href="https://littlevgl.com/" target="_blank" rel="noopener">LittlevGL 官网链接</a><br><a href="https://littlevgl.com/porting" target="_blank" rel="noopener">LittlevGL 移植教程</a><br><a href="https://littlevgl.com/basics" target="_blank" rel="noopener">LittlevGL 官方文档</a><br><a href="https://github.com/littlevgl/lvgl" target="_blank" rel="noopener">LittlevGL GitHub链接</a></p>
@@ -4307,7 +4307,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 开发笔记（十一）使用 ESP32 做为 WebServer</title>
-    <url>/InfiniteYuanBlog/2019/04/28/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%80%EF%BC%89%E4%BD%BF%E7%94%A8%20ESP32%20%E5%81%9A%E4%B8%BA%20WebServer/</url>
+    <url>/2019/04/28/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%80%EF%BC%89%E4%BD%BF%E7%94%A8%20ESP32%20%E5%81%9A%E4%B8%BA%20WebServer/</url>
     <content><![CDATA[<h1 id="使用-ESP32-做为-WebServer"><a href="#使用-ESP32-做为-WebServer" class="headerlink" title="使用 ESP32 做为 WebServer"></a>使用 ESP32 做为 WebServer</h1><p>在某些场景，我们可能需要在手机上或者其他移动终端访问 ESP32 的数据，这个时候我们需要在手机上展示 ESP32 设备的相关信息，这个时候可以用 APP 在手机上展示数据，或者在手机浏览器中打开存储在 ESP32 上的网页。或者其他的方式。</p>
 <p>这篇文章我们将介绍第二种方式。在 ESP32 上存储网页文件，将 ESP32 做为一个简单的 WebServer。</p>
 <p>工作流程：(第一种方式)</p>
@@ -4381,7 +4381,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 开发笔记（十三）ESP32 ping 功能</title>
-    <url>/InfiniteYuanBlog/2019/11/22/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89ESP32%20ping%20%E5%8A%9F%E8%83%BD/</url>
+    <url>/2019/11/22/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89ESP32%20ping%20%E5%8A%9F%E8%83%BD/</url>
     <content><![CDATA[<h1 id="ping"><a href="#ping" class="headerlink" title="ping"></a>ping</h1><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">esp_err_t</span> <span class="title">pingResults</span><span class="params">(<span class="keyword">ping_target_id_t</span> msgType, esp_ping_found * pf)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"AvgTime:%.1fmS Sent:%d Rec:%d min(mS):%d max(mS):%d Resp(mS):%d Timeouts:%d Total Time:%d\n"</span>, (<span class="keyword">float</span>)pf-&gt;total_time/pf-&gt;recv_count, pf-&gt;send_count, pf-&gt;recv_count,  pf-&gt;min_time, pf-&gt;max_time ,pf-&gt;resp_time, pf-&gt;timeout_count, pf-&gt;total_time);</span><br><span class="line">    <span class="keyword">return</span> ESP_OK;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Start_Ping_ESP32</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">uint32_t</span> ip_pinG = ipaddr_addr(<span class="string">"163.177.151.109"</span>);<span class="comment">//百度IP地址</span></span><br><span class="line">    <span class="keyword">uint32_t</span> ping_count = <span class="number">2000</span>;<span class="comment">//ping的次数</span></span><br><span class="line">    <span class="keyword">uint32_t</span> ping_timeout = <span class="number">1000</span>; <span class="comment">//超时时间</span></span><br><span class="line">    <span class="keyword">uint32_t</span> ping_delay = <span class="number">2000</span>; <span class="comment">//ping 的间隔</span></span><br><span class="line">    ping_deinit();</span><br><span class="line">    esp_ping_set_target(PING_TARGET_IP_ADDRESS_COUNT, &amp;ping_count, <span class="keyword">sizeof</span>(<span class="keyword">uint32_t</span>));</span><br><span class="line">    esp_ping_set_target(PING_TARGET_RCV_TIMEO, &amp;ping_timeout, <span class="keyword">sizeof</span>(<span class="keyword">uint32_t</span>));</span><br><span class="line">    esp_ping_set_target(PING_TARGET_DELAY_TIME, &amp;ping_delay, <span class="keyword">sizeof</span>(<span class="keyword">uint32_t</span>));</span><br><span class="line">    esp_ping_set_target(PING_TARGET_IP_ADDRESS, &amp;ip_pinG, <span class="keyword">sizeof</span>(<span class="keyword">uint32_t</span>));</span><br><span class="line">    esp_ping_set_target(PING_TARGET_RES_FN, &amp;pingResults, <span class="keyword">sizeof</span>(pingResults));</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">uint8_t</span> res = <span class="number">0</span>;</span><br><span class="line">    res = ping_init();</span><br><span class="line">    <span class="keyword">if</span>(res == <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"PING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"error:%d\n"</span>,res);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
@@ -4393,7 +4393,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 开发笔记（十二）LittlevGL 添加自定义字体和物理按键</title>
-    <url>/InfiniteYuanBlog/2019/05/12/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%8C%EF%BC%89LittlevGL%20%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AD%97%E4%BD%93%E5%92%8C%E7%89%A9%E7%90%86%E6%8C%89%E9%94%AE/</url>
+    <url>/2019/05/12/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%8C%EF%BC%89LittlevGL%20%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AD%97%E4%BD%93%E5%92%8C%E7%89%A9%E7%90%86%E6%8C%89%E9%94%AE/</url>
     <content><![CDATA[<h1 id="LittlevGL-添加自定义字体"><a href="#LittlevGL-添加自定义字体" class="headerlink" title="LittlevGL 添加自定义字体"></a>LittlevGL 添加自定义字体</h1><ol>
 <li>获取字库 <code>ttf</code> 文件<br>可以从一些网站上获取字库文件，比如<blockquote>
 <p>请注意字体许可证</p>
@@ -4439,7 +4439,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 开发笔记（十五）使用 LittlevGL 实现 2048 小游戏</title>
-    <url>/InfiniteYuanBlog/2020/05/17/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89%E4%BD%BF%E7%94%A8%20LittlevGL%20%E5%AE%9E%E7%8E%B0%202048%20%E5%B0%8F%E6%B8%B8%E6%88%8F/</url>
+    <url>/2020/05/17/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%BA%94%EF%BC%89%E4%BD%BF%E7%94%A8%20LittlevGL%20%E5%AE%9E%E7%8E%B0%202048%20%E5%B0%8F%E6%B8%B8%E6%88%8F/</url>
     <content><![CDATA[<h1 id="使用-LittlevGL-实现-2048-小游戏"><a href="#使用-LittlevGL-实现-2048-小游戏" class="headerlink" title="使用 LittlevGL 实现 2048 小游戏"></a>使用 LittlevGL 实现 2048 小游戏</h1><p>2048 这款益智小游戏，游戏的规则十分简单，简单易上手的数字小游戏，但又十分虐心。曾经也是风靡一时。</p>
 <p>现在我们在 ESP32 上自己动手实现 2048 这款小游戏吧。</p>
 <a id="more"></a>
@@ -4490,7 +4490,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 开发笔记（十四）ESP32 I2C Slave 实现</title>
-    <url>/InfiniteYuanBlog/2019/11/22/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89ESP32%20I2C%20Slave%20%E5%AE%9E%E7%8E%B0/</url>
+    <url>/2019/11/22/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E5%9B%9B%EF%BC%89ESP32%20I2C%20Slave%20%E5%AE%9E%E7%8E%B0/</url>
     <content><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>这篇文章将介绍使用 ESP32 作为 I2C 实现 Random Read/Write 和  Sequential Read/Write 时序。</p>
 <p>首先通过下面的图了解下 Random Read 时序，I2C Master 通过这个时序读取任意数据地址开始的数据。<br><img src="https://img-blog.csdnimg.cn/20191123145556881.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MTE0Mzk3,size_16,color_FFFFFF,t_70" alt="Random Read"></p>
 <a id="more"></a>
@@ -4548,7 +4548,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 开发笔记（十）使用 ESP32+Camera 二维码识别</title>
-    <url>/InfiniteYuanBlog/2019/03/14/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%EF%BC%89%E4%BD%BF%E7%94%A8%20ESP32+Camera%20%E4%BA%8C%E7%BB%B4%E7%A0%81%E8%AF%86%E5%88%AB/</url>
+    <url>/2019/03/14/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%EF%BC%89%E4%BD%BF%E7%94%A8%20ESP32+Camera%20%E4%BA%8C%E7%BB%B4%E7%A0%81%E8%AF%86%E5%88%AB/</url>
     <content><![CDATA[<h1 id="使用-ESP32-Camera-进行二维码识别"><a href="#使用-ESP32-Camera-进行二维码识别" class="headerlink" title="使用 ESP32 Camera 进行二维码识别"></a>使用 ESP32 Camera 进行二维码识别</h1><ul>
 <li>GitHub: <a href="https://github.com/InfiniteYuan/esp32-camera-qr-recoginize/tree/master/examples/single_chip/qrcode_recoginize" target="_blank" rel="noopener">esp32-camera-qr-recoginize</a></li>
 </ul>
@@ -4576,7 +4576,7 @@ ESP32 内置了 5 个专用 ADC 控制器: RTC ADC1 CTRL、 RTC ADC2 CTRL、 DIG
   </entry>
   <entry>
     <title>ESP32 开发笔记（四）OV7670 摄像头图像采集</title>
-    <url>/InfiniteYuanBlog/2018/01/16/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%9B%9B%EF%BC%89OV7670%20%E6%91%84%E5%83%8F%E5%A4%B4%E5%9B%BE%E5%83%8F%E9%87%87%E9%9B%86/</url>
+    <url>/2018/01/16/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/ESP32%20%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%88%E5%9B%9B%EF%BC%89OV7670%20%E6%91%84%E5%83%8F%E5%A4%B4%E5%9B%BE%E5%83%8F%E9%87%87%E9%9B%86/</url>
     <content><![CDATA[<h1 id="ESP32-Camera-Demo"><a href="#ESP32-Camera-Demo" class="headerlink" title="ESP32 Camera Demo"></a>ESP32 Camera Demo</h1><p><a href="https://github.com/InfiniteYuan/esp32_ov7670_video" target="_blank" rel="noopener">GitHub 源码地址</a><br>使用的硬件有：</p>
 <ul>
 <li><code>ESP-WROVER-KIT</code>开发板</li>
