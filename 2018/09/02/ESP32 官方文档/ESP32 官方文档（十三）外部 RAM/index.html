@@ -5,37 +5,37 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.2.1">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/InfiniteYuanBlog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/InfiniteYuanBlog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/InfiniteYuanBlog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/InfiniteYuanBlog/images/logo.svg" color="#222">
 
-<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/InfiniteYuanBlog/css/main.css">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
-  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
-  <script src="/lib/pace/pace.min.js"></script>
+<link rel="stylesheet" href="/InfiniteYuanBlog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/InfiniteYuanBlog/lib/pace/pace-theme-minimal.min.css">
+  <script src="/InfiniteYuanBlog/lib/pace/pace.min.js"></script>
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"blog.infiniteyuan.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"infiniteyuan.github.io","root":"/InfiniteYuanBlog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="外部 RAM介绍ESP32 有几百 KiB 的内部 RAM，与 ESP32 的其余部分位于同一个芯片上。 出于某些目的，这是不够的，因此ESP32还能够使用高达 4MB 的外部 SPI RAM 存储器作为存储器。 外部存储器包含在存储器映射中，并且在某些限制内，可以与内部数据 RAM 相同的方式使用。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ESP32 官方文档（十三）外部 RAM">
-<meta property="og:url" content="https://blog.infiniteyuan.com/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89%E5%A4%96%E9%83%A8%20RAM/index.html">
+<meta property="og:url" content="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89%E5%A4%96%E9%83%A8%20RAM/index.html">
 <meta property="og:site_name" content="InfiniteYuan">
 <meta property="og:description" content="外部 RAM介绍ESP32 有几百 KiB 的内部 RAM，与 ESP32 的其余部分位于同一个芯片上。 出于某些目的，这是不够的，因此ESP32还能够使用高达 4MB 的外部 SPI RAM 存储器作为存储器。 外部存储器包含在存储器映射中，并且在某些限制内，可以与内部数据 RAM 相同的方式使用。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-09-02T17:03:34.000Z">
-<meta property="article:modified_time" content="2020-08-02T06:36:34.035Z">
+<meta property="article:modified_time" content="2020-08-02T06:48:11.893Z">
 <meta property="article:author" content="InfiniteYuan">
 <meta property="article:tag" content="ESP32">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://blog.infiniteyuan.com/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89%E5%A4%96%E9%83%A8%20RAM/">
+<link rel="canonical" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89%E5%A4%96%E9%83%A8%20RAM/">
 
 
 <script id="page-configurations">
@@ -79,7 +79,7 @@
   </style>
 </noscript>
 
-<link rel="alternate" href="/atom.xml" title="InfiniteYuan" type="application/atom+xml">
+<link rel="alternate" href="/InfiniteYuanBlog/atom.xml" title="InfiniteYuan" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
@@ -103,7 +103,7 @@
         </a>
       </div>
 
-    <a href="/" class="brand" rel="start">
+    <a href="/InfiniteYuanBlog/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
       <h1 class="site-title">InfiniteYuan</h1>
       <span class="logo-line-after"><i></i></span>
@@ -124,22 +124,22 @@
   <ul id="menu" class="main-menu menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+    <a href="/InfiniteYuanBlog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">62</span></a>
+    <a href="/InfiniteYuanBlog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">62</span></a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">2</span></a>
+    <a href="/InfiniteYuanBlog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">2</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">4</span></a>
+    <a href="/InfiniteYuanBlog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">4</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -201,10 +201,10 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://blog.infiniteyuan.com/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89%E5%A4%96%E9%83%A8%20RAM/">
+    <link itemprop="mainEntityOfPage" href="https://infiniteyuan.github.io/InfiniteYuanBlog/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89%E5%A4%96%E9%83%A8%20RAM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/InfiniteYuanBlog/images/InfiniteYuanLogo.jpg">
+      <meta itemprop="image" content="/InfiniteYuanBlog/InfiniteYuanBlog/images/InfiniteYuanLogo.jpg">
       <meta itemprop="name" content="InfiniteYuan">
       <meta itemprop="description" content="Stay Hungry, Stay Funlish">
     </span>
@@ -231,7 +231,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-02 06:36:34" itemprop="dateModified" datetime="2020-08-02T06:36:34+00:00">2020-08-02</time>
+                <time title="修改时间：2020-08-02 06:48:11" itemprop="dateModified" datetime="2020-08-02T06:48:11+00:00">2020-08-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -239,7 +239,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ESP32-%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/" itemprop="url" rel="index"><span itemprop="name">ESP32 官方文档</span></a>
+                  <a href="/InfiniteYuanBlog/categories/ESP32-%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/" itemprop="url" rel="index"><span itemprop="name">ESP32 官方文档</span></a>
                 </span>
             </span>
 
@@ -259,8 +259,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89%E5%A4%96%E9%83%A8%20RAM/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89%E5%A4%96%E9%83%A8%20RAM/" itemprop="commentCount"></span>
+    <a title="valine" href="/InfiniteYuanBlog/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89%E5%A4%96%E9%83%A8%20RAM/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/InfiniteYuanBlog/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%B8%89%EF%BC%89%E5%A4%96%E9%83%A8%20RAM/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -340,19 +340,19 @@
   <div class="popular-posts-header">相关文章</div>
   <ul class="popular-posts">
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="/2018/01/16/ESP32 学习笔记/ESP32 学习笔记（一）开发环境搭建/" rel="bookmark">ESP32 学习笔记（一）开发环境搭建</a></div>
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/01/16/ESP32 学习笔记/ESP32 学习笔记（一）开发环境搭建/" rel="bookmark">ESP32 学习笔记（一）开发环境搭建</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="/2018/08/12/ESP32 学习笔记/ESP32 学习笔记（七）I2S - Inter—IC Sound/" rel="bookmark">ESP32 学习笔记（七）I2S - Inter—IC Sound</a></div>
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/12/ESP32 学习笔记/ESP32 学习笔记（七）I2S - Inter—IC Sound/" rel="bookmark">ESP32 学习笔记（七）I2S - Inter—IC Sound</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="/2020/07/04/ESP32 学习笔记/ESP32 学习笔记（三十） ESP32 性能分析，与 Cortex-M4 性能比较/" rel="bookmark">ESP32 学习笔记（三十） ESP32 性能分析，与 Cortex-M4 性能比较</a></div>
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2020/07/04/ESP32 学习笔记/ESP32 学习笔记（三十） ESP32 性能分析，与 Cortex-M4 性能比较/" rel="bookmark">ESP32 学习笔记（三十） ESP32 性能分析，与 Cortex-M4 性能比较</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="/2018/08/11/ESP32 学习笔记/ESP32 学习笔记（三）UART - Universal Asynchronous Receiver Transmitter/" rel="bookmark">ESP32 学习笔记（三）UART - Universal Asynchronous Receiver/Transmitter</a></div>
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/11/ESP32 学习笔记/ESP32 学习笔记（三）UART - Universal Asynchronous Receiver Transmitter/" rel="bookmark">ESP32 学习笔记（三）UART - Universal Asynchronous Receiver/Transmitter</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="/2018/08/13/ESP32 学习笔记/ESP32 学习笔记（九）SPI - SPI Slave/" rel="bookmark">ESP32 学习笔记（九）SPI - SPI Slave</a></div>
+      <div class="popular-posts-title"><a href="/InfiniteYuanBlog/2018/08/13/ESP32 学习笔记/ESP32 学习笔记（九）SPI - SPI Slave/" rel="bookmark">ESP32 学习笔记（九）SPI - SPI Slave</a></div>
     </li>
   </ul>
 
@@ -370,7 +370,7 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/ESP32/" rel="tag"><i class="fa fa-tag"></i> ESP32</a>
+              <a href="/InfiniteYuanBlog/tags/ESP32/" rel="tag"><i class="fa fa-tag"></i> ESP32</a>
           </div>
 
         
@@ -379,11 +379,11 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%BA%8C%EF%BC%89Bootloader%20(%E5%BC%95%E5%AF%BC%E5%8A%A0%E8%BD%BD%E7%A8%8B%E5%BA%8F)/" rel="prev" title="ESP32 官方文档（十二）Bootloader (引导加载程序)">
+    <a href="/InfiniteYuanBlog/2018/09/02/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/ESP32%20%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%88%E5%8D%81%E4%BA%8C%EF%BC%89Bootloader%20(%E5%BC%95%E5%AF%BC%E5%8A%A0%E8%BD%BD%E7%A8%8B%E5%BA%8F)/" rel="prev" title="ESP32 官方文档（十二）Bootloader (引导加载程序)">
       <i class="fa fa-chevron-left"></i> ESP32 官方文档（十二）Bootloader (引导加载程序)
     </a></div>
       <div class="post-nav-item">
-    <a href="/2018/11/15/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%83%EF%BC%89SDMMC%20Host%20Driver/" rel="next" title="ESP32 学习笔记（十七）SDMMC Host Driver">
+    <a href="/InfiniteYuanBlog/2018/11/15/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ESP32%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%83%EF%BC%89SDMMC%20Host%20Driver/" rel="next" title="ESP32 学习笔记（十七）SDMMC Host Driver">
       ESP32 学习笔记（十七）SDMMC Host Driver <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
@@ -452,27 +452,27 @@
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="InfiniteYuan"
-      src="/InfiniteYuanBlog/images/InfiniteYuanLogo.jpg">
+      src="/InfiniteYuanBlog/InfiniteYuanBlog/images/InfiniteYuanLogo.jpg">
   <p class="site-author-name" itemprop="name">InfiniteYuan</p>
   <div class="site-description" itemprop="description">Stay Hungry, Stay Funlish</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
+          <a href="/InfiniteYuanBlog/archives/">
         
           <span class="site-state-item-count">62</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/categories/">
+            <a href="/InfiniteYuanBlog/categories/">
           
         <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/tags/">
+            <a href="/InfiniteYuanBlog/tags/">
           
         <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">标签</span></a>
@@ -560,32 +560,32 @@
   </div>
 
   
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/anime.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.min.js"></script>
+  <script src="/InfiniteYuanBlog/lib/velocity/velocity.ui.min.js"></script>
 
-<script src="/js/utils.js"></script>
+<script src="/InfiniteYuanBlog/js/utils.js"></script>
 
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/muse.js"></script>
+<script src="/InfiniteYuanBlog/js/motion.js"></script>
 
 
-<script src="/js/next-boot.js"></script>
-
-<script src="/js/bookmark.js"></script>
+<script src="/InfiniteYuanBlog/js/schemes/muse.js"></script>
 
 
+<script src="/InfiniteYuanBlog/js/next-boot.js"></script>
 
-
-  
+<script src="/InfiniteYuanBlog/js/bookmark.js"></script>
 
 
 
 
   
-<script src="/js/local-search.js"></script>
+
+
+
+
+  
+<script src="/InfiniteYuanBlog/js/local-search.js"></script>
 
 
 
